@@ -255,8 +255,6 @@ const Traking = (props) => {
        }
        
     }
-
-
     const second=()=>{
           setTimeout(()=>{
             frist()
