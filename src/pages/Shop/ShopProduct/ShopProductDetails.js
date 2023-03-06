@@ -292,8 +292,7 @@ null
 </ScrollView>
 {selectedTab=='Description' ? 
 <View style={{width:'100%',position:'absolute',flexDirection:'row',justifyContent:'space-between',alignItems:'center',height:80, borderTopLeftRadius:10, borderTopRightRadius:10,bottom:10, paddingHorizontal:20, backgroundColor:'#fff'}}>
-<MyButtons title="Add to Cart" height={45} width={'48%'} borderRadius={5} press={()=>{
-}} fontSize={12}
+<MyButtons title="Add to Cart" height={45} width={'48%'} borderRadius={5} press={()=>props.navigation.navigate('ShopProdCart')} fontSize={12}
   titlecolor={'#FFC40C'} marginVertical={0} backgroundColor={'#FFF'} borderColor={'#FFC40C'} borderWidth={1}/>
 <MyButtons title="Buy Now" height={45} width={'48%'} borderRadius={5} press={()=>{
 setmodlevisual4(true)}} fontSize={12}

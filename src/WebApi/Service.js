@@ -30,6 +30,7 @@ export const cancelOrders=`orders`;
 export const vendor_reviews=`vendor/reviews`;
 
 export const shop_product_business = 'shop/product/business'
+export const shop_product_cart = 'shop/product/cart'
 
 
 

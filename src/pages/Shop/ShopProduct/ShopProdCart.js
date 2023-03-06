@@ -7,8 +7,13 @@ import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Loader from '../../../WebApi/Loader';
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart } from '../../../WebApi/Service'
+import MyAlert from '../../../component/MyAlert'
+import {  useSelector, useDispatch } from 'react-redux';
 
 const ShopProduct = (props) => {
+  const userdetaile  = useSelector(state => state.user.user_details)
   const [searchValue,setsearchValue]=useState('')
   let selectedIndex = -1;
   let row = [];
@@ -88,9 +93,27 @@ const ShopProduct = (props) => {
       img:require('../../../assets/images/images.png'),
     },
   ])
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [resData, setresData] = useState(null)
   useEffect(()=>{
-
+    getCartItems()
  },[])
+ const getCartItems = async () => {
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
+  setLoading(false)
+  console.log('the res==>>shop cart', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>Home.body.cartData', responseJson.body)
+    setresData(responseJson.body)
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
+
+}
  const deleteItem = ({item,  index}) =>{
     // console.log('deleteItem item', item);
     const cartItemsCopy = [...cartItems]
@@ -203,6 +226,8 @@ const ShopProduct = (props) => {
 <View style={{height:100}} />
 
 </ScrollView>
+{loading ? <Loader /> : null}
+{My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
     </SafeAreaView>
      );
   }
