@@ -146,6 +146,11 @@ const WeelStack=(props)=>{
             <Stack.Screen component = {ShopEatStack} name="ShopEat" />
             <Stack.Screen component = {shopEntertainmentStack} name="ShopIntertenment" />
             <Stack.Screen component = {ShopProductStack} name="ShopProduct" />
+            <Stack.Screen component = {ConnectPeopleStack} name="ConnectPeople" />
+            <Stack.Screen component = {ConnectDatingStack} name="ConnectDating" />
+            <Stack.Screen component = {DealService} name="DealService" />
+            <Stack.Screen component = {DealLearning} name="DealLearning" />
+            <Stack.Screen component = {CreationFashion} name="CreationFashion" />
 
             <Stack.Screen component = {Talkie} name="Talkie" />
             <Stack.Screen component = {Finenc} name="Finenc" />

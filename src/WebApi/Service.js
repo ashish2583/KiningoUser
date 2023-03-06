@@ -29,6 +29,8 @@ export const delete_Update_Address=`user/address/id/`;
 export const cancelOrders=`orders`;
 export const vendor_reviews=`vendor/reviews`;
 
+export const shop_product_business = 'shop/product/business'
+
 
 
 

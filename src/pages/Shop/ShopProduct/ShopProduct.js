@@ -10,6 +10,9 @@ import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast'
+import Loader from '../../../WebApi/Loader';
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
+import GetLocation from 'react-native-get-location'
 
 const ShopProduct = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -69,10 +72,43 @@ const ShopProduct = (props) => {
     },
   ])
   const multiSliderValuesChange = (values) => {setMultiSliderValue(values)}
+  const [loading, setLoading] = useState(false)
+  const [resData, setresData] = useState(null)
+  const [lat, setlat] = useState('28.6176')
+  const [lan, setlan] = useState('77.422')
   useEffect(()=>{
-
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+  })
+  .then(location => {
+      // console.log('locations latitude longitude',location);
+      setlat(location.latitude)
+      setlan(location.longitude)
+  })
+  .catch(error => {
+      const { code, message } = error;
+      console.warn(code, message);
+  })
+    homePage()
  },[])
 
+ const homePage = async () => {
+   
+  setLoading(true)
+  
+  const { responseJson, err } = await requestGetApi(shop_product_business, '', 'GET', '')
+  setLoading(false)
+  console.log('the res==>>Home', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>Home.body.vendors', responseJson.body)
+    setresData(responseJson.body)
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
+
+}
 
   return(
     <SafeAreaView scrollEnabled={scrollEnabled} style={{backgroundColor:'#F8F8F8'}}>
@@ -297,6 +333,7 @@ paddingLeft={50}/>
 <TouchableOpacity onPress={()=>props.navigation.navigate('ShopProdCart')} style={{width:'80%',height:60,flexDirection:'row',justifyContent:'flex-end',position:'absolute',bottom:40, right:20, shadowColor: '#FFD037', shadowOffset: {width: 0,height: 3},shadowRadius: 1,shadowOpacity: 0.1,elevation: 5}}>
 <Image source={require('../../../assets/images/prod_cart_img.png')} style={{width:100,height:100 }}/>
 </TouchableOpacity>:null}
+{loading ? <Loader /> : null}
     </SafeAreaView>
      );
   }

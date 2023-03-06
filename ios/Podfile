@@ -24,6 +24,8 @@ target 'KinenGo' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
+
   target 'KinenGoTests' do
     inherit! :complete
     # Pods for testing
