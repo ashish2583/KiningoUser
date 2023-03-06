@@ -12,8 +12,13 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
+import Loader from '../../../WebApi/Loader';
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart } from '../../../WebApi/Service'
+import MyAlert from '../../../component/MyAlert'
+import {  useSelector, useDispatch } from 'react-redux';
 
 const ShopProductDetails = (props) => {
+  const userdetaile  = useSelector(state => state.user.user_details)
   const [searchValue,setsearchValue]=useState('')
   const [selectedTab,setselectedTab]=useState('Description')
   const [cookingIns,setcookingIns]=useState('')
@@ -78,6 +83,9 @@ const ShopProductDetails = (props) => {
       img:require('../../../assets/images/images.png'),
     },
   ])
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
+  const [loading, setLoading] = useState(false)
   useEffect(()=>{
 
  },[])
@@ -98,6 +106,26 @@ const design=(img,ti,tit,w,imgh,imgw,bg,redious)=>{
   )
 }
 
+const addToCart = async () => {
+  var data = {
+    "business_id": 9,
+    "product_id": 13,
+    "product_type": "simple13",
+    "quantity": 8
+  }
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(shop_product_cart, data, 'POST', userdetaile.token)
+  setLoading(false)
+  console.log('the res==>>shop add to cart', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>Home.body. add to cart', responseJson.body)
+    setresData(responseJson.body)
+    props.navigation.navigate('ShopProdCart')
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
+}
 
 const flatliistDesign=(img,ti,rs,des,press,allpress)=>{
   return(
@@ -292,7 +320,7 @@ null
 </ScrollView>
 {selectedTab=='Description' ? 
 <View style={{width:'100%',position:'absolute',flexDirection:'row',justifyContent:'space-between',alignItems:'center',height:80, borderTopLeftRadius:10, borderTopRightRadius:10,bottom:10, paddingHorizontal:20, backgroundColor:'#fff'}}>
-<MyButtons title="Add to Cart" height={45} width={'48%'} borderRadius={5} press={()=>props.navigation.navigate('ShopProdCart')} fontSize={12}
+<MyButtons title="Add to Cart" height={45} width={'48%'} borderRadius={5} press={addToCart} fontSize={12}
   titlecolor={'#FFC40C'} marginVertical={0} backgroundColor={'#FFF'} borderColor={'#FFC40C'} borderWidth={1}/>
 <MyButtons title="Buy Now" height={45} width={'48%'} borderRadius={5} press={()=>{
 setmodlevisual4(true)}} fontSize={12}
@@ -640,6 +668,8 @@ setmodlevisual4(true)}} fontSize={12}
            
             </View>
 </Modal>
+{loading ? <Loader /> : null}
+{My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
     </SafeAreaView>
      );
   }
