@@ -129,7 +129,8 @@ const ShopProductDetails = (props) => {
 
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_product_productlist+'12', '', 'GET', '')
+    // const { responseJson, err } = await requestGetApi(shop_product_productlist+'12', '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
     setLoading(false)
     // console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {

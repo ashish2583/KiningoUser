@@ -87,7 +87,6 @@ const ShopProductDetails = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false)
   useEffect(()=>{
-
  },[])
 
 
@@ -119,9 +118,10 @@ const addToCart = async () => {
   setLoading(false)
   console.log('the res==>>shop add to cart', responseJson)
   if (responseJson.headers.success == 1) {
+    console.log('responseJson.headers.message', responseJson.headers.message)
     console.log('the res==>>Home.body. add to cart', responseJson.body)
-    setresData(responseJson.body)
-    props.navigation.navigate('ShopProdCart')
+    setalert_sms(responseJson.headers.message)
+    setMy_Alert(true)
   } else {
      setalert_sms(err)
      setMy_Alert(true)

@@ -720,8 +720,8 @@ const ChartClick = Platform.select({
         <View style={{ alignSelf: 'center', marginVertical: 30 }}>
           <Text style={{ textAlign: 'center', fontSize: 18, color: Mycolors.TEXT_COLOR, fontWeight: '500' }}>Select From</Text>
           <Text style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>KinenGo Wheel</Text>
-          {/* <Text onPress={()=>props.navigation.navigate('ShopEat')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopEat</Text>
-          <Text onPress={()=>props.navigation.navigate('ShopIntertenment')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopIntertenment</Text> */}
+          <Text onPress={()=>props.navigation.navigate('ShopEat')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopEat</Text>
+          {/* <Text onPress={()=>props.navigation.navigate('ShopIntertenment')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopIntertenment</Text> */}
           <Text onPress={()=>props.navigation.navigate('ShopProduct')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopProduct</Text>
           {/* <Text onPress={()=>props.navigation.navigate('ConnectPeople')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectPeople</Text>
           <Text onPress={()=>props.navigation.navigate('ConnectDating')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectDating</Text>

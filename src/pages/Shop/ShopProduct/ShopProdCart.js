@@ -8,7 +8,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 
@@ -107,7 +107,21 @@ const ShopProduct = (props) => {
   console.log('the res==>>shop cart', responseJson)
   if (responseJson.headers.success == 1) {
     console.log('the res==>>Home.body.cartData', responseJson.body)
-    setresData(responseJson.body)
+    setresData(responseJson.body.items)
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
+
+}
+ const deleteCartItems = async (id) => {
+  setLoading(true)
+  const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item+id, '', 'DELETE', userdetaile.token)
+  setLoading(false)
+  console.log('the res==>>shop delete cart', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>Home.body.delete cart', responseJson.body)
+    getCartItems()
   } else {
      setalert_sms(err)
      setMy_Alert(true)
@@ -116,9 +130,10 @@ const ShopProduct = (props) => {
 }
  const deleteItem = ({item,  index}) =>{
     // console.log('deleteItem item', item);
-    const cartItemsCopy = [...cartItems]
-    const remainingItems = cartItemsCopy.filter(el=>el.id !== item.id)
-    setCartItems(remainingItems)
+    deleteCartItems(item.id)
+    // const cartItemsCopy = [...cartItems]
+    // const remainingItems = cartItemsCopy.filter(el=>el.id !== item.id)
+    // setCartItems(remainingItems)
  }
 
  const renderItem = ({ item, index }, onClick) => {
@@ -150,6 +165,25 @@ const ShopProduct = (props) => {
           </View>
         );
       };
+
+      const mpress = (id) => {
+        const resCopy = [...resData]
+        resData.filter(el=>{
+          if(el.id === id){
+            if(el.quantity === 1){
+              Alert.alert('cannot reduce quantity')
+              return
+            }
+          }
+        })
+        const updatedData = resCopy.map(el=>el.id === id ? {...el, quantity:el.quantity-1} : el)
+        setresData(updatedData) 
+      }
+      const apress = (id) => {
+        const resCopy = [...resData]
+        const updatedData = resCopy.map(el=>el.id === id ? {...el, quantity:el.quantity+1} : el)
+        setresData(updatedData) 
+      }
     return(
         <View style={{width:'90%', height:200, alignSelf:'center'}}>
            <Swipeable
@@ -170,21 +204,33 @@ const ShopProduct = (props) => {
             }}
             >
                 <View style={{borderWidth:5,borderRadius:5,borderColor:'rgba(255, 196, 12, 0.2)',marginRight:20, justifyContent:'center', borderRadius:20, height:100}}>
-                    <Image source={require('../../../assets/images/images.png')} resizeMode='contain' style={{width:50, height:50, marginHorizontal:10}}/>
+                    <Image source={{uri:item.image}} resizeMode='contain' style={{width:50, height:50, marginHorizontal:10}}/>
                 </View>
                 <View>
-                    <Text style={{ fontSize: 16, color:'#263238' }}>{item.title}</Text>
-                    <Text style={{ fontSize: 16, color:'#263238', marginTop:5 }}>${item.price}</Text>
+                    <Text style={{ fontSize: 16, color:'#263238' }}>{item.name}</Text>
+                    <Text style={{ fontSize: 16, color:'#263238', marginTop:5 }}>${item.item_total.toFixed(2)}</Text>
+                    <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
                     <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
                         <Text style={{ fontSize: 12, color:Mycolors.GrayColor, marginRight:10 }}>Quantity</Text>
-                        <Text style={{ fontSize: 12, color:'#263238' }}>{item.quantity}</Text>
+                      <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
+                      <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'#FFE2E6',justifyContent:'center', alignItems:'center', marginRight:10}}
+                          onPress={()=>mpress(item.id)}>
+                          <Text style={{textAlign:'center',fontSize:25,color:'red'}}>-</Text>
+                          </TouchableOpacity>
+                          <Text style={{ fontSize: 12, color:'#263238' }}>{item.quantity}</Text>
+                          <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'red',justifyContent:'center', alignItems:'center', marginLeft:10}}
+                          onPress={()=>apress(item.id)}>
+                          <Text style={{textAlign:'center',fontSize:25,color:'#fff'}}>+</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between',marginTop:10}}>
+                </View>
+                    <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between',marginTop:10, width:'70%'}}>
                         <Text style={{ fontSize: 12, color:'#263238', textDecorationColor:'#263238', textDecorationLine:'underline', fontWeight:'bold' }}>View Breakup Amount</Text>
                         {/* <Image resizeMode="contain" source={index == selectedIndex ? require('../../../assets/images/prod_unsel_circle.png') : require('../../../assets/images/prod_sel_circle.png')} style={{width:30, height:30}}/> */}
                         <Image resizeMode="contain" source={false ? require('../../../assets/images/prod_unsel_circle.png') : require('../../../assets/images/prod_sel_circle.png')} style={{width:30, height:30}}/>
                     </View>
-                </View>
+            </View>
             </View>
         </Swipeable>         
         </View>
@@ -208,7 +254,7 @@ const ShopProduct = (props) => {
 
 <View style={{marginTop:40}}>
     <FlatList
-    data={cartItems}
+    data={resData}
     numColumns={1}
     keyExtractor={item => item.id}
     renderItem={(v) =>
