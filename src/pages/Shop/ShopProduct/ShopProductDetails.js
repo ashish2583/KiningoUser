@@ -107,6 +107,7 @@ const design=(img,ti,tit,w,imgh,imgw,bg,redious)=>{
 }
 
 const addToCart = async () => {
+  console.log('userdetaile.token', userdetaile.token);
   var data = {
     "business_id": 9,
     "product_id": 13,
@@ -114,7 +115,7 @@ const addToCart = async () => {
     "quantity": 8
   }
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_product_cart, data, 'POST', userdetaile.token)
+  const { responseJson, err } = await requestPostApi(shop_product_cart, data, 'POST', userdetaile.token)
   setLoading(false)
   console.log('the res==>>shop add to cart', responseJson)
   if (responseJson.headers.success == 1) {
@@ -657,7 +658,7 @@ setmodlevisual4(true)}} fontSize={12}
                 />
                 
                 <MyButtons title="Confirm & Proceed To Payment" height={45} width={'100%'} borderRadius={5} press={()=>{
-}} marginHorizontal={20} fontSize={12} alignSelf='center'
+props.navigation.navigate('ShopPayment')}} marginHorizontal={20} fontSize={12} alignSelf='center'
   titlecolor={Mycolors.BG_COLOR} marginVertical={30} backgroundColor={'#FFC40C'}/>
          </View>
 
