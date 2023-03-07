@@ -11,6 +11,7 @@ import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ShopProduct = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -234,22 +235,32 @@ const ShopProduct = (props) => {
                 <View>
                     <Text style={{ fontSize: 16, color:'#263238' }}>{item.name}</Text>
                     <Text style={{ fontSize: 16, color:'#263238', marginTop:5 }}>${item.item_total.toFixed(2)}</Text>
-                    <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
+                    {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
                     <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
                         <Text style={{ fontSize: 12, color:Mycolors.GrayColor, marginRight:10 }}>Quantity</Text>
-                      <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
+                      <View style={{flexDirection:'row', alignItems:'center'}}>
                       <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'#FFE2E6',justifyContent:'center', alignItems:'center', marginRight:10}}
                           onPress={()=>mpress(item.id)}>
-                          <Text style={{textAlign:'center',fontSize:25,color:'red'}}>-</Text>
+                            <AntDesign
+                              name='minus'
+                              size={16}
+                              color={'red'}
+                            />
+                          {/* <Text style={{textAlign:'center',fontSize:25,color:'red'}}>-</Text> */}
                           </TouchableOpacity>
                           <Text style={{ fontSize: 12, color:'#263238' }}>{item.quantity}</Text>
                           <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'red',justifyContent:'center', alignItems:'center', marginLeft:10}}
                           onPress={()=>apress(item.id)}>
-                          <Text style={{textAlign:'center',fontSize:25,color:'#fff'}}>+</Text>
+                            <AntDesign
+                              name='plus'
+                              size={16}
+                              color={'#fff'}
+                            />
+                          {/* <Text style={{textAlign:'center',fontSize:25,color:'#fff'}}>+</Text> */}
                         </TouchableOpacity>
                       </View>
                     </View>
-                </View>
+                {/* </View> */}
                     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between',marginTop:10, width:'70%'}}>
                         <Text style={{ fontSize: 12, color:'#263238', textDecorationColor:'#263238', textDecorationLine:'underline', fontWeight:'bold' }}>View Breakup Amount</Text>
                         {/* <Image resizeMode="contain" source={index == selectedIndex ? require('../../../assets/images/prod_unsel_circle.png') : require('../../../assets/images/prod_sel_circle.png')} style={{width:30, height:30}}/> */}

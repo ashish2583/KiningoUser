@@ -82,24 +82,27 @@ const ShopProduct = (props) => {
   const [alert_sms, setalert_sms] = useState('')
 
   useEffect(()=>{
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-  })
-  .then(location => {
-      // console.log('locations latitude longitude',location);
-      setlat(location.latitude)
-      setlan(location.longitude)
-  })
-  .catch(error => {
-      const { code, message } = error;
-      console.warn(code, message);
-  })
+    if(isLatlong){
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+      .then(location => {
+          // console.log('locations latitude longitude',location);
+          setlat(location.latitude)
+          setlan(location.longitude)
+      })
+      .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+      })
+    }
     homePage()
  },[])
 
  const homePage = async () => {
   const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
+  console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
   setLoading(false)
@@ -337,7 +340,8 @@ paddingLeft={50}/>
            
             </View>
 </Modal>
-{!showChooseMilesModal ?
+{/* {!showChooseMilesModal && !loading ? */}
+{!showChooseMilesModal?
 <TouchableOpacity onPress={()=>props.navigation.navigate('ShopProdCart')} style={{width:'80%',height:60,flexDirection:'row',justifyContent:'flex-end',position:'absolute',bottom:40, right:20, shadowColor: '#FFD037', shadowOffset: {width: 0,height: 3},shadowRadius: 1,shadowOpacity: 0.1,elevation: 5}}>
 <Image source={require('../../../assets/images/prod_cart_img.png')} style={{width:100,height:100 }}/>
 </TouchableOpacity>:null}
