@@ -166,23 +166,48 @@ const ShopProduct = (props) => {
         );
       };
 
-      const mpress = (id) => {
-        const resCopy = [...resData]
-        resData.filter(el=>{
-          if(el.id === id){
-            if(el.quantity === 1){
-              Alert.alert('cannot reduce quantity')
-              return
-            }
-          }
-        })
-        const updatedData = resCopy.map(el=>el.id === id ? {...el, quantity:el.quantity-1} : el)
-        setresData(updatedData) 
+      const mpress = async (id) => {
+        const selectedItem = resData.find(el=>el.id===id)
+        if(selectedItem.quantity === 1){
+          Alert.alert('cannot reduce quantity')
+          return
+        }
+        const data = {
+          id: selectedItem.id,
+          product_id: selectedItem.product_id,
+          quantity: selectedItem.quantity - 1
+        }
+        setLoading(true)
+        const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item+ selectedItem.id, data, 'PUT', userdetaile.token)
+        setLoading(false)
+        console.log('the res==>>shop update cart', responseJson)
+        if (responseJson.headers.success == 1) {
+          console.log('the res==>>Home.body.update cart', responseJson.body)
+          getCartItems()
+        } else {
+           setalert_sms(err)
+           setMy_Alert(true)
+        }
+
       }
-      const apress = (id) => {
-        const resCopy = [...resData]
-        const updatedData = resCopy.map(el=>el.id === id ? {...el, quantity:el.quantity+1} : el)
-        setresData(updatedData) 
+      const apress = async (id) => {
+        const selectedItem = resData.find(el=>el.id===id)
+        const data = {
+          id: selectedItem.id,
+          product_id: selectedItem.product_id,
+          quantity: selectedItem.quantity + 1
+        }
+        setLoading(true)
+        const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item+ selectedItem.id, data, 'PUT', userdetaile.token)
+        setLoading(false)
+        console.log('the res==>>shop update cart', responseJson)
+        if (responseJson.headers.success == 1) {
+          console.log('the res==>>Home.body.update cart', responseJson.body)
+          getCartItems()
+        } else {
+           setalert_sms(err)
+           setMy_Alert(true)
+        } 
       }
     return(
         <View style={{width:'90%', height:200, alignSelf:'center'}}>
