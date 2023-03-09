@@ -196,7 +196,7 @@ const ShopProductDetails = (props) => {
             paddingLeft={50} /> */}
 
 <TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
-onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.params.vendorId,datas:resData,from:'search'})}}>
+onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName,datas:resData,from:'search'})}}>
 <View style={{padding:5,marginLeft:10}}>
   <Image source={require('../../../assets/ent_search_icon.png')} style={{width:20,height:20}}></Image>
 </View>
@@ -224,7 +224,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.param
           <View style={{ width: '96%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 20 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: '500' }}>Pick from wide range of categories</Text>
             <Text style={{ color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C' }}
-              onPress={() => { props.navigation.navigate('ShopCategoryAll') }}>View More</Text>
+              onPress={() => { props.navigation.navigate('ShopCategoryAll', {vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>View More</Text>
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
@@ -262,7 +262,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.param
                 return (
                   <View style={{ width: dimensions.SCREEN_WIDTH / 2.2, marginHorizontal: 5 }}>
                     <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH / 2.2, height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
-                      onPress={() => { props.navigation.navigate('ShopProductDetails') }}>
+                      onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>
                       <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
                     </TouchableOpacity>
                     <View style={{}}>

@@ -162,7 +162,7 @@ paddingLeft={50}/>
                     return(
                       <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5,marginVertical:5}}>
           <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:200,backgroundColor:'#fff', alignItems:'center', borderRadius:15}}
-          onPress={()=>{props.navigation.navigate('ShopCategoryProducts', {name: item.title})}}>
+          onPress={()=>{props.navigation.navigate('ShopCategoryProducts', {name: item.title, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName})}}>
           <Image source={item.img} style={{width:120,height:120,borderRadius:60, marginTop:20}}></Image>
           <Text style={{fontSize:12,color:'#263238',marginTop:5,textAlign:'left',fontWeight:'600', marginTop:15}}>{item.title}</Text>
           </TouchableOpacity>

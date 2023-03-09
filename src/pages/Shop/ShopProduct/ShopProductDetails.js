@@ -168,7 +168,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
       <ScrollView>
       <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1backgroundColor={'#fff'} img1width={30} img1height={30} img1padding={5} img1borderRadius={4} 
-   press2={()=>{}} title2={'24/7 Hardware Store'} fontWeight={'500'} img2height={20}
+   press2={()=>{}} title2={props.route.params.vendorName} fontWeight={'500'} img2height={20}
    press3={()=>{}} />
  <View style={{height:200,borderRadius:20,overflow:'hidden',marginTop:40,width:'96%',alignSelf:'center'}}>
      <ImageSlider 
@@ -190,8 +190,8 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
 <View style={{width:'96%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',backgroundColor:'#F8F8F8',borderRadius:9,paddingVertical:10}}>
   <View>
-<Text style={{color:Mycolors.Black,fontWeight:'600'}}>Intel 3rd Gen Motherboard</Text>
-<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>Electronics</Text>
+<Text style={{color:Mycolors.Black,fontWeight:'600'}}>{props.route.params.productName}</Text>
+<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>{props.route.params.category}</Text>
   </View>
 
   <View>

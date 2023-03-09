@@ -113,7 +113,7 @@ paddingLeft={50}/>
        
           <View style={{ width: '90%', marginHorizontal: 5, alignSelf:'center', marginVertical:10 }}>
           <TouchableOpacity style={{ width: '100%', height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
-            onPress={() => { props.navigation.navigate('ShopProductDetails') }}>
+            onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>
             <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
           </TouchableOpacity>
           <View style={{}}>
