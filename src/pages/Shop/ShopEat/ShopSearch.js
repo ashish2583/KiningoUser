@@ -95,7 +95,7 @@ const AllVenders = async () => {
       >
     <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
-   press2={()=>{}} title2={'Product Search'} fontWeight={'500'} img2height={20}
+   press2={()=>{}} title2={'Search'} fontWeight={'500'} img2height={20}
    press3={()=>{}} img3width={25} img3height={25} />
 
 <View style={{width:'96%',alignSelf:'center'}}>

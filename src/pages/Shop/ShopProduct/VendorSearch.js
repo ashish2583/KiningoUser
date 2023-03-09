@@ -157,7 +157,7 @@ presssearch={()=>{Alert.alert('Search Pressed')}}
 paddingLeft={50}/> */}
 <SearchInputEnt marginTop={10} 
 // placeholder={'Restaurant Name. Cuisine, Dishes'} 
-placeholder={'Search Products'} 
+placeholder={'Search Vendors'} 
 serchValue={searchValue} 
 onChangeText={(e)=>{
   setsearchValue(e)
@@ -183,15 +183,78 @@ paddingLeft={50}/>
 />
    </View> */}
 
-<View style={{width:'100%',alignSelf:'center',marginTop:20, backgroundColor:'#F8F8F8'}}>
+<View style={{width:'100%',alignSelf:'center',marginTop:20}}>
+         {
+      filteredData.map((item,index)=> {
+        return(
+       
+                      <View style={{width:'90%',marginHorizontal:5,alignSelf:'center',backgroundColor:'#fff',marginVertical:10,borderRadius:7,
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 3
+                      },
+                      shadowRadius: 1,
+                      shadowOpacity: 0.3,
+                      justifyContent: 'center',
+                      elevation: 5,paddingBottom:15
+                      }}>
+          <TouchableOpacity style={{width:'100%',height:180,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
+          onPress={()=>{
+            props.navigation.navigate('FoodDetails',{data:item})
+            dispatch(setVenderDetail(item))
+            }}>
+          <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderTopLeftRadius:7,borderTopRightRadius:7, resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
+         
+         <View style={{position:'absolute',bottom:-5,left:5,width:80,height:60}}>
+         <Image source={require('../../../assets/images/coupon.png')} style={{width:'100%',height:'100%',alignSelf:'center', resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
+         </View>
+          </TouchableOpacity>
+          <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
+       <View style={{}}>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'300',left:7}}>{item.address_line}</Text>
+          {/* <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : 34 Minutes</Text> */}
+
+          </View>
+          <View style={{padding:5,alignItems:'flex-end'}}>
+          <TouchableOpacity style={{width:50,height:28,borderRadius:5,backgroundColor:'red',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 3
+          },
+          shadowRadius: 1,
+          shadowOpacity: 0.3,
+          justifyContent: 'center',
+          elevation: 5,flexDirection:'row',alignItems:'center'}}>
+
+          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>{item.rating === null ? 0 : item.rating}</Text>
+          <Image source={require('../../../assets/Star.png')} style={{width:13,height:13,alignSelf:'center',marginRight:4}}></Image>
+          </TouchableOpacity>
+         
+          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>1000+ orders delivered.</Text>
+
+          </View>
+
+            </View>
+
+          </View>
+                    )
+                  })
+              
+                }
+              
+         </View>
+{/* <View style={{width:'100%',alignSelf:'center',marginTop:20, backgroundColor:'#F8F8F8'}}>
           <FlatList
                   data={filteredData}
                   showsHorizontalScrollIndicator={false}
-                  numColumns={2}
+                  numColumns={1}
                   renderItem={({item,index})=>{
                     return(
-                      <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
-          <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#F8F8F8',alignSelf:'center'}}
+                      <View style={{width:'90%',marginHorizontal:5}}>
+          <TouchableOpacity style={{width:'100%',height:170,backgroundColor:'#F8F8F8',alignSelf:'center'}}
           // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
           onPress={()=>{props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})}}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>
@@ -218,7 +281,7 @@ paddingLeft={50}/>
                   }}
                   keyExtractor={item => item.id}
                 />
-         </View>
+         </View> */}
 
 
 
