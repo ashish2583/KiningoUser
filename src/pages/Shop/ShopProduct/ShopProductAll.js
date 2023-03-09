@@ -122,10 +122,9 @@ const ShopProductDetails = (props) => {
   ])
   const multiSliderValuesChange = (values) => { setMultiSliderValue(values) }
   useEffect(() => {
-    StoreDetails()
+    getProducts()
   }, [])
-  console.log("categorylist",categorylist);
-  const StoreDetails = async () => {
+  const getProducts = async () => {
 
     setLoading(true)
 
@@ -159,14 +158,23 @@ const ShopProductDetails = (props) => {
           press3={() => { }} img3={require('../../../assets/images/layer_9.png')} img3width={15} img3height={18} />
 
         <View style={{ width: '96%', alignSelf: 'center' }}>
-          <SearchInputEnt marginTop={10} placeholder={'Enter Keyword'}
+          {/* <SearchInputEnt marginTop={10} placeholder={'Search Products'}
             serchValue={searchValue}
             searchIcon={require('../../../assets/images/product_search_icon.png')}
             onChangeText={(e) => { setsearchValue(e) }}
             press={() => { Alert.alert('Hi') }}
             presssearch={() => { Alert.alert('Search Pressed') }}
-            paddingLeft={50} />
+            paddingLeft={50} /> */}
 
+<TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
+onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.params.vendorId,datas:resData,from:'search'})}}>
+<View style={{padding:5,marginLeft:10}}>
+  <Image source={require('../../../assets/ent_search_icon.png')} style={{width:20,height:20}}></Image>
+</View>
+<View style={{padding:5}}>
+  <Text style={{color:'gray',fontSize:12}}>Search Products</Text>
+</View>
+</TouchableOpacity>
 
           {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
      <ImageSlider 
