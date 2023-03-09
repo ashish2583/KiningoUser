@@ -172,7 +172,7 @@ presssearch={()=>{Alert.alert('Search Pressed')}}
 paddingLeft={50}/> */}
 
 <TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
-onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData,from:'search'})}}>
+onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, lan:lan,from:'search'})}}>
 <View style={{padding:5,marginLeft:10}}>
   <Image source={require('../../../assets/images/product_search_icon.png')} style={{width:20,height:20}}></Image>
 </View>

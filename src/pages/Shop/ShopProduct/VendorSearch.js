@@ -106,7 +106,7 @@ const ShopProduct = (props) => {
  }, []);
 
  const homePage = async () => {
-  const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
+  const endPoint = isLatlong ? `${shop_product_business}?lat=${props.route.params.lat}&long=${props.route.params.lan}` : `${shop_product_business}?name=Nile`
   console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
