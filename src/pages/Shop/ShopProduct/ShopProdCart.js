@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -98,9 +98,28 @@ const ShopProduct = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState(null)
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(()=>{
     getCartItems()
  },[])
+ const checkcon=()=>{
+  getCartItems()
+ }   
+ 
+ const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+ }
+ 
+ const onRefresh = React.useCallback(() => {
+  // setRefreshing(true);
+  // fetchSuccessDetails()
+  checkcon()
+  wait(2000).then(() => {
+  
+  setRefreshing(false)
+  
+  });
+ }, []);
  const getCartItems = async () => {
   setLoading(true)
   const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
@@ -275,7 +294,14 @@ const ShopProduct = (props) => {
 
   return(
     <SafeAreaView style={{}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
     <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
    press2={()=>{}} title2={'Cart'} fontWeight={'500'} img2height={20}

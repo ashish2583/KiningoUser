@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import {RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SearchInputEnt from '../../../component/SearchInputEnt';
@@ -121,9 +121,31 @@ const ShopProductDetails = (props) => {
     },
   ])
   const multiSliderValuesChange = (values) => { setMultiSliderValue(values) }
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     getProducts()
   }, [])
+  
+  const checkcon=()=>{
+    getProducts()
+  }   
+   
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+   
+  const onRefresh = React.useCallback(() => {
+  // setRefreshing(true);
+  // fetchSuccessDetails()
+  checkcon()
+  wait(2000).then(() => {
+  
+  setRefreshing(false)
+  
+  });
+  }, []);
+
   const getProducts = async () => {
 
     setLoading(true)
@@ -151,10 +173,17 @@ const ShopProductDetails = (props) => {
 
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <HomeHeader height={60} paddingHorizontal={15}
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
-          press2={() => { }} title2={'24/7 Hardware Store'} fontWeight={'500'} img2height={20}
+          press2={() => { }} title2={props.route.params.vendorName} fontWeight={'500'} img2height={20}
           press3={() => { }} img3={require('../../../assets/images/layer_9.png')} img3width={15} img3height={18} />
 
         <View style={{ width: '96%', alignSelf: 'center' }}>

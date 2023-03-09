@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SearchInputEnt from '../../../component/SearchInputEnt';
@@ -80,6 +80,7 @@ const ShopProduct = (props) => {
   const [isLatlong, setIsLatlong] = useState(true)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(()=>{
     if(isLatlong){
@@ -99,6 +100,25 @@ const ShopProduct = (props) => {
     }
     homePage()
  },[])
+
+ const checkcon=()=>{
+  homePage()
+ }   
+ 
+ const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+ }
+ 
+ const onRefresh = React.useCallback(() => {
+  // setRefreshing(true);
+  // fetchSuccessDetails()
+  checkcon()
+  wait(2000).then(() => {
+  
+  setRefreshing(false)
+  
+  });
+ }, []);
 
  const homePage = async () => {
   const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
@@ -123,7 +143,14 @@ const ShopProduct = (props) => {
 
   return(
     <SafeAreaView scrollEnabled={scrollEnabled} style={{height:'100%',backgroundColor:'#F8F8F8'}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
     <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
    press2={()=>{}} title2={'Shop'} fontWeight={'500'} img2height={20}
@@ -171,7 +198,7 @@ paddingLeft={50}/>
                       <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
           <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#F8F8F8',alignSelf:'center'}}
           // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
-          onPress={()=>{props.navigation.navigate('ShopProductAll', {vendorId: item.userid})}}>
+          onPress={()=>{props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})}}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>
           </TouchableOpacity>
           <View style={{}}>
