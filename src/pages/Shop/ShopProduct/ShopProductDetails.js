@@ -201,27 +201,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
 </View>
 
-<View style={{flexDirection:'row',}}>
-<View style={{width:'32%'}}>
-<MyButtons title="Description" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Description')}} marginHorizontal={20} fontSize={10}
-  titlecolor={selectedTab=='Description' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Description' ? '#FFC40C' : 'transparent'}/>
-</View>
 
-<View style={{width:'32%', marginLeft:20}}>
-<MyButtons title="Take Away" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Take Away')}} marginHorizontal={20} fontSize={12}
-  titlecolor={selectedTab=='Take Away' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Take Away' ? '#FFC40C' : 'transparent'}/>
-</View>
-
-<View style={{width:'32%', marginLeft:20}}>
-<MyButtons title="Delivery" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Delivery')}} marginHorizontal={20} fontSize={12}
-  titlecolor={selectedTab=='Delivery' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Delivery' ? '#FFC40C' : 'transparent'}/>
-</View>
-
-</View>
-
-
-
-{selectedTab=='Description' ? 
 <View>
 <View style={{width:'95%',alignSelf:'center'}}>
 <ViewMoreText
@@ -269,7 +249,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
   <Text style={{fontSize:14, fontWeight:'400', color:'#455A64', marginTop:15}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
 
-  <View style={{flexDirection:'row', marginTop:15}}>
+  <View style={{flexDirection:'row', marginTop:15, marginBottom:20}}>
     <Image source={require('../../../assets/images/product_location2.png')} style={{height:30, width:30, flex:1 }} resizeMode='contain'/>
     <View style={{marginLeft:15, flex:4}}>
       <Text style={{fontSize:14, fontWeight:'500', color:'#455A64'}}>Location</Text>
@@ -283,7 +263,38 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
 </View>
 
-<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
+
+</View>
+ 
+  
+</View>
+
+<View style={{flexDirection:'row',}}>
+{/* <View style={{width:'32%'}}>
+<MyButtons title="Description" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Description')}} marginHorizontal={20} fontSize={10}
+  titlecolor={selectedTab=='Description' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Description' ? '#FFC40C' : 'transparent'}/>
+</View> */}
+
+<View style={{width:'32%', marginLeft:20}}>
+<MyButtons title="Take Away" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Take Away')}} marginHorizontal={20} fontSize={12}
+  titlecolor={selectedTab=='Take Away' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Take Away' ? '#FFC40C' : 'transparent'}/>
+</View>
+
+<View style={{width:'32%', marginLeft:20}}>
+<MyButtons title="Delivery" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Delivery')}} marginHorizontal={20} fontSize={12}
+  titlecolor={selectedTab=='Delivery' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Delivery' ? '#FFC40C' : 'transparent'}/>
+</View>
+
+</View>
+
+
+
+{selectedTab=='Take Away' ? 
+<View>
+<View style={{width:'100%',alignSelf:'center',marginTop:10}}>
+<View style={{width:'95%',marginTop:15,alignSelf:'center'}}>
+
+  <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
   <Text style={{color:Mycolors.Black,fontWeight:'600'}}>Explore Similar Products</Text>
   <Text style={{color:'#FFC40C',textDecorationLine: "underline", textDecorationColor:'#FFC40C'}} onPress={()=>{}}>View More</Text>
 </View>
@@ -296,7 +307,8 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
                     return(
                       <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
           <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#fff',alignSelf:'center', borderRadius:15, overflow:'hidden'}}
-          onPress={()=>{props.navigation.navigate('ShopProductDetails')}}>
+          // onPress={()=>{props.navigation.navigate('ShopProductDetails')}}
+          >
           <Image source={item.img} style={{width:'100%',height:'100%',alignSelf:'center'}}></Image>
           </TouchableOpacity>
           <View style={{}}>
@@ -309,43 +321,48 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
                     )
                   }}
                   keyExtractor={item => item.id}
-                />
+                />  
+
 </View>
- 
-  
+</View>
+
 </View>
 :
-selectedTab=='Store Location' ? 
+null
+}
+{selectedTab=='Delivery' ? 
 <View>
 <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
 <View style={{width:'95%',marginTop:15,alignSelf:'center'}}>
-  
-  <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-    <View style={{flexDirection:'row'}}>
-    <Image source={require('../../../assets/images/store_image.png')}/>
-    <View style={{marginLeft:15, marginTop:5}}>
-      <Text style={{fontSize:16, fontWeight:'500', color:'#263238'}}>Favlily Store</Text>
-      <View style={{flexDirection:'row',marginTop:5}}>
-        <Image source={require('../../../assets/images/Star.png')} style={{width:18,height:18}}></Image>
-        <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>4.5</Text>
-      </View>
-    </View>
-    </View>
-    <TouchableOpacity style={{justifyContent:'center',alignItems:'center',marginTop:5,height:45, width:'35%', borderRadius:20, backgroundColor:'#FFC40C', shadowColor:  '#000',shadowOffset: {width:3,height:3}, shadowRadius: 5,shadowOpacity: 1.0,elevation: 5}}>
-      <Text style={{fontSize:14, fontWeight:'500',color:'#fff'}}>Contact store</Text>
-    </TouchableOpacity>
-  </View>
 
-  <Text style={{fontSize:14, fontWeight:'400', color:'#455A64', marginTop:15}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+  <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
+  <Text style={{color:Mycolors.Black,fontWeight:'600'}}>Explore Similar Products</Text>
+  <Text style={{color:'#FFC40C',textDecorationLine: "underline", textDecorationColor:'#FFC40C'}} onPress={()=>{}}>View More</Text>
+</View>
 
-  <View style={{flexDirection:'row', marginTop:15}}>
-    <Image source={require('../../../assets/images/product_location2.png')} style={{height:30, width:30, flex:1 }} resizeMode='contain'/>
-    <View style={{marginLeft:15, flex:4}}>
-      <Text style={{fontSize:14, fontWeight:'500', color:'#455A64'}}>Location</Text>
-      <Text style={{fontSize:14, fontWeight:'500', color:'#B2B7B9'}}>500 S Buena Vista St, Burbank, CA 91521, United States</Text>
-    </View>
-    <Image source={require('../../../assets/images/product_google_maps_2.png')} style={{height:42, width:42, flex:2 }} resizeMode='contain'/>
-  </View>
+<FlatList
+                  data={upData}
+                  showsHorizontalScrollIndicator={true}
+                  horizontal
+                  renderItem={({item,index})=>{
+                    return(
+                      <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
+          <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#fff',alignSelf:'center', borderRadius:15, overflow:'hidden'}}
+          // onPress={()=>{props.navigation.navigate('ShopProductDetails')}}
+          >
+          <Image source={item.img} style={{width:'100%',height:'100%',alignSelf:'center'}}></Image>
+          </TouchableOpacity>
+          <View style={{}}>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold'}}>{item.title}</Text>
+          </View>
+          <View style={{padding:5,paddingLeft:0,top:-5}}>
+          <Text style={{fontSize:9,color:Mycolors.GrayColor,marginTop:5,textAlign:'left',}}>{item.price}</Text>
+          </View>
+          </View>
+                    )
+                  }}
+                  keyExtractor={item => item.id}
+                />  
 
 </View>
 </View>
@@ -361,16 +378,16 @@ null
 <View style={{height:100}} />
 
 </ScrollView>
-{selectedTab=='Description' ? 
+{/* {selectedTab=='Description' ? 
 <View style={{width:'100%',position:'absolute',flexDirection:'row',justifyContent:'space-between',alignItems:'center',height:80, borderTopLeftRadius:10, borderTopRightRadius:10,bottom:10, paddingHorizontal:20, backgroundColor:'#fff'}}>
 <MyButtons title="Add to Cart" height={45} width={'100%'} borderRadius={5} press={addToCart} fontSize={12}
   titlecolor={'#FFC40C'} marginVertical={0} backgroundColor={'#FFF'} borderColor={'#FFC40C'} borderWidth={1}/>
-{/* <MyButtons title="Buy Now" height={45} width={'48%'} borderRadius={5} press={()=>{
+<MyButtons title="Buy Now" height={45} width={'48%'} borderRadius={5} press={()=>{
 setmodlevisual4(true)}} fontSize={12}
-  titlecolor={Mycolors.BG_COLOR} marginVertical={0} backgroundColor={'#FFC40C'}/> */}
+  titlecolor={Mycolors.BG_COLOR} marginVertical={0} backgroundColor={'#FFC40C'}/>
 </View>
 : null
-}
+} */}
 {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 Search Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
 <Modal
         isVisible={modlevisual1}

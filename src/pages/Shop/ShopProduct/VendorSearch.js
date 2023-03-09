@@ -157,7 +157,7 @@ presssearch={()=>{Alert.alert('Search Pressed')}}
 paddingLeft={50}/> */}
 <SearchInputEnt marginTop={10} 
 // placeholder={'Restaurant Name. Cuisine, Dishes'} 
-placeholder={'Search Vendors'} 
+placeholder={'Search by Vendors, Categories'} 
 serchValue={searchValue} 
 onChangeText={(e)=>{
   setsearchValue(e)

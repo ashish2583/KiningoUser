@@ -177,7 +177,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData,from:'sear
   <Image source={require('../../../assets/images/product_search_icon.png')} style={{width:20,height:20}}></Image>
 </View>
 <View style={{padding:5}}>
-  <Text style={{color:'gray',fontSize:12}}>Restaurant Name. Cuisine, Dishes</Text>
+  <Text style={{color:'gray',fontSize:12}}>Search by Vendors, Categories</Text>
 </View>
 </TouchableOpacity> 
 
