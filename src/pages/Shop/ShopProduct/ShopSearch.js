@@ -63,6 +63,7 @@ const getProducts = async () => {
   if (responseJson.headers.success == 1) {
     // console.log('the res==>>Home.body.vendors', responseJson.body)
     setresData(responseJson.body)
+    setFilteredData(responseJson.body.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
   } else {
     setalert_sms(err)
     setMy_Alert(true)
@@ -110,58 +111,18 @@ paddingLeft={50}/>
       filteredData.map((item,index)=> {
         return(
        
-                      <View style={{width:'90%',marginHorizontal:5,alignSelf:'center',backgroundColor:'#fff',marginVertical:10,borderRadius:7,
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 3
-                      },
-                      shadowRadius: 1,
-                      shadowOpacity: 0.3,
-                      justifyContent: 'center',
-                      elevation: 5,paddingBottom:15
-                      }}>
-          <TouchableOpacity style={{width:'100%',height:180,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
-          onPress={()=>{
-            props.navigation.navigate('ShopProductDetails')
-            // dispatch(setVenderDetail(item))
-            }}>
-          <Image source={{uri:item.image}} style={{width:'100%',height:'100%',alignSelf:'center',borderTopLeftRadius:7,borderTopRightRadius:7, resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
-         
-         <View style={{position:'absolute',bottom:-5,left:5,width:80,height:60}}>
-         <Image source={require('../../../assets/images/coupon.png')} style={{width:'100%',height:'100%',alignSelf:'center', resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
-         </View>
+          <View style={{ width: '90%', marginHorizontal: 5 }}>
+          <TouchableOpacity style={{ width: '100%', height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
+            onPress={() => { props.navigation.navigate('ShopProductDetails') }}>
+            <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
           </TouchableOpacity>
-          <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
-       <View style={{}}>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'300',left:7}}>{item.address_line}</Text>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : 34 Minutes</Text>
-
+          <View style={{}}>
+            <Text style={{ fontSize: 11, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
           </View>
-          <View style={{padding:5,alignItems:'flex-end'}}>
-          <TouchableOpacity style={{width:50,height:28,borderRadius:5,backgroundColor:'red',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 3
-          },
-          shadowRadius: 1,
-          shadowOpacity: 0.3,
-          justifyContent: 'center',
-          elevation: 5,flexDirection:'row',alignItems:'center'}}>
-
-          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>4.0</Text>
-          <Image source={require('../../../assets/Star.png')} style={{width:13,height:13,alignSelf:'center',marginRight:4}}></Image>
-          </TouchableOpacity>
-         
-          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>1000+ orders served.</Text>
-
+          <View style={{ padding: 5, paddingLeft: 0, top: -5 }}>
+            <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', }}>{parseFloat(Number(item.price).toFixed(2))}</Text>
           </View>
-
-            </View>
-
-          </View>
+        </View>
                     )
                   })
               
