@@ -257,21 +257,56 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.param
               // data={resData}
 
               showsHorizontalScrollIndicator={false}
-              numColumns={2}
+              numColumns={1}
               renderItem={({ item, index }) => {
+                // return (
+                //   <View style={{ width: dimensions.SCREEN_WIDTH / 2.2, marginHorizontal: 5 }}>
+                //     <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH / 2.2, height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
+                //       onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>
+                //       <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
+                //     </TouchableOpacity>
+                //     <View style={{}}>
+                //       <Text style={{ fontSize: 11, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
+                //     </View>
+                //     <View style={{ padding: 5, paddingLeft: 0, top: -5 }}>
+                //       <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', }}>${parseFloat(Number(item.price).toFixed(2))}</Text>
+                //     </View>
+                //   </View>
+                // )
                 return (
-                  <View style={{ width: dimensions.SCREEN_WIDTH / 2.2, marginHorizontal: 5 }}>
-                    <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH / 2.2, height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
-                      onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>
-                      <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
-                    </TouchableOpacity>
-                    <View style={{}}>
-                      <Text style={{ fontSize: 11, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
-                    </View>
-                    <View style={{ padding: 5, paddingLeft: 0, top: -5 }}>
-                      <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', }}>${parseFloat(Number(item.price).toFixed(2))}</Text>
-                    </View>
-                  </View>
+                  <View style={{width:'90%',marginHorizontal:5,alignSelf:'center',backgroundColor:'#fff',marginVertical:10,borderRadius:7,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowRadius: 1,
+                  shadowOpacity: 0.3,
+                  justifyContent: 'center',
+                  elevation: 5,paddingBottom:15
+                  }}>
+      <TouchableOpacity style={{width:'100%',height:180,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
+      onPress={()=>{
+        props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName})
+        }}>
+      <Image source={{uri:item.image}} style={{width:'100%',height:'100%',alignSelf:'center',borderTopLeftRadius:7,borderTopRightRadius:7, resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
+     
+     <View style={{position:'absolute',bottom:-5,left:5,width:80,height:60}}>
+     <Image source={require('../../../assets/images/coupon.png')} style={{width:'100%',height:'100%',alignSelf:'center', resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
+     </View>
+      </TouchableOpacity>
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
+   <View style={{}}>
+      {/* <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text> */}
+      <Text style={{color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text>
+      {/* <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', left:7}}>${parseFloat(Number(item.price).toFixed(2))}</Text> */}
+      <Text style={{color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', left:7}}>${parseFloat(Number(item.price).toFixed(2))}</Text>
+
+      </View>
+      
+        </View>
+
+      </View>
                 )
               }}
               keyExtractor={item => item.id}
