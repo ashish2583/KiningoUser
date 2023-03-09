@@ -111,7 +111,7 @@ paddingLeft={50}/>
       filteredData.map((item,index)=> {
         return(
        
-          <View style={{ width: '90%', marginHorizontal: 5 }}>
+          <View style={{ width: '90%', marginHorizontal: 5, alignSelf:'center', marginVertical:10 }}>
           <TouchableOpacity style={{ width: '100%', height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
             onPress={() => { props.navigation.navigate('ShopProductDetails') }}>
             <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
