@@ -170,7 +170,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
       <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1backgroundColor={'#fff'} img1width={30} img1height={30} img1padding={5} img1borderRadius={4} 
    press2={()=>{}} title2={props.route.params.vendorName} fontWeight={'500'} img2height={20}
-   press3={()=>{props.navigation.navigate('ShopCart')}} img3width={45} img3height={45} img3={require('../../../assets/Cart.png')} 
+   press3={()=>{props.navigation.navigate('ShopProdCart')}} img3width={45} img3height={45} img3={require('../../../assets/Cart.png')} 
    img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
    {cartCount!='0' ?
   <View style={{position:'absolute',right:8,top:4,width:20,height:20,borderRadius:20,backgroundColor:'red',justifyContent:'center',zIndex:999}}>
