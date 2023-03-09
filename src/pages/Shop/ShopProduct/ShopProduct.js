@@ -163,14 +163,23 @@ const ShopProduct = (props) => {
 </View>
 
 <View style={{width:'96%',alignSelf:'center'}}>
-<SearchInputEnt marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
+{/* <SearchInputEnt marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
 serchValue={searchValue} 
 searchIcon={require('../../../assets/images/product_search_icon.png')}
 onChangeText={(e)=>{setsearchValue(e)}} 
 press={()=>{Alert.alert('Hi')}}
 presssearch={()=>{Alert.alert('Search Pressed')}}
-paddingLeft={50}/>
- 
+paddingLeft={50}/> */}
+
+<TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
+onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData,from:'search'})}}>
+<View style={{padding:5,marginLeft:10}}>
+  <Image source={require('../../../assets/images/product_search_icon.png')} style={{width:20,height:20}}></Image>
+</View>
+<View style={{padding:5}}>
+  <Text style={{color:'gray',fontSize:12}}>Restaurant Name. Cuisine, Dishes</Text>
+</View>
+</TouchableOpacity> 
 
   {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
      <ImageSlider 
