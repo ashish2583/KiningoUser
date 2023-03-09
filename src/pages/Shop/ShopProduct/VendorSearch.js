@@ -201,8 +201,7 @@ paddingLeft={50}/>
                       }}>
           <TouchableOpacity style={{width:'100%',height:180,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
           onPress={()=>{
-            props.navigation.navigate('FoodDetails',{data:item})
-            dispatch(setVenderDetail(item))
+            props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})
             }}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderTopLeftRadius:7,borderTopRightRadius:7, resizeMode:'stretch'}} resizeMode={'stretch'}></Image>
          
