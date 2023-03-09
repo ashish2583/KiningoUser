@@ -376,8 +376,8 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
            
             </View>
 </Modal>
-{/* {!showChooseMilesModal && !loading ? */}
-{!showChooseMilesModal?
+{!showChooseMilesModal && !loading ?
+// {!showChooseMilesModal?
 <TouchableOpacity onPress={()=>props.navigation.navigate('ShopProdCart')} style={{width:'80%',height:60,flexDirection:'row',justifyContent:'flex-end',position:'absolute',bottom:40, right:20, shadowColor: '#FFD037', shadowOffset: {width: 0,height: 3},shadowRadius: 1,shadowOpacity: 0.1,elevation: 5}}>
 <Image source={require('../../../assets/images/prod_cart_img.png')} style={{width:100,height:100 }}/>
 </TouchableOpacity>:null}

@@ -269,7 +269,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.param
                       <Text style={{ fontSize: 11, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
                     </View>
                     <View style={{ padding: 5, paddingLeft: 0, top: -5 }}>
-                      <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', }}>{parseFloat(Number(item.price).toFixed(2))}</Text>
+                      <Text style={{ fontSize: 9, color: Mycolors.GrayColor, marginTop: 5, textAlign: 'left', }}>${parseFloat(Number(item.price).toFixed(2))}</Text>
                     </View>
                   </View>
                 )

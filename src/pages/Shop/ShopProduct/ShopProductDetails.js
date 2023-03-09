@@ -20,7 +20,7 @@ import {  useSelector, useDispatch } from 'react-redux';
 const ShopProductDetails = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
   const [searchValue,setsearchValue]=useState('')
-  const [selectedTab,setselectedTab]=useState('Description')
+  const [selectedTab,setselectedTab]=useState('Take Away')
   const [cookingIns,setcookingIns]=useState('')
   const [selectedTime,setselectedTime]=useState('1')
   const [selectedTime2,setselectedTime2]=useState('1')
@@ -277,13 +277,13 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
   
 </View>
 
-<View style={{flexDirection:'row',}}>
+<View style={{flexDirection:'row', marginTop:10}}>
 {/* <View style={{width:'32%'}}>
 <MyButtons title="Description" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Description')}} marginHorizontal={20} fontSize={10}
   titlecolor={selectedTab=='Description' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Description' ? '#FFC40C' : 'transparent'}/>
 </View> */}
 
-<View style={{width:'32%', marginLeft:20}}>
+<View style={{width:'32%'}}>
 <MyButtons title="Take Away" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Take Away')}} marginHorizontal={20} fontSize={12}
   titlecolor={selectedTab=='Take Away' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab=='Take Away' ? '#FFC40C' : 'transparent'}/>
 </View>
