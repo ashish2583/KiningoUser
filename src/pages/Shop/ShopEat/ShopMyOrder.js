@@ -18,10 +18,12 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 const ShopMyOrder = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const [modlevisual1, setmodlevisual1] = useState(false)
+  const [modlevisual2, setmodlevisual2] = useState(false)
   const [checkitem, setcheckitem] = useState('')
   const [reson, setreson] = useState(' ')
   const [date, setDate] = useState('')
   const User = useSelector(state => state.user.user_details)
+  const [drvRating,setdrvRating]=useState('0')
   const [upData, setupData] = useState([
     {
       id: '1',
@@ -277,11 +279,20 @@ const ShopMyOrder = (props) => {
                         <>
 
                           <TouchableOpacity style={{
-                            width: '100%', height: 120, marginVertical: 5, backgroundColor: 'transparent',
-                            borderColor: '#dee4ec', elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
+                            width: '100%',
+                            //  height: 120, 
+                            padding:15,
+                             marginVertical: 5,
+                             backgroundColor: 'transparent',
+                             borderColor: '#dee4ec',
+                             elevation: 3, 
+                             borderRadius: 2, 
+                             alignSelf: 'center', 
+                             flexDirection: 'row', 
+                             alignItems: 'center'
                           }}
                             onPress={() => { }}>
-                            <View style={{ width: 60, height: 75, alignSelf: 'center', borderRadius: 5, borderWidth: 3, borderColor: '#dee4ec' }}>
+                            <View style={{ width: 60, height: 75, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
                             <View style={{ marginLeft: 10 }}>
@@ -293,7 +304,6 @@ const ShopMyOrder = (props) => {
                                   </View>
                                 )
                               })}
-
                               <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.amount}</Text>
 
                               <View style={{ width: 120, }}>
@@ -332,9 +342,9 @@ const ShopMyOrder = (props) => {
                           : null
                         }
 
-                        {item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 ?
+                        {item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driver_id != null ?
                           <MyButtons title="Navigate" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => { 
-                            props.navigation.navigate('Traking')
+                            props.navigation.navigate('Traking',{data:item})
                            }} fontSize={11}
                             titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
                           : 
@@ -345,15 +355,33 @@ const ShopMyOrder = (props) => {
                             }
                         }} fontSize={11}
                           titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
-                    
                         : null
+
                         }
  
                       </View>
+{   item.order_type == 'delivery' && item.status== 5 ?
+<View style={{alignSelf:'center',width:'100%'}}>
+                          <MyButtons title="Submit Driver Review" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => {
+                           setmodlevisual2(true) 
+                            }} fontSize={11}
+                          titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
+</View>
+: 
+item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driver_id != null ?
+<MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+         props.navigation.navigate('Chat', { data: item, from: 'myOrder' })
+
+                        }} fontSize={11}
+                          titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
+:null
+}
+
+
                       {item.business_rating!= null ?
                       <View style={{marginVertical:10,paddingHorizontal:5,backgroundColor:'#fff',alignItems:'flex-start',flexDirection:'row'}}>
                       <Text style={{fontSize:13,color:'#000',marginRight:5}}>You Rated</Text>
-                      <Rating
+                          <Rating
                                 type='custom'
                                 ratingCount={5}
                                 imageSize={16}
@@ -460,6 +488,52 @@ const ShopMyOrder = (props) => {
         </View>
         {loading ? <Loader /> : null}
       </Modal>
+
+{/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 Submit Driver Review Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
+  <Modal
+        isVisible={modlevisual2}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          setmodlevisual2(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+
+        <View style={{ height: '30%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
+          <View style={{ width: '100%', height: 50, backgroundColor: Mycolors.TimingColor, borderTopLeftRadius: 30, borderTopRightRadius: 30, justifyContent: 'center' }}>
+            <Text style={{ fontWeight: '600', fontSize: 14, marginTop: 5, color: Mycolors.Black, textAlign: 'center' }}>Submit Driver Review</Text>
+          </View>
+       
+          {/* <Text style={{fontWeight:'500',fontSize:13,marginTop:20,color:Mycolors.Black,lineHeight:20}}>Please provide rating for the restaurant here.</Text> */}
+              <View style={{marginTop:20,paddingHorizontal:5,backgroundColor:'#fff',alignItems:'flex-start',alignSelf:'center'}}>
+
+              <Rating
+                 type='custom'
+                 ratingCount={5}
+                 imageSize={25}
+                 startingValue={0}
+               // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                onSwipeRating={(d)=>{setdrvRating(d)}}
+                // onFinishRating={(d)=>{setdrvRating(d)}}
+                //readonly={true}
+              />
+              </View>
+
+              <View style={{ width: '100%' ,marginTop:10}}>
+              <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => { setmodlevisual2(false) }} marginHorizontal={20} fontSize={14}
+                titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
+            </View>
+
+
+        </View>
+        {loading ? <Loader /> : null}
+      </Modal>
+
       {loading ? <Loader /> : null}
 
     </SafeAreaView>

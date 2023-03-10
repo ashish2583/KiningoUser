@@ -6,7 +6,7 @@ import SerchInput from '../../../component/SerchInput';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
+import { baseUrl, login,vendor_lists_subcat,shop_eat_business, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
@@ -28,10 +28,34 @@ const ShopSearch = (props) => {
   useEffect(()=>{
    console.log('hohohohoho',props.route.params.datas);
    setresData(props.route.params.datas)
-   if(props.route.params.from!='search'){
-    AllVenders()
+   if(props.route.params.from!='search'){   
+    if(props.route.params.from=='CatClick'){
+      // console.log('props.route.params.datas',props.route.params.datas);
+    catSerch(props.route.params.datas[0].category_name)
+   
+    }else{
+        AllVenders()
+    }
+  
    }
+
  },[])
+
+ const catSerch = async (ddd) => {
+
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(vendor_lists_subcat+ddd, '', 'GET', '')
+  setLoading(false)
+  console.log('the res==>>vendor_lists_subcat', responseJson)
+  if (responseJson.headers.success == 1) {
+   setresData(responseJson.body)
+   setRefreshing(!refreshing)
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
+
+}
 
  const checkcon=()=>{
   AllVenders()
@@ -102,14 +126,25 @@ const AllVenders = async () => {
 <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
 serchValue={searchValue} 
 onChangeText={(e)=>{
-  setsearchValue(e)
-  homePageSearch()
+  if(props.route.params.from=='CatClick'){
+     catSerch(e.text)
+    }else{
+      homePageSearch()
+    }
+   setsearchValue(e)
 if(e.text.length==0){
   AllVenders()
 }
 }} 
 press={()=>{Alert.alert('Hi')}}
-presssearch={()=>{homePageSearch()}}
+presssearch={()=>{
+  if(props.route.params.from=='CatClick'){
+    catSerch(searchValue.text)
+    }else{
+      homePageSearch()
+    }
+  
+  }}
 paddingLeft={50}/>
  
          <View style={{width:'100%',alignSelf:'center',marginTop:20}}>
@@ -158,11 +193,11 @@ paddingLeft={50}/>
           justifyContent: 'center',
           elevation: 5,flexDirection:'row',alignItems:'center'}}>
 
-          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>4.0</Text>
+          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>{item.rating ?  parseInt(item.rating) : 0}</Text>
           <Image source={require('../../../assets/Star.png')} style={{width:13,height:13,alignSelf:'center',marginRight:4}}></Image>
           </TouchableOpacity>
          
-          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>1000+ orders served.</Text>
+          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>{item.total_orders !=0 ? item.total_orders : ''}+ orders served.</Text>
 
           </View>
 

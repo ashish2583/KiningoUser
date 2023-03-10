@@ -116,25 +116,46 @@ const Traking = (props) => {
       const [rideSterted,setrideSterted]=useState(false)
       const [estimatedTime,setestimatedTime]=useState('')
       const [estimatedDestTime,setestimatedDestTime]=useState('')
-      const [curentCord,setCurentCord]=useState('')
+      const [curentCord,setCurentCord]=useState({
+        latitude: 26.4788922, 
+        longitude: 83.7454171,
+      })
       const [angle,setangle]=useState(45)
       const [watch,setWatch]=useState('1')
       const [payments,setpayments]=useState(false)
       const [close,setClose]=useState(false)
-      const [driverCord,setDriverCord]=useState('')
+      const [driverCord,setDriverCord]=useState({
+        latitude: 26.4788922, 
+        longitude: 83.7454171,
+      })
       const [driverAngle,setDriverAngle]=useState(45)
       const [myreson,setmyReson]=useState({
         latitude: 26.4788922, 
         longitude: 83.7454171,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
-      })
+      }) 
       const [newsms,setNewsms]=useState(0)
       const [My_Alert, setMy_Alert] = useState(false)
       const [alert_sms, setalert_sms] = useState('')
+
+      // useEffect(() => {
+      //   const subscriber = firestore()
+      //     .collection('DriverLocation') 
+      //     .doc('5')
+      //     .onSnapshot(documentSnapshot => {
+      //       console.log('User data: ', documentSnapshot.data());
+      //     });
+    
+      //   // Stop listening for updates when no longer required
+      //   return () => subscriber();
+      // }, ['5']);
+
+
       useEffect(()=>{
-        myposition() 
-       // getAllRealtimeLocation()
+        console.log('dssssssss',props.route.params.data.driver_id);
+         frist() 
+         getAllRealtimeLocation()
       //   const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {console.log('hiii')})
       //  if(mapdata.notificationdata.payment_status =='pending' && mapdata.notificationdata.ride_status=='completed'){
       //   setmodlevisual(false)
@@ -146,7 +167,7 @@ const Traking = (props) => {
       //  } 
       //   return () => backHandler.remove()
     },[])
-
+ 
     // messaging().onMessage(async remoteMessage => {
     //   const data = remoteMessage.data
     //   if(remoteMessage.notification.body=='Ride Completed'){
@@ -197,7 +218,9 @@ const Traking = (props) => {
   }
 
     const getAllRealtimeLocation=()=>{
-      const docid  =mapdata.notificationdata.driver_id
+      // const docid  =mapdata.notificationdata.driver_id   props.route.params.data.driver_id
+       const docid  = props.route.params.data.driver_id.toString()
+    
       const messageRef = firestore().collection('DriverLocation')
       .doc(docid)
       // .collection('messages')
@@ -211,13 +234,15 @@ const Traking = (props) => {
           // //       }
           // console.log('The location is==>',data)
           // })
-          //  console.log('The allmsg is==>',allmsg)
+            console.log('The allmsg is==>',querySnap._data)
+  let My_drv_cord = { latitude: querySnap._data.Location.latitude, longitude: querySnap._data.Location.longitude }
 
           setDriverAngle(querySnap._data.Angle)
-          setDriverCord(querySnap._data.Location)
+          
+          setDriverCord(My_drv_cord)
       })
     }
-     
+    
 
     const myposition = () => {
         Geolocation.getCurrentPosition(
@@ -261,24 +286,7 @@ const Traking = (props) => {
           },20000)  
         }
 
-     const watchposations=()=>{
-        Geolocation.watchPosition(
-            position => {
-          let My_cord = { latitude: position.coords.latitude, longitude: position.coords.longitude }
-              let angle = position.coords.heading;
-              setCurentCord(My_cord)
-              setangle(angle)
-             
-            },
-            error => console.log(error),
-              {
-                showLocationDialog: true,
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 0
-              }
-          );  
-     } 
+  
 
      const dialCall = () => {
  console.log('theddggc===>>',mapdata.notificationdata.driver_phone_no)
@@ -293,12 +301,12 @@ const Traking = (props) => {
     };
 
     const c_pos_click=()=>{
-      setmyReson({
-        latitude: mapdata.curentPosition.latitude, 
-        longitude: mapdata.curentPosition.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      })
+      // setmyReson({
+      //   latitude: mapdata.curentPosition.latitude, 
+      //   longitude: mapdata.curentPosition.longitude,
+      //   latitudeDelta: 0.0922,
+      //   longitudeDelta: 0.0421,
+      // })
      }
   
 
@@ -309,17 +317,12 @@ const Traking = (props) => {
   <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: mapdata.curentPosition.latitude,
-            longitude: mapdata.curentPosition.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          initialRegion={myreson}
           customMapStyle={mapStyle}
           showsUserLocation={true}
           userLocationCalloutEnabled={true}
           showsMyLocationButton={true}
-          mapPadding={{ top: 0, right: 0, bottom: modlevisual? 150 : 0 , left: 0 }}
+          mapPadding={{ top: 50, right: 0, bottom: modlevisual? 150 : 0 , left: 0 }}
           showsScale={true}
           showsCompass={true}
           rotateEnabled={true}
@@ -334,148 +337,43 @@ const Traking = (props) => {
           //showsTraffic={true}
           showsIndoors={true}
           showsIndoorLevelPicker={true}
-            >
-          {/* Driver Marker with rotation */}
-          {/* <MapView.Marker.Animated 
-            coordinate={driverCord!=''?driverCord:mapdata.curentPosition}
-            title={'Start Address'}
-            description={mapdata.startAddress}
-            style={{ transform: [{
-                rotate: driverAngle === undefined ? '0deg' : `${driverAngle}deg`
-              }]
-            }}
-            >
-             <Image
-                source={require('../../../assets/shape_33.png')}
-                style={{width: 26, height: 28,
-                    // transform: [{
-                    // // rotate: '270deg'
-                    // rotate: driverAngle === undefined ? '0deg' : `${driverAngle}deg`
-                    // }]
-                  }}
-                resizeMode="contain"
-               /> 
-            </MapView.Marker.Animated > */}
-        {/* Start position Marker */}
+          >
+         
           <Marker
                 coordinate={curentCord}
                 title={'Start Address'}
-                description={mapdata.startAddress}
+                // description={mapdata.startAddress}
                 image={require('../../../assets/shape_33.png')}
                 
             />
           <Marker
-            coordinate={{latitude: 37.771707, longitude: -122.4053769}}
+            coordinate={driverCord}
             title={'Destination Address'}
             image={require('../../../assets/shape_33.png')}
-            description={mapdata.destnationAddress}
+            // description={mapdata.destnationAddress}
           />
      
          <MapViewDirections
           origin={curentCord}     // driver position with new update
-          destination={{latitude: 37.771707, longitude: -122.4053769}} // destination position
+          destination={driverCord} // destination position
           apikey={GoogleApiKey}
           strokeWidth={4}
           strokeColor={Mycolors.ORANGE}
           optimizeWaypoints={true}
-          // waypoints={[
-          //   mapdata.startPosition, //start position
-          // ]}
           onStart={(params) => {
-           // console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
           }}
           onReady={result => {
-            //  console.log(`Distance: ${result} km`)
-           //  console.log('the reseulttt==>>>',result)
-           // console.log(`Duration: ${result.duration} min.`)
           }}
+          precision="high"
           onError={(errorMessage) => {
            console.log('GOT AN ERROR');
           }}
-        /> 
-    {/* {!rideSterted ?
-        <MapViewDirections
-          origin={driverCord}           // driver position with new update
-          destination={mapdata.startPosition} // destination position
-          apikey={GoogleApiKey}
-          strokeWidth={4}
-          strokeColor="transparent"
-          optimizeWaypoints={true}
-        
-          onReady={result => {
-            console.log('mmttt===>>',result.duration)
-            var myminut=parseInt(result.duration)
-
-            var hours = (myminut / 60);
-            var rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            var rminutes = Math.round(minutes);
-            let thm=rhours+":"+rminutes+' Hours'
-            console.log('the total hours and minuts is==>>==>>>',thm)
-            setestimatedTime(thm)
-            // if(myminut>=60){
-            //   var mm= myminut%60
-            //  console.log('the reseulmmm111==>>>',mm)
-            //   var hh= parseInt(myminut/60)
-            //   console.log('the reseulhhhh111==>>>',hh)
-            //   let hh_mm=hh+":"+mm+' Hours'
-            //   console.log('FTime is===>>',hh_mm)
-            //   setestimatedTime(hh_mm)
-            // }else{
-            //   var mm='00'
-            //   if(result.duration.toString().substring(0,2)=='0.'){
-            //   mm='00'
-            //   }else{
-            //     mm=result.duration.toString().substring(0,2)
-            //   }
-            //   var fTime='00:'+myminut
-            //   console.log('mfffmttt==>>',fTime)
-            //   setestimatedTime(fTime)
-            // }
-          }}
-          onError={(errorMessage) => {
-           console.log('GOT AN ERROR');
-          }}
-        /> 
-        :
-         <MapViewDirections
-          origin={driverCord}           // driver position with new update
-          destination={mapdata.destnationPosition} // destination position
-          apikey={GoogleApiKey}
-          strokeWidth={4}
-          strokeColor="transparent"
-          optimizeWaypoints={true}  
-          onReady={result => {
-            var myminut=parseInt(result.duration)
-
-            var hours = (myminut / 60);
-            var rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            var rminutes = Math.round(minutes);
-            let thm=rhours+":"+rminutes+' Hours'
-            console.log('the total hours and minuts is==>>==>>>',thm)
-            setestimatedDestTime(thm)
-            //  if(result.duration>=60){
-            //   var hh= result.duration%60
-            // //  console.log('the reseulhhh==>>>',hh)
-            //   var mm= result.duration/60
-            //  // console.log('the reseulmmm==>>>',hh)
-            //   let mmtt=hh.toString().substring(0,2)+":"+mm.toString().substring(0,2)+' Hours'
-            //  // console.log('mmttt===>>',mmtt)
-            //   setestimatedDestTime(mmtt)
-            // }else{
-            //  // console.log('the reseulderation==>>>',result.duration)
-            //   let hhmm="00:"+result.duration.toString().substring(0,2)+' Hours'
-            //   setestimatedDestTime(hhmm)
-            // }
-          }}
-          onError={(errorMessage) => {
-           console.log('GOT AN ERROR');
-          }}
-        /> 
-    } */}
+        />  
+   
         </MapView>
    </View>
+
+   
 <SafeAreaView>
 <View style={{position:'absolute',top:10,backgroundColor:Mycolors.BG_COLOR,borderRadius:12,width:(dimensions.SCREEN_WIDTH*100/100)-25,height:40,justifyContent:'center',paddingHorizontal:5,alignSelf:'center'}}>
    <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between'}} onPress={()=>{props.navigation.goBack()}}>

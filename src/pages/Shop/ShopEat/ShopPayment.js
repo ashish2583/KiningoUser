@@ -103,7 +103,6 @@ setRefreshing(false)
       console.log('card', card);
       const res = await createToken({card, type: 'Card'});
       console.log('res', res);
-      
       var data={
         token_id: res.token.id,
         card_no: res.token.card.last4,
@@ -123,7 +122,6 @@ setRefreshing(false)
       // setalert_sms(err)
       // setMy_Alert(true) 
       }
-    
   };
 
   const placeOrder = async () => {
@@ -136,14 +134,15 @@ setRefreshing(false)
         "billing_address_id": props.route.params.address.id,
         "shipping_address_id": props.route.params.address.id,
         "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
-        "order_type" : props.route.params.orderType //delivery/take-away 
+        "order_type" : props.route.params.orderType, //delivery/take-away 
+        "cookingInstruction" :props.route.params.cooking
           }
     console.log('the form data==>>', data)
       const { responseJson, err } = await requestPostApi(shop_eat_cart_place_order, data, 'POST', User.token)
       setLoading(false)
       console.log('the res shop_eat_cart_place_order==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        Toast.show(responseJson.headers.message)
+        // Toast.show(responseJson.headers.message)
         props.navigation.navigate('ShopEat')
       } else {
       // setalert_sms(err)

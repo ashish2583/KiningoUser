@@ -13,6 +13,10 @@ import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken,setVenderDetail, setUserType } from '../../../redux/actions/user_action';
 import GetLocation from 'react-native-get-location'
+import Geocoder from "react-native-geocoding";
+import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
+
+Geocoder.init(GoogleApiKey);
 
 const ShopEat = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -76,16 +80,19 @@ const ShopEat = (props) => {
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
-
+  const [addre, setaddre] = useState(' ');
   useEffect(()=>{
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
   })
   .then(location => {
-      // console.log('locations latitude longitude',location);
+       console.log('locations latitude longitude',location);
       setlat(location.latitude)
       setlan(location.longitude)
+      let My_cord = { latitude: location.latitude, longitude: location.longitude }
+
+      LatlongTo_address(My_cord)
   })
   .catch(error => {
       const { code, message } = error;
@@ -94,6 +101,19 @@ const ShopEat = (props) => {
     homePage()
     // venderList()
  },[])
+
+ const LatlongTo_address = async(latlong) => {
+  // var courentlocation = mapdata.curentPosition
+  // dispatch(setStartPosition(courentlocation))
+  Geocoder.from(latlong.latitude, latlong.longitude)
+    .then(json => {
+      var addressComponent = json.results[0].formatted_address;
+      console.log('The address is', json.results[0].formatted_address);
+      setaddre(addressComponent)
+      // UpdateLocation(latlong,addressComponent)
+    })
+    .catch(error => console.warn(error));
+}
 
  const checkcon=()=>{
   homePage()
@@ -112,8 +132,6 @@ wait(2000).then(() => {
   
 });
 }, []);
-
-
 
  const homePage = async () => {
    
@@ -184,7 +202,7 @@ const venderList = async () => {
 <View style={{width:'95%',alignSelf:'center',backgroundColor:'rgba(0,0,0,0.025)',borderRadius:10,borderBottomColor:'rgba(0,0,0,0.5)',borderBottomWidth:0.2}}>
   <HomeHeader height={40}  paddingHorizontal={15}
    press1={()=>{}} img1={require('../../../assets/shape_33.png')} img1width={11} img1height={15} 
-   press2={()=>{}} title2={'New Yark USA'} fontWeight={'500'} img2height={20} right={dimensions.SCREEN_WIDTH*26/100} fontSize={10} color={Mycolors.GrayColor}
+   press2={()=>{}} title2={addre.substring(0,45)} fontWeight={'500'} img2height={20} right={dimensions.SCREEN_WIDTH*7/100} fontSize={10} color={Mycolors.GrayColor}
    press3={()=>{props.navigation.navigate('ShopEatFilter')}} img3={require('../../../assets/shape_32.png')} img3width={25} img3height={25} />
 </View>
 
@@ -205,8 +223,6 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
   <Text style={{color:'gray',fontSize:12}}>Restaurant Name. Cuisine, Dishes</Text>
 </View>
 </TouchableOpacity>
- 
-
 
 <View style={{width:'100%',alignSelf:'center',marginTop:15}}>
         {resData!=null ?
@@ -305,7 +321,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
                     shadowRadius: 1,
                     shadowOpacity: 0.3,
                    // justifyContent: 'center',
-                    elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'CatClick'})}}>
+                    elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[item],from:'CatClick'})}}>
           <View style={{width:80,height:80,alignSelf:'center',marginTop:5}}>
           <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:10,overflow:'hidden'}}></Image>
           </View>

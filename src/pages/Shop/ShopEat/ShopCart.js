@@ -79,6 +79,7 @@ const ShopCart = (props) => {
     const [edit,setedit]=useState(false)
     const [AddressId,setAddressId]=useState(null)
     const [refreshing, setRefreshing] = useState(false);
+    const [cookingIns,setcookingIns] = useState('')
 
   useEffect(()=>{
    console.log('hello ji ==>>',User);
@@ -149,7 +150,8 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      Toast.show(responseJson.headers.message)
+      // Toast.show(responseJson.headers.message)
+      Alert.alert(responseJson.headers.message)
       getcart()
     
     } else {
@@ -166,7 +168,8 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      Toast.show(responseJson.headers.message)
+      Alert.alert(responseJson.headers.message)
+      // Toast.show(responseJson.headers.message)
       getcart()
     } else {
       getcart()
@@ -183,7 +186,8 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      Toast.show(responseJson.headers.message)
+      // Toast.show(responseJson.headers.message)
+      Alert.alert(responseJson.headers.message)
       getAddress()
       setreloades(!reloades)
     } else {
@@ -212,7 +216,8 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      Toast.show(responseJson.headers.message)
+      // Toast.show(responseJson.headers.message)
+      Alert.alert(responseJson.headers.message)
       setShippingAddressPopUp(false) 
       setaddressList(true)
       setedit(false)
@@ -270,7 +275,8 @@ const ShopCart = (props) => {
   
   const applyCoupan = async () => {
     if(discount_id==null){
-      Toast.show('Please select any coupon')
+      // Toast.show('Please select any coupon')
+      Alert.alert('Please select any coupon')
     }else{
       setLoading(true)
     var data={ 
@@ -308,6 +314,7 @@ const ShopCart = (props) => {
       "country_id": 1,
       "is_default": 1
   }
+  console.log('Ashush===>>',data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
     console.log('the res user_address set==>>', responseJson)
@@ -443,9 +450,9 @@ onPress={apress}>
       >
   
   <View>
-    <Text style={{fontWeight:'bold',fontSize:14}}>{selectedAddress.location_name}</Text>
-    <Text style={{fontSize:13,marginVertical:5}}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
-    <Text style={{fontSize:13}}>{selectedAddress.address_line2}</Text>
+    <Text style={{fontWeight:'bold',fontSize:14,color:'#000'}}>{selectedAddress.location_name}</Text>
+    <Text style={{fontSize:13,marginVertical:5,color:'#000'}}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
+    <Text style={{fontSize:13,color:'#000'}}>{selectedAddress.address_line2}</Text>
   </View>
  
   <TouchableOpacity style={{width:25,height:25,alignSelf:'center'}} onPress={()=>{setaddressList(true)}}>
@@ -453,6 +460,33 @@ onPress={apress}>
   </TouchableOpacity>
 
      </View>
+     <View style={{width:'95%',height:100,borderRadius:2,marginTop:10,alignSelf:'center'}}>
+
+   <TextInput
+      value={cookingIns}
+      onChangeText={(e) => setcookingIns(e)}
+      placeholder={'Add Cooking Instructions'}
+      placeholderTextColor="#bbbbbb"
+      multiline={true}
+    // maxLength={500}
+    // keyboardType="number-pad"
+      autoCapitalize = 'none'
+      style={{ 
+        paddingLeft: 15,
+    width:'100%',
+    fontSize: 13,
+    borderColor: 'rgba(0,0,0,0.2)',
+    borderWidth:0.5,
+   // backgroundColor: '#34333a',
+    color:'#fff',
+    height:80,
+    borderRadius:5,
+    paddingHorizontal:15,
+    paddingVertical:10,
+    color:Mycolors.Black}}
+    />
+
+</View>
 
     <View style={{  width: dimensions.SCREEN_WIDTH - 30 ,marginTop:15,alignSelf:'center'}}>
          
@@ -522,9 +556,8 @@ onPress={apress}>
       </View>
       </View>
 
-
         <View style={{width:'95%',alignSelf:'center',marginTop:15}}>
-          <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype})}} marginHorizontal={20} fontSize={11}
+          <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype,cooking:cookingIns})}} marginHorizontal={20} fontSize={11}
           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
           </View>
 

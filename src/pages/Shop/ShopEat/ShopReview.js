@@ -29,7 +29,6 @@ const ShopReview = (props) => {
       title: 'Tasty Food',
       desc:'Order placed by mistake',
       time:'',
-     
     },
     {
       id: '2',

@@ -12,11 +12,13 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action'; 
 import DatePicker from 'react-native-datepicker';
-import { baseUrl,shop_eat_cart,user_payment_method,shop_eat_orders, shop_eat_cart_book_dining,shop_eat_cart_book_table,shop_eat_cart_id,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
+import { baseUrl,shop_eat_cart,user_payment_method,shop_eat_menu,shop_eat_orders, shop_eat_cart_book_dining,shop_eat_cart_book_table,shop_eat_cart_id,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { log } from 'react-native-reanimated';
 
 
 const FoodDetails = (props) => {
@@ -103,14 +105,24 @@ const FoodDetails = (props) => {
   const [imgcartCount, setimgcartCount] = useState(1)
   const [timimgs, settimimgs] = useState('')
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedValue,setselectedValue] = useState('Regular')
+  const [menutypeOpen, setmenutypeOpen] = useState(false);
+  const [menutypevalue, setmenutypevalue] = useState('Regular');
+  const [menutypedate, setmenutypedate] = useState([
+    {label: 'Regular', value: 'Regular'}, 
+    {label: 'Veggie', value: 'Veggie'}, 
+    {label: 'Vegan', value: 'Vegan'}, 
+    {label: 'Keto', value: 'Keto'}, 
+    {label: 'Paleo', value: 'Paleo'}, 
+  ]);
   useEffect(()=>{
     vendorDetail()
-    menuList()
+    menuList('Regular')
     },[])
 
     const checkcon=()=>{
       vendorDetail()
-      menuList()
+      menuList('Regular')
     }   
 
     const wait = (timeout) => {
@@ -175,7 +187,8 @@ const bookTables = async () => {
   var tt=''
 if(date==''){
  if(selectedTime==''){
-  Toast.show('Please Select Time Slot')
+  Alert.alert('Please Select Time Slot')
+ // Toast.show('Please Select Time Slot')
  }else{
    td=new Date()
    tt=selectedTime
@@ -183,7 +196,8 @@ if(date==''){
  
 }else{
   if(selectedTime2==''){
-    Toast.show('Please Select Time Slot')
+    // Toast.show('Please Select Time Slot')
+    Alert.alert('Please Select Time Slot')
    }else{
     td=date
     tt=selectedTime2
@@ -253,7 +267,8 @@ console.log(data);
   setLoading(false)
   console.log('the res==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    Toast.show(responseJson.headers.message)
+    Alert.alert(responseJson.headers.message)
+    // Toast.show(responseJson.headers.message)
     setdiningItens1([])
     setmodlevisual3(false)
   } else {
@@ -289,7 +304,8 @@ const putcart = async (item,add) => {
   setLoading(false)
   console.log('the res==>>', responseJson)
   if (responseJson.headers.success == 1) {
-     Toast.show(responseJson.headers.message)
+    //  Toast.show(responseJson.headers.message)
+    Alert.alert(responseJson.headers.message)
      menuList()
      setreloades(!reloades)
   } else {
@@ -328,7 +344,7 @@ const deletcart = async (item) => {
   setLoading(false)
   console.log('the res==>>', responseJson)
   if (responseJson.headers.success == 1) {
-   Toast.show(responseJson.headers.message)
+  //  Toast.show(responseJson.headers.message)
    menuList()
   //  props.navigation.navigate('ShopCart')
   } else {
@@ -340,7 +356,7 @@ const myfun=(stime,etime)=>{
   var starttime = stime;
 var interval = "30";
 var endtime = etime;
-var timeslots = [starttime];
+var timeslots = [starttime]; 
 
 
 while (starttime != endtime) {
@@ -384,8 +400,6 @@ function formatDate(date) {
   return date.replace(pattern, replacement);
 }
 
-// alert(formatDate("February 04, 2011 12:00:00"));
-
  const vendorDetail = async () => {
    
   setLoading(true)
@@ -422,10 +436,11 @@ function formatDate(date) {
   }
 }
 
-const menuList = async () => {
+const menuList = async (dd) => {
    
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_eat_menu_userid+props.route.params.data.userid, '', 'GET', User.token)
+  var urls=shop_eat_menu+props.route.params.data.userid+'?menu_type='+dd
+  const { responseJson, err } = await requestGetApi(urls, '', 'GET', User.token)
   setLoading(false)
   console.log('the res in_cart shop_eat_menu_userid ==>>', responseJson)
   if (responseJson.headers.success == 1) {
@@ -442,7 +457,6 @@ const menuList = async () => {
      setalert_sms(err)
      setMy_Alert(true)
   }
-
 }
 
 const searchmenuList = async () => {
@@ -686,7 +700,7 @@ const resetStacks=(page)=>{
 <Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>Restaurant</Text>
                           <View style={{flexDirection:'row',marginTop:5}}>
                           <Image source={require('../../../assets/Star.png')} style={{width:18,height:18}}></Image>
-                          <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>4.5</Text>
+                          <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>{resData.rating}</Text>
                           </View>
   </View>
 
@@ -848,8 +862,9 @@ null
  onPress={()=>{setmodlevisual1(true)}}>
     <Image source={require('../../../assets/searchblue.png')} style={{width:25,height:25,overflow:'hidden',alignSelf:'center'}}></Image>
    </TouchableOpacity>
-<View style={{}}>
-<Toggle
+<View style={{width:150,height:30}}>
+
+{/* <Toggle
   value={toggleValue}
   onPress={(newState) => {
     setToggleValue(newState)
@@ -886,39 +901,93 @@ null
     backgroundColor:'#fff',
   }}
   containerStyle={{width:70,height:40}}
+/> 
 
-/>
 <View style={{position:'absolute',top:14,right:toggleValue ? 'auto' :8,left:toggleValue ? 5 :'auto'}}>
   <Text style={{color:'#fff',fontSize:toggleValue ? 8 : 12,top:toggleValue ? 0:-2 }}>{toggleValue ? 'Non-Veg' : 'Veg'}</Text>
-</View>
-</View>
+</View>*/}
+
+<DropDownPicker
+    open={menutypeOpen}
+    value={menutypevalue}
+    items={menutypedate}
+   //multiple={true}
+    setOpen={()=>{setmenutypeOpen(!menutypeOpen)}}
+    setValue={(v)=>{setmenutypevalue(v)}}
+    setItems={(i)=>{setmenutypedate(i)}}
+   //listMode="MODAL"
+    placeholder="Menu Type"
+    onChangeValue={(value) => {
+      setmenutypevalue(value)
+      console.log('hihiihi',value)
+      // getData(makeUrl(value))
+      menuList(value)
+      setselectedValue(value)
+      setreloades(!reloades)
+    }} 
+    placeholderStyle={{
+      color: '#000',
+      fontSize:12,
+      fontWeight: "600"
+    }}
+    textStyle={{
+      color: '#000',
+    //  fontSize:5
+    }}
+    style={{borderColor:'gray',backgroundColor:'transparent',height:30}}
+    containerStyle={{
+      borderColor:'red',
+      height:30
+    }} 
+    disabledStyle={{
+      opacity: 0.5
+    }}
+    dropDownContainerStyle={{
+      backgroundColor: "#fff",
+     
+      borderColor:'#000',
+      borderWidth:0.2,
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 5,
+      shadowOpacity: 1.0,
+      elevation: 5,
+      zIndex:999
+    }}
+  />
 
 </View>
 
 
 </View>
 
-<View style={{width:'100%',alignSelf:'center',marginTop:10}}>
+
+</View>
+
+<View style={{width:'100%',alignSelf:'center',marginTop:10,zIndex:-999}}>
     {selectedTab!='Dining' ? 
       selectedTab=='Take Away' ? 
       menuresData.map((item,index)=> {
         return(
           <View>
-            {item.menuType=="Veg" && item.serviceType=='Take Away' && toggleValue==false ?
-          flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',()=>{ postcart(item)},
+            {item.menuType==menutypevalue && item.serviceType=='Take Away'?
+          flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,()=>{ postcart(item)},
           ()=>{
             setClickedItemData(item)
             setmodlevisual1(false)
-            setmodlevisual2(true)
+            {/* setmodlevisual2(true) */}
                             }  ,
                item ,()=>{putcart(item,'-')},()=>{putcart(item,'+')},'green'           
                          )       
             :
-            item.menuType!="Veg" && item.serviceType=='Take Away' && toggleValue==true ?
-            flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',()=>{postcart(item)},()=>{
+            item.menuType!=menutypevalue && item.serviceType=='Take Away' ?
+            flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,()=>{postcart(item)},()=>{
               setClickedItemData(item)
               setmodlevisual1(false)
-              setmodlevisual2(true)
+              {/* setmodlevisual2(true) */}
             },
            item ,()=>{putcart(item,'-')},()=>{putcart(item,'+')},'red'   
             )
@@ -932,21 +1001,21 @@ null
        menuresData.map((item,index)=> {
         return(
           <View>
-            {item.menuType=="Veg" && item.serviceType=='Delivery' && toggleValue==false ?
-          flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',()=>{ postcart(item)},
+            {item.menuType==selectedValue && item.serviceType=='Delivery' ?
+          flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,()=>{ postcart(item)},
           ()=>{
             setClickedItemData(item)
             setmodlevisual1(false)
-            setmodlevisual2(true)
+            {/* setmodlevisual2(true) */}
                             }  ,
                item ,()=>{putcart(item,'-')},()=>{putcart(item,'+')},'green'           
                          )       
             :
-            item.menuType!="Veg" && item.serviceType=='Delivery' && toggleValue==true ?
-            flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',()=>{postcart(item)},()=>{
+            item.menuType!=selectedValue && item.serviceType=='Delivery' ?
+            flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,()=>{postcart(item)},()=>{
               setClickedItemData(item)
               setmodlevisual1(false)
-              setmodlevisual2(true)
+              {/* setmodlevisual2(true) */}
             },
            item ,()=>{putcart(item,'-')},()=>{putcart(item,'+')},'red'   
             )
@@ -961,8 +1030,8 @@ null
         return(
           <View>
           
-            {item.menuType=="Veg" && item.serviceType=='Dinning' && toggleValue==false ?
-          DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',
+            {item.menuType==menutypevalue && item.serviceType=='Dinning' ?
+          DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,
           ()=>{
           // let arr=diningItens
           let arr1=diningItens1
@@ -1002,8 +1071,8 @@ null
                 ()=>{minus(item)},'green'           
                          )       
             :
-            item.menuType!="Veg" && item.serviceType=='Dinning' && toggleValue==true ?
-            DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',
+            item.menuType!=menutypevalue && item.serviceType=='Dinning' ?
+            DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,
             ()=>{ 
               let arr1=diningItens1
               if(itemloop(item)){
@@ -1131,7 +1200,7 @@ null
               shadowOpacity: 0.1,
               justifyContent: 'center',
               elevation: 3,}}
-            >
+           >
 
        <DatePicker
           customStyles={{
@@ -1140,7 +1209,6 @@ null
             dateIcon: styles.dateIcon,
             dateplaceholder: {
               alignContent: 'flex-start',
-             
             },
             placeholderText: {
               fontSize: 15,
@@ -1212,7 +1280,6 @@ null
             //  setmodlevisual4(true)
             //  setmodlevisual1(false)
             //  setmodlevisual2(false)
-
           }} marginHorizontal={20} fontSize={11}
           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
           </View>
@@ -1269,20 +1336,19 @@ null
           paddingLeft={50}/>
             </View>
         
-         <Text style={{fontWeight:'bold',fontSize:16,marginTop:15,left:5,color:'#cbcbcb'}}>7 Result Found</Text>
+         <Text style={{fontWeight:'bold',fontSize:16,marginTop:15,left:5,color:'#cbcbcb'}}></Text>
         
           <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
-         
-
-{
+        
+    {
       menuresData.map((item,index)=> {
         return(
           <View>
             {
-               flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',()=>{selectedTab=='Dining' ? '' : postcart(item)},()=>{
+               flatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,()=>{selectedTab=='Dining' ? '' : postcart(item)},()=>{
                 setClickedItemData(item)
                 setmodlevisual1(false)
-                setmodlevisual2(true)
+                {/* setmodlevisual2(true) */}
                                 }  ,item,()=>{putcart(item,'-')},()=>{putcart(item,'+')},'#fff'
                              )  
             }
@@ -1410,7 +1476,7 @@ null
 // </TouchableOpacity>
 <>
 {
-  DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),' 34 minutes',
+  DiningflatliistDesign(item.image,item.name,'$'+parseFloat(Number(item.price).toFixed(2)),item.tentative_time,
   ()=>{ 
     let arr1=diningItens1
     if(itemloop(item)){
