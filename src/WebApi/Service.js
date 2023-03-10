@@ -8,6 +8,7 @@ import {  useSelector, useDispatch } from 'react-redux';
 // shop/eat
 //API END POINT LISTS  
 
+export const profile = 'user/profile'
 export const register = 'auth/register'
 export const login = 'auth/login'
 export const verify_otp = 'auth/verify-otp'
@@ -34,6 +35,7 @@ export const shop_product_business = 'shop/product/business'
 export const shop_product_cart = 'shop/product/cart'
 export const shop_product_productlist=`shop/product/productList/userid/`;
 export const shop_product_delete_cart_item=`shop/product/cart/id/`;
+export const shop_product_details=`shop/product/productDetails/id/`;
 // start: new apis yet to be created
 export const shop_product_coupons_userid = 'shop/product/coupons/userid/'
 export const shop_product_cart_apply_coupon=`shop/product/cart/apply-coupon`;

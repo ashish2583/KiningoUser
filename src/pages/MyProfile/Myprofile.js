@@ -1,18 +1,19 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {KeyboardAvoidingView,RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
 import MyButtons from '../../component/MyButtons';
 import { dimensions, Mycolors } from '../../utility/Mycolors';
 import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 // import messaging from '@react-native-firebase/messaging';
 import {  useSelector, useDispatch } from 'react-redux';
-import {requestPostApi,requestGetApi} from '../../WebApi/Service'
+import {requestPostApi,requestGetApi, profile} from '../../WebApi/Service'
 import Loader from '../../WebApi/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyAlert from '../../component/MyAlert';
 import Toast from 'react-native-simple-toast';
 import HomeHeader from '../../component/HomeHeader';
 import SerchInput from '../../component/SerchInput';
+import moment from 'moment'
 
 const Myprofile = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -30,9 +31,77 @@ const Myprofile = (props) => {
   {id:'4',img:person_Image,title:'GRECA Vegetarian Greek',lable:'Table Booking',price:'$140.00',desc:'Booking date and time: 21 July 2021, 11:00 AM'},
   {id:'5',img:person_Image,title:'GRECA Vegetarian Greek',lable:'Table Booking',price:'$140.00',desc:'Booking date and time: 21 July 2021, 11:00 AM'},
 ])
-  useEffect(()=>{
+const [refreshing, setRefreshing] = useState(false);
+const [resData, setresData] = useState(null)
+const [showEditProfileModal, setEditProfileModal] = useState(false)
+const [firstName, setFirstName] = useState('')
+const [lastName, setLastName] = useState('')
+const [emailId, setEmailId] = useState('')
 
- },[])
+useEffect(()=>{
+  getProfileDetails()
+},[])
+
+const checkcon=()=>{
+  getProfileDetails()
+}   
+
+const wait = (timeout) => {
+return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+const onRefresh = React.useCallback(() => {
+// setRefreshing(true);
+// fetchSuccessDetails()
+checkcon()
+wait(2000).then(() => {
+
+setRefreshing(false)
+
+});
+}, []);
+
+const getProfileDetails = async () => {
+setLoading(true)
+const { responseJson, err } = await requestGetApi(profile, '', 'GET', userdetaile.token)
+setLoading(false)
+console.log('the res==>>profile', responseJson)
+if (responseJson.headers.success == 1) {
+  console.log('the res==>>body.profile', responseJson.body)
+  setresData(responseJson.body)
+  setFirstName(responseJson.body?.first_name)
+  setLastName(responseJson.body?.last_name)
+  setEmailId(responseJson.body?.emailid)
+} else {
+   setalert_sms(err)
+   setMy_Alert(true)
+}
+
+}
+const editProfileDetails = async () => {
+const data = {
+  first_name: firstName,
+  last_name: lastName,
+  username: resData?.username,
+  emailid: emailId,
+  country_code: resData?.country_code,
+  phone: resData?.phone
+}
+setLoading(true)
+const { responseJson, err } = await requestGetApi(profile, data, 'PUT', userdetaile.token)
+setLoading(false)
+setEditProfileModal(false)
+console.log('the res==>>edit profile', responseJson)
+if (responseJson.headers.success == 1) {
+  console.log('the res==>>body.edit profile', responseJson.body)
+  setalert_sms(responseJson.headers.message)
+  setMy_Alert(true)
+} else {
+   setalert_sms(err)
+   setMy_Alert(true)
+}
+
+}
 
 
   const getProfile=async()=>{
@@ -118,7 +187,15 @@ const MyorderDesign=(item)=>{
    press1={()=>{props.navigation.openDrawer()}} img1={require('../../assets/List.png')} img1width={25} img1height={25} 
    press2={()=>{}} img2={require('../../assets/Kinengo_Green.png')} img2width={95} img2height={20}
    press3={()=>{}} img3={require('../../assets/Bell.png')} img3width={25} img3height={25} />
-  <ScrollView style={{paddingHorizontal:20}}>
+  <ScrollView
+   refreshControl={
+    <RefreshControl
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    />
+  }
+   style={{paddingHorizontal:20}}
+   >
      <View style={{width:'99%',padding:10,marginTop:10,borderRadius:10,
      backgroundColor:'#fff',
      shadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -135,20 +212,23 @@ const MyorderDesign=(item)=>{
 <View style={{flexDirection:'row',alignItems:'center'}}>
 <Image source={require('../../assets/images/profileimg.png')} style={{width:50,height:50,borderRadius:25}}></Image>
 <View style={{marginLeft:10}}>
-  <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,fontWeight:'600'}}>John Doe</Text>
+  <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,fontWeight:'600'}}>{firstName + ' ' + lastName}</Text>
   <View style={{flexDirection:'row',alignItems:'center',marginTop:5}}>
+  <Text style={{color:Mycolors.TEXT_COLOR,fontSize:11}}>Registered Date : {moment(resData?.created_date).format('DD-MM-YYYY')}</Text>
+  </View>
+  {/* <View style={{flexDirection:'row',alignItems:'center',marginTop:5}}>
   <Image source={require('../../assets/Star.png')} style={{width:15,height:15,}}></Image>
   <Text style={{color:Mycolors.TEXT_COLOR,fontSize:11,left:7}}>4.5</Text>
-  </View>
+  </View> */}
 </View>
 </View>
 
-<MyButtons title="Edit" height={30} width={60} borderRadius={30} press={()=>{}} 
+<MyButtons title="Edit" height={30} width={60} borderRadius={30} press={()=>{setEditProfileModal(true)}} 
  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN} fontWeight={'500'} fontSize={13} marginVertical={10}/>
 </View>
 <View style={{marginLeft:65,marginTop:5}}>
-{PhoneEmailDesign(require('../../assets/callgreen.png'),'Phone','+911234567890')}
-{PhoneEmailDesign(require('../../assets/emailgreen.png'),'Email','abc@abc.comhhhhg')}
+{PhoneEmailDesign(require('../../assets/callgreen.png'),'Phone',resData?.phone)}
+{PhoneEmailDesign(require('../../assets/emailgreen.png'),'Email',emailId)}
 </View>
      </View>
 
@@ -183,9 +263,84 @@ const MyorderDesign=(item)=>{
                   ))}
             </ScrollView> 
 
-{My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
-     {loading ?  <Loader /> : null }
      </ScrollView>
+    {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
+     {loading ?  <Loader /> : null }
+     <Modal
+        isVisible={showEditProfileModal}
+        swipeDirection="down"
+        onBackdropPress={()=>setEditProfileModal(false)}
+        onSwipeComplete={(e) => {
+          setEditProfileModal(false)
+        }}
+          scrollTo={() => {}}
+          scrollOffset={1}
+          propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '60%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+          
+          <View style={{flexDirection:'row',justifyContent:'center', marginBottom:30, marginTop:10}}>
+            <Text style={{flex:4,color:Mycolors.Black,fontWeight:'500', textAlign:'center'}}>Edit Profile</Text>
+          </View>
+        
+          <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.firstLastView}>
+            <View style={styles.viewStyle2}>
+              <TextInput
+                    value={firstName}
+                    onChangeText={(e) => setFirstName(e)}
+                    placeholder={'First Name'}
+                    placeholderTextColor="#bbbbbb"
+                    autoCapitalize = 'none'
+                    style={styles.input2}
+                  />
+              </View>
+            <View style={styles.viewStyle2}>
+              <TextInput
+                    value={lastName}
+                    onChangeText={(e) => setLastName(e)}
+                    placeholder={'Last Name'}
+                    placeholderTextColor="#bbbbbb"
+                    autoCapitalize = 'none'
+                    style={[styles.input2, {right:5}]}
+                  />
+              </View>
+            </View>
+            <View style={styles.viewStyle}>
+            <TextInput
+                  value={emailId}
+                  onChangeText={(e) => setEmailId(e)}
+                  placeholder={'Email'}
+                  placeholderTextColor="#bbbbbb"
+                  autoCapitalize = 'none'
+                  style={styles.input2}
+                />
+            </View>
+            <View style={styles.viewStyle}>
+            <TextInput
+                  value={resData?.phone}
+                  editable={false}
+                  placeholderTextColor="#bbbbbb"
+                  autoCapitalize = 'none'
+                  style={styles.input2}
+                />
+            </View>
+
+            <View style={{height:30}} />
+
+            <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={editProfileDetails} marginHorizontal={20} fontSize={11}
+              titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />
+            </KeyboardAvoidingView>
+            </ScrollView>
+           
+            </View>
+</Modal>
     </SafeAreaView>
      );
   }
@@ -205,5 +360,66 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 5,
   },
+  input2: {
+    paddingLeft: 15,
+    height: 55,
+    width:'97%',
+    fontSize: 13,
+    backgroundColor: Mycolors.BG_COLOR,
+    borderRadius:5,
+    borderWidth: 0.2,
+    borderColor: '#8e8e8e',
+    color:Mycolors.TEXT_COLOR,
+    textAlignVertical: 'center',
+
+
+    // top:6
+  },
+  viewStyle:{
+    width:'100%',
+    height:55,
+    marginTop:10,
+    // borderRadius: 28,
+    // marginTop: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    // shadowColor: '#000000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 3
+    // },
+    // shadowRadius: 5,
+    // shadowOpacity: 1.0,
+    // // justifyContent: 'center',
+    // elevation: 5,
+    alignSelf:'center',
+    
+},
+  viewStyle2:{
+    width:'48%',
+    height:55,
+    marginTop:10,
+    // borderRadius: 28,
+    // marginTop: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    // shadowColor: '#000000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 3
+    // },
+    // shadowRadius: 5,
+    // shadowOpacity: 1.0,
+    // // justifyContent: 'center',
+    // elevation: 5,
+    // alignSelf:'center',
+    
+},
+  firstLastView:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent: 'space-between',
+    // marginHorizontal:5
+  }
 });
 export default Myprofile
