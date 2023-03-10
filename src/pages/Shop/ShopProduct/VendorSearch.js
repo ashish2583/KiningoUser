@@ -115,7 +115,11 @@ const ShopProduct = (props) => {
   if (responseJson.headers.success == 1) {
     console.log('the res==>>Home.body.vendors', responseJson.body)
     setresData(responseJson.body)
-    setFilteredData(responseJson.body.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
+    const data = responseJson.body.filter(el=>
+      el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim()) ||
+      el.category_name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())
+    )
+    setFilteredData([...data])
   } else {
      setalert_sms(err)
      setMy_Alert(true)
@@ -126,7 +130,11 @@ const ShopProduct = (props) => {
 const getDataBasedOfSearch = (searchTerm) => {
   // console.log('resData', resData);
   // console.log('searchTerm', searchTerm);
-  setFilteredData(resData.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
+  const data = resData.filter(el=>
+    el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim()) ||
+    el.category_name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())
+  )
+  setFilteredData([...data])
 }
   const handleNavigate = (latitude, longitude) => {
 
