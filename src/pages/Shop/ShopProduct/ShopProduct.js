@@ -214,7 +214,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
           <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold'}}>{item.name}</Text>
           </View>
           <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:5,paddingLeft:0,top:-10}}>
-          <Text style={{fontSize:11,color:'#FFC40C',marginTop:5,textAlign:'left',}}>Cafe</Text>
+          <Text style={{fontSize:9,color:'#FFC40C',marginTop:5,textAlign:'left',}}>Cafe</Text>
           <TouchableOpacity onPress={()=>handleNavigate(item.latitude, item.longitude)} style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
       shadowOffset: {
         width: 0,
