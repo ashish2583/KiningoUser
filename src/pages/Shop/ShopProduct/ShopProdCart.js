@@ -329,7 +329,10 @@ const ShopProduct = (props) => {
 
 </View>
 
-
+<View style={{width:'95%',alignSelf:'center',marginTop:15}}>
+  <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{props.navigation.navigate('ShopPayment')}} marginHorizontal={20} fontSize={11}
+  titlecolor={Mycolors.BG_COLOR} backgroundColor={'#FFC40C'} marginVertical={0}/>
+</View>
  </View>
 <View style={{height:100}} />
 
