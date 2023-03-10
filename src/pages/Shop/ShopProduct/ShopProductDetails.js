@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 
@@ -87,9 +87,38 @@ const ShopProductDetails = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false)
   const [cartCount, setcartCount] = useState('0')
+  const [productDetailsData, setProductDetailsData] = useState({})
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(()=>{
+    getProductDetails()
  },[])
+ const checkcon=()=>{
+  homePage()
+ }
+ const onRefresh = React.useCallback(() => {
+  // setRefreshing(true);
+  // fetchSuccessDetails()
+  checkcon()
+  wait(2000).then(() => {
+  
+  setRefreshing(false)
+  
+  });
+ }, []);
+ const getProductDetails = async () => {
+  // setLoading(true)
+  // const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
+  // setLoading(false)
+  // console.log('the res==>>product details', responseJson)
+  // if (responseJson.headers.success == 1) {
+  //   console.log('the res==>>body.product details', responseJson.body)
+  //   setProductDetailsData(responseJson.body)
+  // } else {
+  //    setalert_sms(err)
+  //    setMy_Alert(true)
+  // }
 
+}
 
 const design=(img,ti,tit,w,imgh,imgw,bg,redious)=>{
   return(
@@ -166,7 +195,14 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
   return(
     <SafeAreaView style={{height:'100%', backgroundColor: '#F8F8F8'}}>
-      <ScrollView>
+      <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+      >
       <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1backgroundColor={'#fff'} img1width={30} img1height={30} img1padding={5} img1borderRadius={4} 
    press2={()=>{}} title2={props.route.params.vendorName} fontWeight={'500'} img2height={20}
