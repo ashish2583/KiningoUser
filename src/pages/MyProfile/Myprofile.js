@@ -88,7 +88,7 @@ const data = {
   phone: resData?.phone
 }
 setLoading(true)
-const { responseJson, err } = await requestGetApi(profile, data, 'PUT', userdetaile.token)
+const { responseJson, err } = await requestPostApi(profile, data, 'PUT', userdetaile.token)
 setLoading(false)
 setEditProfileModal(false)
 console.log('the res==>>edit profile', responseJson)
