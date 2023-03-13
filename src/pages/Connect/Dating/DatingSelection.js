@@ -42,8 +42,6 @@ const db = [
     img: `https://images.unsplash.com/photo-1508341591423-4347099e1f19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
   }
 ]
-const alreadyRemoved = []
-let charactersState = db // This fixes issues with updating characters state forcing it to use the current state and not the state that was active when the card was created.
 
 const PeopleHome = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -106,14 +104,13 @@ const PeopleHome = (props) => {
   ])
   const [characters, setCharacters] = useState(db)
   const [lastDirection, setLastDirection] = useState()
-
+  const [alreadyRemoved, setAlreadyRemoved] = useState([])
   const multiSliderValuesChange = (values) => {setMultiSliderValue(values)}
   const childRefs = React.useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
   useEffect(()=>{
     const unsubscribe = props.navigation.addListener('focus', () => {
-      alreadyRemoved.splice(0,alreadyRemoved.length)
+      setAlreadyRemoved([])
       setCharacters(db)
-      charactersState = db
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
@@ -131,13 +128,12 @@ const PeopleHome = (props) => {
  const swiped = (direction, nameToDelete) => {
   console.log('removing: ' + nameToDelete + ' to the ' + direction)
   setLastDirection(direction)
-  alreadyRemoved.push(nameToDelete)
+  setAlreadyRemoved([...alreadyRemoved, nameToDelete])
 }
 
 const outOfFrame = (name) => {
   console.log(name + ' left the screen!')
-  charactersState = charactersState.filter(character => character.name !== name)
-  setCharacters(charactersState)
+  setCharacters(prevState => prevState.filter(character => character.name !== name))
 }
 
 const swipe = (dir) => {
@@ -147,7 +143,7 @@ const swipe = (dir) => {
   if (cardsLeft.length) {
     const toBeRemoved = cardsLeft[cardsLeft.length - 1].name // Find the card object to be removed
     const index = db.map(person => person.name).indexOf(toBeRemoved) // Find the index of which to make the reference to
-    alreadyRemoved.push(toBeRemoved) // Make sure the next card gets removed next time if this card do not have time to exit the screen
+    setAlreadyRemoved([...alreadyRemoved, toBeRemoved]) // Make sure the next card gets removed next time if this card do not have time to exit the screen
     childRefs[index].current.swipe(dir) // Swipe the card!
   }
 }
