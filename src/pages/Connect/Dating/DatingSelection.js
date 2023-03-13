@@ -15,6 +15,7 @@ import Toast from 'react-native-simple-toast'
 import Carousel from './Components/Carousel/Carousel';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import TinderCard from 'react-tinder-card'
+import LinearGradient from 'react-native-linear-gradient'
 const SliderData = [
   {slider: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`},
   {slider: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`},
@@ -23,23 +24,38 @@ const SliderData = [
 const db = [
   {
     name: 'Richard Hendricks',
-    img: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`
+    img: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`,
+    age: 23,
+    handle: '@marry',
+    distance:'5 miles',
   },
   {
     name: 'Erlich Bachman',
-    img: `https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+    img: `https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`,
+    age: 23,
+    handle: '@marry',
+    distance:'5 miles',
   },
   {
     name: 'Monica Hall',
-    img: `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+    img: `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`,
+    age: 23,
+    handle: '@marry',
+    distance:'5 miles',
   },
   {
     name: 'Jared Dunn',
-    img: `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+    img: `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`,
+    age: 23,
+    handle: '@marry',
+    distance:'5 miles',
   },
   {
     name: 'Dinesh Chugtai',
-    img: `https://images.unsplash.com/photo-1508341591423-4347099e1f19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+    img: `https://images.unsplash.com/photo-1508341591423-4347099e1f19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`,
+    age: 23,
+    handle: '@marry',
+    distance:'5 miles',
   }
 ]
 
@@ -195,14 +211,15 @@ const _renderItem = ({ item }) => {
    press3={()=>{}} img3={require('../../../assets/images/dating-filter-image.png')} img3width={25} img3height={25} />  
   <View style={{borderBottomColor: '#ffb0ba', borderBottomWidth: StyleSheet.hairlineWidth}}/>
   <View style={{height:30}}/>  
-  <AppIntroSlider
+  {/* <AppIntroSlider
     data={introSliderData}
     renderItem={_renderItem}
+ 
     renderPagination={() => null}
     renderDoneButton={()=><View />}
     renderNextButton={()=><View />}
     keyExtractor={(item) => item.id}
-  />
+  /> */}
   {/* <ImageSlider 
     data={[
         {img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5a5uCP-n4teeW2SApcIqUrcQApev8ZVCJkA&usqp=CAU'},
@@ -213,42 +230,67 @@ const _renderItem = ({ item }) => {
    showIndicator={false}
       closeIconColor="#fff"
   /> */}
+  
+  <View style={styles.cardContainer}>
+    {characters.map((character, index) =>
+      <TinderCard ref={childRefs[index]} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
+        <View style={styles.card}>
+          <ImageBackground style={styles.cardImage} source={{uri: character.img}}>
+        <LinearGradient
+          colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.43)']}
+          style={{width: '100%', height: '100%',}}
+         >
+
+            <View style={styles.imgDetails}>
+              <View style={styles.imgView1}>
+                <Text style={{fontSize:15, color:'#fff', fontWeight:'bold'}}>{character.name}</Text>
+                <Text style={{fontSize:12, color:'#fff'}}>{character.handle}</Text>        
+              </View>
+              <View style={styles.imgView1}>
+                <Text style={{fontSize:12, color:'#fff'}}>Age: {character.age}</Text>
+                <Text style={{fontSize:12, color:'#fff'}}>Distance: {character.distance}</Text>
+              </View>
+            </View>
+            {/* <Text style={styles.imgDetails}>{character.name}</Text> */}
+         </LinearGradient>
+          </ImageBackground>
+        </View>
+      </TinderCard>
+    )}
+  </View>
+  {characters?.length > 0 ?
   <View style={styles.buttonsRow}>
-    <TouchableOpacity onPress={()=>{onReject(1)}} style={styles.buttonViewOne}>
+    <TouchableOpacity 
+      // onPress={()=>{onReject(1)}}
+      onPress={() => swipe('left')}
+     style={styles.buttonViewOne}>
       <Image source={require('../../../assets/images/dating-reject-image.png')} style={{width:20, height:20,}} resizeMode='contain'/>
     </TouchableOpacity>
-    <TouchableOpacity onPress={()=>{onLove(1)}} style={styles.buttonViewTwo}>
+    <TouchableOpacity 
+      // onPress={()=>{onLove(1)}}
+      onPress={() => swipe('right')}
+     style={styles.buttonViewTwo}>
       <Image source={require('../../../assets/images/dating-love-image.png')} style={{width:40, height:40,}} resizeMode='contain'/>
     </TouchableOpacity>
     <TouchableOpacity onPress={()=>{onRefresh(1)}} style={styles.buttonViewOne}>
       <Image source={require('../../../assets/images/dating-refresh-image.png')} style={{width:20, height:20,}} resizeMode='contain'/>
     </TouchableOpacity>
   </View>
-  <View style={styles.cardContainer}>
-    {characters.map((character, index) =>
-      <TinderCard ref={childRefs[index]} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
-        <View style={styles.card}>
-          <ImageBackground style={styles.cardImage} source={{uri: character.img}}>
-            <Text style={styles.cardTitle}>{character.name}</Text>
-          </ImageBackground>
-        </View>
-      </TinderCard>
-    )}
-  </View>
-  <View style={styles.buttons}>
+  :null}
+  {/* <View style={styles.buttons}>
     <Button onPress={() => swipe('left')} title='Swipe left!' />
     <Button onPress={() => swipe('right')} title='Swipe right!' />
-  </View>
-  {lastDirection ? <Text style={styles.infoText} key={lastDirection}>You swiped {lastDirection}</Text> : <Text style={styles.infoText}>Swipe a card or press a button to get started!</Text>}
+  </View> */}
+  {/* {lastDirection ? <Text style={styles.infoText} key={lastDirection}>You swiped {lastDirection}</Text> : <Text style={styles.infoText}>Swipe a card or press a button to get started!</Text>} */}
 
-  <Text style={{fontSize:15, color:'#31313f', fontWeight:'bold', textAlign:'center', top:-20}}>Mary Burgees</Text>
+  {/* <Text style={{fontSize:15, color:'#31313f', fontWeight:'bold', textAlign:'center', top:-20}}>Mary Burgees</Text>
   <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', top:-10}}>
     <Text style={{fontSize:10, color:'#e10f51'}}>@marry</Text>
     <View style={{height: '100%',width: 1,backgroundColor: '#4a4c52', marginHorizontal:20}}></View>
     <Text style={{fontSize:10, color:'#e1e1e1'}}>Age 23</Text>
     <View style={{height: '100%',width: 1,backgroundColor: '#4a4c52', marginHorizontal:20}}></View>
     <Text style={{fontSize:10, color:'#e1e1e1'}}>5 miles away</Text>
-  </View>  
+  </View>   */}
   {/* {SliderData.length > 0 ? <Carousel data={SliderData} onReject={onReject} onLove={onLove} onRefresh={onRefresh} /> : null}   */}
 
  </View>
@@ -507,17 +549,17 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   cardContainer: {
-    width: '90%',
+    width: '100%',
     alignSelf:'center',
-    maxWidth: 260,
-    height: 300,
+    // maxWidth: 260,
+    height: 400,
   },
   card: {
     position: 'absolute',
     backgroundColor: '#fff',
     width: '100%',
-    maxWidth: 260,
-    height: 300,
+    // maxWidth: 260,
+    height: 400,
     shadowColor: 'black',
     shadowOpacity: 0.2,
     shadowRadius: 20,
@@ -530,17 +572,27 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 20,
   },
-  cardTitle: {
+  imgDetails: {
     position: 'absolute',
-    bottom: 0,
+    width:'90%',
+    bottom: 30,
     margin: 10,
     color: '#fff',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
+  },
+  imgView1:{
+    // flexDirection:'row',
+    // alignItems:'center',
+    // justifyContent:'space-between',
   },
   buttons: {
     margin: 20,
     zIndex: -100,
   },
   infoText: {
+    color:'black',
     height: 28,
     justifyContent: 'center',
     display: 'flex',
