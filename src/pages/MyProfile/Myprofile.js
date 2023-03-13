@@ -227,7 +227,7 @@ const MyorderDesign=(item)=>{
  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN} fontWeight={'500'} fontSize={13} marginVertical={10}/>
 </View>
 <View style={{marginLeft:65,marginTop:5}}>
-{PhoneEmailDesign(require('../../assets/callgreen.png'),'Phone',resData?.phone)}
+{PhoneEmailDesign(require('../../assets/callgreen.png'),'Phone', resData?.country_code + resData?.phone)}
 {PhoneEmailDesign(require('../../assets/emailgreen.png'),'Email',emailId)}
 </View>
      </View>

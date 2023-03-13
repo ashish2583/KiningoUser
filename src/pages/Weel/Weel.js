@@ -722,10 +722,10 @@ const ChartClick = Platform.select({
           <Text style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>KinenGo Wheel</Text>
           <Text onPress={()=>props.navigation.navigate('ShopEat')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopEat</Text>
           {/* <Text onPress={()=>props.navigation.navigate('ShopIntertenment')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopIntertenment</Text> */}
-          <Text onPress={()=>props.navigation.navigate('ShopProduct')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopProduct</Text>
-          {/* <Text onPress={()=>props.navigation.navigate('ConnectPeople')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectPeople</Text>
+          {/* <Text onPress={()=>props.navigation.navigate('ShopProduct')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopProduct</Text>
+          <Text onPress={()=>props.navigation.navigate('ConnectPeople')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectPeople</Text> */}
           <Text onPress={()=>props.navigation.navigate('ConnectDating')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectDating</Text>
-          <Text onPress={()=>props.navigation.navigate('DealService')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>DealService</Text>
+          {/* <Text onPress={()=>props.navigation.navigate('DealService')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>DealService</Text>
           <Text onPress={()=>props.navigation.navigate('DealLearning')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>DealLearning</Text>
           <Text onPress={()=>props.navigation.navigate('CreationFashion')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>CreationFashion</Text> */}
         </View>
