@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, Button} from 'react-native';
 import HomeHeaderRoundBottom from '../../../component/HomeHeaderRoundBottom';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
@@ -14,11 +14,36 @@ import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast'
 import Carousel from './Components/Carousel/Carousel';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import TinderCard from 'react-tinder-card'
 const SliderData = [
   {slider: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`},
   {slider: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`},
   {slider: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`},
 ]
+const db = [
+  {
+    name: 'Richard Hendricks',
+    img: `https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60`
+  },
+  {
+    name: 'Erlich Bachman',
+    img: `https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+  },
+  {
+    name: 'Monica Hall',
+    img: `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+  },
+  {
+    name: 'Jared Dunn',
+    img: `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+  },
+  {
+    name: 'Dinesh Chugtai',
+    img: `https://images.unsplash.com/photo-1508341591423-4347099e1f19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60`
+  }
+]
+const alreadyRemoved = []
+let charactersState = db // This fixes issues with updating characters state forcing it to use the current state and not the state that was active when the card was created.
 
 const PeopleHome = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -79,11 +104,20 @@ const PeopleHome = (props) => {
     },
 
   ])
+  const [characters, setCharacters] = useState(db)
+  const [lastDirection, setLastDirection] = useState()
+
   const multiSliderValuesChange = (values) => {setMultiSliderValue(values)}
+  const childRefs = React.useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
   useEffect(()=>{
-
- },[])
-
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      alreadyRemoved.splice(0,alreadyRemoved.length)
+      setCharacters(db)
+      charactersState = db
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  },[props.navigation])
  const changeSaved = (id) => {
   const updataCopy = [...upData]
   const updatedData = updataCopy?.map(el=>el.id === id ? {...el, isSaved: !el.isSaved }: el)
@@ -94,6 +128,29 @@ const PeopleHome = (props) => {
   const updatedData = updataCopy?.map(el=>el.id === id ? {...el, isLiked: !el.isLiked }: el)
   setupData([...updatedData])
  }
+ const swiped = (direction, nameToDelete) => {
+  console.log('removing: ' + nameToDelete + ' to the ' + direction)
+  setLastDirection(direction)
+  alreadyRemoved.push(nameToDelete)
+}
+
+const outOfFrame = (name) => {
+  console.log(name + ' left the screen!')
+  charactersState = charactersState.filter(character => character.name !== name)
+  setCharacters(charactersState)
+}
+
+const swipe = (dir) => {
+  console.log('swipe characters', characters);
+  console.log('swipe alreadyRemoved', alreadyRemoved);
+  const cardsLeft = characters.filter(person => !alreadyRemoved.includes(person.name))
+  if (cardsLeft.length) {
+    const toBeRemoved = cardsLeft[cardsLeft.length - 1].name // Find the card object to be removed
+    const index = db.map(person => person.name).indexOf(toBeRemoved) // Find the index of which to make the reference to
+    alreadyRemoved.push(toBeRemoved) // Make sure the next card gets removed next time if this card do not have time to exit the screen
+    childRefs[index].current.swipe(dir) // Swipe the card!
+  }
+}
 
  const onReject = (id) => {
   console.log('id rejected', id);
@@ -171,6 +228,23 @@ const _renderItem = ({ item }) => {
       <Image source={require('../../../assets/images/dating-refresh-image.png')} style={{width:20, height:20,}} resizeMode='contain'/>
     </TouchableOpacity>
   </View>
+  <View style={styles.cardContainer}>
+    {characters.map((character, index) =>
+      <TinderCard ref={childRefs[index]} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
+        <View style={styles.card}>
+          <ImageBackground style={styles.cardImage} source={{uri: character.img}}>
+            <Text style={styles.cardTitle}>{character.name}</Text>
+          </ImageBackground>
+        </View>
+      </TinderCard>
+    )}
+  </View>
+  <View style={styles.buttons}>
+    <Button onPress={() => swipe('left')} title='Swipe left!' />
+    <Button onPress={() => swipe('right')} title='Swipe right!' />
+  </View>
+  {lastDirection ? <Text style={styles.infoText} key={lastDirection}>You swiped {lastDirection}</Text> : <Text style={styles.infoText}>Swipe a card or press a button to get started!</Text>}
+
   <Text style={{fontSize:15, color:'#31313f', fontWeight:'bold', textAlign:'center', top:-20}}>Mary Burgees</Text>
   <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', top:-10}}>
     <Text style={{fontSize:10, color:'#e10f51'}}>@marry</Text>
@@ -435,6 +509,46 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     shadowOpacity: 0.2,
     elevation: 4,
+  },
+  cardContainer: {
+    width: '90%',
+    alignSelf:'center',
+    maxWidth: 260,
+    height: 300,
+  },
+  card: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 260,
+    height: 300,
+    shadowColor: 'black',
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    borderRadius: 20,
+    resizeMode: 'cover',
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    borderRadius: 20,
+  },
+  cardTitle: {
+    position: 'absolute',
+    bottom: 0,
+    margin: 10,
+    color: '#fff',
+  },
+  buttons: {
+    margin: 20,
+    zIndex: -100,
+  },
+  infoText: {
+    height: 28,
+    justifyContent: 'center',
+    display: 'flex',
+    zIndex: -100,
   }
 });
 export default PeopleHome 
