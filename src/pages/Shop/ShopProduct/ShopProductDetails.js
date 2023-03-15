@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_business_userid } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 
@@ -106,17 +106,24 @@ const ShopProductDetails = (props) => {
   });
  }, []);
  const getProductDetails = async () => {
-  // setLoading(true)
-  // const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
-  // setLoading(false)
-  // console.log('the res==>>product details', responseJson)
-  // if (responseJson.headers.success == 1) {
-  //   console.log('the res==>>body.product details', responseJson.body)
-  //   setProductDetailsData(responseJson.body)
-  // } else {
-  //    setalert_sms(err)
-  //    setMy_Alert(true)
-  // }
+  let endPoint = shop_product_business_userid+props.route.params.vendorId+'?category='+props.route.params.category+'&name='+props.route.params.productName
+  if(false){
+    endPoint += '&product_type=Take Away'
+  }
+  if(false){
+    endPoint += '&product_type=Delivery'
+  }
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
+  setLoading(false)
+  console.log('the res==>>product details', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>body.product details', responseJson.body)
+    setProductDetailsData(responseJson.body)
+  } else {
+     setalert_sms(err)
+     setMy_Alert(true)
+  }
 
 }
 
