@@ -45,26 +45,18 @@ const ShopEatFilter = (props) => {
   const [modlevisual,setmodlevisual]=useState(false)
   const [searchValue,setsearchValue]=useState('')
   const [refreshing, setRefreshing] = useState(false);
+  const [relod, setrelod] = useState(false);
   const [lat,setlat]=useState('')
   const [long,setlong]=useState('')
   const [filterData,setFilterData]=useState([
-    {
-      id:1,
-      title:'Fast Delivery'
-    },
-    {
-      id:2,
-      title:'Veg'
-    },
-    {
-      id:3,
-      title:'Non Veg'
-    },
-    {
-      id:4,
-      title:'Rated 4+' 
-    }
+    {id:'1',title:'Rating'},
+    {id: '2', title: 'Regular'}, 
+    {id: '3', title: 'Veggie'}, 
+    {id: '4', title: 'Vegan'}, 
+    {id: '5', title: 'Keto'}, 
+    {id: '6', title: 'Paleo'}, 
   ])
+  const [selected,setselected]=useState([])
   const [serviceOpen, setserviceOpen] = useState(false);
   const [servicevalue, setservicevalue] = useState([]);
  
@@ -120,7 +112,6 @@ const myposition = () => {
 }
 
  const getData = async (urls) => {
-   
     setLoading(true)
     //'?name='+searchValue.text+'&lat='+lat+'&long='+long
     var fUrl = shop_eat_business
@@ -137,20 +128,49 @@ const myposition = () => {
       //  setalert_sms(err)
       //  setMy_Alert(true)
     }
-  
   }
   
  const makeUrl=(val)=>{
 if(val=='Rating'){
   var murl= '?lat='+lat+'&long='+long+'&sortBy=rating_desc'
   return murl
-}else if (val=='Relevance'){
-  var murl= '?lat='+lat+'&long='+long+'&sortBy=rating_desc'
+}else if (val!='Rating'){
+  var murl= '?lat='+lat+'&long='+long+'&menu_type='+val
   return murl
 }else{
   return undefined
 }
   }
+
+
+ 
+  const myselected=(item)=>{
+    var myarr=selected
+    console.log(myarr);
+    if(myarr.length>0){
+      var found=0
+      for(let i=0;i<myarr.length;i++){
+        if(myarr[i]==item){ 
+          // console.log('in',myarr.length);
+          myarr.splice(i, 1);
+          found=found+1
+        }
+    }
+    console.log(myarr);
+    if(!myarr.includes(item) && found==0){
+        myarr.push(item)
+      }
+
+    }else{ 
+      myarr=[item]
+    }
+   
+  
+    setselected(myarr)
+    setrelod(!relod)
+    }
+
+
 
 
   return(
@@ -189,7 +209,7 @@ paddingLeft={50}/>
     </View>
     {filterClick ? 
 <View style={{flexDirection:'row'}}>
-<View style={{width:100,zIndex:999,backgroundColor:'red',borderRadius:5,marginTop:15,height:40}}> 
+{/* <View style={{width:100,zIndex:999,backgroundColor:'red',borderRadius:5,marginTop:15,height:40}}> 
    <DropDownPicker
     open={serviceOpen}
     value={servicevalue}
@@ -236,7 +256,7 @@ paddingLeft={50}/>
       zIndex:999
     }}
   />
-</View>
+</View> */}
 <View style={{width:'100%',alignSelf:'center',marginTop:15}}>
        
           <FlatList
@@ -247,8 +267,21 @@ paddingLeft={50}/>
                   renderItem={({item,index})=>{
                     return(
                       <View style={{marginHorizontal:5,}}>
-                          <TouchableOpacity style={{backgroundColor:'red',justifyContent:'center',padding:10,borderRadius:5}}
-                          onPress={()=>{ }}>
+                          <TouchableOpacity style={{backgroundColor:selected.includes(item) ? '#FFC40C':'red',justifyContent:'center',padding:10,borderRadius:5}}
+                          onPress={()=>{
+                            if(selected.includes(item)){
+                              if(selected.length==1){
+                               getData(undefined)
+                              }else{
+                                getData(makeUrl(item.title))
+                              }
+                               myselected(item)
+                            }else{
+                             getData(makeUrl(item.title))
+                            myselected(item) 
+                            }
+                            
+                           }}>
                             <Text style={{color:'#fff'}}>{item.title}</Text>
                           </TouchableOpacity>
                       </View>
@@ -293,8 +326,7 @@ paddingLeft={50}/>
        <View style={{}}>
           <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text>
           <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'300',left:7}}>{item.address_line}</Text>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : 34 Minutes</Text>
-
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : {item.tentative_time}</Text>
           </View>
           <View style={{padding:5,alignItems:'flex-end'}}>
           <TouchableOpacity style={{width:50,height:28,borderRadius:5,backgroundColor:'red',
@@ -308,11 +340,11 @@ paddingLeft={50}/>
           justifyContent: 'center',
           elevation: 5,flexDirection:'row',alignItems:'center'}}>
 
-          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>4.0</Text>
+          <Text style={{fontSize:14,textAlign:'left',fontWeight:'bold',marginHorizontal:4,color:'#fff',top:1}}>{parseInt(item.rating) ? parseInt(item.rating) :'0'}</Text>
           <Image source={require('../../../assets/Star.png')} style={{width:13,height:13,alignSelf:'center',marginRight:4}}></Image>
           </TouchableOpacity>
          
-          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>1000+ orders served.</Text>
+          <Text style={{fontSize:11,color:Mycolors.ORANGE,marginTop:5,textAlign:'left',fontWeight:'500',}}>{item.total_orders}+ orders served.</Text>
 
           </View>
 

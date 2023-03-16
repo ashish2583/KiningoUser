@@ -49,7 +49,7 @@ const ShopSearch = (props) => {
   console.log('the res==>>vendor_lists_subcat', responseJson)
   if (responseJson.headers.success == 1) {
    setresData(responseJson.body)
-   setRefreshing(!refreshing)
+  //  setRefreshing(!refreshing)
   } else {
      setalert_sms(err)
      setMy_Alert(true)
@@ -178,7 +178,7 @@ paddingLeft={50}/>
        <View style={{}}>
           <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold',left:7}}>{item.name}</Text>
           <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'300',left:7}}>{item.address_line}</Text>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : 34 Minutes</Text>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'200',left:7,fontStyle:'italic'}}>Food Preparation Time : {item.tentative_time}</Text>
 
           </View>
           <View style={{padding:5,alignItems:'flex-end'}}>

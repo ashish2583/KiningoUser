@@ -116,7 +116,8 @@ setRefreshing(false)
       console.log('the res==>>', responseJson)
       if (responseJson.headers.success == 1) {
         getpaymentList()
-        Toast.show(responseJson.headers.message)
+        Alert.alert(responseJson.headers.message)
+        // Toast.show(responseJson.headers.message)
         setaddpayment(false)
       } else {
       // setalert_sms(err)
@@ -126,7 +127,8 @@ setRefreshing(false)
 
   const placeOrder = async () => {
    if(checkitem==''){
-    Toast.show('Please select payment method')
+    // Toast.show('Please select payment method')
+    Alert.alert('Please select payment method')
    }else{
      setLoading(true);
       var data={
@@ -218,16 +220,16 @@ setRefreshing(false)
                 placeholder={{
                   number: '4242 4242 4242 4242',
                 }}
-                cardStyle={{
-                  borderRadius: 20,
-                  // backgroundColor: '#a9bcd6',
-                  // backgroundColor: '#7294c2',
-                  backgroundColor:'#fff',
-                  borderColor: Mycolors.RED,
-                  borderWidth: 1,
-                  textColor: Mycolors.BLACK,
-                  placeholderColor: '#c9c9c9',
-                }}
+                // cardStyle={{
+                //   borderRadius: 20,
+                //   // backgroundColor: '#a9bcd6',
+                //   // backgroundColor: '#7294c2',
+                //   backgroundColor:'#fff',
+                //   borderColor: Mycolors.RED,
+                //   borderWidth: 1,
+                //   textColor: Mycolors.BLACK,
+                //   placeholderColor: '#c9c9c9',
+                // }}
                 style={{
                   width: '100%',
                   height: 200,

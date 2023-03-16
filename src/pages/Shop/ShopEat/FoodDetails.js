@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, Platform} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -18,7 +18,8 @@ import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { log } from 'react-native-reanimated';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import openMap from 'react-native-open-maps';
 
 
 const FoodDetails = (props) => {
@@ -115,14 +116,16 @@ const FoodDetails = (props) => {
     {label: 'Keto', value: 'Keto'}, 
     {label: 'Paleo', value: 'Paleo'}, 
   ]);
+  const [showda,setshowda]=useState(false)
+
   useEffect(()=>{
     vendorDetail()
-    menuList('Regular')
+    menuList(null)
     },[])
 
     const checkcon=()=>{
       vendorDetail()
-      menuList('Regular')
+      menuList(null)
     }   
 
     const wait = (timeout) => {
@@ -187,8 +190,10 @@ const bookTables = async () => {
   var tt=''
 if(date==''){
  if(selectedTime==''){
-  Alert.alert('Please Select Time Slot')
- // Toast.show('Please Select Time Slot')
+  setalert_sms('Please Select Time Slot')
+  setMy_Alert(true)
+  // Alert.alert('Please Select Time Slot')
+  // Toast.show('Please Select Time Slot') 
  }else{
    td=new Date()
    tt=selectedTime
@@ -197,7 +202,9 @@ if(date==''){
 }else{
   if(selectedTime2==''){
     // Toast.show('Please Select Time Slot')
-    Alert.alert('Please Select Time Slot')
+    setalert_sms('Please Select Time Slot')
+  setMy_Alert(true)
+    // Alert.alert('Please Select Time Slot')
    }else{
     td=date
     tt=selectedTime2
@@ -353,19 +360,15 @@ const deletcart = async (item) => {
   }
 }
 const myfun=(stime,etime)=>{
-  var starttime = stime;
+var starttime = stime;
 var interval = "30";
 var endtime = etime;
 var timeslots = [starttime]; 
-
-
 while (starttime != endtime) {
-	
   starttime = addMinutes(starttime, interval);
   timeslots.push(starttime);
-
 }
-// console.log('hello ji times',timeslots);
+console.log('hello ji times===>>',timeslots);
 return timeslots;
 }
 
@@ -400,22 +403,37 @@ function formatDate(date) {
   return date.replace(pattern, replacement);
 }
 
+const goToMap=(l,n)=> {
+  openMap(
+    { 
+      latitude: l,
+       longitude: n ,
+       provider:'google',
+      //  start:'Noida ,Uttar Pradesh,India',
+        end:resData.address,
+      }
+      );
+ }
+
  const vendorDetail = async () => {
-   
+
   setLoading(true)
-  
   const { responseJson, err } = await requestGetApi(shop_eat_business_id+props.route.params.data.business_id, '', 'GET', '')
   setLoading(false)
   console.log('the res shop_eat_business_id==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
-    console.log('the res features ==>>', responseJson.body.features)
+  console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
+  console.log('the res features ==>>', responseJson.body.features)
   var updated=0
     for(let j=1;j<=responseJson.body.services.length;j++){
      if(responseJson.body.services[j-1].attribute_label=='Book A Table' &&  responseJson.body.services[j-1].attribute_value=='yes'){
-        var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
-        setfutureTimes(stimess)
-        settimimgs(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00 - '+responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
+      console.log('kumar===>>',responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00');
+      console.log('verma===>>',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00');
+
+        // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
+        //  setfutureTimes(stimess)
+
+         settimimgs(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00 - '+responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
        }
        if(responseJson.body.services[j-1].attribute_value=='yes' && updated ==0){
         setselectedTab(responseJson.body.services[j-1].attribute_label)
@@ -438,8 +456,16 @@ function formatDate(date) {
 
 const menuList = async (dd) => {
    
-  setLoading(true)
-  var urls=shop_eat_menu+props.route.params.data.userid+'?menu_type='+dd
+   setLoading(true)
+  var urls=''
+  if(dd==null){
+    // urls=shop_eat_menu+props.route.params.data.userid+'?menu_type='+dd
+    urls=shop_eat_menu_userid+props.route.params.data.userid
+  }else{
+    urls=shop_eat_menu+props.route.params.data.userid+'?menu_type='+dd
+    // urls=shop_eat_menu_userid+props.route.params.data.userid
+  }
+  console.log('the res in_cart shop_eat_menu_userid urls==>>', urls)
   const { responseJson, err } = await requestGetApi(urls, '', 'GET', User.token)
   setLoading(false)
   console.log('the res in_cart shop_eat_menu_userid ==>>', responseJson)
@@ -580,19 +606,19 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 <View style={{width:100,height:30,flexDirection:'row',alignItems:'center',marginTop:5,}}>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'#FFE2E6',justifyContent:'center'}}
 onPress={mpress}>
-<Text style={{textAlign:'center',fontSize:25,color:'red',top:-1}}>-</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'red',top:-4}}>-</Text>
 </TouchableOpacity>
 <Text style={{marginHorizontal:10,color:Mycolors.Black}}>{item.cart_quantity}</Text>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'red',justifyContent:'center'}}
 onPress={apress}>
-<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-1}}>+</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-3}}>+</Text>
 </TouchableOpacity>
    </View>
 }
 </View>
-  <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:boxcolor,justifyContent:'center'}}>
+  {/* <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:boxcolor,justifyContent:'center'}}>
   <View style={{width:10,height:10,borderRadius:10,alignSelf:'center',backgroundColor:'#fff'}} />
-  </View>
+  </View> */}
 </TouchableOpacity>
   )
 }
@@ -626,19 +652,19 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 <View style={{width:100,height:30,flexDirection:'row',alignItems:'center',marginTop:5,}}>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'#FFE2E6',justifyContent:'center'}}
 onPress={minus}>
-<Text style={{textAlign:'center',fontSize:25,color:'red',top:-1}}>-</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'red',top:-4}}>-</Text>
 </TouchableOpacity>
 <Text style={{marginHorizontal:10,color:Mycolors.Black}}>{qty}</Text>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'red',justifyContent:'center'}}
 onPress={plush}>
-<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-1}}>+</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-3}}>+</Text>
 </TouchableOpacity>
    </View>
 }
 </View>
-  <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:boxcolor,justifyContent:'center'}}>
+  {/* <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:boxcolor,justifyContent:'center'}}>
   <View style={{width:10,height:10,borderRadius:10,alignSelf:'center',backgroundColor:'#fff'}} />
-  </View>
+  </View> */}
 </TouchableOpacity>
   )
 }
@@ -648,6 +674,8 @@ const resetStacks=(page)=>{
     routes: [{name: page}],
   });
  }
+
+
   return(
     <SafeAreaView style={{backgroundColor:Mycolors.BG_COLOR}}>
  <View style={{}}>
@@ -681,7 +709,7 @@ const resetStacks=(page)=>{
    
     <View style={{overflow:'hidden',top:0,width:'100%',alignSelf:'center',position:'absolute',zIndex:-999}}>
      <ImageSlider 
-    //  localImg={true}
+    //  localImg={true}'
     data={allImg}
    // onClick={(item, index) => {alert('hello'+index)}}
     autoPlay={true}
@@ -700,7 +728,7 @@ const resetStacks=(page)=>{
 <Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>Restaurant</Text>
                           <View style={{flexDirection:'row',marginTop:5}}>
                           <Image source={require('../../../assets/Star.png')} style={{width:18,height:18}}></Image>
-                          <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>{resData.rating}</Text>
+                          <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>{parseInt(resData.rating)}.0</Text>
                           </View>
   </View>
 
@@ -714,7 +742,7 @@ const resetStacks=(page)=>{
       shadowRadius: 1,
       shadowOpacity: 0.3,
       justifyContent: 'center',
-      elevation: 5,}}>
+      elevation: 5,}} onPress={()=>{goToMap(resData.latitude,resData.longitude)}}>
       <Image source={require('../../../assets/layer_9.png')} style={{width:10,height:15,alignSelf:'center'}}></Image>
       </TouchableOpacity>
   </View>
@@ -722,27 +750,8 @@ const resetStacks=(page)=>{
 </View>
 
 
-{/* 
-<View style={{flexDirection:'row',justifyContent:'space-between',top:-40}}>
-<View style={{width:'32%'}}>
-<MyButtons title="Take Away" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Take Away')}} marginHorizontal={20} fontSize={10}
-  titlecolor={selectedTab=='Take Away' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab=='Take Away' ?['#fd001f','#b10027']:['transparent','transparent']} backgroundColor={'transparent'}/>
-</View>
 
-<View style={{width:'32%'}}>
-<MyButtons title="Dining" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Dining')}} marginHorizontal={20} fontSize={12}
-  titlecolor={selectedTab=='Dining' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab=='Dining' ?['#fd001f','#b10027']:['transparent','transparent']} backgroundColor={'transparent'}/>
-</View>
-
-<View style={{width:'32%'}}>
-<MyButtons title="Book A Table" height={37} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{setselectedTab('Book A Table')}} marginHorizontal={20} fontSize={12}
-  titlecolor={selectedTab=='Book A Table' ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab=='Book A Table' ?['#fd001f','#b10027']:['transparent','transparent']} backgroundColor={'transparent'}/>
-</View>
-</View> 
-*/}
-
-
-<View style={{width:'100%',alignSelf:'center',top:-40}}>
+<View style={{width:'100%',alignSelf:'center',top:-30}}>
           <FlatList
                   data={resData.services}
                   horizontal={true}
@@ -766,7 +775,7 @@ const resetStacks=(page)=>{
                   }} 
                   keyExtractor={item => item.id}
                 />
-         </View>
+</View>
 
  
 {selectedTab=='Take Away' || selectedTab=='Delivery' ? 
@@ -821,8 +830,8 @@ const resetStacks=(page)=>{
 :
 selectedTab=='Dining' ? 
 <View>
-<View style={{width:'100%',alignSelf:'center',marginTop:10}}>
-          <FlatList
+   {/* <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
+         <FlatList
                   data={upData}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
@@ -845,8 +854,8 @@ selectedTab=='Dining' ?
                     )
                   }}
                   keyExtractor={item => item.id}
-                />
-         </View>
+                /> 
+         </View>*/}
 
 </View>
 :
@@ -855,14 +864,14 @@ null
 { selectedTab!='Book A Table' ? 
 <> 
 
-<View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginTop:15,alignItems:'center'}}>
-<Text style={{color:Mycolors.Black,fontWeight:'bold'}}>Menu</Text>
+<View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',alignItems:'center',marginBottom:10,borderWidth:1,borderColor:'gray',padding:4,borderRadius:5,marginTop:10}}>
+<Text style={{color:Mycolors.Black,fontWeight:'bold',left:5}}>Menu</Text>
 <View style={{height:40,flexDirection:'row'}}>
  <TouchableOpacity style={{width:40,height:40,backgroundColor:'transparent',justifyContent:'center'}}
  onPress={()=>{setmodlevisual1(true)}}>
     <Image source={require('../../../assets/searchblue.png')} style={{width:25,height:25,overflow:'hidden',alignSelf:'center'}}></Image>
    </TouchableOpacity>
-<View style={{width:150,height:30}}>
+<View style={{width:150,height:30,zIndex:999}}>
 
 {/* <Toggle
   value={toggleValue}
@@ -915,7 +924,7 @@ null
     setOpen={()=>{setmenutypeOpen(!menutypeOpen)}}
     setValue={(v)=>{setmenutypevalue(v)}}
     setItems={(i)=>{setmenutypedate(i)}}
-   //listMode="MODAL"
+   // listMode="MODAL"
     placeholder="Menu Type"
     onChangeValue={(value) => {
       setmenutypevalue(value)
@@ -923,8 +932,9 @@ null
       // getData(makeUrl(value))
       menuList(value)
       setselectedValue(value)
-      setreloades(!reloades)
+      // setreloades(!reloades)
     }} 
+    dropDownDirection="TOP"
     placeholderStyle={{
       color: '#000',
       fontSize:12,
@@ -934,25 +944,26 @@ null
       color: '#000',
     //  fontSize:5
     }}
-    style={{borderColor:'gray',backgroundColor:'transparent',height:30}}
+    style={{borderColor:'transparent',backgroundColor:'transparent',height:30, zIndex:999,top:-5,right:-4}}
     containerStyle={{
       borderColor:'red',
-      height:30
+      height:30,
+      zIndex:999
     }} 
     disabledStyle={{
       opacity: 0.5
     }}
     dropDownContainerStyle={{
       backgroundColor: "#fff",
-     
       borderColor:'#000',
+      // height:360,
       borderWidth:0.2,
       shadowColor: '#000000',
       shadowOffset: {
         width: 0,
         height: 3
       },
-      shadowRadius: 5,
+      shadowRadius: 5, 
       shadowOpacity: 1.0,
       elevation: 5,
       zIndex:999
@@ -967,7 +978,7 @@ null
 
 </View>
 
-<View style={{width:'100%',alignSelf:'center',marginTop:10,zIndex:-999}}>
+<View style={{width:'100%',alignSelf:'center',marginTop:10,zIndex:-888}}>
     {selectedTab!='Dining' ? 
       selectedTab=='Take Away' ? 
       menuresData.map((item,index)=> {
@@ -1201,7 +1212,7 @@ null
               justifyContent: 'center',
               elevation: 3,}}
            >
-
+{ Platform.OS=='ios' ?
        <DatePicker
           customStyles={{
             dateInput: {borderColor:'transparent',left:-90},
@@ -1234,6 +1245,27 @@ null
             setDate(date)
           }}
         />
+        :
+        showda ?
+                      <View>
+                        <DateTimePicker
+                          value={new Date()}
+                          mode='calendar' 
+                          // is24Hour={false}
+                          display="spinner"
+                          onChange={(event, sTime) => {
+                            setshowda(false) 
+                            console.log(sTime.toDateString());
+                            setDate(sTime)
+                            console.log(event);
+                          }}
+                        />
+                      </View>
+                      :
+                      <TouchableOpacity style={{ width: '100%', height: 50, justifyContent: 'center',backgroundColor:Mycolors.HEADERCOLOR,borderColor:'transparent',zIndex:-999,borderRadius:5 }}>
+                        <Text style={{fontSize: 15, color: '#000',left:10 }} onPress={() => { setshowda(true) }}>{date.toString().substring(0,16)}</Text>
+                      </TouchableOpacity>
+        }
 
           </View>
 
@@ -1289,8 +1321,6 @@ null
  : null
 }
 
-
-
 <View style={{height:200}} />
 
 </ScrollView>
@@ -1298,10 +1328,15 @@ null
 <View style={{width:'92%',alignSelf:'center',position:'absolute',bottom:80}}>
 <MyButtons title="Confirm Order" height={45} width={'100%'} borderRadius={5} alignSelf="center"
  press={()=>{
+  if(diningItens1.length>0){
   setmodlevisual4(false)
-  setmodlevisual3(true)
+  setmodlevisual3(true) 
   setmodlevisual1(false)
   setmodlevisual2(false)
+  }else{
+    Alert.alert('Please add items from the menu to place an order.')
+  }
+  
 }} marginHorizontal={20} fontSize={12}
   titlecolor={Mycolors.BG_COLOR} marginVertical={0} hLinearColor={['#fd001f','#b10027']} backgroundColor={'transparent'}/>
 </View>
@@ -1396,7 +1431,7 @@ null
 <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,marginTop:9}} >{ClickedItemData.name}</Text>
 <View style={{flexDirection:'row'}}>
 <Text style={{color:Mycolors.GrayColor,fontWeight:'600',fontSize:12,marginTop:9}} >Food Preparation Time:</Text>
-<Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,marginTop:9}} > 34 minutes</Text>
+<Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,marginTop:9}} > {resData.tentative_time}</Text>
 </View>
 </View>
 <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:'red',justifyContent:'center'}}>
@@ -1409,7 +1444,7 @@ null
           <TextInput
                 value={cookingIns}
                 onChangeText={(e) => setcookingIns(e)}
-                placeholder={'Add Cooking Instruction'}
+                placeholder={'Add Cooking Instructions'} 
                 placeholderTextColor="#bbbbbb"
                 multiline={true}
               // maxLength={500}
@@ -1527,7 +1562,7 @@ null
           <TextInput
                 value={cookingIns}
                 onChangeText={(e) => setcookingIns(e)}
-                placeholder={'Add Cooking Instruction'}
+                placeholder={'Add Cooking Instructions'}
                 placeholderTextColor="#bbbbbb"
                 multiline={true}
               // maxLength={500}
@@ -1623,6 +1658,8 @@ null
   {loading ?  
   <Loader />
   :null}
+  {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}}/> : null }
+
     </SafeAreaView>
      );
   }

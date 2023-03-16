@@ -263,20 +263,26 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
                   // numColumns={2}
                   renderItem={({item,index})=>{
                     return(
-                      <View style={{width:160,marginHorizontal:5}}>
-          <TouchableOpacity style={{width:160,height:130,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
+                      <View style={{width:190,marginHorizontal:5}}>
+          <TouchableOpacity style={{width:190,height:130,backgroundColor:Mycolors.LogininputBox,alignSelf:'center'}}
           onPress={()=>{
             props.navigation.navigate('FoodDetails',{data:item})
             dispatch(setVenderDetail(item))
             }}>
-          <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>
+          <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7,resizeMode:'stretch'}}></Image>
           </TouchableOpacity>
           <View style={{}}>
-          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold'}}>{item.name}</Text>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:2,fontWeight:'bold',left:2}}>{item.name}</Text>
+
           </View>
-          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:5,top:-10}}>
-          <Text style={{fontSize:9,color:Mycolors.RED,marginTop:5,textAlign:'left',}}></Text>
-          <TouchableOpacity style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
+          <View style={{padding:5}}>
+          <View style={{flexDirection:'row',}}>
+          <Image source={require('../../../assets/Star.png')} style={{width:13,height:13}}></Image>
+          <Text style={{fontSize:10,color:Mycolors.Black,left:2}}>4.2</Text>
+          <Image source={require('../../../assets/Clock.png')} style={{width:13,height:13,marginLeft:10,top:1}}></Image>
+          <Text style={{fontSize:10,color:Mycolors.Black,left:2}}>25-30 min</Text>
+          </View>
+          {/* <TouchableOpacity style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 3
@@ -286,7 +292,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
       justifyContent: 'center',
       elevation: 5,}}>
           <Image source={require('../../../assets/layer_9.png')} style={{width:10,height:15,alignSelf:'center'}}></Image>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           </View>
           </View>
                     )
@@ -313,7 +319,8 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
                   // numColumns={2}
                   renderItem={({item,index})=>{
                     return(
-                      <TouchableOpacity style={{width:130,height:150,marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
+                      <View style={{width:100,height:200,marginHorizontal:5,marginVertical:5,}}>
+                      <TouchableOpacity style={{width:100,height:120, padding:10,backgroundColor:'#fff',
                       shadowOffset: {
                       width: 0,
                       height: 3
@@ -322,11 +329,12 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
                     shadowOpacity: 0.3,
                    // justifyContent: 'center',
                     elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[item],from:'CatClick'})}}>
-          <View style={{width:80,height:80,alignSelf:'center',marginTop:5}}>
-          <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:10,overflow:'hidden'}}></Image>
+          <View style={{width:60,height:60,alignSelf:'center'}}>
+          <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:50,overflow:'hidden'}}></Image>
           </View>
         <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,textAlign:'center',marginTop:9}} >{item.category_name}</Text>
           </TouchableOpacity>
+          </View>
                     )
                   }}
                   keyExtractor={item => item.id}
@@ -353,6 +361,8 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}}
 
 </View>
 {loading ? <Loader /> : null}
+{My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}}/> : null }
+
     </SafeAreaView>
      );
   }

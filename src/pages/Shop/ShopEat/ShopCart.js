@@ -71,7 +71,7 @@ const ShopCart = (props) => {
     const [phone, setphone] = useState('');
     const [pincode, setpincode] = useState('');
     const [state, setstate] = useState('');
-    const [selectedAddress, setselectedAddress] = useState('');  
+    const [selectedAddress, setselectedAddress] = useState(null);  
     const [lat, setlat] = useState('28.6176')
     const [lan, setlan] = useState('77.422') 
     const [ordertype, setordertype] = useState('delivery') 
@@ -166,7 +166,7 @@ const ShopCart = (props) => {
     
     const { responseJson, err } = await requestPostApi(shop_eat_cart_id+item.id, '', 'DELETE',User.token)
     setLoading(false)
-    console.log('the res==>>', responseJson)
+    console.log('the res==>>delete ', responseJson)
     if (responseJson.headers.success == 1) {
       Alert.alert(responseJson.headers.message)
       // Toast.show(responseJson.headers.message)
@@ -238,28 +238,35 @@ const ShopCart = (props) => {
  const getcart = async () => {
     // setresData([])
     setLoading(true)
-    
     const { responseJson, err } = await requestGetApi(shop_eat_cart, '', 'GET',  User.token)
     setLoading(false)
-    console.log('the res get shop_eat_cart ==>>', responseJson.body.items)
+    // console.log('the res get shop_eat_cart ==>>', responseJson.body.items.length)
     if (responseJson.headers.success == 1) {
-      console.log('status 11111111ioioiooio',responseJson.body.items[0].serviceType);
-       if(responseJson.body.items[0].serviceType=='Take Away'){
-        setordertype('take-away')
-       }
-        setres(responseJson.body)
-        var myCartItem=[]
-        for(let i=1;i<=responseJson.body.items.length;i++){
-          if(responseJson.body.items[i-1].serviceType!=null){
-            myCartItem.push(responseJson.body.items[i-1])
-          }
-        }
-        setresData(myCartItem)
-        // setresData(responseJson.body.items)
-        setsubTotal(responseJson.body.sub_total)  
-        setdilivery(responseJson.body.delivery_charge)
-        settotal(responseJson.body.total)
+      if(responseJson.body.items.length==0){
+        setres([])
+        setresData([])
+        setsubTotal('')  
+        setdilivery('')
+        settotal('0')
         setreloades(!reloades)
+       }else{
+        if(responseJson.body.items[0].serviceType=='Take Away'){
+          setordertype('take-away')
+         }
+          setres(responseJson.body)
+          var myCartItem=[]
+          for(let i=1;i<=responseJson.body.items.length;i++){
+            if(responseJson.body.items[i-1].serviceType!=null){
+              myCartItem.push(responseJson.body.items[i-1])
+            }
+          }
+          setresData(myCartItem)
+          // setresData(responseJson.body.items)
+          setsubTotal(responseJson.body.sub_total)  
+          setdilivery(responseJson.body.delivery_charge)
+          settotal(responseJson.body.total)
+          setreloades(!reloades)
+         }
     } else {
         setres([])
         setresData([])
@@ -300,7 +307,15 @@ const ShopCart = (props) => {
   }
   
   const AddAddress = async () => {
-   
+   if(full_name==''){
+    Alert.alert('Please Add Name')
+   }else if(area_village==''){
+    Alert.alert('Please Add Address')
+   }else if(city==''){
+    Alert.alert('Please Add City')
+   }else if(state==''){
+    Alert.alert('Please Add State')
+   }
       setLoading(true)
     var data={
       "location_name": full_name,
@@ -339,14 +354,22 @@ const ShopCart = (props) => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET',  User.token)
     setLoading(false)
-    console.log('the res get user_address get==>>', responseJson)
-    if (responseJson.headers.success == 1) {
+    console.log('the res get user_address get==>>body', responseJson)
+    if(responseJson!=null){
+      if (responseJson.headers.success == 1) {
       setaddressListData(responseJson.body)
       setselectedAddress(responseJson.body[0])
     } else {
+      // setaddressListData(null)
+      setselectedAddress(null)
       //  setalert_sms(err)
       //  setMy_Alert(true)
     }
+    }else{
+      // setaddressListData(null)
+      setselectedAddress(null)
+    }
+    
   } 
 
 
@@ -392,12 +415,12 @@ const flatliistDesign=(img,ti,rs,des,mpress,apress,dpress,qty)=>{
  <View style={{width:100,height:30,flexDirection:'row',alignItems:'center',marginTop:5,marginLeft:70,position:'absolute',bottom:5,right:0}}>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'#FFE2E6',justifyContent:'center'}}
 onPress={mpress}>
-<Text style={{textAlign:'center',fontSize:25,color:'red',top:-1}}>-</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'red',top:-4}}>-</Text>
 </TouchableOpacity>
 <Text style={{marginHorizontal:10,color:Mycolors.Black}}>{qty}</Text>
 <TouchableOpacity style={{width:30,height:30,borderRadius:20,backgroundColor:'red',justifyContent:'center'}}
 onPress={apress}>
-<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-1}}>+</Text>
+<Text style={{textAlign:'center',fontSize:25,color:'#fff',top:-3}}>+</Text>
 </TouchableOpacity>
    </View>
   </View>
@@ -442,7 +465,7 @@ onPress={apress}>
         <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Choose Delivery Address</Text>
         <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setShippingAddressPopUp(true)}}>Add Address</Text> 
         </View>
-
+ {selectedAddress!=null ? 
      <View style={{width:'100%',marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
       borderColor:'#dee4ec',
       borderWidth:1,
@@ -460,6 +483,7 @@ onPress={apress}>
   </TouchableOpacity>
 
      </View>
+     : null}
      <View style={{width:'95%',height:100,borderRadius:2,marginTop:10,alignSelf:'center'}}>
 
    <TextInput
@@ -507,7 +531,7 @@ onPress={apress}>
      </View>
 
      <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:12,width:'100%'}}>
-     <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Other Coupons</Text>
+     <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Coupons</Text>
      <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setmodlevisual(true)}}>View All</Text>
      </View>
 
@@ -557,7 +581,14 @@ onPress={apress}>
       </View>
 
         <View style={{width:'95%',alignSelf:'center',marginTop:15}}>
-          <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype,cooking:cookingIns})}} marginHorizontal={20} fontSize={11}
+          <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
+           if(selectedAddress!=null){
+            props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype,cooking:cookingIns})
+           }else{
+            Alert.alert('Please Add Address')
+           }
+            
+            }} marginHorizontal={20} fontSize={11}
           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
           </View>
 
@@ -583,7 +614,7 @@ onPress={apress}>
 </ScrollView>
 
 {modlevisual ?
-<View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,backgroundColor:'rgba(0,0,0,0.4)',position:'absolute',left:0,top:0,justifyContent:'center'}}>
+<TouchableOpacity style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,backgroundColor:'rgba(0,0,0,0.4)',position:'absolute',left:0,top:0,justifyContent:'center'}} onPress={()=>{setmodlevisual(false)}}>
         <View style={{ height: 300, backgroundColor: '#fff',  borderRadius: 30,position: 'absolute',  width: '95%',borderColor:'#fff',borderWidth:0.3,alignSelf:'center' ,padding:10}}>
 
         {
@@ -623,7 +654,7 @@ onPress={apress}>
 
         </View>
 
-</View>
+</TouchableOpacity>
         : null
       }
 
@@ -850,7 +881,7 @@ null
                                         marginBottom:200
                                     }}>
 
-                                   
+                                   {addressListData !=null ? 
                                         <FlatList
                                             vertical
                                             data={addressListData}
@@ -945,7 +976,7 @@ null
                                             }
                                             }
                                         />
-                                       
+                                      : null} 
                                 </View>
         
                             </View>
