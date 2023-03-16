@@ -21,6 +21,13 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import openMap from 'react-native-open-maps';
 
+function newAddMinutes(time, minsToAdd) {
+  function D(J){ return (J<10? '0':'') + J;};
+  var piece = time.split(':');
+  var mins = piece[0]*60 + +piece[1] + +minsToAdd;
+
+  return D(mins%(24*60)/60 | 0) + ':' + D(mins%60);  
+}  
 
 const FoodDetails = (props) => {
   const User = useSelector(state => state.user.user_details)
@@ -105,6 +112,7 @@ const FoodDetails = (props) => {
   const [futureTimes, setfutureTimes] = useState([])
   const [imgcartCount, setimgcartCount] = useState(1)
   const [timimgs, settimimgs] = useState('')
+  const [slots, setSlots] = useState([])
   const [refreshing, setRefreshing] = useState(false);
   const [selectedValue,setselectedValue] = useState('Regular')
   const [menutypeOpen, setmenutypeOpen] = useState(false);
@@ -418,6 +426,7 @@ const goToMap=(l,n)=> {
  const vendorDetail = async () => {
 
   setLoading(true)
+  console.log('saurabh url', shop_eat_business_id+props.route.params.data.business_id);
   const { responseJson, err } = await requestGetApi(shop_eat_business_id+props.route.params.data.business_id, '', 'GET', '')
   setLoading(false)
   console.log('the res shop_eat_business_id==>>', responseJson)
@@ -429,6 +438,31 @@ const goToMap=(l,n)=> {
      if(responseJson.body.services[j-1].attribute_label=='Book A Table' &&  responseJson.body.services[j-1].attribute_value=='yes'){
       console.log('kumar===>>',responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00');
       console.log('verma===>>',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00');
+      console.log('saurabh===>>',responseJson.body.services[j-1].attribute_detail);
+      const startTime  = responseJson.body.services[j-1].attribute_detail.substring(0,5)
+      const endTime  = responseJson.body.services[j-1].attribute_detail.substring(6)
+      const startInMinutes=startTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
+      const endInMinutes=endTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
+      const minutesDifferent = endInMinutes - startInMinutes
+      const isAdditionalSlot = (minutesDifferent % 45) >= 30
+      const slotsWithGap = Math.floor(minutesDifferent / 45)
+      console.log('minutesDifferent', minutesDifferent);
+      console.log('slotsWithGap', slotsWithGap);
+      console.log('isAdditionalSlot', isAdditionalSlot);
+      let allSlots = []
+      let start = startTime
+      let newTime = ''
+      Array.from(Array(slotsWithGap).keys()).map(el=>{
+        newTime = newAddMinutes(start, 30)
+        allSlots.push({start: start, end: newTime})
+        console.log('{start: start, end: newTime}', {start: start, end: newTime});
+        start = newAddMinutes(newTime, 15)
+      })
+      // if(isAdditionalSlot){
+      //   allSlots.push({start: newTime, end: newAddMinutes(newTime, 15)})
+      // }
+      setSlots(allSlots)
+      console.log('all slots', allSlots);
 
         // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
         //  setfutureTimes(stimess)
