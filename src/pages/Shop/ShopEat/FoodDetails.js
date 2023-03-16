@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, Platform} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import openMap from 'react-native-open-maps';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function newAddMinutes(time, minsToAdd) {
   function D(J){ return (J<10? '0':'') + J;};
@@ -113,6 +114,7 @@ const FoodDetails = (props) => {
   const [imgcartCount, setimgcartCount] = useState(1)
   const [timimgs, settimimgs] = useState('')
   const [slots, setSlots] = useState([])
+  const [selectedSlot, setSelectedSlot] = useState({})
   const [refreshing, setRefreshing] = useState(false);
   const [selectedValue,setselectedValue] = useState('Regular')
   const [menutypeOpen, setmenutypeOpen] = useState(false);
@@ -197,14 +199,15 @@ const bookTables = async () => {
   var td=''
   var tt=''
 if(date==''){
- if(selectedTime==''){
+//  if(selectedTime==''){
+ if(Object.keys(selectedSlot)?.length === 0){
   setalert_sms('Please Select Time Slot')
   setMy_Alert(true)
   // Alert.alert('Please Select Time Slot')
   // Toast.show('Please Select Time Slot') 
  }else{
    td=new Date()
-   tt=selectedTime
+   tt=selectedSlot
  }
  
 }else{
@@ -224,8 +227,8 @@ if(td!='' && tt!=''){
     "business_id": props.route.params.data.business_id,
     "no_of_person": counter,
     "schedule_date": td,
-    "schedule_time_from": tt,
-    "schedule_time_to": tt
+    "schedule_time_from": tt?.start,
+    "schedule_time_to": tt?.end
 }
 console.log(data);
   const { responseJson, err } = await requestPostApi(shop_eat_cart_book_table, data, 'POST', User.token)
@@ -1195,15 +1198,39 @@ null
 
           </View>
 
-          <TouchableOpacity style={{width:'95%',height:50,marginHorizontal:5,marginVertical:10, padding:10,backgroundColor:Mycolors.TimingColor,
+          <TouchableOpacity style={{width:'95%',marginHorizontal:5,marginVertical:10, padding:10,backgroundColor:Mycolors.TimingColor,
               borderColor:'#dee4ec',borderRadius:7,alignSelf:'center',flexDirection:'row',alignItems:'center'}}
             >
           <View style={{width:25,height:25,alignSelf:'center',top:-2}}>
           <Image source={require('../../../assets/shape_42.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
           </View>
           <View style={{marginLeft:10}}>
+          {/* <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text> */}
           <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text>
-          <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,marginTop:4}} >{timimgs}</Text>
+          {/* {console.log('FlatList slots', slots)} */}
+          <View style={{width:'100%', flexDirection:'row'}}>
+          <FlatList
+            data={slots}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+              // numColumns={2}
+              keyExtractor={item => item.start}
+              // style={{backgroundColor:'yellow',width:'100%'}}
+            renderItem={({item, index}) => {
+              return (
+                // <Text>abc</Text>
+                <TouchableWithoutFeedback onPress={()=>{setSelectedSlot(item)}}>
+                  
+                <View style={[styles.radioButtonContainer]}>
+                <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
+                <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.start+' - '+item.end}</Text>
+              </View>
+                </TouchableWithoutFeedback>
+              );
+            }}
+          />
+          </View>
+          <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,marginTop:4}} >{}</Text>
           </View>
           </TouchableOpacity>
 
@@ -1728,5 +1755,10 @@ const styles = StyleSheet.create({
     borderRadius:10,
     color:'#fff',
   },
+  radioButtonContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    marginRight:5
+  }
 });
 export default FoodDetails 
