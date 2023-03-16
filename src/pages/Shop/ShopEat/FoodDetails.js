@@ -439,13 +439,15 @@ const goToMap=(l,n)=> {
       console.log('kumar===>>',responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00');
       console.log('verma===>>',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00');
       console.log('saurabh===>>',responseJson.body.services[j-1].attribute_detail);
+      const slotDuration = 30
+      const breakDuration = 15
       const startTime  = responseJson.body.services[j-1].attribute_detail.substring(0,5)
       const endTime  = responseJson.body.services[j-1].attribute_detail.substring(6)
       const startInMinutes=startTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
       const endInMinutes=endTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
       const minutesDifferent = endInMinutes - startInMinutes
-      const isAdditionalSlot = (minutesDifferent % 45) >= 30
-      const slotsWithGap = Math.floor(minutesDifferent / 45)
+      const isAdditionalSlot = (minutesDifferent % (slotDuration+breakDuration)) >= slotDuration
+      const slotsWithGap = Math.floor(minutesDifferent / (slotDuration+breakDuration))
       console.log('minutesDifferent', minutesDifferent);
       console.log('slotsWithGap', slotsWithGap);
       console.log('isAdditionalSlot', isAdditionalSlot);
@@ -453,14 +455,14 @@ const goToMap=(l,n)=> {
       let start = startTime
       let newTime = ''
       Array.from(Array(slotsWithGap).keys()).map(el=>{
-        newTime = newAddMinutes(start, 30)
+        newTime = newAddMinutes(start, slotDuration)
         allSlots.push({start: start, end: newTime})
         console.log('{start: start, end: newTime}', {start: start, end: newTime});
-        start = newAddMinutes(newTime, 15)
+        start = newAddMinutes(newTime, Math.abs(slotDuration-breakDuration))
       })
-      // if(isAdditionalSlot){
-      //   allSlots.push({start: newTime, end: newAddMinutes(newTime, 15)})
-      // }
+      if(isAdditionalSlot){
+        allSlots.push({start: start, end: newAddMinutes(start, slotDuration)})
+      }
       setSlots(allSlots)
       console.log('all slots', allSlots);
 
