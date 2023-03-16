@@ -210,17 +210,29 @@ if(date==''){
    tt=selectedSlot
  }
  
-}else{
-  if(selectedTime2==''){
-    // Toast.show('Please Select Time Slot')
-    setalert_sms('Please Select Time Slot')
-  setMy_Alert(true)
-    // Alert.alert('Please Select Time Slot')
-   }else{
-    td=date
-    tt=selectedTime2
-   }
 }
+else{
+  if(Object.keys(selectedSlot)?.length === 0){
+    setalert_sms('Please Select Time Slot')
+    setMy_Alert(true)
+    // Alert.alert('Please Select Time Slot')
+    // Toast.show('Please Select Time Slot') 
+   }else{
+     td=date
+     tt=selectedSlot
+   }
+  }
+// else{
+//   if(selectedTime2==''){
+//     // Toast.show('Please Select Time Slot')
+//     setalert_sms('Please Select Time Slot')
+//   setMy_Alert(true)
+//     // Alert.alert('Please Select Time Slot')
+//    }else{
+//     td=date
+//     tt=selectedTime2
+//    }
+// }
 if(td!='' && tt!=''){
    setLoading(true)
   var data={
@@ -230,7 +242,7 @@ if(td!='' && tt!=''){
     "schedule_time_from": tt?.start,
     "schedule_time_to": tt?.end
 }
-console.log(data);
+console.log('bookTables data', data);
   const { responseJson, err } = await requestPostApi(shop_eat_cart_book_table, data, 'POST', User.token)
   setLoading(false)
   console.log('the res==>>', responseJson)
@@ -239,14 +251,16 @@ console.log(data);
     // setmodlevisual4(true)
     // setmodlevisual1(false)
     // setmodlevisual2(false)
-    Alert.alert(
-      '',
-      'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
-      [
-        {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
-      ],
-      // {cancelable: false},
-    );
+    setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+    setMy_Alert(true)
+    // Alert.alert(
+    //   '',
+    //   'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
+    //   [
+    //     {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
+    //   ],
+    //   // {cancelable: false},
+    // );
    // Alert.alert('Booking request has been sent successfully you will receive a notification once your table is finalized.')
   } else {
   setalert_sms(err)
@@ -1198,45 +1212,16 @@ null
 
           </View>
 
-          <TouchableOpacity style={{width:'95%',marginHorizontal:5,marginVertical:10, padding:10,backgroundColor:Mycolors.TimingColor,
-              borderColor:'#dee4ec',borderRadius:7,alignSelf:'center',flexDirection:'row',alignItems:'center'}}
-            >
-          <View style={{width:25,height:25,alignSelf:'center',top:-2}}>
-          <Image source={require('../../../assets/shape_42.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
-          </View>
-          <View style={{marginLeft:10}}>
-          {/* <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text> */}
-          <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text>
-          {/* {console.log('FlatList slots', slots)} */}
-          <View style={{width:'100%', flexDirection:'row'}}>
-          <FlatList
-            data={slots}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-              // numColumns={2}
-              keyExtractor={item => item.start}
-              // style={{backgroundColor:'yellow',width:'100%'}}
-            renderItem={({item, index}) => {
-              return (
-                // <Text>abc</Text>
-                <TouchableWithoutFeedback onPress={()=>{setSelectedSlot(item)}}>
-                  
-                <View style={[styles.radioButtonContainer]}>
-                <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-                <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.start+' - '+item.end}</Text>
-              </View>
-                </TouchableWithoutFeedback>
-              );
-            }}
-          />
-          </View>
-          <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,marginTop:4}} >{}</Text>
-          </View>
-          </TouchableOpacity>
+          
 
-          <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
+          {/* <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
           <Text style={{color:Mycolors.Black,fontWeight:'500',fontSize:13}}>For Today</Text>
-          </View> 
+          </View>  */}
+          <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
+          <Text style={{color:Mycolors.Black,fontWeight:'500',fontSize:13}}>Select Date</Text>
+          </View>
+          
+           
 
           <View style={{width:'97%',alignSelf:'center'}}>
           <FlatList
@@ -1260,9 +1245,9 @@ null
                 />
          </View>
 
-         <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
+         {/* <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
           <Text style={{color:Mycolors.Black,fontWeight:'500',fontSize:13}}>For Later</Text>
-          </View> 
+          </View>  */}
 
           <View style={{width:'95%',height:50,marginHorizontal:5,marginVertical:10, padding:10,backgroundColor:'#fff',
               borderColor:'#dee4ec',borderRadius:7,alignSelf:'center',flexDirection:'row',alignItems:'center',shadowColor: '#000',
@@ -1331,6 +1316,42 @@ null
         }
 
           </View>
+
+          <TouchableOpacity style={{width:'95%',marginHorizontal:5,marginVertical:10, padding:10,backgroundColor:Mycolors.TimingColor,
+              borderColor:'#dee4ec',borderRadius:7,alignSelf:'center',flexDirection:'row',alignItems:'center'}}
+            >
+          <View style={{width:25,height:25,alignSelf:'center',top:-2}}>
+          <Image source={require('../../../assets/shape_42.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
+          </View>
+          <View style={{marginLeft:10}}>
+          {/* <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text> */}
+          <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:11,}} >Timings</Text>
+          {/* {console.log('FlatList slots', slots)} */}
+          <View style={{width:'100%', flexDirection:'row'}}>
+          <FlatList
+            data={slots}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+              // numColumns={2}
+              keyExtractor={item => item.start}
+              // style={{backgroundColor:'yellow',width:'100%'}}
+            renderItem={({item, index}) => {
+              return (
+                // <Text>abc</Text>
+                <TouchableWithoutFeedback onPress={()=>{setSelectedSlot(item)}}>
+                  
+                <View style={[styles.radioButtonContainer]}>
+                <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
+                <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.start+' - '+item.end}</Text>
+              </View>
+                </TouchableWithoutFeedback>
+              );
+            }}
+          />
+          </View>
+          <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,marginTop:4}} >{}</Text>
+          </View>
+          </TouchableOpacity>
 
           <View style={{width:'97%',alignSelf:'center',marginTop:10}}>
           <FlatList
