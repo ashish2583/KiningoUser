@@ -132,7 +132,6 @@ const FoodDetails = (props) => {
     vendorDetail()
     menuList(null)
     },[])
-
     const checkcon=()=>{
       vendorDetail()
       menuList(null)
@@ -198,30 +197,35 @@ const B=()=>{
 const bookTables = async () => {
   var td=''
   var tt=''
+// if(date==''){
+// //  if(selectedTime==''){
+//  if(Object.keys(selectedSlot)?.length === 0){
+//   setalert_sms('Please Select Time Slot')
+//   setMy_Alert(true)
+//   // Alert.alert('Please Select Time Slot')
+//   // Toast.show('Please Select Time Slot') 
+//  }else{
+//    td=new Date()
+//    tt=selectedSlot
+//  }
+ 
+// }
+
 if(date==''){
-//  if(selectedTime==''){
- if(Object.keys(selectedSlot)?.length === 0){
+  setalert_sms('Please Select Date')
+  setMy_Alert(true)
+  return
+}else{
+  td=date
+}
+if(Object.keys(selectedSlot)?.length === 0){
   setalert_sms('Please Select Time Slot')
   setMy_Alert(true)
-  // Alert.alert('Please Select Time Slot')
-  // Toast.show('Please Select Time Slot') 
- }else{
-   td=new Date()
-   tt=selectedSlot
- }
- 
+  return
+}else{
+  tt=selectedSlot
 }
-else{
-  if(Object.keys(selectedSlot)?.length === 0){
-    setalert_sms('Please Select Time Slot')
-    setMy_Alert(true)
-    // Alert.alert('Please Select Time Slot')
-    // Toast.show('Please Select Time Slot') 
-   }else{
-     td=date
-     tt=selectedSlot
-   }
-  }
+
 // else{
 //   if(selectedTime2==''){
 //     // Toast.show('Please Select Time Slot')
@@ -1301,6 +1305,24 @@ null
                           mode='calendar' 
                           // is24Hour={false}
                           display="spinner"
+                          customStyles={{
+                            dateInput: {borderColor:'transparent',left:-90},
+                            dateText: {color:Mycolors.Black},
+                            dateIcon: styles.dateIcon,
+                            dateplaceholder: {
+                              alignContent: 'flex-start',
+                            },
+                            placeholderText: {
+                              fontSize: 15,
+                              color: Mycolors.GrayColor,
+                              marginLeft: '5%',
+                              // left:100
+                            },
+                            zIndex:99999
+                          }}
+                          minDate={new Date ()}
+                          format='YYYY-MM-DD'
+                          placeholder={'Select date'}
                           onChange={(event, sTime) => {
                             setshowda(false) 
                             console.log(sTime.toDateString());
