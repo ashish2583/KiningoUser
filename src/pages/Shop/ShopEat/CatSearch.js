@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, StatusBar} from 'react-native';
+import {View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, StatusBar,RefreshControl} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -23,6 +23,7 @@ const CatSearch = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(()=>{
    console.log('hohohohoho',props.route.params.datas);
    setresData(props.route.params.datas)
@@ -30,6 +31,23 @@ const CatSearch = (props) => {
 //     AllVenders()
 //    }
  },[])
+ const checkcon = () => {
+     
+ }
+ const wait = (timeout) => {
+   return new Promise(resolve => setTimeout(resolve, timeout));
+ }
+
+ const onRefresh = React.useCallback(() => {
+   // setRefreshing(true);
+   // fetchSuccessDetails()
+   checkcon()
+   wait(2000).then(() => {
+
+     setRefreshing(false)
+
+   });
+ }, []);
 
 const homePageSearch = async () => {
 
@@ -69,6 +87,15 @@ const AllVenders = async () => {
    press2={()=>{}} title2={'Search'} fontWeight={'500'} img2height={20}
    press3={()=>{}} img3width={25} img3height={25} />
 
+<ScrollView
+        // refreshControl={
+        //   <RefreshControl
+        //     refreshing={refreshing}
+        //     onRefresh={onRefresh}
+
+        //   />
+        // }
+      >
 <View style={{width:'96%',alignSelf:'center'}}>
 <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
 serchValue={searchValue} 
@@ -81,10 +108,10 @@ onChangeText={(e)=>{
 }} 
 press={()=>{Alert.alert('Hi')}}
 presssearch={()=>{homePageSearch()}}
-paddingLeft={50}/>
+paddingLeft={9}/>
  
         
-<View style={{width:'100%',marginTop:10,alignSelf:'center'}}>
+<View style={{width:'100%',marginTop:25,alignSelf:'center', }}>
 {resData!=null ?
           <FlatList
                   data={resData}
@@ -93,21 +120,41 @@ paddingLeft={50}/>
                    numColumns={2}
                   renderItem={({item,index})=>{
                     return(
-                      <TouchableOpacity style={{width:'47%',height:160,marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
-                      shadowOffset: {
-                      width: 0,
-                      height: 3
-                    },
-                    shadowRadius: 1,
-                    shadowOpacity: 0.3,
-                    alignSelf:'center',
-                   // justifyContent: 'center',
-                    elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'CatClick'})}}>
-          <View style={{width:100,height:100,alignSelf:'center',marginTop:5}}>
-          <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:10,overflow:'hidden'}}></Image>
-          </View>
-        <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,textAlign:'center',marginTop:9}} >{item.category_name}</Text>
-          </TouchableOpacity>
+                      <View style={{ width:'49%',height:238, marginHorizontal: 2, marginVertical:-1,}}>
+                      <ImageBackground source={require('../../../assets/Food-Cover-image.png')}style={{width:'100%',height:'100%',  borderRadius: 10,  }}resizeMode='stretch'> 
+                      <TouchableOpacity style={{ paddingTop:20
+                   
+                      }} onPress={() => { props.navigation.navigate('ShopSearch', { datas: [item], from: 'CatClick' }) }}>
+                        <View style={{ width: 100, height: 100, alignSelf: 'center',borderRadius:100/2,shadowOffset: {
+                          width: 0,
+                          height: 3
+                        },
+                        shadowRadius: 1,
+                        shadowOpacity: 0.5,
+                       elevation: 10,
+                       }}>
+                          <Image source={{ uri: item.category_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 50, overflow: 'hidden' }}></Image>
+                        </View>
+                        <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
+                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >+25 Places NearBy</Text>
+                      </TouchableOpacity>
+                      </ImageBackground>
+                    </View>
+        //               <TouchableOpacity style={{width:'47%',height:160,marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
+        //               shadowOffset: {
+        //               width: 0,
+        //               height: 3
+        //             },
+        //             shadowRadius: 1,
+        //             shadowOpacity: 0.3,
+        //             alignSelf:'center',
+        //            // justifyContent: 'center',
+        //             elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'CatClick'})}}>
+        //   <View style={{width:100,height:100,alignSelf:'center',marginTop:5}}>
+        //   <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:10,overflow:'hidden'}}></Image>
+        //   </View>
+        // <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,textAlign:'center',marginTop:9}} >{item.category_name}</Text>
+        //   </TouchableOpacity>
                     )
                   }}
                   keyExtractor={item => item.id}
@@ -120,9 +167,9 @@ paddingLeft={50}/>
 
 
  </View>
-<View style={{height:100}} />
+<View style={{height:60}} />
 
-
+</ScrollView>
 
 {loading ? <Loader /> : null}
     </SafeAreaView>

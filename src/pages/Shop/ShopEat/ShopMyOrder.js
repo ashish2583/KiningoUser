@@ -15,7 +15,7 @@ import Toast from 'react-native-simple-toast';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import DropDownPicker from 'react-native-dropdown-picker';
+
 
 const ShopMyOrder = (props) => {
   const [searchValue, setsearchValue] = useState('')
@@ -24,42 +24,8 @@ const ShopMyOrder = (props) => {
   const [checkitem, setcheckitem] = useState('')
   const [reson, setreson] = useState(' ')
   const [date, setDate] = useState('')
-  const [orderDate, setOrderDate] = useState('')
   const User = useSelector(state => state.user.user_details)
-  const [drvRating,setdrvRating]=useState('0')
-  const [showFiltersModal, setShowFiltersModal] = useState(false);
-  const [orderTypeOpen, setOrderTypeOpen] = useState(false);
-  const [orderTypeValue, setOrderTypeValue] = useState('');
-  const [orderTypeData, setOrderTypeData] = useState([
-    // {label: 'Dining', value: 'dining'},
-    {label: 'Delivery', value: 'delivery'},
-    // {label: 'Table Booking', value: 'booked-table'},
-    {label: 'Take Away', value: 'take-away'},
-  ]);
-  const [timeDurationOpen, setTimeDurationOpen] = useState(false);
-  const [timeDurationValue, setTimeDurationValue] = useState('');
-  const [timeDurationData, setTimeDurationData] = useState([
-    {label: 'Today', value: 'Today'},
-    {label: '30 days', value: '30 day'},
-    {label: '60 days', value: '60 day'},
-    {label: '120 days', value: '120 day'},
-    {label: 'Last Year', value: 'Last Year'},
-    {label: 'Last 3 Years', value: 'Last 3 Years'},
-  ]);
-  const [statusOpen, setStatusOpen] = useState(false);
-  const [statusValue, setStatusValue] = useState('');
-  const [statusData, setStatusData] = useState([
-    {label: 'Pending', value: '0'},
-    {label: 'Accepted', value: '1'},
-    {label: 'Rejected', value: '2'},
-    {label: 'Preparing', value: '3'},
-    {label: 'Cancelled', value: '6'},
-    {label: 'Delivered', value: '12'},
-  ]);
- 
-  const [keyword, setKeyword] = useState('');
-  
-  
+  const [drvRating, setdrvRating] = useState('0')
   const [upData, setupData] = useState([
     {
       id: '1',
@@ -95,6 +61,35 @@ const ShopMyOrder = (props) => {
   const [orderData, setorderData] = useState([])
   const [refreshing, setRefreshing] = useState(false);
   const [cancleitem, setcancleitem] = useState('');
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
+  const [orderTypeValue, setOrderTypeValue] = useState('');
+  const [orderTypeData, setOrderTypeData] = useState([
+    // {label: 'Dining', value: 'dining'},
+    {label: 'Delivery', value: 'delivery'},
+    // {label: 'Table Booking', value: 'booked-table'},
+    {label: 'Take Away', value: 'take-away'},
+  ]);
+  const [timeDurationValue, setTimeDurationValue] = useState('');
+  const [timeDurationData, setTimeDurationData] = useState([
+    {label: 'Today', value: 'Today'},
+    {label: '30 days', value: '30 day'},
+    {label: '60 days', value: '60 day'},
+    {label: '120 days', value: '120 day'},
+    {label: 'Last Year', value: 'Last Year'},
+    {label: 'Last 3 Years', value: 'Last 3 Years'},
+  ]);
+  const [orderDate, setOrderDate] = useState('')
+  const [statusValue, setStatusValue] = useState('');
+  const [statusData, setStatusData] = useState([
+    {label: 'Pending', value: '0'},
+    {label: 'Accepted', value: '1'},
+    {label: 'Rejected', value: '2'},
+    {label: 'Preparing', value: '3'},
+    {label: 'Cancelled', value: '6'},
+    {label: 'Delivered', value: '12'},
+  ]);
+ 
+  const [keyword, setKeyword] = useState('');
   useEffect(() => {
     orderList()
   }, [])
@@ -186,12 +181,13 @@ const ShopMyOrder = (props) => {
     // return
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat_orders, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
     console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
     if (responseJson.headers.success == 1) {
       setorderData(responseJson.body)
     } else {
+	    setorderData([])
       //  setalert_sms(err)
       //  setMy_Alert(true)
     }
@@ -199,7 +195,6 @@ const ShopMyOrder = (props) => {
       setShowFiltersModal(false)
     }
   }
-
   const resetFilter = () => {
     setKeyword('')
     setOrderTypeValue('')
@@ -349,12 +344,23 @@ const ShopMyOrder = (props) => {
 
                 <>
                   {item.order_type == 'take-away' || item.order_type == 'delivery' ?
-                    <View style={{ marginVertical: 10, backgroundColor: '#fff', padding: 15, borderRadius: 10, borderColor: 'rgba(0,0,0,0.2)', borderWidth: 0.5 }}>
+                    <View style={{
+                      marginVertical: 15, backgroundColor: '#ffff',   borderRadius: 10,paddingVertical:10,paddingHorizontal:15,  shadowColor: 'black',
+                      shadowOffset: {
+                        width: 0,
+                        height: 10
+                      },
+                      shadowRadius: 10,
+                      shadowOpacity: 0.9,
+                      overflow: 'hidden',
+                            elevation: 5,
+                      // borderColor: 'rgba(0,0,0,0.2)', borderWidth: 0.5
+                    }}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
 
-                        <View style={{ paddingHorizontal: 10, justifyContent: 'center', borderRadius: 10, backgroundColor: 'rgba(130,213,112,0.2)', borderColor: Mycolors.GrayColor, borderWidth: 0.2 }}>
-                          <Text style={{ color: Mycolors.GREEN, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{item.order_type_label}</Text>
+                        <View style={{ paddingHorizontal: 10, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2 }}>
+                          <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{item.order_type_label}</Text>
                         </View>
                       </View>
                       <Text style={{ color: Mycolors.RED, fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
@@ -363,33 +369,33 @@ const ShopMyOrder = (props) => {
 
                           <TouchableOpacity style={{
                             width: '100%',
-                            //  height: 120,
-                            padding:15,
-                             marginVertical: 5,
-                             backgroundColor: 'transparent',
-                             borderColor: '#dee4ec',
-                             elevation: 3,
-                             borderRadius: 2,
-                             alignSelf: 'center',
-                             flexDirection: 'row',
-                             alignItems: 'center'
+                            //  height: 120, 
+                            padding: 10,
+                            marginVertical: 5,
+                            backgroundColor: '#D4F9FA',
+                            //  borderColor: '#dee4ec',
+                            elevation: 3,
+                            borderRadius: 10,
+                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            alignItems: 'center'
                           }}
-                            onPress={() => { }}>
-                            <View style={{ width: 60, height: 75, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
+                            onPress={() => {props.navigation.navigate('ShopMyOrderDetails')}}>
+                            <View style={{ width: 110, height: 110, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
-                            <View style={{ marginLeft: 10 }}>
-                                      {item.items.map((sitem, index) => {
+                            <View style={{ marginLeft: 15 }}>
+                              {item.items.map((sitem, index) => {
                                 return (
-                                  <View style={{ flexDirection: 'row', top: -6, marginTop: 4 }}>
-                                    <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
-                                    <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} > X {sitem.product_name}</Text>
+                                  <View style={{ flexDirection: 'row', top: -6, marginTop: 4,   width: '85%', }}>
+                                    <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
+                                    <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} > X {sitem.product_name} </Text>
                                   </View>
                                 )
                               })}
                               <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.amount}</Text>
 
-                              <View style={{ width: 120, }}>
+                              <View style={{ width: 120,marginTop:4 }}>
                                 <MyButtons title="Call Restaurant" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
                                   titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.4} />
                               </View>
@@ -399,85 +405,85 @@ const ShopMyOrder = (props) => {
 
                         </>
                         :
-                       null
+                        null
                       }
-                      <View style={{ borderColor: Mycolors.GrayColor, borderWidth: 1, borderStyle: 'dashed', }} />
+                      <View style={{ borderColor: Mycolors.GrayColor, borderWidth: 1, borderStyle: 'dashed', marginTop: 8 }} />
 
                       {design(require('../../../assets/shape_39.png'), 'Order Status', item.status_label, '100%', 25, 28, 'red', 20)}
 
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
-                         {/* {item.status!= 5 ?
+                        {/* {item.status!= 5 ?
                          <MyButtons title={"Cancel Order"} height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             setcancleitem(item)
                             setmodlevisual1(true)
-                          }} fontSize={11}
-                            titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
+                          }} fontSize={12}
+                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1}/>
                        : null
                           } */}
 
-                        {item.order_type == 'take-away' && item.business_rating== null ?
+                        {item.order_type == 'take-away' && item.business_rating == null ?
                           <MyButtons title="Submit Review" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                              if(item.business_rating== null){
-                             props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                              }
-                          }} fontSize={11}
-                            titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
+                            if (item.business_rating == null) {
+                              props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                            }
+                          }} fontSize={12}
+                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           : null
                         }
 
-                        {item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driver_id != null ?
+                        {item.order_type == 'delivery' && item.status != 5 && item.status != 0 && item.driver_id != null ?
                           <MyButtons title="Navigate" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                            props.navigation.navigate('Traking',{data:item})
-                           }} fontSize={11}
-                            titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
+                            props.navigation.navigate('Traking', { data: item })
+                          }} fontSize={12}
+                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           :
-                          item.order_type == 'delivery' && item.status== 5 && item.business_rating== null ?
-                          <MyButtons title="Submit Review" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                            if(item.business_rating== null){
-                           props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                            }
-                        }} fontSize={11}
-                          titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
-                        : null
+                          item.order_type == 'delivery' && item.status == 5 && item.business_rating == null ?
+                            <MyButtons title="Submit Review" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+                              if (item.business_rating == null) {
+                                props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                              }
+                            }} fontSize={12}
+                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                            : null
 
                         }
-                        {   item.order_type == 'delivery' && item.status== 5 ?
-<View style={{paddingHorizontal:10}}>
-                          <MyButtons title="Driver Review" height={45} width={'100%'} paddingHorizontal={10} borderRadius={5} alignSelf="center" press={() => {
-                           setmodlevisual2(true)
-                            }} fontSize={11}
-                          titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
-</View>
-: null }
+                        {item.order_type == 'delivery' && item.status == 5 ?
+                          <View style={{ paddingHorizontal: 10 }}>
+                            <MyButtons title="Driver Review" height={45} width={'100%'} paddingHorizontal={10} borderRadius={5} alignSelf="center" press={() => {
+                              setmodlevisual2(true)
+                            }} fontSize={12}
+                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          </View>
+                          : null}
                       </View>
-{   item.order_type == 'delivery' && item.status== 5 ?
-null
-:
-item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driver_id != null ?
-<MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-         props.navigation.navigate('Chat', { data: item, from: 'myOrder' })
+                      {item.order_type == 'delivery' && item.status == 5 ?
+                        null
+                        :
+                        item.order_type == 'delivery' && item.status != 5 && item.status != 0 && item.driver_id != null ?
+                          <MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+                            props.navigation.navigate('Chat', { data: item, from: 'myOrder' })
 
-                        }} fontSize={11}
-                          titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.2} />
-:null
-}
+                          }} fontSize={12}
+                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          : null
+                      }
 
 
-                      {item.business_rating!= null ?
-                      <View style={{marginVertical:10,paddingHorizontal:5,backgroundColor:'#fff',alignItems:'flex-start',flexDirection:'row'}}>
-                      <Text style={{fontSize:13,color:'#000',marginRight:5}}>You Rated</Text>
+                      {item.business_rating != null ?
+                        <View style={{ marginVertical: 10, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>You Rated</Text>
                           <Rating
-                                type='custom'
-                                ratingCount={5}
-                                imageSize={16}
-                                startingValue={item.business_rating}
-                              // style={{alignSelf:'flex-start',backgroundColor:'red'}}
-                             
-                               readonly={true}
-                             />
-                      </View>
-                      :
-                      null
+                            type='custom'
+                            ratingCount={5}
+                            imageSize={16}
+                            startingValue={item.business_rating}
+                            // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+
+                            readonly={true}
+                          />
+                        </View>
+                        :
+                        null
                       }
                     </View>
                     :
@@ -574,8 +580,8 @@ item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driv
         {loading ? <Loader /> : null}
       </Modal>
 
-{/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 Submit Driver Review Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
-  <Modal
+      {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 Submit Driver Review Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
+      <Modal
         isVisible={modlevisual2}
         swipeDirection="down"
         onSwipeComplete={(e) => {
@@ -593,32 +599,29 @@ item.order_type == 'delivery' && item.status!= 5 && item.status!= 0 && item.driv
           <View style={{ width: '100%', height: 50, backgroundColor: Mycolors.TimingColor, borderTopLeftRadius: 30, borderTopRightRadius: 30, justifyContent: 'center' }}>
             <Text style={{ fontWeight: '600', fontSize: 14, marginTop: 5, color: Mycolors.Black, textAlign: 'center' }}>Submit Driver Review</Text>
           </View>
-       
+
           {/* <Text style={{fontWeight:'500',fontSize:13,marginTop:20,color:Mycolors.Black,lineHeight:20}}>Please provide rating for the restaurant here.</Text> */}
-              <View style={{marginTop:20,paddingHorizontal:5,backgroundColor:'#fff',alignItems:'flex-start',alignSelf:'center'}}>
+          <View style={{ marginTop: 20, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', alignSelf: 'center' }}>
 
-              <Rating
-                 type='custom'
-                 ratingCount={5}
-                 imageSize={25}
-                 startingValue={0}
-               // style={{alignSelf:'flex-start',backgroundColor:'red'}}
-                onSwipeRating={(d)=>{setdrvRating(d)}}
-                // onFinishRating={(d)=>{setdrvRating(d)}}
-                //readonly={true}
-              />
-              </View>
+            <Rating
+              type='custom'
+              ratingCount={5}
+              imageSize={25}
+              startingValue={0}
+              // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+              onSwipeRating={(d) => { setdrvRating(d) }}
+            // onFinishRating={(d)=>{setdrvRating(d)}}
+            //readonly={true}
+            />
+          </View>
 
-              <View style={{ width: '100%' ,marginTop:10}}>
-              <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => { setmodlevisual2(false) }} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
-            </View>
+          <View style={{ width: '100%', marginTop: 10 }}>
+            <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => { setmodlevisual2(false) }} marginHorizontal={20} fontSize={14}
+              titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
+          </View>
 
 
         </View>
-
-
-
         {loading ? <Loader /> : null}
       </Modal>
 
