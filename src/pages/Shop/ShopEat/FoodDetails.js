@@ -211,19 +211,19 @@ const bookTables = async () => {
  
 // }
 
-if(date==''){
-  setalert_sms('Please Select Date')
-  setMy_Alert(true)
-  return
-}else{
-  td=date
-}
 if(Object.keys(selectedSlot)?.length === 0){
   setalert_sms('Please Select Time Slot')
   setMy_Alert(true)
   return
 }else{
   tt=selectedSlot
+}
+if(date==''){
+  setalert_sms('Please Select Date')
+  setMy_Alert(true)
+  return
+}else{
+  td=date
 }
 
 // else{
@@ -242,7 +242,7 @@ if(td!='' && tt!=''){
   var data={
     "business_id": props.route.params.data.business_id,
     "no_of_person": counter,
-    "schedule_date": td,
+    "schedule_date": moment(td).format('YYYY-MM-DD'),
     "schedule_time_from": tt?.start,
     "schedule_time_to": tt?.end
 }
