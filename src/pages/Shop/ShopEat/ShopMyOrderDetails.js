@@ -14,6 +14,8 @@ import Loader from '../../../WebApi/Loader';
 
 
 const ShopMyOrderDetails = (props) => {
+  const {data} = props.route.params
+  // console.log('ShopMyOrderDetails data', data);
   const [searchValue, setsearchValue] = useState('')
   const [modlevisual1, setmodlevisual1] = useState(false)
   const [checkitem, setcheckitem] = useState('')
@@ -160,8 +162,8 @@ const ShopMyOrderDetails = (props) => {
           }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <View style={{ flexDirection: 'column' }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #178476366473</Text>
-                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Deliverd, 2 items, $78.00</Text>
+                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
+                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Deliverd, {data?.items?.length} items, ${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
               </View>
 
 
@@ -193,7 +195,7 @@ const ShopMyOrderDetails = (props) => {
                 <Image source={require('../../../assets/ent_location_image.png')} style={{ width: 18, height: 23, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ADC430' }}>Domino's Pizza</Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ADC430' }}>{data.business_name}</Text>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>Sector 22</Text>
               </View>
 
@@ -238,17 +240,20 @@ const ShopMyOrderDetails = (props) => {
 
             borderColor: '#D8E9FA', borderWidth: 1,
           }}>
+            {data.items?.map(el=>
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, paddingRight: 20,marginBottom:15 }}>
+              
               <View style={{ width: 20, height: 40, justifyContent: 'center', borderRadius: 10 }}>
                 <Image source={require('../../../assets/Green-chekbox-icon.png')} style={{ width: 18, height: 18, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
-                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>Veggie paradise x 1</Text>
+                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{el.product_name} x {el.quantity}</Text>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 2, lineHeight: 18 }}>Medium, Cheese burst</Text>
               </View>
-              <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>$78.00</Text>
+              <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>${parseFloat(Number(el.amount).toFixed(2))}</Text>
             </View>
-            <View style={{ borderColor: '#E8E7E9', borderWidth: 1, borderStyle: 'solid', }} />
+            )}
+            {/* <View style={{ borderColor: '#E8E7E9', borderWidth: 1, borderStyle: 'solid', }} />
 
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, marginTop: 13, paddingRight: 20, marginBottom: 10 }}>
               <View style={{ width: 20, height: 25, justifyContent: 'center', borderRadius: 10 }}>
@@ -259,7 +264,7 @@ const ShopMyOrderDetails = (props) => {
 
               </View>
               <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>$78.00</Text>
-            </View>
+            </View> */}
 
 
 

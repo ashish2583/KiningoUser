@@ -380,7 +380,7 @@ const ShopMyOrder = (props) => {
                             flexDirection: 'row',
                             alignItems: 'center'
                           }}
-                            onPress={() => {props.navigation.navigate('ShopMyOrderDetails')}}>
+                            onPress={() => {props.navigation.navigate('ShopMyOrderDetails', {data:item})}}>
                             <View style={{ width: 110, height: 110, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
