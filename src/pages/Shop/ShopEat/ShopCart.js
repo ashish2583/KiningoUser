@@ -56,6 +56,8 @@ const ShopCart = (props) => {
   const [discountPrice, setdiscountPrice] = useState('0.0')
   const [subTotal, setsubTotal] = useState('0.0')
   const [dilivery, setdilivery] = useState('0.0')
+  const [vendorCharges, setVendorCharges] = useState('0.0')
+  const [taxes, setTaxes] = useState('0.0')
   const [totla, settotal] = useState('0.0')
   const [applyedCoupen, setapplyedCoupen] = useState('')
   const [modlevisual, setmodlevisual] = useState(false)
@@ -241,12 +243,15 @@ const ShopCart = (props) => {
     const { responseJson, err } = await requestGetApi(shop_eat_cart, '', 'GET', User.token)
     setLoading(false)
     // console.log('the res get shop_eat_cart ==>>', responseJson.body.items.length)
+    console.log('the res get shop_eat_cart ==>>', responseJson.body)
     if (responseJson.headers.success == 1) {
       if (responseJson.body.items.length == 0) {
         setres([])
         setresData([])
         setsubTotal('')
         setdilivery('')
+        setVendorCharges('')
+        setTaxes('')
         settotal('0')
         setreloades(!reloades)
       } else {
@@ -264,6 +269,8 @@ const ShopCart = (props) => {
         // setresData(responseJson.body.items)
         setsubTotal(responseJson.body.sub_total)
         setdilivery(responseJson.body.delivery_charge)
+        setVendorCharges(responseJson.body.vendor_charges)
+        setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
         setreloades(!reloades)
       }
@@ -272,6 +279,8 @@ const ShopCart = (props) => {
       setresData([])
       setsubTotal('')
       setdilivery('')
+      setVendorCharges('')
+      setTaxes('')
       settotal('0')
       setreloades(!reloades)
       //  setalert_sms(err)
@@ -296,6 +305,8 @@ const ShopCart = (props) => {
         setdiscountPrice(responseJson.body.coupon_discount)
         setsubTotal(responseJson.body.sub_total)
         setdilivery(responseJson.body.delivery_charge)
+        setVendorCharges(responseJson.body.vendor_charges)
+        setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
         setapplyedCoupen(responseJson.body.coupon)
       } else {
@@ -601,12 +612,20 @@ const ShopCart = (props) => {
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${dilivery}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(taxes).toFixed(2))}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Discount</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${discountPrice}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10,backgroundColor:'#ADC430',height:46,alignItems:"center",borderRadius:7 ,padding:10}}>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14,  fontWeight: '600',textAlign:'center' }} >${totla}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14,  fontWeight: '600',textAlign:'center' }} >${parseFloat(Number(totla).toFixed(2))}</Text>
                 </View>
               </View>
 
