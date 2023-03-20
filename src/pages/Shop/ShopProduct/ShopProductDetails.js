@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_business_userid } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_details, shop_product_business_userid } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 

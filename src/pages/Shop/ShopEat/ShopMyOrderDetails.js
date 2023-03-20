@@ -21,6 +21,7 @@ const ShopMyOrderDetails = (props) => {
   const [checkitem, setcheckitem] = useState('')
   const [reson, setreson] = useState('')
   const [date, setDate] = useState('')
+  const [itemTotal, setItemTotal] = useState(0)
   const User = useSelector(state => state.user.user_details)
   const [upData, setupData] = useState([
     {
@@ -51,7 +52,13 @@ const ShopMyOrderDetails = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    orderList()
+    console.log('ShopMyOrderDetails data', data)
+    let localItemTotal = 0
+    data.items.map(el=>{
+      localItemTotal += el.quantity * el.amount  
+    })
+    setItemTotal(localItemTotal)
+    // orderList()
   }, [])
 
 
@@ -196,7 +203,7 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ADC430' }}>{data.business_name}</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>Sector 22</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.business_address}</Text>
               </View>
 
             </View>
@@ -275,11 +282,11 @@ const ShopMyOrderDetails = (props) => {
             >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >$34.00</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >$42.00</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
@@ -287,13 +294,13 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >$40.00</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.taxes).toFixed(2))}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ffff', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                 <Text style={{ color: Mycolors.Black, fontSize: 13,   }} >Paid Via Bank</Text>
                 <View style={{flexDirection:"column"}}>
                 <Text style={{ color: Mycolors.GrayColor, fontSize: 12, fontWeight: '600', textAlign: 'left' }} >Bill Total</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >$234.00</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
                 </View>
                 
               </View>
