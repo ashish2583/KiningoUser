@@ -139,6 +139,12 @@ export const setVenderDetail = (data) => {
         venderDeatil:data
     }
 }
+export const setProductVenderDetail = (data) => {
+    return {
+        type:types.PRODUCTVERDERDETAILS,
+        productVendorDetail:data
+    }
+}
 export const setDashBoardData = (data) => {
     return {
         type:types.DASHDATA,

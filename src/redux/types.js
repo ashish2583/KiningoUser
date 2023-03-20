@@ -40,5 +40,7 @@ export const NOOFCAR = "NOOFCAR";
 
 export const VERDERDETAILS = "VERDERDETAILS";
 
+export const PRODUCTVERDERDETAILS = "PRODUCTVERDERDETAILS";
+
 
 export const DASHDATA = "DASHDATA";

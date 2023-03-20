@@ -16,6 +16,7 @@ import GetLocation from 'react-native-get-location'
 
 const ShopProduct = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
+  const ProductVenderDetails = useSelector(state => state.user.productVendorDetail)
   const [searchValue,setsearchValue]=useState('')
   let selectedIndex = -1;
   let row = [];
@@ -201,7 +202,7 @@ const getCopun = async () => {
    
   setLoading(true)
   
-  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+VenderDetails.userid, '', 'GET',  User.token)
+  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
   setLoading(false)
   console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
   if (responseJson.headers.success == 1) {

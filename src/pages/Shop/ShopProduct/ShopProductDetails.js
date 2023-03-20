@@ -91,9 +91,9 @@ const ShopProductDetails = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   useEffect(()=>{
     getProductDetails()
- },[])
- const checkcon=()=>{
-  homePage()
+  },[])
+  const checkcon=()=>{
+    getProductDetails()
  }
  const onRefresh = React.useCallback(() => {
   // setRefreshing(true);
@@ -106,13 +106,14 @@ const ShopProductDetails = (props) => {
   });
  }, []);
  const getProductDetails = async () => {
-  let endPoint = shop_product_business_userid+props.route.params.vendorId+'?category='+props.route.params.category+'&name='+props.route.params.productName
+  // let endPoint = shop_product_business_userid+props.route.params.vendorId+'?category='+props.route.params.category+'&name='+props.route.params.productName
   if(false){
     endPoint += '&product_type=Take Away'
   }
   if(false){
     endPoint += '&product_type=Delivery'
   }
+  let endPoint = shop_product_details + props.route.params.productId
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
   setLoading(false)

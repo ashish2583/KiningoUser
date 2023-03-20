@@ -11,7 +11,7 @@ import DatePicker from 'react-native-datepicker';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { CardField,CardFieldInput, useStripe,StripeContainer,} from '@stripe/stripe-react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { baseUrl,shop_eat_cart,user_payment_method, shop_eat_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
+import { baseUrl,shop_eat_cart,user_payment_method, shop_product_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
 
@@ -135,15 +135,15 @@ setRefreshing(false)
         "shipping_address_id": props.route.params.address.id,
         "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
         "order_type" : props.route.params.orderType, //delivery/take-away 
-        "cookingInstruction" :props.route.params.cooking
+        // "cookingInstruction" :props.route.params.cooking
           }
     console.log('the form data==>>', data)
-      const { responseJson, err } = await requestPostApi(shop_eat_cart_place_order, data, 'POST', User.token)
+      const { responseJson, err } = await requestPostApi(shop_product_cart_place_order, data, 'POST', User.token)
       setLoading(false)
-      console.log('the res shop_eat_cart_place_order==>>', responseJson)
+      console.log('the res shop_product_cart_place_order==>>', responseJson)
       if (responseJson.headers.success == 1) {
         // Toast.show(responseJson.headers.message)
-        props.navigation.navigate('ShopEat')
+        props.navigation.navigate('ShopProduct')
       } else {
       // setalert_sms(err)
       // setMy_Alert(true)
@@ -298,8 +298,7 @@ setRefreshing(false)
 
 
  <View style={{width:'100%',marginTop:30}}>
- <MyButtons title="Confirm and Place Order" height={53} width={'100%'} borderRadius={5} alignSelf="center" 
-//  press={()=>{placeOrder()}}
+ <MyButtons title="Confirm and Place Order" height={53} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{placeOrder()}}
 backgroundColor={'#FFC40C'} marginHorizontal={20} fontSize={14}
    titlecolor={Mycolors.BG_COLOR} />
  </View>

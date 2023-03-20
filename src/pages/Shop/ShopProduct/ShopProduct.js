@@ -14,8 +14,11 @@ import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
 import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
+import { useSelector, useDispatch } from 'react-redux';
+import { saveUserResult, saveUserToken, setProductVenderDetail, setUserType } from '../../../redux/actions/user_action';
 
 const ShopProduct = (props) => {
+  const dispatch = useDispatch();
   const [searchValue,setsearchValue]=useState('')
   const [scrollEnabled, setScrollEnabled] = useState(false)
   const myTextInput = useRef()
@@ -207,7 +210,10 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
                       <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
           <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#F8F8F8',alignSelf:'center'}}
           // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
-          onPress={()=>{props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})}}>
+          onPress={()=>{
+            props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})
+            dispatch(setProductVenderDetail(item))
+            }}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>
           </TouchableOpacity>
           <View style={{}}>
