@@ -443,8 +443,11 @@ const ShopCart = (props) => {
     }
     for(let i = 0; i < matches + 1; i++){
       lastindex = getLastIndex(addressValue)
-      partOfString = addressValue.substring(lastindex + 1)
-      addressValue = addressValue.substring(0, lastindex)
+      if(i !== 3){
+        partOfString = addressValue.substring(lastindex + 1)
+        addressValue = addressValue.substring(0, lastindex)
+      }
+      // console.log('i', i);
       // console.log('lastindex', lastindex);
       // console.log('partOfString', partOfString);
       // console.log('addressValue', addressValue);
@@ -477,6 +480,7 @@ const ShopCart = (props) => {
     }
     // console.log('addressData', addressData);
     console.log('google address data===>>', data);
+    // return
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
     // close modal
@@ -532,8 +536,10 @@ const ShopCart = (props) => {
     }
     for(let i = 0; i < matches + 1; i++){
       lastindex = getLastIndex(addressValue)
-      partOfString = addressValue.substring(lastindex + 1)
-      addressValue = addressValue.substring(0, lastindex)
+      if(i !== 3){
+        partOfString = addressValue.substring(lastindex + 1)
+        addressValue = addressValue.substring(0, lastindex)
+      }
       // console.log('lastindex', lastindex);
       // console.log('partOfString', partOfString);
       // console.log('addressValue', addressValue);
@@ -544,14 +550,14 @@ const ShopCart = (props) => {
       }else if(i == 2){
         addressData.city = partOfString?.trim()
       }else if(i == 3){
-        addressData.address_line1 = partOfString?.trim()
+        addressData.address_line1 = addressValue?.trim()
       }
       console.log('addressData', addressData);
       // if(i == 3){
       //   break
       // }
     }
-    // setLoading(true)
+    setLoading(true)
     var data = {
       "location_name": '',
       "location_type": '1',
