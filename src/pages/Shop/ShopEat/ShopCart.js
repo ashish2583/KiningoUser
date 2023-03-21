@@ -1196,10 +1196,12 @@ const ShopCart = (props) => {
                                               </View>
                                           </TouchableOpacity>
                                       </View> */}
-              <View style={{ width: '70%', alignSelf: 'center', marginTop: 55 }}>
-                <MyButtons title={edit ? "Update" : "Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+              <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
+                <MyButtons title={edit ? "Update" : "Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
                   edit ? UpdateAddress() : AddAddress()
-                }} marginHorizontal={20} fontSize={11}
+                }} 
+                // marginHorizontal={20} 
+                fontSize={14}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
               </View>
 
@@ -1397,7 +1399,7 @@ const ShopCart = (props) => {
                         </TouchableWithoutFeedback>
 
                         <View style={{height:30}} />
-                        <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                        <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
 
                         {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
