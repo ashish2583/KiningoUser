@@ -862,20 +862,25 @@ const ShopCart = (props) => {
                   </View>
                   <View style={{ marginLeft: 10, width: '63%' }}>
                     <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13 }} >{applyedCoupen.coupon_desc}</Text>
-                    <Text style={{ color: Mycolors.GREEN, fontSize: 11, marginTop: 5 }} >Save ${applyedCoupen.discount_value} with this code</Text>
+                    <Text style={{ color: Mycolors.GREEN, fontSize: 11, marginTop: 5, marginBottom:5 }} >Save ${applyedCoupen.discount_value} with this code</Text>
+                    <MyButtons title={applyedCoupen.coupon_code} height={27} width={'50%'} borderRadius={15} alignSelf="flex-start" press={() => {
+                      setpromocode(applyedCoupen.coupon_code)
+                      setdiscount_id(applyedCoupen.discount_id)
+                    }} 
+                    // marginHorizontal={20} 
+                    fontSize={12}
+                      titlecolor={Mycolors.RED} borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
                   </View>
-                  <View style={{ position: 'absolute', right: 10, top: 10 }}>
+                  <TouchableOpacity onPress={removeCoupan} style={{paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 5}} >
+                    <Text style={{color:'red', textAlign:'center'}}>Remove</Text>
+                  </TouchableOpacity>  
+                  {/* <View style={{ position: 'absolute', right: 10, top: 10 }}>
                     <View style={{ width: 80, }}>
-                      <TouchableOpacity onPress={removeCoupan} style={{backgroundColor: 'red', paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 5}} >
-                        <Text style={{color:'white', textAlign:'center'}}>Remove</Text>
+                      <TouchableOpacity onPress={removeCoupan} style={{paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 5}} >
+                        <Text style={{color:'red', textAlign:'center'}}>Remove</Text>
                       </TouchableOpacity>
-                      <MyButtons title={applyedCoupen.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={() => {
-                        setpromocode(applyedCoupen.coupon_code)
-                        setdiscount_id(applyedCoupen.discount_id)
-                      }} marginHorizontal={20} fontSize={12}
-                        titlecolor={Mycolors.RED} borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
                     </View>
-                  </View>
+                  </View> */}
                 </View>
                 : null
               }
