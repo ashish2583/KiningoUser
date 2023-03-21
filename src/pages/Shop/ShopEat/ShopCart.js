@@ -1016,9 +1016,9 @@ const ShopCart = (props) => {
                 />
               </TouchableOpacity>
               <TextInput style={styles.textInput}
-                placeholder='Full Name'
+                placeholder='Complete Address'
                 placeholderTextColor="#8F93A0"
-                label="full name"
+                label="complete address"
                 value={full_name}
                 onChangeText={e => setfull_name(e)}
               />
@@ -1030,7 +1030,7 @@ const ShopCart = (props) => {
                                           value={phone}
                                           onChangeText={e => setphone(e)}
                                       /> */}
-              <TextInput style={styles.textInput}
+              {/* <TextInput style={styles.textInput}
                 placeholder='Zip code'
                 placeholderTextColor="#8F93A0"
                 label="pincode"
@@ -1058,7 +1058,7 @@ const ShopCart = (props) => {
                 placeholderTextColor="#8F93A0"
                 value={house_no}
                 onChangeText={e => sethouse_no(e)}
-              />
+              /> */}
               <TextInput style={styles.textInput}
                 placeholder='Area Colony'
                 placeholderTextColor="#8F93A0"
