@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, delete_Update_Address, shop_eat_cart, shop_eat_cart_id, user_address, shop_eat_coupons_userid, shop_eat_cart_apply_coupon, login, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
+import { baseUrl, delete_Update_Address, shop_eat_cart, shop_eat_cart_id, user_address, shop_eat_coupons_userid, shop_eat_cart_apply_coupon, login, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_remove_coupon } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
@@ -331,6 +331,31 @@ const ShopCart = (props) => {
         // setMy_Alert(true)
       }
     }
+
+  }
+  const removeCoupan = async () => {
+    setLoading(true)
+    var data = {
+      discount_id: discount_id,
+    }
+    const { responseJson, err } = await requestPostApi(shop_remove_coupon, data, 'POST', User.token)
+    setLoading(false)
+    console.log('remove coupon response', responseJson)
+    console.log('remove coupon response body', responseJson.body)
+    if (responseJson.headers.success == 1) {
+      setdiscountPrice(responseJson.body.coupon_discount)
+      setsubTotal(responseJson.body.sub_total)
+      setdilivery(responseJson.body.delivery_charge)
+      setVendorCharges(responseJson.body.vendor_charges)
+      setTaxes(responseJson.body.taxes)
+      settotal(responseJson.body.total)
+      setapplyedCoupen('')
+      setpromocode('')
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+    
 
   }
 
@@ -736,7 +761,7 @@ const ShopCart = (props) => {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 8, width: '100%',marginTop:18 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Choose Delivery Address</Text>
                 {/* <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setShippingAddressPopUp(true) }}>Add Address</Text> */}
-                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Add Address</Text>
+                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Choose Address</Text>
               </View>
               {selectedAddress != null ?
                 <View style={{
@@ -835,6 +860,9 @@ const ShopCart = (props) => {
                   </View>
                   <View style={{ position: 'absolute', right: 10, top: 10 }}>
                     <View style={{ width: 80, }}>
+                      <TouchableOpacity onPress={removeCoupan} style={{backgroundColor: 'red', paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 5}} >
+                        <Text style={{color:'white', textAlign:'center'}}>Remove</Text>
+                      </TouchableOpacity>
                       <MyButtons title={applyedCoupen.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={() => {
                         setpromocode(applyedCoupen.coupon_code)
                         setdiscount_id(applyedCoupen.discount_id)
@@ -1281,8 +1309,9 @@ const ShopCart = (props) => {
             </View>
             <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 100 }}>
               <MyButtons title="Add New Address" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
-                setShippingAddressPopUp(true)
+                // setShippingAddressPopUp(true)
                 setaddressList(false)
+                setChooseAddressModeModal(true)
               }} marginHorizontal={20} fontSize={11}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>

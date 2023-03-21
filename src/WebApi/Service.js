@@ -22,6 +22,7 @@ export const shop_eat_coupons_userid = 'shop/eat/coupons/userid/'
 export const shop_eat_cart_apply_coupon=`shop/eat/cart/apply-coupon`;
 export const user_payment_method=`user/payment-method`;
 export const user_address=`user/address`;
+export const shop_remove_coupon=`shop/eat/cart/remove-coupon`;
 export const shop_eat_cart_place_order=`shop/eat/cart/place-order`;
 export const shop_eat_cart_book_dining=`shop/eat/cart/book-dining`;
 export const shop_eat_cart_book_table=`shop/eat/cart/book-table`;
