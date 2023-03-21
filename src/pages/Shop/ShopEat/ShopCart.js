@@ -1308,7 +1308,7 @@ const ShopCart = (props) => {
 
             </View>
             <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 100 }}>
-              <MyButtons title="Add New Address" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+              <MyButtons title="Add New Address" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
                 // setShippingAddressPopUp(true)
                 setaddressList(false)
                 setChooseAddressModeModal(true)
@@ -1337,31 +1337,31 @@ const ShopCart = (props) => {
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
                 <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
-                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Choose Address Method</Text>
+                    <Text style={{ fontSize: 22, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 25, marginTop: 30 }}>Choose Address Method</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
                         <TouchableWithoutFeedback onPress={()=>{setAddressMode('1')}}>
                           <View style={styles.radioButtonContainer}>
                             <MaterialCommunityIcons name={'1' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
-                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Enter Complete Address</Text>
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Enter Complete Address</Text>
                           </View>
                         </TouchableWithoutFeedback>  
                         
-                        <TouchableWithoutFeedback style={{marginTop:10}} onPress={()=>{setAddressMode('2')}}>
+                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
                           <View style={styles.radioButtonContainer}>
                             <MaterialCommunityIcons name={'2' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
-                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Search Address</Text>
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Search Address</Text>
                           </View>
                         </TouchableWithoutFeedback>  
-                        <TouchableWithoutFeedback style={{marginTop:10}} onPress={()=>{setAddressMode('3')}}>
+                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('3')}}>
                           <View style={styles.radioButtonContainer}>
                             <MaterialCommunityIcons name={'3' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
-                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Current Address</Text>
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Current Address</Text>
                           </View>
                         </TouchableWithoutFeedback>
 
-                        <View style={{height:20}} />
-                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                        <View style={{height:30}} />
+                        <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
 
                         {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
