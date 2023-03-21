@@ -996,20 +996,46 @@ const ShopCart = (props) => {
         : null
       }
 
-      {ShippingAddressPopUp ?
-        <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <Modal
+        isVisible={ShippingAddressPopUp}
+        swipeDirection="down"
+        onBackdropPress={() => setShippingAddressPopUp(false)}
+        onSwipeComplete={(e) => {
+            setShippingAddressPopUp(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        onModalWillShow={()=>{setAddressMode('1')}}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+
+        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
 
           <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
             <KeyboardAwareScrollView>
 
 
 
-              <View style={{ marginTop: 15, height: 30, flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
-                <Text style={{ marginTop: 2, marginLeft: 10, textAlign: 'center', fontSize: 20, color: '#000000', fontWeight: '500' }}>Add Address</Text>
+              <View style={{ marginTop: 15, height: 30, justifyContent: "center", alignItems: 'center' }}>
+                {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
+                <TouchableOpacity
+                onPress={() => setShippingAddressPopUp(false)}
+                  style={{
+                    width: '20%',
+                    borderWidth: 2,
+                    borderColor: 'grey',
+                    marginBottom:5,
+                    // ...style
+                  }}
+                />
+                <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 20, color: '#000000', fontWeight: '500' }}>Add Address</Text>
 
 
               </View>
-              <TouchableOpacity onPress={() => { setShippingAddressPopUp(false) }}
+              {/* <TouchableOpacity onPress={() => { setShippingAddressPopUp(false) }}
                 style={{ position: "absolute", width: 30, borderRadius: 35, height: 30, right: 10, top: 10 }}>
                 <Image
                   source={require('../../../assets/crossed.png')}
@@ -1019,7 +1045,7 @@ const ShopCart = (props) => {
                   }}
 
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TextInput style={styles.textInput}
                 placeholder='Complete Address'
                 placeholderTextColor="#8F93A0"
@@ -1185,10 +1211,8 @@ const ShopCart = (props) => {
           </View>
 
 
-        </View>
-        :
-        null
-      }
+        {/* </View> */}
+      </Modal>            
 
 
       {addressList ?
