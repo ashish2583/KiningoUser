@@ -1023,15 +1023,16 @@ const ShopCart = (props) => {
                 {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
                 <TouchableOpacity
                 onPress={() => setShippingAddressPopUp(false)}
-                  style={{
-                    width: '20%',
-                    borderWidth: 2,
-                    borderColor: 'grey',
-                    marginBottom:5,
-                    // ...style
-                  }}
+                  // style={{
+                  //   width: '20%',
+                  //   borderWidth: 2,
+                  //   borderColor: 'grey',
+                  //   marginBottom:5,
+                  //   // ...style
+                  // }}
+                  style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5}}
                 />
-                <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 20, color: '#000000', fontWeight: '500' }}>Add Address</Text>
+                <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500' }}>Add Address</Text>
 
 
               </View>
@@ -1107,7 +1108,7 @@ const ShopCart = (props) => {
 
               <View style={{ height: 45, width: "98%", marginTop: 14, alignItems: 'flex-start', justifyContent: "flex-start", marginLeft: 10 }}>
 
-                <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400" }}>Address Type</Text>
+                <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400", marginLeft:10 }}>Address Type</Text>
 
                 <View style={{ height: 45, width: "90%", marginTop: 5, alignItems: 'center', justifyContent: "flex-start", flexDirection: "row" }}>
 
