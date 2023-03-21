@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, FlatList, Alert, TouchableOpacity, Pressable, ScrollView, ImageBackground } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, FlatList, Alert, TouchableOpacity, Pressable, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -18,9 +18,17 @@ import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import GetLocation from 'react-native-get-location'
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Geolocation from "react-native-geolocation-service";
+import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
+import Geocoder from "react-native-geocoding";
 
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
+const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+Geolocation.setRNConfiguration(GoogleApiKey);
+Geocoder.init(GoogleApiKey);
 
 const ShopCart = (props) => {
   const person_Image = "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cGVyc29ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
@@ -82,6 +90,15 @@ const ShopCart = (props) => {
   const [AddressId, setAddressId] = useState(null)
   const [refreshing, setRefreshing] = useState(false);
   const [cookingIns, setcookingIns] = useState('')
+  const [googleAddress, setGoogleAddress] = useState('');
+  const [googleLatLng, setGoogleLatLng] = useState({});
+  // const [currentAddress, setCurrentAddress] = useState('');
+  // const [currentLatLng, setCurrentLatLng] = useState({});
+  const [chooseAddressModeModal, setChooseAddressModeModal] = useState(false);
+  const [openGoogleAddressModal, setOpenGoogleAddressModal] = useState(false);
+  const [addressMode, setAddressMode] = useState(null);
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
 
   useEffect(() => {
     console.log('hello ji ==>>', User);
@@ -361,6 +378,219 @@ const ShopCart = (props) => {
 
   }
 
+  const getMatches = (str) => {
+    var count = (str.match(/,/g) || []).length;
+    return count
+  }
+  const getLastIndex = (str) => {
+    return str.lastIndexOf(",")
+  }
+  const AddAddressUsingGoogleSearch = async () => {
+    console.log('googleAddress', googleAddress);
+    if(googleAddress === ''){
+      Alert.alert('Please Add Address')
+      return
+    }
+    // if (full_name == '') {
+    //   Alert.alert('Please Add Name')
+    // } else if (area_village == '') {
+    //   Alert.alert('Please Add Address')
+    // } else if (city == '') {
+    //   Alert.alert('Please Add City')
+    // } else if (state == '') {
+    //   Alert.alert('Please Add State')
+    // }
+    // address_line1, city, state, country
+    let matches = getMatches(googleAddress)
+    console.log('matches', matches);
+    const addressData = {
+      country: '',
+      state: '',
+      city: '',
+      address_line1: '',
+    }
+    let addressValue = googleAddress
+    console.log('googleAddress', googleAddress);
+    let lastindex = null
+    let partOfString = null
+    if(matches > 3){
+      matches = 3 
+    }
+    for(let i = 0; i < matches + 1; i++){
+      lastindex = getLastIndex(addressValue)
+      partOfString = addressValue.substring(lastindex + 1)
+      addressValue = addressValue.substring(0, lastindex)
+      // console.log('lastindex', lastindex);
+      // console.log('partOfString', partOfString);
+      // console.log('addressValue', addressValue);
+      if(i == 0){
+        addressData.country = partOfString?.trim()
+      }else if(i == 1){
+        addressData.state = partOfString?.trim()
+      }else if(i == 2){
+        addressData.city = partOfString?.trim()
+      }else if(i == 3){
+        addressData.address_line1 = addressValue?.trim()
+      }
+      if(i == 3){
+        break
+      }
+    }
+    setLoading(true)
+    var data = {
+      "location_name": '',
+      "location_type": '1',
+      "latitude": googleLatLng.lat,
+      "longitude": googleLatLng.lng,
+      // "address_line1": house_no,
+      "address_line2": '',
+      // "city": city,
+      // "state": state,
+      "country_id": 1,
+      "is_default": 1,
+      ...addressData
+    }
+    // console.log('addressData', addressData);
+    console.log('google address data===>>', data);
+    const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
+    setLoading(false)
+    // close modal
+    setOpenGoogleAddressModal(false)
+    console.log('the res google user_address set==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      getAddress()
+      setfull_name('')
+      setaddress_type('')
+      sethouse_no('')
+      setarea_village('')
+      setCity('')
+      setstate('')
+      setGoogleLatLng({})
+      setGoogleAddress('')
+      setShippingAddressPopUp(false)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+
+
+  }
+  const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
+    // if(googleAddress === ''){
+    //   Alert.alert('Please Add Address')
+    //   return
+    // }
+    // if (full_name == '') {
+    //   Alert.alert('Please Add Name')
+    // } else if (area_village == '') {
+    //   Alert.alert('Please Add Address')
+    // } else if (city == '') {
+    //   Alert.alert('Please Add City')
+    // } else if (state == '') {
+    //   Alert.alert('Please Add State')
+    // }
+    // address_line1, city, state, country
+    let matches = getMatches(currentAddress)
+    console.log('matches', matches);
+    const addressData = {
+      country: '',
+      state: '',
+      city: '',
+      address_line1: '',
+    }
+    let addressValue = currentAddress
+    console.log('currentAddress', currentAddress);
+    let lastindex = null
+    let partOfString = null
+    if(matches > 3){
+      matches = 3 
+    }
+    for(let i = 0; i < matches + 1; i++){
+      lastindex = getLastIndex(addressValue)
+      partOfString = addressValue.substring(lastindex + 1)
+      addressValue = addressValue.substring(0, lastindex)
+      // console.log('lastindex', lastindex);
+      // console.log('partOfString', partOfString);
+      // console.log('addressValue', addressValue);
+      if(i == 0){
+        addressData.country = partOfString?.trim()
+      }else if(i == 1){
+        addressData.state = partOfString?.trim()
+      }else if(i == 2){
+        addressData.city = partOfString?.trim()
+      }else if(i == 3){
+        addressData.address_line1 = partOfString?.trim()
+      }
+      console.log('addressData', addressData);
+      // if(i == 3){
+      //   break
+      // }
+    }
+    // setLoading(true)
+    var data = {
+      "location_name": '',
+      "location_type": '1',
+      "latitude": latLng.lat,
+      "longitude": latLng.lng,
+      // "address_line1": house_no,
+      "address_line2": '',
+      // "city": city,
+      // "state": state,
+      "country_id": 1,
+      "is_default": 1,
+      ...addressData
+    }
+    // console.log('addressData', addressData);
+    console.log('current address data===>>', data);
+    const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
+    setLoading(false)
+    // close modal
+    // setOpenGoogleAddressModal(false)
+    console.log('the res current user_address set==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      getAddress()
+      setfull_name('')
+      setaddress_type('')
+      sethouse_no('')
+      setarea_village('')
+      setCity('')
+      setstate('')
+      setShippingAddressPopUp(false)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+
+
+  }
+  const myposition = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        setLoading(true)
+        let My_cord = { latitude: position.coords.latitude, longitude: position.coords.longitude }
+        Geocoder.from(position.coords.latitude, position.coords.longitude)
+        .then(json => {
+          var addressComponent = json.results[0].formatted_address;
+          console.log('The address is', json.results[0].formatted_address);
+          AddAddressUsingCurrentLoation({lat: position.coords.latitude, lng: position.coords.longitude}, json.results[0].formatted_address)
+        })
+        .catch(error => {
+          setLoading(false)
+          console.warn(error)
+        });
+      },
+      error => {
+        setLoading(false)
+        Alert.alert(error.message.toString());
+      },
+      {
+        showLocationDialog: true,
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 0
+      }
+    );
+  }
   const getAddress = async () => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET', User.token)
@@ -399,7 +629,22 @@ const ShopCart = (props) => {
     }
 
   }
-
+  const openAddressModel = () => {
+    // if(addressMode == ''){
+    //    setalert_sms('Please select address method')
+    //    setMy_Alert(true)
+    //   return
+    // }
+    if(addressMode == '1'){
+      setShippingAddressPopUp(true)
+    } else if(addressMode == '2'){
+      setOpenGoogleAddressModal(true)
+    } else if(addressMode == '3'){
+      myposition()
+    }
+    setChooseAddressModeModal(false)
+    // setAddressMode('')
+  }
   const flatliistDesign = (img, ti, rs, des, mpress, apress, dpress, qty) => {
     return (
       <View style={{
@@ -459,6 +704,7 @@ const ShopCart = (props) => {
           press3={() => { }} img3width={25} img3height={25} />
       </View>
       <ScrollView
+        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -489,7 +735,8 @@ const ShopCart = (props) => {
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 8, width: '100%',marginTop:18 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Choose Delivery Address</Text>
-                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setShippingAddressPopUp(true) }}>Add Address</Text>
+                {/* <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setShippingAddressPopUp(true) }}>Add Address</Text> */}
+                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Add Address</Text>
               </View>
               {selectedAddress != null ?
                 <View style={{
@@ -519,6 +766,7 @@ const ShopCart = (props) => {
 
                 </View>
                 : null}
+                
               <View style={{ width: '100%', marginHorizontal: 5, height: 100, borderRadius: 2, marginTop: 10, alignSelf: 'center' }}>
 
                 <TextInput
@@ -1044,7 +1292,121 @@ const ShopCart = (props) => {
         :
         null
       }
+      <Modal
+                isVisible={chooseAddressModeModal}
+                swipeDirection="down"
+                onBackdropPress={() => setChooseAddressModeModal(false)}
+                onSwipeComplete={(e) => {
+                    setChooseAddressModeModal(false)
+                }}
+                scrollTo={() => { }}
+                scrollOffset={1}
+                onModalWillShow={()=>{setAddressMode('1')}}
+                propagateSwipe={true}
+                coverScreen={false}
+                backdropColor='transparent'
+                style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+            >
+                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Choose Address Method</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
+                        <TouchableWithoutFeedback onPress={()=>{setAddressMode('1')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'1' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Enter Complete Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>  
+                        
+                        <TouchableWithoutFeedback style={{marginTop:10}} onPress={()=>{setAddressMode('2')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'2' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Search Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>  
+                        <TouchableWithoutFeedback style={{marginTop:10}} onPress={()=>{setAddressMode('3')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'3' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 12, marginLeft:5}} >Current Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>
+
+                        <View style={{height:20}} />
+                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+
+                        {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                          titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
+
+                    </ScrollView>
+
+                </View>
+            </Modal>
+            <Modal
+                isVisible={openGoogleAddressModal}
+                swipeDirection="down"
+                onBackdropPress={() => setOpenGoogleAddressModal(false)}
+                onSwipeComplete={(e) => {
+                    setOpenGoogleAddressModal(false)
+                }}
+                scrollTo={() => { }}
+                scrollOffset={1}
+                propagateSwipe={true}
+                coverScreen={false}
+                backdropColor='transparent'
+                style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+            >
+                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Search Address</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled" >
+
+                    <GooglePlacesAutocomplete
+            placeholder="Add Location"
+            textInputProps={{
+              placeholderTextColor: '#c9c9c9',
+              // placeholderTextColor: Colors.BLACK,
+              returnKeyType: 'search',
+              // onFocus: () => setShowPlacesList(true),
+              // onBlur: () => setShowPlacesList(false),
+              multiline:true,
+              // onTouchStart: ()=>{downButtonHandler()}
+              height:55,
+            }}
+            enablePoweredByContainer={false}
+            listViewDisplayed={'auto'}
+            styles={styles.searchbar}
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              // setShowPlacesList(false)
+              setGoogleLatLng({
+                lat: details.geometry.location.lat,
+                lng: details.geometry.location.lng,
+              });
+              setGoogleAddress(data?.description);
+            }}
+            GooglePlacesDetailsQuery={{
+              fields: 'geometry',
+            }}
+            fetchDetails={true}
+            query={{
+              key: GOOGLE_MAPS_APIKEY,
+              language: 'en',
+            }}
+          />
+                        
+
+                        <View style={{height:20}} />
+                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+
+                        {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                          titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
+
+                    </ScrollView>
+
+                </View>
+            </Modal>
+            {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
       {loading ? <Loader /> : null}
     </SafeAreaView>
   );
@@ -1076,6 +1438,43 @@ const styles = StyleSheet.create({
     justifyContent: "center", color: 'black',
     fontWeight: '400',
     fontSize: 14,
+  },
+  radioButtonContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  searchbar: {
+    description: {
+      fontWeight: 'bold',
+    },
+    predefinedPlacesDescription: {
+      color: '#1faadb',
+    },
+    textInputContainer: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      // top: 50,
+      // width: width - 10,
+      borderWidth: 0,
+      marginTop:5,
+    },
+    textInput: {
+      paddingLeft: 15,
+      width: '100%',
+      fontSize: 13,
+      borderColor: 'rgba(0,0,0,0.2)',
+      borderWidth: 0.5,
+      // backgroundColor: '#34333a',
+      color: '#fff',
+      height: 80,
+      borderRadius: 5,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      color: Mycolors.Black
+    },
+    listView: {
+      // backgroundColor: 'rgba(192,192,192,0.9)',
+      // top: 23,
+    },
   },
 });
 export default ShopCart
