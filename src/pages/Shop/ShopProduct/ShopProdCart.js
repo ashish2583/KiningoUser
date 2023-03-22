@@ -8,7 +8,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -100,6 +100,7 @@ const ShopProduct = (props) => {
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false)
+  const [res, setres] = useState('')
   const [resData, setresData] = useState(null)
   const [refreshing, setRefreshing] = useState(false);
   const [pincode, setpincode] = useState('');
@@ -113,6 +114,8 @@ const ShopProduct = (props) => {
   const [discount_id,setdiscount_id]=useState(null)
   const [discountPrice,setdiscountPrice]=useState('0.0')
   const [dilivery,setdilivery]=useState('0.0')
+  const [vendorCharges, setVendorCharges] = useState('0.0')
+  const [taxes, setTaxes] = useState('0.0')
   const [totla,settotal]=useState('0.0')
   const [modlevisual,setmodlevisual]=useState(false)
   const [addressList,setaddressList]=useState(false)
@@ -169,37 +172,57 @@ const checkcon=()=>{
   
   });
  }, []);
- const getcart = async () => {
+ const getcart = async (callGetCopunFun = true) => {
   setLoading(true)
   const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
   setLoading(false)
-  console.log('the res==>>shop cart', responseJson)
-  if (responseJson.headers.success == 1) {
-    console.log('the res==>>Home.body.cartData', responseJson.body)
-    // await getCopun(responseJson.body.business_id)
-    if(responseJson.body.items[0].serviceType=='Take Away'){
-      setordertype('take-away')
-    }
-    var myCartItem=[]
-    for(let i=1;i<=responseJson.body.items.length;i++){
-      if(responseJson.body.items[i-1].serviceType!=null){
-        myCartItem.push(responseJson.body.items[i-1])
+    // console.log('the res get shop_eat_cart ==>>', responseJson.body.items.length)
+    console.log('the res get shop_eat_cart ==>>', responseJson.body)
+    if (responseJson.headers.success == 1) {
+      if (responseJson.body.items.length == 0) {
+        setres([])
+        setresData([])
+        setsubTotal('')
+        setdilivery('')
+        setVendorCharges('')
+        setTaxes('')
+        settotal('0')
+        setreloades(!reloades)
+      } else {
+        if (responseJson.body.items[0].serviceType == 'Take Away') {
+          setordertype('take-away')
+        }
+        setres(responseJson.body)
+        var myCartItem = []
+        for (let i = 1; i <= responseJson.body.items.length; i++) {
+          if (responseJson.body.items[i - 1].serviceType != null) {
+            myCartItem.push(responseJson.body.items[i - 1])
+          }
+        }
+        setresData(myCartItem)
+        // setresData(responseJson.body.items)
+        setsubTotal(responseJson.body.sub_total)
+        setdilivery(responseJson.body.delivery_charge)
+        setVendorCharges(responseJson.body.vendor_charges)
+        setTaxes(responseJson.body.taxes)
+        settotal(responseJson.body.total)
+        setreloades(!reloades)
+        if(callGetCopunFun){
+          await getCopun(responseJson.body.business_id)
+        }
       }
+    } else {
+      setres([])
+      setresData([])
+      setsubTotal('')
+      setdilivery('')
+      setVendorCharges('')
+      setTaxes('')
+      settotal('0')
+      setreloades(!reloades)
+      //  setalert_sms(err)
+      //  setMy_Alert(true)
     }
-    // setresData(responseJson.body.items)
-    setresData(myCartItem)
-    setsubTotal(responseJson.body.sub_total)  
-    setdilivery(responseJson.body.delivery_charge)
-    settotal(responseJson.body.total)
-  } else {
-    setLoading(false)
-    setresData([])
-    setsubTotal('')  
-    setdilivery('')
-    settotal('0')
-    setalert_sms(err)
-    setMy_Alert(true)
-  }
 
 }
 const getCopun = async (businessId) => {
@@ -208,7 +231,7 @@ const getCopun = async (businessId) => {
   setLoading(true)
   
   // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
-  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+businessId, '', 'GET',  User.token)
+  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+businessId, '', 'GET',  userdetaile.token)
   setLoading(false)
   console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
   if (responseJson.headers.success == 1) {
@@ -221,7 +244,7 @@ const getCopun = async (businessId) => {
 }
 const getAddress = async () => {
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(user_address, '', 'GET',  User.token)
+  const { responseJson, err } = await requestGetApi(user_address, '', 'GET',  userdetaile.token)
   setLoading(false)
   console.log('the res get user_address get==>>', responseJson)
   if (responseJson.headers.success == 1) {
@@ -236,7 +259,7 @@ const deletAddress = async (item) => {
   console.log('itemsss',item);
    setLoading(true)
    
-   const { responseJson, err } = await requestPostApi(delete_Update_Address+item.id, '', 'DELETE',User.token)
+   const { responseJson, err } = await requestPostApi(delete_Update_Address+item.id, '', 'DELETE',userdetaile.token)
    setLoading(false)
    console.log('the res==>>', responseJson)
    if (responseJson.headers.success == 1) {
@@ -265,7 +288,7 @@ const deletAddress = async (item) => {
     "is_default": 1
 }
 setLoading(true)
-  const { responseJson, err } = await requestPostApi(delete_Update_Address+AddressId, data, 'PUT', User.token)
+  const { responseJson, err } = await requestPostApi(delete_Update_Address+AddressId, data, 'PUT', userdetaile.token)
   setLoading(false)
   console.log('the res==>>', responseJson)
   if (responseJson.headers.success == 1) {
@@ -288,6 +311,32 @@ setLoading(true)
   // setMy_Alert(true)
   }
 }
+const removeCoupan = async () => {
+  setLoading(true)
+  var data = {
+    discount_id: discount_id,
+  }
+  console.log('removeCoupan data', data);
+  const { responseJson, err } = await requestPostApi(shop_product_remove_coupon, data, 'POST', userdetaile.token)
+  setLoading(false)
+  console.log('remove coupon response', responseJson)
+  console.log('remove coupon response body', responseJson.body)
+  if (responseJson.headers.success == 1) {
+    setdiscountPrice(responseJson.body.coupon_discount)
+    setsubTotal(responseJson.body.sub_total)
+    setdilivery(responseJson.body.delivery_charge)
+    setVendorCharges(responseJson.body.vendor_charges)
+    setTaxes(responseJson.body.taxes)
+    settotal(responseJson.body.total)
+    setapplyedCoupen('')
+    setpromocode('')
+  } else {
+    // setalert_sms(err)
+    // setMy_Alert(true)
+  }
+  
+
+}
 const AddAddress = async () => {
    
   setLoading(true)
@@ -304,7 +353,7 @@ var data={
   "is_default": 1
 }
 console.log('Ashush===>>',data);
-const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
+const { responseJson, err } = await requestPostApi(user_address, data, 'POST', userdetaile.token)
 setLoading(false)
 console.log('the res user_address set==>>', responseJson)
 if (responseJson.headers.success == 1) {
@@ -333,17 +382,18 @@ const applyCoupan = async () => {
   var data={ 
       discount_id: discount_id,
     }
-  const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', User.token)
+  const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
   setLoading(false)
   console.log('the res shop_eat_cart_apply_coupon==>>', responseJson)
   if (responseJson.headers.success == 1) {
+    Toast.show({text1:responseJson.headers.message})
     setdiscountPrice(responseJson.body.coupon_discount)
       setsubTotal(responseJson.body.sub_total)  
       setdilivery(responseJson.body.delivery_charge)
       settotal(responseJson.body.total)
       setapplyedCoupen(responseJson.body.coupon)
   } else {
-    // Toast.show({text1: err})
+    Toast.show({text1: responseJson.headers.message})
   // setalert_sms(err)
   // setMy_Alert(true)
   }
@@ -357,7 +407,7 @@ const applyCoupan = async () => {
   console.log('the res==>>shop delete cart', responseJson)
   if (responseJson.headers.success == 1) {
     console.log('the res==>>Home.body.delete cart', responseJson.body)
-    getcart()
+    getcart(false)
   } else {
      Toast.show({text1: err})
     //  setalert_sms(err)
@@ -421,7 +471,7 @@ const applyCoupan = async () => {
         console.log('the res==>>shop update cart', responseJson)
         if (responseJson.headers.success == 1) {
           console.log('the res==>>Home.body.update cart', responseJson.body)
-          getcart()
+          getcart(false)
         } else {
            Toast.show({text1: err})
           //  setalert_sms(err)
@@ -442,7 +492,7 @@ const applyCoupan = async () => {
         console.log('the res==>>shop update cart', responseJson)
         if (responseJson.headers.success == 1) {
           console.log('the res==>>Home.body.update cart', responseJson.body)
-          getcart()
+          getcart(false)
         } else {
            Toast.show({text1: err}) 
           //  setalert_sms(err)
@@ -604,6 +654,11 @@ const applyCoupan = async () => {
 
 </View> */}
 
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:12,width:'100%'}}>
+        <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Coupons</Text>
+        <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setmodlevisual(true)}}>View All</Text>
+     </View>
+
     <View style={{  width: dimensions.SCREEN_WIDTH - 30 ,marginTop:15,alignSelf:'center'}}>
          
             <TextInput
@@ -622,10 +677,7 @@ const applyCoupan = async () => {
             </View>
      </View>
 
-     <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:12,width:'100%'}}>
-     <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Other Coupons</Text>
-     <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setmodlevisual(true)}}>View All</Text>
-     </View>
+     
 
      {applyedCoupen!='' ?
       <View style={{width:'100%',marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
@@ -636,15 +688,23 @@ const applyCoupan = async () => {
       </View>
       <View style={{marginLeft:10,width:'63%'}}>
       <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13}} >{applyedCoupen.coupon_desc}</Text>
-      <Text style={{color:Mycolors.GREEN,fontSize:11,marginTop:5}} >Save ${applyedCoupen.discount_value} with this code</Text>
+      <Text style={{color:Mycolors.GREEN,fontSize:11,marginTop:5, marginBottom:5}} >Save ${parseFloat(Number(applyedCoupen.discount_value).toFixed(2))} with this code</Text>
+      <MyButtons title={applyedCoupen.coupon_code} height={27} width={'50%'} borderRadius={15} press={()=>{
+          setpromocode(applyedCoupen.coupon_code)
+          setdiscount_id(applyedCoupen.discount_id)
+        }} fontSize={12}
+          titlecolor={Mycolors.RED}   borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'}/>
       </View>
+      <TouchableOpacity onPress={removeCoupan} style={{paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 5}} >
+        <Text style={{color:'red', textAlign:'center'}}>Remove</Text>
+      </TouchableOpacity>  
        <View style={{position:'absolute',right:10,top:10}}>
         <View style={{width:80,}}>
-        <MyButtons title={applyedCoupen.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={()=>{
+        {/* <MyButtons title={applyedCoupen.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={()=>{
           setpromocode(applyedCoupen.coupon_code)
           setdiscount_id(applyedCoupen.discount_id)
         }} marginHorizontal={20} fontSize={12}
-          titlecolor={Mycolors.RED}   borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'}/>
+          titlecolor={Mycolors.RED}   borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'}/> */}
         </View>
         </View>
       </View>
@@ -656,19 +716,19 @@ const applyCoupan = async () => {
           >
        <View style={{flexDirection:'row',justifyContent:'space-between',}}>
       <Text style={{color:Mycolors.Black,fontSize:13,fontWeight:'600'}} >Sub Total</Text>
-      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >${subTotal}</Text>
+      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
       </View>
       <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
       <Text style={{color:Mycolors.Black,fontSize:13,}} >Delivery Charges</Text>
-      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >${dilivery}</Text>
+      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
       </View>
       <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
       <Text style={{color:Mycolors.Black,fontSize:13,}} >Discount</Text>
-      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >-${discountPrice}</Text>
+      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >-${parseFloat(Number(discountPrice).toFixed(2))}</Text>
       </View>
       <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20}}>
       <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600'}} >Total Cost</Text>
-      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:14,marginTop:5,fontWeight:'600'}} >${totla}</Text>
+      <Text style={{color:Mycolors.TEXT_COLOR,fontSize:14,marginTop:5,fontWeight:'600'}} >${parseFloat(Number(totla).toFixed(2))}</Text>
       </View>
       </View>
 
@@ -720,7 +780,7 @@ const applyCoupan = async () => {
       </View>
       <View style={{marginLeft:10}}>
       <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13}} >{item.coupon_name}</Text>
-      <Text style={{color:Mycolors.GREEN,fontSize:11,marginTop:5}} >Save ${item.discount_value} with this code</Text>
+      <Text style={{color:Mycolors.GREEN,fontSize:11,marginTop:5}} >Save ${parseFloat(Number(item.discount_value).toFixed(2))} with this code</Text>
       </View>
        <View style={{position:'absolute',right:10,top:10}}>
         <View style={{width:80,}}>
@@ -1089,6 +1149,18 @@ null
      );
   }
 const styles = StyleSheet.create({
+  input: {
+    height: 45,
+    width: '100%',
+    // fontSize: 12,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    borderRadius: 5,
+    color: Mycolors.TEXT_COLOR,
+    paddingLeft: 15,
 
+    backgroundColor: Mycolors.BG_COLOR,
+    top: 1
+  },
 });
 export default ShopProduct 

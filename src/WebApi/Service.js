@@ -39,6 +39,7 @@ export const shop_product_productlist=`shop/product/productList/userid/`;
 export const shop_product_delete_cart_item=`shop/product/cart/id/`;
 export const shop_product_details=`shop/product/productDetails/id/`;
 export const shop_product_cart_place_order=`shop/product/cart/place-order`;
+export const shop_product_remove_coupon=`shop/product/cart/remove-coupon`;
 // start: new apis yet to be created
 export const shop_product_coupons_userid = 'shop/product/coupons/userid/'
 export const shop_product_cart_apply_coupon=`shop/product/cart/apply-coupon`;
