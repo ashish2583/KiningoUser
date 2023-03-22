@@ -141,6 +141,7 @@ const ShopProduct = (props) => {
   const [phone, setphone] = useState('');
   const [AddressId,setAddressId]=useState(null)
   const [edit,setedit]=useState(false)
+  const [businessId, setBusinessId]=useState('')
   const [subTotal,setsubTotal]=useState('0.0')
   const [reloades,setreloades] = useState(false)
   const [applyedCoupen,setapplyedCoupen]=useState('')
@@ -224,6 +225,9 @@ const checkcon=()=>{
         setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
         setreloades(!reloades)
+        if(businessId === ''){
+          setBusinessId(responseJson.body.business_id)
+        }
         if(callGetCopunFun){
           await getCopun(responseJson.body.business_id)
         }
@@ -242,13 +246,19 @@ const checkcon=()=>{
     }
 
 }
-const getCopun = async (businessId) => {
+const getCopun = async (param) => {
   // console.log('getCopun endpoint', shop_product_coupons_userid+ProductVenderDetails.userid); 
-  console.log('getCopun endpoint 2', shop_product_coupons_userid+businessId); 
+  let endpoint = shop_product_coupons_userid
+  if(businessId !== ''){
+    endpoint += businessId
+  }else{
+    endpoint += param
+  }
+  console.log('getCopun endpoint 2', endpoint); 
   setLoading(true)
   
   // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
-  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+businessId, '', 'GET',  userdetaile.token)
+  const { responseJson, err } = await requestGetApi(endpoint, '', 'GET',  userdetaile.token)
   setLoading(false)
   console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
   if (responseJson.headers.success == 1) {
