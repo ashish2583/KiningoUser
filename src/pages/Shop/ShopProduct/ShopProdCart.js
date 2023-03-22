@@ -1,5 +1,5 @@
 import React, { useEffect,useState ,useRef} from 'react';
-import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
+import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, TouchableWithoutFeedback} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -14,6 +14,17 @@ import {  useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GetLocation from 'react-native-get-location'
 import Toast from 'react-native-toast-message';
+import Geolocation from "react-native-geolocation-service";
+import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
+import Geocoder from "react-native-geocoding";
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Modal from 'react-native-modal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+Geolocation.setRNConfiguration(GoogleApiKey);
+Geocoder.init(GoogleApiKey);
 
 const ShopProduct = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -133,6 +144,12 @@ const ShopProduct = (props) => {
   const [subTotal,setsubTotal]=useState('0.0')
   const [reloades,setreloades] = useState(false)
   const [applyedCoupen,setapplyedCoupen]=useState('')
+  const [chooseAddressModeModal, setChooseAddressModeModal] = useState(false);
+  const [openGoogleAddressModal, setOpenGoogleAddressModal] = useState(false);
+  const [addressMode, setAddressMode] = useState(null);
+  const [googleAddress, setGoogleAddress] = useState('');
+  const [googleLatLng, setGoogleLatLng] = useState({});
+
   useEffect(()=>{
     console.log('userdetaile.token', userdetaile.token);
     getcart()
@@ -176,8 +193,8 @@ const checkcon=()=>{
   setLoading(true)
   const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
   setLoading(false)
-    // console.log('the res get shop_eat_cart ==>>', responseJson.body.items.length)
-    console.log('the res get shop_eat_cart ==>>', responseJson.body)
+    // console.log('', responseJson.body.items.length)
+    console.log('the res get shop_product_cart ==>>', responseJson.body)
     if (responseJson.headers.success == 1) {
       if (responseJson.body.items.length == 0) {
         setres([])
@@ -373,6 +390,241 @@ if (responseJson.headers.success == 1) {
 
 
 }
+const getMatches = (str) => {
+  var count = (str.match(/,/g) || []).length;
+  return count
+}
+const getLastIndex = (str) => {
+  return str.lastIndexOf(",")
+}
+const AddAddressUsingGoogleSearch = async () => {
+  console.log('googleAddress', googleAddress);
+  if(googleAddress === ''){
+    Alert.alert('Please Add Address')
+    return
+  }
+  // if (full_name == '') {
+  //   Alert.alert('Please Add Name')
+  // } else if (area_village == '') {
+  //   Alert.alert('Please Add Address')
+  // } else if (city == '') {
+  //   Alert.alert('Please Add City')
+  // } else if (state == '') {
+  //   Alert.alert('Please Add State')
+  // }
+  // address_line1, city, state, country
+  let matches = getMatches(googleAddress)
+  console.log('matches', matches);
+  const addressData = {
+    country: '',
+    state: '',
+    city: '',
+    address_line1: '',
+  }
+  let addressValue = googleAddress
+  console.log('googleAddress', googleAddress);
+  let lastindex = null
+  let partOfString = null
+  if(matches > 3){
+    matches = 3 
+  }
+  for(let i = 0; i < matches + 1; i++){
+    lastindex = getLastIndex(addressValue)
+    if(i !== 3){
+      partOfString = addressValue.substring(lastindex + 1)
+      addressValue = addressValue.substring(0, lastindex)
+    }
+    // console.log('i', i);
+    // console.log('lastindex', lastindex);
+    // console.log('partOfString', partOfString);
+    // console.log('addressValue', addressValue);
+    if(i == 0){
+      addressData.country = partOfString?.trim()
+    }else if(i == 1){
+      addressData.state = partOfString?.trim()
+    }else if(i == 2){
+      addressData.city = partOfString?.trim()
+    }else if(i == 3){
+      addressData.address_line1 = addressValue?.trim()
+    }
+    if(i == 3){
+      break
+    }
+  }
+  setLoading(true)
+  var data = {
+    "location_name": '',
+    "location_type": '1',
+    "latitude": googleLatLng.lat,
+    "longitude": googleLatLng.lng,
+    // "address_line1": house_no,
+    "address_line2": '',
+    // "city": city,
+    // "state": state,
+    "country_id": 1,
+    "is_default": 1,
+    ...addressData
+  }
+  // console.log('addressData', addressData);
+  console.log('google address data===>>', data);
+  // return
+  const { responseJson, err } = await requestPostApi(user_address, data, 'POST', userdetaile.token)
+  setLoading(false)
+  // close modal
+  setOpenGoogleAddressModal(false)
+  console.log('the res google user_address set==>>', responseJson)
+  if (responseJson.headers.success == 1) {
+    getAddress()
+    setfull_name('')
+    setaddress_type('')
+    sethouse_no('')
+    setarea_village('')
+    setCity('')
+    setstate('')
+    setGoogleLatLng({})
+    setGoogleAddress('')
+    setShippingAddressPopUp(false)
+  } else {
+    // setalert_sms(err)
+    // setMy_Alert(true)
+  }
+
+
+}
+const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
+  // if(googleAddress === ''){
+  //   Alert.alert('Please Add Address')
+  //   return
+  // }
+  // if (full_name == '') {
+  //   Alert.alert('Please Add Name')
+  // } else if (area_village == '') {
+  //   Alert.alert('Please Add Address')
+  // } else if (city == '') {
+  //   Alert.alert('Please Add City')
+  // } else if (state == '') {
+  //   Alert.alert('Please Add State')
+  // }
+  // address_line1, city, state, country
+  let matches = getMatches(currentAddress)
+  console.log('matches', matches);
+  const addressData = {
+    country: '',
+    state: '',
+    city: '',
+    address_line1: '',
+  }
+  let addressValue = currentAddress
+  console.log('currentAddress', currentAddress);
+  let lastindex = null
+  let partOfString = null
+  if(matches > 3){
+    matches = 3 
+  }
+  for(let i = 0; i < matches + 1; i++){
+    lastindex = getLastIndex(addressValue)
+    if(i !== 3){
+      partOfString = addressValue.substring(lastindex + 1)
+      addressValue = addressValue.substring(0, lastindex)
+    }
+    // console.log('lastindex', lastindex);
+    // console.log('partOfString', partOfString);
+    // console.log('addressValue', addressValue);
+    if(i == 0){
+      addressData.country = partOfString?.trim()
+    }else if(i == 1){
+      addressData.state = partOfString?.trim()
+    }else if(i == 2){
+      addressData.city = partOfString?.trim()
+    }else if(i == 3){
+      addressData.address_line1 = addressValue?.trim()
+    }
+    console.log('addressData', addressData);
+    // if(i == 3){
+    //   break
+    // }
+  }
+  setLoading(true)
+  var data = {
+    "location_name": '',
+    "location_type": '1',
+    "latitude": latLng.lat,
+    "longitude": latLng.lng,
+    // "address_line1": house_no,
+    "address_line2": '',
+    // "city": city,
+    // "state": state,
+    "country_id": 1,
+    "is_default": 1,
+    ...addressData
+  }
+  // console.log('addressData', addressData);
+  console.log('current address data===>>', data);
+  const { responseJson, err } = await requestPostApi(user_address, data, 'POST', userdetaile.token)
+  setLoading(false)
+  // close modal
+  // setOpenGoogleAddressModal(false)
+  console.log('the res current user_address set==>>', responseJson)
+  if (responseJson.headers.success == 1) {
+    getAddress()
+    setfull_name('')
+    setaddress_type('')
+    sethouse_no('')
+    setarea_village('')
+    setCity('')
+    setstate('')
+    setShippingAddressPopUp(false)
+  } else {
+    // setalert_sms(err)
+    // setMy_Alert(true)
+  }
+
+
+}
+const myposition = () => {
+  Geolocation.getCurrentPosition(
+    position => {
+      setLoading(true)
+      let My_cord = { latitude: position.coords.latitude, longitude: position.coords.longitude }
+      Geocoder.from(position.coords.latitude, position.coords.longitude)
+      .then(json => {
+        var addressComponent = json.results[0].formatted_address;
+        console.log('The address is', json.results[0].formatted_address);
+        AddAddressUsingCurrentLoation({lat: position.coords.latitude, lng: position.coords.longitude}, json.results[0].formatted_address)
+      })
+      .catch(error => {
+        setLoading(false)
+        console.warn(error)
+      });
+    },
+    error => {
+      setLoading(false)
+      Alert.alert(error.message.toString());
+    },
+    {
+      showLocationDialog: true,
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 0
+    }
+  );
+}
+const openAddressModel = () => {
+  // if(addressMode == ''){
+  //    setalert_sms('Please select address method')
+  //    setMy_Alert(true)
+  //   return
+  // }
+  if(addressMode == '1'){
+    setShippingAddressPopUp(true)
+  } else if(addressMode == '2'){
+    setOpenGoogleAddressModal(true)
+  } else if(addressMode == '3'){
+    myposition()
+  }
+  setChooseAddressModeModal(false)
+  // setAddressMode('')
+}
 const applyCoupan = async () => {
   if(discount_id==null){
     Toast.show({text1: 'Please select any coupon'})
@@ -384,7 +636,7 @@ const applyCoupan = async () => {
     }
   const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
   setLoading(false)
-  console.log('the res shop_eat_cart_apply_coupon==>>', responseJson)
+  console.log('the res shop_product_cart_apply_coupon==>>', responseJson)
   if (responseJson.headers.success == 1) {
     Toast.show({text1:responseJson.headers.message})
     setdiscountPrice(responseJson.body.coupon_discount)
@@ -606,7 +858,7 @@ const applyCoupan = async () => {
     <View>
         <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:12,width:'100%'}}>
         <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Choose Delivery Address</Text>
-        <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setShippingAddressPopUp(true)}}>Add Address</Text> 
+        <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setChooseAddressModeModal(true)}}>Choose Address</Text> 
         </View>
 
      <View style={{width:'100%',marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
@@ -810,207 +1062,285 @@ const applyCoupan = async () => {
         : null
       }
 
-  { ShippingAddressPopUp ?
-<View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}>
+<Modal
+        isVisible={ShippingAddressPopUp}
+        swipeDirection="down"
+        onBackdropPress={() => setShippingAddressPopUp(false)}
+        onSwipeComplete={(e) => {
+            setShippingAddressPopUp(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        onModalWillShow={()=>{setAddressMode('1')}}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
 
-<View style={{width:'100%',height:dimensions.SCREEN_HEIGHT*80/100,position:'absolute',bottom:0,borderTopRightRadius: 20,borderTopLeftRadius: 20,backgroundColor:'#fff'}}>
-<KeyboardAwareScrollView>
-                                  
+        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
 
-                                
-                                      <View style={{ marginTop: 15, height: 30, flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
-                                          <Text style={{ marginTop: 2, marginLeft: 10, textAlign: 'center', fontSize: 20, color: '#000000', fontWeight: '500' }}>Add Address</Text>
-
-
-                                      </View>
-                                      <TouchableOpacity onPress={() => { setShippingAddressPopUp(false) }}
-                                          style={{ position: "absolute", width: 30,  borderRadius: 35, height: 30, right: 10, top: 10 }}>
-                                          <Image
-                                              source={require('../../../assets/crossed.png')}
-                                              style={{
-                                                  width: 35,
-                                                  height: 35, alignSelf: 'center'
-                                              }}
-
-                                          />
-                                      </TouchableOpacity>
-                                      <TextInput style={styles.textInput}
-                                          placeholder='Full Name'
-                                          placeholderTextColor="#8F93A0"
-                                          label="full name"
-                                          value={full_name}
-                                          onChangeText={e => setfull_name(e)}
-                                      />
-                                      {/* <TextInput style={styles.textInput}
-                                          placeholder='Phone number'
-                                          placeholderTextColor="#8F93A0"
-                                          maxLength={12}
-                                          label="phone"
-                                          value={phone}
-                                          onChangeText={e => setphone(e)}
-                                      /> */}
-                                      <TextInput style={styles.textInput}
-                                          placeholder='Zip code'
-                                          placeholderTextColor="#8F93A0"
-                                          label="pincode"
-
-                                          maxLength={9}
-                                          value={pincode}
-                                          onChangeText={e => setpincode(e)}
-                                      />
-                                      <TextInput style={styles.textInput}
-                                          placeholder='State'
-                                          placeholderTextColor="#8F93A0"
-                                          label="state"
-                                          value={state}
-                                          onChangeText={e => setstate(e)}
-                                      />
-                                      <TextInput style={styles.textInput}
-                                          placeholder= 'City'
-                                          placeholderTextColor="#8F93A0"
-                                          label="ity"
-                                          value={city}
-                                          onChangeText={e => setCity(e)}
-                                      />
-                                      <TextInput style={styles.textInput}
-                                          placeholder='Address'
-                                          placeholderTextColor="#8F93A0"
-                                          value={house_no}
-                                          onChangeText={e => sethouse_no(e)}
-                                      />
-                                      <TextInput style={styles.textInput}
-                                          placeholder= 'Area Colony'
-                                          placeholderTextColor="#8F93A0"
-                                          label="area village"
-                                          value={area_village}
-                                          onChangeText={e => setarea_village(e)}
-                                      />
-                                      <TextInput style={styles.textInput}
-                                          placeholder='Landmark'
-                                          placeholderTextColor="#8F93A0"
-                                          label="landmark"
-                                          value={landmark}
-                                          onChangeText={e => setlandmark(e)}
-                                      />
-                                     
-                                      <View style={{ height: 45, width: "98%", marginTop: 14, alignItems: 'flex-start', justifyContent: "flex-start", marginLeft: 10 }}>
-
-                                          <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400" }}>Address Type</Text>
-
-                                          <View style={{ height: 45, width: "90%", marginTop: 5, alignItems: 'center', justifyContent: "flex-start", flexDirection: "row" }}>
-
-                                              <View
-                                                  style={{
-                                                      marginLeft: 10,
-                                                      justifyContent: 'center',
-                                                      flexDirection: 'row',
-                                                      height: 40,
-                                                  }}>
-                                                  <TouchableOpacity
-                                                      onPress={() => {
-                                                          setaddress_type('1')
-                                                      }}>
-
-                                                      <View
-                                                          style={{
-                                                              flex: 1,
-                                                              flexDirection: 'row',
-                                                              justifyContent: 'flex-start',
-                                                              alignItems: 'center',
-                                                          }}>
-                                                         <View style={{width:17,height:17,borderRadius:15,borderColor:'#000',borderWidth:0.5,justifyContent:'center'}}>
-                                                         <View style={{width:12,height:12,borderRadius:15,justifyContent:'center',alignSelf:'center',backgroundColor:address_type=='1'?'#000':'transparent'}} />
-                                                         </View>
-                                                          <Text
-                                                              style={{
-                                                                  fontWeight: "500",
-                                                                  textAlign: 'left',
-                                                                  fontSize: 11,
-                                                                  color: "black",
-                                                                  marginLeft:3
-                                                              }}>
-                                                             Home
-                                                          </Text>
-                                                      </View>
-
-                                                  </TouchableOpacity>
-                                              </View>
-                                              <View
-                                                  style={{
-                                                      marginLeft: 30,
-                                                      justifyContent: 'center',
-                                                      flexDirection: 'row',
-                                                      height: 40,
-                                                  }}>
-                                                  <TouchableOpacity
-                                                      onPress={() => {
-                                                        setaddress_type('2')
-                                                      }}>
-
-                                                      <View
-                                                          style={{
-                                                              flex: 1,
-                                                              flexDirection: 'row',
-                                                              justifyContent: 'flex-start',
-                                                              alignItems: 'center',
-                                                          }}>
-                                                          <View style={{width:17,height:17,borderRadius:15,borderColor:'#000',borderWidth:0.5,justifyContent:'center'}}>
-                                                         <View style={{width:12,height:12,borderRadius:15,justifyContent:'center',alignSelf:'center',backgroundColor:address_type=='2'?'#000':'transparent'}} />
-                                                         </View>
-
-                                                          <Text
-                                                              style={{
-                                                                  fontWeight: "500",
-                                                                  textAlign: 'left',
-                                                                  fontSize: 11,
-                                                                  color: "black",
-                                                                  marginLeft:4
-                                                              }}>
-                                                              Work
-                                                          </Text>
-                                                      </View>
-
-                                                  </TouchableOpacity>
-                                              </View>
-                                            
-                                          </View>
-                                      </View>
-                                      {/* <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 0, flexDirection: 'row', height: 34, marginHorizontal: 20, marginTop: 60 }}>
-                                          <TouchableOpacity
-                                              onPress={() => {AddAddress()}} >
-                                              <View style={{ justifyContent: 'center', width: 200, flex: 1, backgroundColor: '#ffcc00', borderRadius: 50 }}>
-                                                  <Text style={{textAlign:'center'}}>Save</Text>
-                                              </View>
-                                          </TouchableOpacity>
-                                      </View> */}
-                                      <View style={{width:'70%',alignSelf:'center',marginTop:55}}>
-                                      <MyButtons title={edit? "Update" :"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
-                                       edit ? UpdateAddress() : AddAddress()
-                                      }} marginHorizontal={20} fontSize={11}
-                                      titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
-                                      </View>
-
-<View style={{width:'100%',height:200}}></View>
-
-                     {loading ? <Loader /> : null}     
-                              </KeyboardAwareScrollView> 
+          <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+            <KeyboardAwareScrollView>
 
 
-</View>
+
+              <View style={{ marginTop: 15, height: 30, justifyContent: "center", alignItems: 'center' }}>
+                {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
+                <TouchableOpacity
+                onPress={() => setShippingAddressPopUp(false)}
+                  // style={{
+                  //   width: '20%',
+                  //   borderWidth: 2,
+                  //   borderColor: 'grey',
+                  //   marginBottom:5,
+                  //   // ...style
+                  // }}
+                  style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5}}
+                />
+                <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500' }}>Add Address</Text>
 
 
-</View>
-:
-null
-}
+              </View>
+              
+              <TextInput style={styles.textInput}
+                placeholder='Complete Address'
+                placeholderTextColor="#8F93A0"
+                label="complete address"
+                value={full_name}
+                onChangeText={e => setfull_name(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Zip code'
+                placeholderTextColor="#8F93A0"
+                label="pincode"
+
+                maxLength={9}
+                value={pincode}
+                onChangeText={e => setpincode(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='State'
+                placeholderTextColor="#8F93A0"
+                label="state"
+                value={state}
+                onChangeText={e => setstate(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='City'
+                placeholderTextColor="#8F93A0"
+                label="ity"
+                value={city}
+                onChangeText={e => setCity(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Address'
+                placeholderTextColor="#8F93A0"
+                value={house_no}
+                onChangeText={e => sethouse_no(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Area Colony'
+                placeholderTextColor="#8F93A0"
+                label="area village"
+                value={area_village}
+                onChangeText={e => setarea_village(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Landmark'
+                placeholderTextColor="#8F93A0"
+                label="landmark"
+                value={landmark}
+                onChangeText={e => setlandmark(e)}
+              />
+
+              <View style={{ height: 45, width: "98%", marginTop: 14, alignItems: 'flex-start', justifyContent: "flex-start", marginLeft: 10 }}>
+
+                <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400", marginLeft:10 }}>Address Type</Text>
+
+                <View style={{ height: 45, width: "90%", marginTop: 5, alignItems: 'center', justifyContent: "flex-start", flexDirection: "row" }}>
+
+                  <View
+                    style={{
+                      marginLeft: 10,
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      height: 40,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setaddress_type('1')
+                      }}>
+
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}>
+                        <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                          <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '1' ? '#000' : 'transparent' }} />
+                        </View>
+                        <Text
+                          style={{
+                            fontWeight: "500",
+                            textAlign: 'left',
+                            fontSize: 11,
+                            color: "black",
+                            marginLeft: 3
+                          }}>
+                          Home
+                        </Text>
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 30,
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      height: 40,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setaddress_type('2')
+                      }}>
+
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}>
+                        <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                          <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '2' ? '#000' : 'transparent' }} />
+                        </View>
+
+                        <Text
+                          style={{
+                            fontWeight: "500",
+                            textAlign: 'left',
+                            fontSize: 11,
+                            color: "black",
+                            marginLeft: 4
+                          }}>
+                          Work
+                        </Text>
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
+
+                </View>
+              </View>
+              <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
+                <MyButtons title={edit ? "Update" : "Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+                  edit ? UpdateAddress() : AddAddress()
+                }} 
+                // marginHorizontal={20} 
+                fontSize={14}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              </View>
+
+              <View style={{ width: '100%', height: 200 }}></View>
+
+            </KeyboardAwareScrollView>
 
 
-{ addressList ?
-<View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}>
+          </View>
+
+
+        {/* </View> */}
+</Modal>  
+
+      <Modal
+                isVisible={openGoogleAddressModal}
+                swipeDirection="down"
+                onBackdropPress={() => setOpenGoogleAddressModal(false)}
+                onSwipeComplete={(e) => {
+                    setOpenGoogleAddressModal(false)
+                }}
+                scrollTo={() => { }}
+                scrollOffset={1}
+                propagateSwipe={true}
+                coverScreen={false}
+                backdropColor='transparent'
+                style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+            >
+                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Search Address</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled" >
+
+                    <GooglePlacesAutocomplete
+            placeholder="Add Location"
+            textInputProps={{
+              placeholderTextColor: '#c9c9c9',
+              // placeholderTextColor: Colors.BLACK,
+              returnKeyType: 'search',
+              // onFocus: () => setShowPlacesList(true),
+              // onBlur: () => setShowPlacesList(false),
+              multiline:true,
+              // onTouchStart: ()=>{downButtonHandler()}
+              height:55,
+            }}
+            enablePoweredByContainer={false}
+            listViewDisplayed={'auto'}
+            styles={styles.searchbar}
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              // setShowPlacesList(false)
+              setGoogleLatLng({
+                lat: details.geometry.location.lat,
+                lng: details.geometry.location.lng,
+              });
+              setGoogleAddress(data?.description);
+            }}
+            GooglePlacesDetailsQuery={{
+              fields: 'geometry',
+            }}
+            fetchDetails={true}
+            query={{
+              key: GOOGLE_MAPS_APIKEY,
+              language: 'en',
+            }}
+          />
+                        
+
+                        <View style={{height:20}} />
+                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+
+                        {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                          titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
+
+                    </ScrollView>
+
+                </View>
+            </Modal>
+
+
+  <Modal
+        isVisible={addressList}
+        swipeDirection="down"
+        onBackdropPress={() => setaddressList(false)}
+        onSwipeComplete={(e) => {
+          setaddressList(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+{/* <View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}> */}
 <View style={{width:'100%',height:dimensions.SCREEN_HEIGHT*80/100,position:'absolute',bottom:0,borderTopRightRadius: 20,borderTopLeftRadius: 20,backgroundColor:'#fff'}}>
 
 <View style={{ flex: 1 }}>
-                                        <TouchableOpacity onPress={() => { setaddressList(false) }}
+                                        {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
                                           style={{ position: "absolute", width: 30,  borderRadius: 35, height: 30, right: 10, top: 10 }}>
                                           <Image
                                               source={require('../../../assets/crossed.png')}
@@ -1020,7 +1350,7 @@ null
                                               }}
 
                                           />
-                                      </TouchableOpacity>
+                                      </TouchableOpacity> */}
                                 <Text style={{ marginLeft: 15, marginTop: 15, textAlign: 'left', fontSize: 17, color: '#000000', fontWeight: "500" }}>Select Delivery Address</Text>
                                 <View
                                     style={{
@@ -1141,10 +1471,252 @@ null
                   </View> 
 
 </View>
-</View>
-:
-null
-}
+{/* </View> */}
+</Modal>
+<Modal
+                isVisible={chooseAddressModeModal}
+                swipeDirection="down"
+                onBackdropPress={() => setChooseAddressModeModal(false)}
+                onSwipeComplete={(e) => {
+                    setChooseAddressModeModal(false)
+                }}
+                scrollTo={() => { }}
+                scrollOffset={1}
+                onModalWillShow={()=>{setAddressMode('1')}}
+                propagateSwipe={true}
+                coverScreen={false}
+                backdropColor='transparent'
+                style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+            >
+                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                    <Text style={{ fontSize: 22, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 25, marginTop: 30 }}>Choose Address Method</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+                        <TouchableWithoutFeedback onPress={()=>{setAddressMode('1')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'1' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Enter Complete Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>  
+                        
+                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'2' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Search Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>  
+                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('3')}}>
+                          <View style={styles.radioButtonContainer}>
+                            <MaterialCommunityIcons name={'3' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
+                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Current Address</Text>
+                          </View>
+                        </TouchableWithoutFeedback>
+
+                        <View style={{height:30}} />
+                        <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+
+                        {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
+                          titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
+
+                    </ScrollView>
+
+                </View>
+            </Modal>
+
+            <Modal
+        isVisible={ShippingAddressPopUp}
+        swipeDirection="down"
+        onBackdropPress={() => setShippingAddressPopUp(false)}
+        onSwipeComplete={(e) => {
+            setShippingAddressPopUp(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        onModalWillShow={()=>{setAddressMode('1')}}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+
+        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
+
+          <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+            <KeyboardAwareScrollView>
+
+
+
+              <View style={{ marginTop: 15, height: 30, justifyContent: "center", alignItems: 'center' }}>
+                {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
+                <TouchableOpacity
+                onPress={() => setShippingAddressPopUp(false)}
+                  // style={{
+                  //   width: '20%',
+                  //   borderWidth: 2,
+                  //   borderColor: 'grey',
+                  //   marginBottom:5,
+                  //   // ...style
+                  // }}
+                  style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5}}
+                />
+                <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500' }}>Add Address</Text>
+
+
+              </View>
+              
+              <TextInput style={styles.textInput}
+                placeholder='Complete Address'
+                placeholderTextColor="#8F93A0"
+                label="complete address"
+                value={full_name}
+                onChangeText={e => setfull_name(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Zip code'
+                placeholderTextColor="#8F93A0"
+                label="pincode"
+
+                maxLength={9}
+                value={pincode}
+                onChangeText={e => setpincode(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='State'
+                placeholderTextColor="#8F93A0"
+                label="state"
+                value={state}
+                onChangeText={e => setstate(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='City'
+                placeholderTextColor="#8F93A0"
+                label="ity"
+                value={city}
+                onChangeText={e => setCity(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Address'
+                placeholderTextColor="#8F93A0"
+                value={house_no}
+                onChangeText={e => sethouse_no(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Area Colony'
+                placeholderTextColor="#8F93A0"
+                label="area village"
+                value={area_village}
+                onChangeText={e => setarea_village(e)}
+              />
+              <TextInput style={styles.textInput}
+                placeholder='Landmark'
+                placeholderTextColor="#8F93A0"
+                label="landmark"
+                value={landmark}
+                onChangeText={e => setlandmark(e)}
+              />
+
+              <View style={{ height: 45, width: "98%", marginTop: 14, alignItems: 'flex-start', justifyContent: "flex-start", marginLeft: 10 }}>
+
+                <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400", marginLeft:10 }}>Address Type</Text>
+
+                <View style={{ height: 45, width: "90%", marginTop: 5, alignItems: 'center', justifyContent: "flex-start", flexDirection: "row" }}>
+
+                  <View
+                    style={{
+                      marginLeft: 10,
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      height: 40,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setaddress_type('1')
+                      }}>
+
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}>
+                        <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                          <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '1' ? '#000' : 'transparent' }} />
+                        </View>
+                        <Text
+                          style={{
+                            fontWeight: "500",
+                            textAlign: 'left',
+                            fontSize: 11,
+                            color: "black",
+                            marginLeft: 3
+                          }}>
+                          Home
+                        </Text>
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 30,
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      height: 40,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setaddress_type('2')
+                      }}>
+
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}>
+                        <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                          <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '2' ? '#000' : 'transparent' }} />
+                        </View>
+
+                        <Text
+                          style={{
+                            fontWeight: "500",
+                            textAlign: 'left',
+                            fontSize: 11,
+                            color: "black",
+                            marginLeft: 4
+                          }}>
+                          Work
+                        </Text>
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
+
+                </View>
+              </View>
+              <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
+                <MyButtons title={edit ? "Update" : "Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+                  edit ? UpdateAddress() : AddAddress()
+                }} 
+                // marginHorizontal={20} 
+                fontSize={14}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              </View>
+
+              <View style={{ width: '100%', height: 200 }}></View>
+
+            </KeyboardAwareScrollView>
+
+
+          </View>
+
+
+        {/* </View> */}
+</Modal>
     </SafeAreaView>
      );
   }
@@ -1161,6 +1733,57 @@ const styles = StyleSheet.create({
 
     backgroundColor: Mycolors.BG_COLOR,
     top: 1
+  },
+  textInput: {
+    marginTop: 14, borderRadius: 10, marginHorizontal: 20, paddingLeft: 15,
+    flexDirection: 'row',
+    height: 45,
+    shadowColor: '#11032586',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    borderColor: "#D7D7D7",
+    borderWidth: 1,
+    flexDirection: 'column',
+    justifyContent: "center", color: 'black',
+    fontWeight: '400',
+    fontSize: 14,
+  },
+  radioButtonContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  searchbar: {
+    description: {
+      fontWeight: 'bold',
+    },
+    predefinedPlacesDescription: {
+      color: '#1faadb',
+    },
+    textInputContainer: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      // top: 50,
+      // width: width - 10,
+      borderWidth: 0,
+      marginTop:5,
+    },
+    textInput: {
+      paddingLeft: 15,
+      width: '100%',
+      fontSize: 13,
+      borderColor: 'rgba(0,0,0,0.2)',
+      borderWidth: 0.5,
+      // backgroundColor: '#34333a',
+      color: '#fff',
+      height: 80,
+      borderRadius: 5,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      color: Mycolors.Black
+    },
+    listView: {
+      // backgroundColor: 'rgba(192,192,192,0.9)',
+      // top: 23,
+    },
   },
 });
 export default ShopProduct 
