@@ -9,7 +9,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import { baseUrl, login,shop_product_business, requestPostApi,requestGetApi,shop_product, shop_product_productlist } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken,setVenderDetail, setUserType } from '../../../redux/actions/user_action';
@@ -65,8 +65,9 @@ const getProducts = async () => {
     setresData(responseJson.body)
     setFilteredData(responseJson.body.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
   } else {
-    setalert_sms(err)
-    setMy_Alert(true)
+    Toast.show({text1: err})
+    // setalert_sms(err)
+    // setMy_Alert(true)
   }
 
 }

@@ -13,6 +13,7 @@ import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GetLocation from 'react-native-get-location'
+import Toast from 'react-native-toast-message';
 
 const ShopProduct = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -130,8 +131,9 @@ const ShopProduct = (props) => {
   const [reloades,setreloades] = useState(false)
   const [applyedCoupen,setapplyedCoupen]=useState('')
   useEffect(()=>{
+    console.log('userdetaile.token', userdetaile.token);
     getcart()
-    getCopun()
+    // getCopun()
     getAddress()
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -149,7 +151,7 @@ const ShopProduct = (props) => {
 },[])
 const checkcon=()=>{
   getcart()
-  getCopun()
+  // getCopun()
   getAddress()
 }   
  
@@ -174,6 +176,7 @@ const checkcon=()=>{
   console.log('the res==>>shop cart', responseJson)
   if (responseJson.headers.success == 1) {
     console.log('the res==>>Home.body.cartData', responseJson.body)
+    // await getCopun(responseJson.body.business_id)
     if(responseJson.body.items[0].serviceType=='Take Away'){
       setordertype('take-away')
     }
@@ -189,6 +192,7 @@ const checkcon=()=>{
     setdilivery(responseJson.body.delivery_charge)
     settotal(responseJson.body.total)
   } else {
+    setLoading(false)
     setresData([])
     setsubTotal('')  
     setdilivery('')
@@ -198,11 +202,13 @@ const checkcon=()=>{
   }
 
 }
-const getCopun = async () => {
-   
+const getCopun = async (businessId) => {
+  // console.log('getCopun endpoint', shop_product_coupons_userid+ProductVenderDetails.userid); 
+  console.log('getCopun endpoint 2', shop_product_coupons_userid+businessId); 
   setLoading(true)
   
-  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
+  // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
+  const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+businessId, '', 'GET',  User.token)
   setLoading(false)
   console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
   if (responseJson.headers.success == 1) {
@@ -234,8 +240,8 @@ const deletAddress = async (item) => {
    setLoading(false)
    console.log('the res==>>', responseJson)
    if (responseJson.headers.success == 1) {
-     // Toast.show(responseJson.headers.message)
-     Alert.alert(responseJson.headers.message)
+     Toast.show({text1: responseJson.headers.message})
+    //  Alert.alert(responseJson.headers.message)
      getAddress()
      setreloades(!reloades)
    } else {
@@ -263,8 +269,8 @@ setLoading(true)
   setLoading(false)
   console.log('the res==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    // Toast.show(responseJson.headers.message)
-    Alert.alert(responseJson.headers.message)
+    Toast.show({text1: responseJson.headers.message})
+    // Alert.alert(responseJson.headers.message)
     setShippingAddressPopUp(false) 
     setaddressList(true)
     setedit(false)
@@ -277,6 +283,7 @@ setLoading(true)
     setstate('')
     getAddress()
   } else {
+    // Toast.show({text1: err})
   // setalert_sms(err)
   // setMy_Alert(true)
   }
@@ -310,6 +317,7 @@ if (responseJson.headers.success == 1) {
   setstate('')
   setShippingAddressPopUp(false)
 } else {
+  // Toast.show({text1: err})
 // setalert_sms(err)
 // setMy_Alert(true)
 }
@@ -318,8 +326,8 @@ if (responseJson.headers.success == 1) {
 }
 const applyCoupan = async () => {
   if(discount_id==null){
-    // Toast.show('Please select any coupon')
-    Alert.alert('Please select any coupon')
+    Toast.show({text1: 'Please select any coupon'})
+    // Alert.alert('Please select any coupon')
   }else{
     setLoading(true)
   var data={ 
@@ -335,6 +343,7 @@ const applyCoupan = async () => {
       settotal(responseJson.body.total)
       setapplyedCoupen(responseJson.body.coupon)
   } else {
+    // Toast.show({text1: err})
   // setalert_sms(err)
   // setMy_Alert(true)
   }
@@ -350,8 +359,9 @@ const applyCoupan = async () => {
     console.log('the res==>>Home.body.delete cart', responseJson.body)
     getcart()
   } else {
-     setalert_sms(err)
-     setMy_Alert(true)
+     Toast.show({text1: err})
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
   }
 
 }
@@ -413,8 +423,9 @@ const applyCoupan = async () => {
           console.log('the res==>>Home.body.update cart', responseJson.body)
           getcart()
         } else {
-           setalert_sms(err)
-           setMy_Alert(true)
+           Toast.show({text1: err})
+          //  setalert_sms(err)
+          //  setMy_Alert(true)
         }
 
       }
@@ -433,8 +444,9 @@ const applyCoupan = async () => {
           console.log('the res==>>Home.body.update cart', responseJson.body)
           getcart()
         } else {
-           setalert_sms(err)
-           setMy_Alert(true)
+           Toast.show({text1: err}) 
+          //  setalert_sms(err)
+          //  setMy_Alert(true)
         } 
       }
     return(

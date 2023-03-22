@@ -16,6 +16,7 @@ import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_details, shop_product_business_userid } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
+import Toast from 'react-native-toast-message'
 
 const ShopProductDetails = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -122,8 +123,9 @@ const ShopProductDetails = (props) => {
     console.log('the res==>>body.product details', responseJson.body)
     setProductDetailsData(responseJson.body)
   } else {
-     setalert_sms(err)
-     setMy_Alert(true)
+    Toast.show({text1: err})
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
   }
 
 }
@@ -158,11 +160,13 @@ const addToCart = async () => {
   if (responseJson.headers.success == 1) {
     console.log('responseJson.headers.message', responseJson.headers.message)
     console.log('the res==>>Home.body. add to cart', responseJson.body)
-    setalert_sms(responseJson.headers.message)
-    setMy_Alert(true)
+    Toast.show({text1: responseJson.headers.message})
+    // setalert_sms(responseJson.headers.message)
+    // setMy_Alert(true)
   } else {
-     setalert_sms(err)
-     setMy_Alert(true)
+    Toast.show({text1: err}) 
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
   }
 }
 

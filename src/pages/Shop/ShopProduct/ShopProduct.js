@@ -9,7 +9,8 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message'
 import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
 import GetLocation from 'react-native-get-location'
@@ -134,8 +135,9 @@ const ShopProduct = (props) => {
     console.log('the res==>>Home.body.vendors', responseJson.body)
     setresData(responseJson.body)
   } else {
-     setalert_sms(err)
-     setMy_Alert(true)
+     Toast.show({text1: err}) 
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
   }
 
 }
@@ -345,9 +347,9 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
                 onChangeText={(e) => {
                   const value = e.replace(/[^0-9]/g, '')
                   if(Number(value) > 100){
-                    Toast.show('Miles cannot be more than 100', Toast.SHORT)
+                    Toast.show({ text1: 'Miles cannot be more than 100' });
                   }else if(Number(value) < 0){
-                    Toast.show('Miles cannot be less than 0', Toast.SHORT)
+                    Toast.show({ text1: 'Miles cannot be less than 0' });
                   } else{
                     multiSliderValuesChange([Number(value)])
                   }

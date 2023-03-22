@@ -12,7 +12,7 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 import { CardField,CardFieldInput, useStripe,StripeContainer,} from '@stripe/stripe-react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { baseUrl,shop_eat_cart,user_payment_method, shop_product_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import Loader from '../../../WebApi/Loader';
 
 const ShopPayment = (props) => {
@@ -116,9 +116,10 @@ setRefreshing(false)
       console.log('the res==>>', responseJson)
       if (responseJson.headers.success == 1) {
         getpaymentList()
-        Toast.show(responseJson.headers.message)
+        Toast.show({text1: responseJson.headers.message})
         setaddpayment(false)
       } else {
+        // Toast.show({text1: err})
       // setalert_sms(err)
       // setMy_Alert(true) 
       }
@@ -126,7 +127,7 @@ setRefreshing(false)
 
   const placeOrder = async () => {
    if(checkitem==''){
-    Toast.show('Please select payment method')
+    Toast.show({text1: 'Please select payment method'})
    }else{
      setLoading(true);
       var data={
@@ -142,9 +143,10 @@ setRefreshing(false)
       setLoading(false)
       console.log('the res shop_product_cart_place_order==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        // Toast.show(responseJson.headers.message)
+        // Toast.show({text1: responseJson.headers.message})
         props.navigation.navigate('ShopProduct')
       } else {
+      // Toast.show({text1: err})
       // setalert_sms(err)
       // setMy_Alert(true)
       }
@@ -175,6 +177,7 @@ setRefreshing(false)
    setallCardList(arr)
   } else {
     console.log('kokokok');
+    // Toast.show({text1: err})
     //  setalert_sms(err)
     //  setMy_Alert(true)
   }

@@ -9,7 +9,7 @@ import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message'
 import { requestGetApi, shop_product_productlist } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
 
@@ -165,8 +165,9 @@ const ShopProductDetails = (props) => {
         setSelectedCategory(cateList[0])
       }
     } else {
-      setalert_sms(err)
-      setMy_Alert(true)
+      Toast.show({text1: err})
+      // setalert_sms(err)
+      // setMy_Alert(true)
     }
 
   }

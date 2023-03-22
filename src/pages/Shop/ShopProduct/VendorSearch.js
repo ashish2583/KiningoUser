@@ -9,7 +9,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message'
 import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
 import GetLocation from 'react-native-get-location'
@@ -121,8 +121,9 @@ const ShopProduct = (props) => {
     )
     setFilteredData([...data])
   } else {
-     setalert_sms(err)
-     setMy_Alert(true)
+    Toast.show({text1: err})
+    // setalert_sms(err)
+    // setMy_Alert(true)
   }
 
 }
