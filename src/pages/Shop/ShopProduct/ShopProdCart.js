@@ -757,7 +757,7 @@ const applyCoupan = async () => {
         } 
       }
     return(
-        <View style={{width:'90%', height:200, alignSelf:'center'}}>
+        <View style={{width:'100%', height:200, alignSelf:'center'}}>
            <Swipeable
             renderRightActions={(progress, dragX) =>
                 renderRightActions(progress, dragX, onClick)
@@ -837,7 +837,7 @@ const applyCoupan = async () => {
 <View style={{width:'96%',alignSelf:'center', marginTop:20}}>
 {resData?.length>0 ? 
 <>
-<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:15}}>
+<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
     <Text style={{fontSize:16,color:Mycolors.Black,marginTop:5, fontWeight:'bold'}}>Total {resData?.length} items</Text>
     <Text style={{fontSize:13,color:'#FFC40C',marginTop:5, textDecorationColor:'#FFC40C', textDecorationLine:'underline'}}>Select All</Text>
 </View>
@@ -861,7 +861,7 @@ const applyCoupan = async () => {
 
 {resData?.length>0 ?
     <View>
-        <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:12,width:'100%'}}>
+        <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:5,width:'100%'}}>
         <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Choose Delivery Address</Text>
         <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setChooseAddressModeModal(true)}}>Choose Address</Text> 
         </View>
@@ -911,12 +911,12 @@ const applyCoupan = async () => {
 
 </View> */}
 
-      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:12,width:'100%'}}>
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5,width:'100%'}}>
         <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:14,}} >Coupons</Text>
         <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setmodlevisual(true)}}>View All</Text>
      </View>
 
-    <View style={{  width: dimensions.SCREEN_WIDTH - 30 ,marginTop:15,alignSelf:'center'}}>
+    <View style={{  width: '100%' ,marginTop:5,marginBottom:25,alignSelf:'center'}}>
          
             <TextInput
               value={promocode}
@@ -990,7 +990,7 @@ const applyCoupan = async () => {
       </View>
 
         <View style={{width:'95%',alignSelf:'center',marginTop:15}}>
-          <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" 
+          <MyButtons title="Proceed to payment" height={50} width={'100%'} borderRadius={5} alignSelf="center" 
           press={()=>{
             if(selectedAddress === ''){
               if(addressListData?.length === 0){
@@ -1406,18 +1406,18 @@ const applyCoupan = async () => {
                                                     marginBottom: addressListData.length-1 == index ? 100 : 10
                                                 }}>
                                                     <View style={{ flexDirection: 'column' }}>
-                                                        <View style={{ height: 30, flexDirection: 'row', marginLeft: 15 }}>
+                                                        <View style={{ height: 30, flexDirection: 'row', marginLeft: 0 }}>
                                                             <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
                                                              
                                                             </View>
-                                                            <View style={{ flex: 1, marginTop: 10, left: 20, }}>
-                                                                <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>{item.location_name}</Text>
+                                                            <View style={{ flex: 1, marginTop: 10, left: 0, }}>
+                                                                <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>Location Name: {item.location_name}</Text>
                                                             </View>
 
                                                         </View>
                                                     </View>
 
-                                                    <View style={{ marginHorizontal: 10, marginLeft: 50, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
+                                                    <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
                                                         <ScrollView>
                                                             <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
                                                             <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
@@ -1425,7 +1425,7 @@ const applyCoupan = async () => {
                                                     </View>
 
 
-                                                    <View style={{ flexDirection: 'row', left: 30, marginTop: 10, position: "absolute", bottom: 10 }}>
+                                                    <View style={{ flexDirection: 'row', left: 0, marginTop: 10, position: "absolute", bottom: 10 }}>
 
                                                         <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', marginTop: 10, left: 27 }}>
                                                             <TouchableOpacity onPress={() => { 
