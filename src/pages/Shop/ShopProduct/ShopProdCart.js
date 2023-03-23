@@ -259,14 +259,18 @@ const getCopun = async (businessId) => {
   }
 
 }
-const getAddress = async () => {
+const getAddress = async (newAddressId = '') => {
   setLoading(true)
   const { responseJson, err } = await requestGetApi(user_address, '', 'GET',  userdetaile.token)
   setLoading(false)
   console.log('the res get user_address get==>>', responseJson)
   if (responseJson.headers.success == 1) {
     setaddressListData(responseJson.body)
-    setselectedAddress(responseJson.body[0])
+    if(newAddressId){
+      setselectedAddress(responseJson.body.find(el=>el.id == newAddressId))
+    }else {
+      setselectedAddress(responseJson.body[0])
+    }
   } else {
     //  setalert_sms(err)
     //  setMy_Alert(true)
@@ -307,7 +311,7 @@ const deletAddress = async (item) => {
 setLoading(true)
   const { responseJson, err } = await requestPostApi(delete_Update_Address+AddressId, data, 'PUT', userdetaile.token)
   setLoading(false)
-  console.log('the res==>>', responseJson)
+  console.log('the res UpdateAddress==>>', responseJson)
   if (responseJson.headers.success == 1) {
     Toast.show({text1: responseJson.headers.message})
     // Alert.alert(responseJson.headers.message)
@@ -321,12 +325,13 @@ setLoading(true)
     setarea_village('')
     setCity('')
     setstate('')
-    getAddress()
+    getAddress(AddressId)
   } else {
     // Toast.show({text1: err})
   // setalert_sms(err)
   // setMy_Alert(true)
   }
+  setShippingAddressPopUp(false)
 }
 const removeCoupan = async () => {
   setLoading(true)
@@ -374,7 +379,7 @@ const { responseJson, err } = await requestPostApi(user_address, data, 'POST', u
 setLoading(false)
 console.log('the res user_address set==>>', responseJson)
 if (responseJson.headers.success == 1) {
-  getAddress()
+  getAddress(responseJson.body.id)
   setfull_name('')
   setaddress_type('')
   sethouse_no('')
@@ -474,7 +479,7 @@ const AddAddressUsingGoogleSearch = async () => {
   setOpenGoogleAddressModal(false)
   console.log('the res google user_address set==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    getAddress()
+    getAddress(responseJson.body.id)
     setfull_name('')
     setaddress_type('')
     sethouse_no('')
@@ -566,7 +571,7 @@ const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
   // setOpenGoogleAddressModal(false)
   console.log('the res current user_address set==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    getAddress()
+    getAddress(responseJson.body.id)
     setfull_name('')
     setaddress_type('')
     sethouse_no('')
@@ -986,7 +991,18 @@ const applyCoupan = async () => {
 
         <View style={{width:'95%',alignSelf:'center',marginTop:15}}>
           <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" 
-          press={()=>{props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype})}} 
+          press={()=>{
+            if(selectedAddress === ''){
+              if(addressListData?.length === 0){
+                Toast.show({text1: 'Please add an address'}) 
+                return
+              }else{
+                Toast.show({text1: 'Please select an address'}) 
+                return
+              }
+            }
+            props.navigation.navigate('ShopPayment',{address:selectedAddress,orderType:ordertype})
+          }} 
           marginHorizontal={20} fontSize={11}
           titlecolor={Mycolors.BG_COLOR} backgroundColor={'#FFC40C'} marginVertical={0}/>
           </View>
@@ -1464,7 +1480,8 @@ const applyCoupan = async () => {
                             </View>
                   <View style={{width:'90%',alignSelf:'center',position:'absolute',bottom:100}}>
                   <MyButtons title="Add New Address" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
-                    setShippingAddressPopUp(true) 
+                    // setShippingAddressPopUp(true) 
+                    setChooseAddressModeModal(true)
                     setaddressList(false)
                   }} marginHorizontal={20} fontSize={11}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
