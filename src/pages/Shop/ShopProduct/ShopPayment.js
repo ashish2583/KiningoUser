@@ -221,16 +221,16 @@ setRefreshing(false)
                 placeholder={{
                   number: '4242 4242 4242 4242',
                 }}
-                cardStyle={{
-                  borderRadius: 20,
-                  // backgroundColor: '#a9bcd6',
-                  // backgroundColor: '#7294c2',
-                  backgroundColor:'#fff',
-                  borderColor: Mycolors.RED,
-                  borderWidth: 1,
-                  textColor: Mycolors.BLACK,
-                  placeholderColor: '#c9c9c9',
-                }}
+                // cardStyle={{
+                //   borderRadius: 20,
+                //   // backgroundColor: '#a9bcd6',
+                //   // backgroundColor: '#7294c2',
+                //   backgroundColor:'#fff',
+                //   borderColor: Mycolors.RED,
+                //   borderWidth: 1,
+                //   textColor: Mycolors.BLACK,
+                //   placeholderColor: '#c9c9c9',
+                // }}
                 style={{
                   width: '100%',
                   height: 200,

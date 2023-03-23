@@ -834,7 +834,7 @@ const applyCoupan = async () => {
    press2={()=>{}} title2={'Cart'} fontWeight={'500'} img2height={20}
    press3={()=>{}} img3width={25} img3height={25} backgroundColor='#fff'/>
 
-<View style={{width:'96%',alignSelf:'center', marginTop:20}}>
+<View style={{width:'94%',alignSelf:'center', marginTop:20}}>
 {resData?.length>0 ? 
 <>
 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
