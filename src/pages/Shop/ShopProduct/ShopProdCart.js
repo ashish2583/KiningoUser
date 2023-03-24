@@ -1402,7 +1402,8 @@ const applyCoupan = async () => {
 
                                           />
                                       </TouchableOpacity> */}
-                                <Text style={{ marginLeft: 15, marginTop: 15, textAlign: 'left', fontSize: 17, color: '#000000', fontWeight: "500" }}>Select Delivery Address</Text>
+                                      <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setaddressList(false) }} />
+                                <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Select Delivery Address</Text>
                                 <View
                                     style={{
                                         justifyContent: "center",
@@ -1434,31 +1435,38 @@ const applyCoupan = async () => {
                                                     shadowOpacity: 0.2,
                                                     //elevation: 3,
                                                     borderRadius: 20,
-                                                    borderColor: "#ffcc00",
-                                                    borderWidth: 1,
-                                                    // backgroundColor: 'red'
+                                                    // borderColor: "#ffcc00",
+                                                    // borderWidth: 1,
+                                                    backgroundColor: '#f5f5f5',
                                                     marginTop: 8,
                                                     marginBottom: addressListData.length-1 == index ? 100 : 10
                                                 }}>
+                                                  <View style={{flexDirection:'row', alignItems:'center'}}>
+                                                    
+                                                    <Image source={require('../../../assets/danish_location.png')} style={{height:40, width:40, marginLeft:15}} />
+                                                    <View>
                                                     <View style={{ flexDirection: 'column' }}>
                                                         <View style={{ height: 30, flexDirection: 'row', marginLeft: 0 }}>
-                                                            <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
+                                                            {/* <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
                                                              
-                                                            </View>
-                                                            <View style={{ flex: 1, marginTop: 10, left: 0, }}>
+                                                            </View> */}
+                                                            <View style={{ flex: 1, marginTop: 10, left: 0, marginLeft:23}}>
                                                                 <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>Location Name: {item.location_name}</Text>
                                                             </View>
 
                                                         </View>
                                                     </View>
 
-                                                    <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
+                                                    <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 0, paddingTop: 4 }}>
                                                         <ScrollView>
-                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
-                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
+                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: 'black', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
+                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: 'black', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
                                                         </ScrollView>
                                                     </View>
+                                                    </View>
+                                                    </View>
 
+                                                    <View style={{ width: '95%', height: 0.5, backgroundColor: '#9B9B9B', alignSelf: 'center', marginTop:4}} />  
 
                                                     <View style={{ flexDirection: 'row', left: 0, marginTop: 10, position: "absolute", bottom: 10 }}>
 
@@ -1514,7 +1522,7 @@ const applyCoupan = async () => {
         
                             </View>
                   <View style={{width:'90%',alignSelf:'center',position:'absolute',bottom:100}}>
-                  <MyButtons title="Add New Address" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
+                  <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
                     // setShippingAddressPopUp(true) 
                     setChooseAddressModeModal(true)
                     setaddressList(false)
@@ -1817,13 +1825,13 @@ const styles = StyleSheet.create({
     borderWidth:2,
     borderColor:'#f5f5f5',
     marginBottom:20,
-    borderRadius:20,
+    borderRadius:10,
   },
   radioButtonContainerSelected:{
     backgroundColor:'#F5F5F5',
     borderColor:'#D00100',
     borderWidth:1,
-    borderRadius:10,
+    borderRadius:20,
   },
   iconContainer:{
     width:60,
