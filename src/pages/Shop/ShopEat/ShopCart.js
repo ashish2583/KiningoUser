@@ -247,7 +247,7 @@ const ShopCart = (props) => {
       setarea_village('')
       setCity('')
       setstate('')
-      getAddress()
+      getAddress(AddressId)
     } else {
       // setalert_sms(err)
       // setMy_Alert(true)
@@ -387,7 +387,7 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress()
+      getAddress(responseJson.body.id)
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -487,7 +487,7 @@ const ShopCart = (props) => {
     setOpenGoogleAddressModal(false)
     console.log('the res google user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress()
+      getAddress(responseJson.body.id)
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -579,7 +579,7 @@ const ShopCart = (props) => {
     // setOpenGoogleAddressModal(false)
     console.log('the res current user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress()
+      getAddress(responseJson.body.id)
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -622,7 +622,7 @@ const ShopCart = (props) => {
       }
     );
   }
-  const getAddress = async () => {
+  const getAddress = async (newAddressId = '') => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET', User.token)
     setLoading(false)
@@ -630,7 +630,11 @@ const ShopCart = (props) => {
     if (responseJson != null) {
       if (responseJson.headers.success == 1) {
         setaddressListData(responseJson.body)
-        setselectedAddress(responseJson.body[0])
+        if(newAddressId){
+          setselectedAddress(responseJson.body.find(el=>el.id == newAddressId))
+        }else {
+          setselectedAddress(responseJson.body[0])
+        }
       } else {
         // setaddressListData(null)
         setselectedAddress(null)
