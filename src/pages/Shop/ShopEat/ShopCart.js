@@ -1222,12 +1222,25 @@ const ShopCart = (props) => {
       </Modal>            
 
 
-      {addressList ?
-        <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <Modal
+        isVisible={addressList}
+        swipeDirection="down"
+        onBackdropPress={() => setaddressList(false)}
+        onSwipeComplete={(e) => {
+          setaddressList(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
           <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
 
             <View style={{ flex: 1 }}>
-              <TouchableOpacity onPress={() => { setaddressList(false) }}
+              {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
                 style={{ position: "absolute", width: 30, borderRadius: 35, height: 30, right: 10, top: 10 }}>
                 <Image
                   source={require('../../../assets/crossed.png')}
@@ -1237,8 +1250,8 @@ const ShopCart = (props) => {
                   }}
 
                 />
-              </TouchableOpacity>
-              <Text style={{ marginLeft: 15, marginTop: 15, textAlign: 'left', fontSize: 17, color: '#000000', fontWeight: "500" }}>Select Delivery Address</Text>
+              </TouchableOpacity> */}
+              <Text style={{ marginLeft: 15, marginTop: 15, textAlign: 'center', fontSize: 17, color: '#000000', fontWeight: "500" }}>Select Delivery Address</Text>
               <View
                 style={{
                   justifyContent: "center",
@@ -1277,18 +1290,18 @@ const ShopCart = (props) => {
                         marginBottom: addressListData.length - 1 == index ? 100 : 10
                       }}>
                         <View style={{ flexDirection: 'column' }}>
-                          <View style={{ height: 30, flexDirection: 'row', marginLeft: 15 }}>
+                          <View style={{ height: 30, flexDirection: 'row', marginLeft: 0 }}>
                             <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
 
                             </View>
-                            <View style={{ flex: 1, marginTop: 10, left: 20, }}>
-                              <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>{item.location_name}</Text>
+                            <View style={{ flex: 1, marginTop: 10, left: 0, }}>
+                              <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>Location Name: {item.location_name}</Text>
                             </View>
 
                           </View>
                         </View>
 
-                        <View style={{ marginHorizontal: 10, marginLeft: 50, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
+                        <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
                           <ScrollView>
                             <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
                             <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400', marginTop: 4 }}>{item.address_line2} </Text>
@@ -1296,7 +1309,7 @@ const ShopCart = (props) => {
                         </View>
 
 
-                        <View style={{ flexDirection: 'row', left: 30, marginTop: 10, position: "absolute", bottom: 10 }}>
+                        <View style={{ flexDirection: 'row', left: 0, marginTop: 10, position: "absolute", bottom: 10 }}>
 
                           <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', marginTop: 10, left: 27 }}>
                             <TouchableOpacity onPress={() => {
@@ -1359,10 +1372,8 @@ const ShopCart = (props) => {
             </View>
 
           </View>
-        </View>
-        :
-        null
-      }
+        {/* </View> */}
+       </Modal>
       <Modal
                 isVisible={chooseAddressModeModal}
                 swipeDirection="down"
