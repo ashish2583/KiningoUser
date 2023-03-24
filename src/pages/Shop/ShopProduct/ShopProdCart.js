@@ -8,6 +8,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
+import Loader2 from '../../../WebApi/Loader2';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
@@ -111,6 +112,7 @@ const ShopProduct = (props) => {
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loading2, setLoading2] = useState(false)
   const [res, setres] = useState('')
   const [resData, setresData] = useState(null)
   const [refreshing, setRefreshing] = useState(false);
@@ -149,6 +151,7 @@ const ShopProduct = (props) => {
   const [addressMode, setAddressMode] = useState(null);
   const [googleAddress, setGoogleAddress] = useState('');
   const [googleLatLng, setGoogleLatLng] = useState({});
+  const [loaderText, setLoaderText] = useState('');
 
   useEffect(()=>{
     console.log('userdetaile.token', userdetaile.token);
@@ -549,7 +552,8 @@ const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
     //   break
     // }
   }
-  setLoading(true)
+  setLoaderText('Your Current location')
+  setLoading2(true)
   var data = {
     "location_name": '',
     "location_type": '1',
@@ -566,7 +570,7 @@ const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
   // console.log('addressData', addressData);
   console.log('current address data===>>', data);
   const { responseJson, err } = await requestPostApi(user_address, data, 'POST', userdetaile.token)
-  setLoading(false)
+  setLoading2(false)
   // close modal
   // setOpenGoogleAddressModal(false)
   console.log('the res current user_address set==>>', responseJson)
@@ -1041,6 +1045,7 @@ const applyCoupan = async () => {
 
 </ScrollView>
 {loading ? <Loader /> : null}
+{loading2 ? <Loader2 text={loaderText} /> : null}
 {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
 
 {modlevisual ?
