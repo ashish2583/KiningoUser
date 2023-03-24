@@ -898,7 +898,7 @@ const applyCoupan = async () => {
       elevation: 5,borderRadius:10,alignSelf:'center',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}
       >
   
-  <View>
+  <View style={{width:'80%'}}>
     <Text style={{fontWeight:'bold',fontSize:14,color:'#000'}}>{selectedAddress.location_name}</Text>
     <Text style={{fontSize:13,marginVertical:5,color:'#000'}}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
     <Text style={{fontSize:13,color:'#000'}}>{selectedAddress.address_line2}</Text>
