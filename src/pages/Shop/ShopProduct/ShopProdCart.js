@@ -1540,7 +1540,7 @@ const applyCoupan = async () => {
                 backdropColor='transparent'
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-                <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                <View style={{ height: '85%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
                 <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setChooseAddressModeModal(false) }} />
                     <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Choose Address Method</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
@@ -1554,6 +1554,9 @@ const applyCoupan = async () => {
                                 <Text style={{ color: '#9B9B9B', fontWeight: '600', fontSize: 14, marginLeft:10, fontStyle: 'italic'}} >{el.name1}</Text>
                                 <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, marginLeft:10}} >{el.name2}</Text>
                               </View>
+                              {el.id == addressMode ? 
+                                <Image source={require('../../../assets/danish_selected.png')} style={styles.selectedCheck} />
+                              :null}
                             </TouchableOpacity>
                           )}
                         
@@ -1811,14 +1814,15 @@ const styles = StyleSheet.create({
     alignItems:'center',
     backgroundColor:'white',
     padding:20,
-    borderWidth:1,
+    borderWidth:2,
     borderColor:'#f5f5f5',
-    marginBottom:10,
+    marginBottom:20,
     borderRadius:20,
   },
   radioButtonContainerSelected:{
     backgroundColor:'#F5F5F5',
     borderColor:'#D00100',
+    borderWidth:1,
     borderRadius:10,
   },
   iconContainer:{
@@ -1826,7 +1830,15 @@ const styles = StyleSheet.create({
     height:60,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'#f5f5f5'
+    backgroundColor:'#f5f5f5',
+    borderRadius:10,
+  },
+  selectedCheck:{
+    position:'absolute',
+    height:30, 
+    width:30, 
+    top:10, 
+    right:10
   },
   searchbar: {
     description: {
