@@ -14,7 +14,6 @@ import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import { baseUrl, delete_Update_Address, shop_eat_cart, shop_eat_cart_id, user_address, shop_eat_coupons_userid, shop_eat_cart_apply_coupon, login, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_remove_coupon } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import GetLocation from 'react-native-get-location'
@@ -23,6 +22,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Geolocation from "react-native-geolocation-service";
 import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
 import Geocoder from "react-native-geocoding";
+import Toast from 'react-native-toast-message';
 
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
@@ -34,25 +34,6 @@ const ShopCart = (props) => {
   const person_Image = "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cGVyc29ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
   const [checkitem, setcheckitem] = useState('')
   const [res, setres] = useState('')
-  const [upData, setupData] = useState([
-    {
-      id: '1',
-      title: '**** **** **** 5967',
-      height: 33,
-      width: 55,
-      time: 'Expires 24/22',
-      img: require('../../../assets/images/layer_48.png'),
-    },
-    {
-      id: '2',
-      title: '**** **** **** 5967',
-      height: 18,
-      width: 55,
-      time: 'Expires 24/22',
-      img: require('../../../assets/images/group_36.png'),
-    },
-
-  ])
   const User = useSelector(state => state.user.user_details)
   const VenderDetails = useSelector(state => state.user.venderDeatil)
   const dispatch = useDispatch();
@@ -65,6 +46,26 @@ const ShopCart = (props) => {
   const [subTotal, setsubTotal] = useState('0.0')
   const [dilivery, setdilivery] = useState('0.0')
   const [vendorCharges, setVendorCharges] = useState('0.0')
+  const [addressMethodData, setAddressMethodData] = useState([
+    {
+      id:'1',
+      name1:'Enter',
+      name2:'Complete Address',
+      icon: require('../../../assets/danish_complete.png')
+    },
+    {
+      id:'2',
+      name1:'Seacrh',
+      name2:'Address',
+      icon: require('../../../assets/danish_search.png')
+    },
+    {
+      id:'3',
+      name1:'Current',
+      name2:'Address',
+      icon: require('../../../assets/danish_current.png')
+    },
+  ])
   const [taxes, setTaxes] = useState('0.0')
   const [totla, settotal] = useState('0.0')
   const [applyedCoupen, setapplyedCoupen] = useState('')
@@ -99,6 +100,7 @@ const ShopCart = (props) => {
   const [addressMode, setAddressMode] = useState(null);
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
+  const [promoEdit,setpromoEdit] =useState(true)
 
   useEffect(() => {
     console.log('hello ji ==>>', User);
@@ -169,8 +171,8 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      // Toast.show(responseJson.headers.message)
-      Alert.alert(responseJson.headers.message)
+       Toast.show({text1:responseJson.headers.message})
+      
       getcart()
 
     } else {
@@ -187,8 +189,7 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res==>>delete ', responseJson)
     if (responseJson.headers.success == 1) {
-      Alert.alert(responseJson.headers.message)
-      // Toast.show(responseJson.headers.message)
+      Toast.show({text1:responseJson.headers.message})
       getcart()
     } else {
       getcart()
@@ -197,64 +198,7 @@ const ShopCart = (props) => {
     }
   }
 
-  const deletAddress = async (item) => {
-    console.log('itemsss', item);
-    setLoading(true)
-
-    const { responseJson, err } = await requestPostApi(delete_Update_Address + item.id, '', 'DELETE', User.token)
-    setLoading(false)
-    console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // Toast.show(responseJson.headers.message)
-      Alert.alert(responseJson.headers.message)
-      getAddress()
-      setreloades(!reloades)
-    } else {
-
-      // setalert_sms(err)
-      // setMy_Alert(true)
-    }
-  }
-
-  const UpdateAddress = async (item) => {
-
-    var data = {
-      "location_name": full_name,
-      "location_type": address_type,
-      "latitude": lat,
-      "longitude": lan,
-      "address_line1": house_no,
-      "address_line2": area_village,
-      "city": city,
-      "state": state,
-      "country_id": 1,
-      "is_default": 1
-    }
-    setLoading(true)
-    const { responseJson, err } = await requestPostApi(delete_Update_Address + AddressId, data, 'PUT', User.token)
-    setLoading(false)
-    console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // Toast.show(responseJson.headers.message)
-      Alert.alert(responseJson.headers.message)
-      setShippingAddressPopUp(false)
-      setaddressList(true)
-      setedit(false)
-      setAddressId('')
-      setfull_name('')
-      setaddress_type('')
-      sethouse_no('')
-      setarea_village('')
-      setCity('')
-      setstate('')
-      getAddress(AddressId)
-    } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
-    }
-  }
-
-  const getcart = async () => {
+const getcart = async () => {
     // setresData([])
     setLoading(true)
     const { responseJson, err } = await requestGetApi(shop_eat_cart, '', 'GET', User.token)
@@ -300,25 +244,80 @@ const ShopCart = (props) => {
       setTaxes('')
       settotal('0')
       setreloades(!reloades)
-      //  setalert_sms(err)
-      //  setMy_Alert(true)
     }
 
   }
+  const deletAddress = async (item) => {
+    console.log('itemsss', item);
+    setLoading(true)
+
+    const { responseJson, err } = await requestPostApi(delete_Update_Address + item.id, '', 'DELETE', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      Toast.show({text1:responseJson.headers.message})
+      getAddress()
+      setreloades(!reloades)
+    } else {
+
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
+
+  const UpdateAddress = async (item) => {
+
+    var data = {
+      "location_name": full_name,
+      "location_type": address_type,
+      "latitude": lat,
+      "longitude": lan,
+      "address_line1": house_no,
+      "address_line2": area_village,
+      "city": city,
+      "state": state,
+      "country_id": 1,
+      "is_default": 1
+    }
+    setLoading(true)
+    const { responseJson, err } = await requestPostApi(delete_Update_Address + AddressId, data, 'PUT', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      Toast.show({text1:responseJson.headers.message})
+      setShippingAddressPopUp(false)
+      setaddressList(true)
+      setedit(false)
+      setAddressId('')
+      setfull_name('')
+      setaddress_type('')
+      sethouse_no('')
+      setarea_village('')
+      setCity('')
+      setstate('')
+      getAddress()
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
+
+  
 
   const applyCoupan = async () => {
-    if (discount_id == null) {
-      // Toast.show('Please select any coupon')
-      Alert.alert('Please select any coupon')
+    if (promocode == null || promocode=='') {
+      Toast.show({text1:'Please select or Enter any coupon'})
     } else {
       setLoading(true)
       var data = {
-        discount_id: discount_id,
+        discount_id: promocode,
       }
+    
       const { responseJson, err } = await requestPostApi(shop_eat_cart_apply_coupon, data, 'POST', User.token)
       setLoading(false)
       console.log('the res shop_eat_cart_apply_coupon==>>', responseJson)
       if (responseJson.headers.success == 1) {
+        Toast.show({text1:responseJson.headers.message})
         setdiscountPrice(responseJson.body.coupon_discount)
         setsubTotal(responseJson.body.sub_total)
         setdilivery(responseJson.body.delivery_charge)
@@ -326,9 +325,9 @@ const ShopCart = (props) => {
         setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
         setapplyedCoupen(responseJson.body.coupon)
+        setpromoEdit(false)
       } else {
-        // setalert_sms(err)
-        // setMy_Alert(true)
+        Toast.show({text1:'Invalid Coupon Code. Please try again.'})
       }
     }
 
@@ -336,13 +335,16 @@ const ShopCart = (props) => {
   const removeCoupan = async () => {
     setLoading(true)
     var data = {
-      discount_id: discount_id,
+      discount_id: promocode,
+      // discount_id: discount_id,
+      // discount_price: pri,
     }
     const { responseJson, err } = await requestPostApi(shop_remove_coupon, data, 'POST', User.token)
     setLoading(false)
     console.log('remove coupon response', responseJson)
     console.log('remove coupon response body', responseJson.body)
     if (responseJson.headers.success == 1) {
+      Toast.show({text1:responseJson.headers.message})
       setdiscountPrice(responseJson.body.coupon_discount)
       setsubTotal(responseJson.body.sub_total)
       setdilivery(responseJson.body.delivery_charge)
@@ -351,7 +353,10 @@ const ShopCart = (props) => {
       settotal(responseJson.body.total)
       setapplyedCoupen('')
       setpromocode('')
+      setdiscount_id(null)
+      setpromoEdit(true)
     } else {
+      Toast.show({text1:responseJson.headers.message})
       // setalert_sms(err)
       // setMy_Alert(true)
     }
@@ -361,13 +366,17 @@ const ShopCart = (props) => {
 
   const AddAddress = async () => {
     if (full_name == '') {
-      Alert.alert('Please Add Name')
+      Toast.show({text1:'Please Add Name'})
+     
     } else if (area_village == '') {
-      Alert.alert('Please Add Address')
+      Toast.show({text1:'Please Add Address'})
+    
     } else if (city == '') {
-      Alert.alert('Please Add City')
+      Toast.show({text1:'Please Add City'})
+     
     } else if (state == '') {
-      Alert.alert('Please Add State')
+      Toast.show({text1:'Please Add State'})
+     
     }
     setLoading(true)
     var data = {
@@ -387,7 +396,7 @@ const ShopCart = (props) => {
     setLoading(false)
     console.log('the res user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress(responseJson.body.id)
+      getAddress()
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -413,19 +422,11 @@ const ShopCart = (props) => {
   const AddAddressUsingGoogleSearch = async () => {
     console.log('googleAddress', googleAddress);
     if(googleAddress === ''){
-      Alert.alert('Please Add Address')
+      Toast.show({text1:'Please Add Address'})
+   
       return
     }
-    // if (full_name == '') {
-    //   Alert.alert('Please Add Name')
-    // } else if (area_village == '') {
-    //   Alert.alert('Please Add Address')
-    // } else if (city == '') {
-    //   Alert.alert('Please Add City')
-    // } else if (state == '') {
-    //   Alert.alert('Please Add State')
-    // }
-    // address_line1, city, state, country
+    
     let matches = getMatches(googleAddress)
     console.log('matches', matches);
     const addressData = {
@@ -487,7 +488,7 @@ const ShopCart = (props) => {
     setOpenGoogleAddressModal(false)
     console.log('the res google user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress(responseJson.body.id)
+      getAddress()
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -505,20 +506,7 @@ const ShopCart = (props) => {
 
   }
   const AddAddressUsingCurrentLoation = async (latLng, currentAddress) => {
-    // if(googleAddress === ''){
-    //   Alert.alert('Please Add Address')
-    //   return
-    // }
-    // if (full_name == '') {
-    //   Alert.alert('Please Add Name')
-    // } else if (area_village == '') {
-    //   Alert.alert('Please Add Address')
-    // } else if (city == '') {
-    //   Alert.alert('Please Add City')
-    // } else if (state == '') {
-    //   Alert.alert('Please Add State')
-    // }
-    // address_line1, city, state, country
+   
     let matches = getMatches(currentAddress)
     console.log('matches', matches);
     const addressData = {
@@ -579,7 +567,7 @@ const ShopCart = (props) => {
     // setOpenGoogleAddressModal(false)
     console.log('the res current user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      getAddress(responseJson.body.id)
+      getAddress()
       setfull_name('')
       setaddress_type('')
       sethouse_no('')
@@ -622,7 +610,7 @@ const ShopCart = (props) => {
       }
     );
   }
-  const getAddress = async (newAddressId = '') => {
+  const getAddress = async () => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET', User.token)
     setLoading(false)
@@ -630,11 +618,7 @@ const ShopCart = (props) => {
     if (responseJson != null) {
       if (responseJson.headers.success == 1) {
         setaddressListData(responseJson.body)
-        if(newAddressId){
-          setselectedAddress(responseJson.body.find(el=>el.id == newAddressId))
-        }else {
-          setselectedAddress(responseJson.body[0])
-        }
+        setselectedAddress(responseJson.body[0])
       } else {
         // setaddressListData(null)
         setselectedAddress(null)
@@ -678,9 +662,8 @@ const ShopCart = (props) => {
       myposition()
     }
     setChooseAddressModeModal(false)
-    // setAddressMode('')
   }
-  const flatliistDesign = (img, ti, rs, des, mpress, apress, dpress, qty) => {
+  const flatliistDesign = (item,img, ti, rs, des, mpress, apress, dpress, qty) => {
     return (
       <View style={{
         width: '100%', marginHorizontal: 5, marginVertical: 8, padding: 10, backgroundColor: '#fff',
@@ -701,12 +684,12 @@ const ShopCart = (props) => {
         </View>
         <View style={{ marginLeft: 15, width: '58%', top: -10 }}>
           <View style={{}}>
-            <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 22, marginTop: 0 }} >{ti}</Text>
+            <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 15, marginTop: 0 }} >{item.business_name}</Text>
           </View>
 
           <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >{rs}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >{des}</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >&{parseFloat(Number(item.price).toFixed(2))}</Text>
 
           </View>
 
@@ -749,17 +732,14 @@ const ShopCart = (props) => {
           />
         }
       >
-      
 
         <View style={{ width: '92%', alignSelf: 'center',marginTop:8 }}>
-
-
-
+ 
           {resData.length > 0 ?
             resData.map((item, index) => {
               return (
                 <View>
-                  {flatliistDesign(item.image, item.category, item.name, '$' + item.price, () => { putcart(item, '-') }, () => { putcart(item, '+') }, () => { deletcart(item) }, item.quantity)}
+                  {flatliistDesign(item,item.image, item.category, item.name, '$' + item.price, () => { putcart(item, '-') }, () => { putcart(item, '+') }, () => { deletcart(item) }, item.quantity)}
                 </View>
               )
             }
@@ -775,7 +755,7 @@ const ShopCart = (props) => {
               </View>
               {selectedAddress != null ?
                 <View style={{
-                  width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 12, backgroundColor: '#fff',
+                  width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 20, backgroundColor: '#fff',
                   // borderColor: '#dee4ec',
                   // borderWidth: 1,
                   shadowOffset: {
@@ -789,16 +769,14 @@ const ShopCart = (props) => {
                 }}
                 >
 
-                  <View>
+                  <View style={{width:'80%'}}>
                     <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>{selectedAddress.location_name}</Text>
                     <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
                     <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text>
                   </View>
-
-                  <TouchableOpacity style={{ width: 25, height: 25, alignSelf: 'center' }} onPress={() => { setaddressList(true) }}>
-                    <Image source={require('../../../assets/arrow_right_black.png')} style={{ width: 25, height: 25, resizeMode: 'stretch' }} ></Image>
+                  <TouchableOpacity style={{ width: 25, height: 40, alignSelf: 'center',right:5 }} onPress={() => { setaddressList(true) }}>
+                    <Image source={require('../../../assets/arrow_right_black.png')} style={{ width: 25, height: 40, resizeMode: 'stretch' }} ></Image>
                   </TouchableOpacity>
-
                 </View>
                 : null}
                 
@@ -843,6 +821,7 @@ const ShopCart = (props) => {
                     setpromocode(text)
                   }}
                   placeholder="Promo Code"
+                  editable={promoEdit}
                   placeholderTextColor={Mycolors.placeholdercolor}
                   style={[styles.input, { paddingRight: 70 }]}
                 />
@@ -925,7 +904,7 @@ const ShopCart = (props) => {
                   if (selectedAddress != null) {
                     props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, cooking: cookingIns })
                   } else {
-                    Alert.alert('Please Add Address')
+                    Toast.show({text1:'Please Add Address'})
                   }
 
                 }} marginHorizontal={20} fontSize={14}
@@ -1236,144 +1215,152 @@ const ShopCart = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
         >
-        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
-          <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+{/* <View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}> */}
+<View style={{width:'100%',height:dimensions.SCREEN_HEIGHT*80/100,position:'absolute',bottom:0,borderTopRightRadius: 20,borderTopLeftRadius: 20,backgroundColor:'#fff'}}>
 
-            <View style={{ flex: 1 }}>
-              {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
-                style={{ position: "absolute", width: 30, borderRadius: 35, height: 30, right: 10, top: 10 }}>
-                <Image
-                  source={require('../../../assets/crossed.png')}
-                  style={{
-                    width: 35,
-                    height: 35, alignSelf: 'center'
-                  }}
+<View style={{ flex: 1 }}>
+                                        {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
+                                          style={{ position: "absolute", width: 30,  borderRadius: 35, height: 30, right: 10, top: 10 }}>
+                                          <Image
+                                              source={require('../../../assets/crossed.png')}
+                                              style={{
+                                                  width: 35,
+                                                  height: 35, alignSelf: 'center'
+                                              }}
 
-                />
-              </TouchableOpacity> */}
-              <Text style={{ marginLeft: 15, marginTop: 15, textAlign: 'center', fontSize: 17, color: '#000000', fontWeight: "500" }}>Select Delivery Address</Text>
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                  flexDirection: "row",
-                  height: '78%',
-                  marginHorizontal: 10,
-                  marginTop: 10,
-                  marginBottom: 200
-                }}>
+                                          />
+                                      </TouchableOpacity> */}
+                                      <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setaddressList(false) }} />
+                                <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Select Delivery Address</Text>
+                                <View
+                                    style={{
+                                        justifyContent: "center",
+                                        alignItems: "flex-start",
+                                        flexDirection: "row",
+                                        height: '78%',
+                                        marginHorizontal: 10,
+                                        marginTop: 10,
+                                        marginBottom:200
+                                    }}>
 
-                {addressListData != null ?
-                  <FlatList
-                    vertical
-                    data={addressListData}
-                    keyExtractor={(item, index) => String(index)}
+                                   
+                                        <FlatList
+                                            vertical
+                                            data={addressListData}
+                                            keyExtractor={(item, index) => String(index)}
 
-                    renderItem={({ item, index }) => {
-                      // console.warn('checked ----------->', item, props?.route?.params?.address)
-                      return <View style={{
-                        width: '95%',
-                        height: 150,
-                        marginHorizontal: 10,
-                        // marginLeft: 10,
-                        // marginRight: 15,
-                        shadowColor: '#000000',
-                        // shadowOffset: { width: 0, height: 4 },
-                        shadowRadius: 6,
-                        shadowOpacity: 0.2,
-                        //elevation: 3,
-                        borderRadius: 20,
-                        borderColor: "#ffcc00",
-                        borderWidth: 1,
-                        // backgroundColor: 'red'
-                        marginTop: 8,
-                        marginBottom: addressListData.length - 1 == index ? 100 : 10
-                      }}>
-                        <View style={{ flexDirection: 'column' }}>
-                          <View style={{ height: 30, flexDirection: 'row', marginLeft: 0 }}>
-                            <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
+                                            renderItem={({ item, index }) => {
+                                                // console.warn('checked ----------->', item, props?.route?.params?.address)
+                                                return <View style={{
+                                                    width: '95%',
+                                                    height: 150,
+                                                    marginHorizontal: 10,
+                                                    // marginLeft: 10,
+                                                    // marginRight: 15,
+                                                    shadowColor: '#000000',
+                                                    // shadowOffset: { width: 0, height: 4 },
+                                                    shadowRadius: 6,
+                                                    shadowOpacity: 0.2,
+                                                    //elevation: 3,
+                                                    borderRadius: 20,
+                                                    // borderColor: "#ffcc00",
+                                                    // borderWidth: 1,
+                                                    backgroundColor: '#f5f5f5',
+                                                    marginTop: 8,
+                                                    marginBottom: addressListData.length-1 == index ? 100 : 10
+                                                }}>
+                                                  <View style={{flexDirection:'row', alignItems:'center'}}>
+                                                    
+                                                    <Image source={require('../../../assets/danish_location.png')} style={{height:40, width:40, marginLeft:15}} />
+                                                    <View>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <View style={{ height: 30, flexDirection: 'row', marginLeft: 0 }}>
+                                                            {/* <View style={{ width: 25, height: 50, justifyContent: "center", alignItems: 'center', marginTop: 15, left: 6 }} >
+                                                             
+                                                            </View> */}
+                                                            <View style={{ flex: 1, marginTop: 10, left: 0, marginLeft:23}}>
+                                                                <Text style={{ textAlign: 'left', fontSize: 13, color: '#000000', fontWeight: "500", }}>Location Name: {item.location_name}</Text>
+                                                            </View>
 
-                            </View>
-                            <View style={{ flex: 1, marginTop: 10, left: 0, }}>
-                              <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>Location Name: {item.location_name}</Text>
-                            </View>
+                                                        </View>
+                                                    </View>
 
-                          </View>
-                        </View>
+                                                    <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 0, paddingTop: 4 }}>
+                                                        <ScrollView>
+                                                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
+                                                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
+                                                        </ScrollView>
+                                                    </View>
+                                                    </View>
+                                                    </View>
 
-                        <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 5, paddingVertical: 4 }}>
-                          <ScrollView>
-                            <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
-                            <Text style={{ textAlign: 'left', fontSize: 14, color: '#676767', fontWeight: '400', marginTop: 4 }}>{item.address_line2} </Text>
-                          </ScrollView>
-                        </View>
+                                                    <View style={{ width: '95%', height: 0.5, backgroundColor: '#9B9B9B', alignSelf: 'center', marginTop:4}} />  
 
+                                                    <View style={{ flexDirection: 'row', left: 0, marginTop: 10, position: "absolute", bottom: 10 }}>
 
-                        <View style={{ flexDirection: 'row', left: 0, marginTop: 10, position: "absolute", bottom: 10 }}>
+                                                        <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', marginTop: 10, left: 27 }}>
+                                                            <TouchableOpacity onPress={() => { 
+                                                             
+                                                               setfull_name(item.location_name)
+                                                               setaddress_type(item.location_type)
+                                                               setlat(item.latitude)
+                                                               setlan(item.longitude)
+                                                               sethouse_no(item.address_line1)
+                                                               setarea_village(item.address_line2)
+                                                               setCity(item.city)
+                                                               setstate(item.state)
+                                                               setAddressId(item.id)
+                                                               setShippingAddressPopUp(true) 
+                                                               setaddressList(false)
+                                                               setedit(true)
+                                                             }}>
+                                                                <Image source={require('../../../assets/pen.png')}
+                                                                 style={{width:25,height:25}}/>
+                                                            </TouchableOpacity>
 
-                          <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', marginTop: 10, left: 27 }}>
-                            <TouchableOpacity onPress={() => {
-
-                              setfull_name(item.location_name)
-                              setaddress_type(item.location_type)
-                              setlat(item.latitude)
-                              setlan(item.longitude)
-                              sethouse_no(item.address_line1)
-                              setarea_village(item.address_line2)
-                              setCity(item.city)
-                              setstate(item.state)
-                              setAddressId(item.id)
-                              setShippingAddressPopUp(true)
-                              setaddressList(false)
-                              setedit(true)
-                            }}>
-                              <Image source={require('../../../assets/pen.png')}
-                                style={{ width: 25, height: 25 }} />
-                            </TouchableOpacity>
-
-                          </View>
+                                                        </View>
 
 
 
-                          <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', borderRadius: 20 / 2, marginTop: 10, left: 57, }}>
-                            <TouchableOpacity onPress={() => { deletAddress(item) }}>
-                              <Image source={require('../../../assets/bin.png')}
-                                style={{ width: 25, height: 25 }} />
-                            </TouchableOpacity>
-                          </View>
+                                                        <View style={{ width: 25, height: 25, justifyContent: "center", alignItems: 'center', borderRadius: 20 / 2, marginTop: 10, left: 57, }}>
+                                                            <TouchableOpacity onPress={() => { deletAddress(item) }}>
+                                                                <Image source={require('../../../assets/bin.png')}
+                                                                style={{width:25,height:25}}/>
+                                                            </TouchableOpacity>
+                                                        </View>
 
-                          <TouchableOpacity style={{ width: 170, height: 30, justifyContent: "center", alignItems: 'center', borderRadius: 20, marginTop: 9, left: 80, backgroundColor: "red" }}
-                            onPress={() => {
-                              setselectedAddress(item)
-                              setaddressList(false)
-                            }}>
-                            <View style={{}}>
-                              {/* <Image source={require('../assets/buttonSave.png')}
+                                                        <TouchableOpacity style={{ width: 170, height: 30, justifyContent: "center", alignItems: 'center', borderRadius: 20, marginTop: 9, left: 80, backgroundColor: "red" }}
+                                                            onPress={() => {
+                                                              setselectedAddress(item)
+                                                              setaddressList(false)
+                                                            }}>
+                                                            <View style={{}}>
+                                                                {/* <Image source={require('../assets/buttonSave.png')}
                                                     /> */}
-                              <Text style={{ color: '#FFFFFF', fontWeight: "600", fontSize: 12, textAlign: 'left' }}>Select Address</Text>
+                                                                <Text style={{ color: '#FFFFFF', fontWeight: "600", fontSize: 12, textAlign: 'left' }}>Select Address</Text>
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
+                                            }
+                                            }
+                                        />
+                                       
+                                </View>
+        
                             </View>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    }
-                    }
-                  />
-                  : null}
-              </View>
+                  <View style={{width:'90%',alignSelf:'center',position:'absolute',bottom:100}}>
+                  <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
+                    // setShippingAddressPopUp(true) 
+                    setChooseAddressModeModal(true)
+                    setaddressList(false)
+                  }} marginHorizontal={20} fontSize={11}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027','#fd001f']}/>
+                  </View> 
 
-            </View>
-            <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 100 }}>
-              <MyButtons title="Add New Address" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
-                // setShippingAddressPopUp(true)
-                setaddressList(false)
-                setChooseAddressModeModal(true)
-              }} marginHorizontal={20} fontSize={11}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
-            </View>
-
-          </View>
-        {/* </View> */}
-       </Modal>
+</View>
+{/* </View> */}
+</Modal>
       <Modal
                 isVisible={chooseAddressModeModal}
                 swipeDirection="down"
@@ -1389,18 +1376,27 @@ const ShopCart = (props) => {
                 backdropColor='transparent'
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
-                    <Text style={{ fontSize: 22, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 25, marginTop: 30 }}>Choose Address Method</Text>
+                <View style={{ height: '85%', backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingHorizontal:20 }}>
+                <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setChooseAddressModeModal(false) }} />
+                    <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Choose Address Method</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
-                        <TouchableWithoutFeedback onPress={()=>{setAddressMode('1')}}>
-                          <View style={styles.radioButtonContainer}>
-                            <MaterialCommunityIcons name={'1' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
-                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Enter Complete Address</Text>
-                          </View>
-                        </TouchableWithoutFeedback>  
+                        {addressMethodData?.map(el=>
+                            <TouchableOpacity onPress={()=>{setAddressMode(el.id)}} style={[styles.radioButtonContainer, el.id == addressMode ? styles.radioButtonContainerSelected: null]}>
+                              <View style={[styles.iconContainer, el.id == addressMode ? {backgroundColor:'white'} : null ]}>
+                                <Image source={el.icon} style={{height:40, width:40}} />
+                              </View>
+                              <View>
+                                <Text style={{ color: '#9B9B9B', fontWeight: '600', fontSize: 14, marginLeft:10, fontStyle: 'italic'}} >{el.name1}</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, marginLeft:10}} >{el.name2}</Text>
+                              </View>
+                              {el.id == addressMode ? 
+                                <Image source={require('../../../assets/danish_selected.png')} style={styles.selectedCheck} />
+                              :null}
+                            </TouchableOpacity>
+                          )}
                         
-                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
+                        {/* <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
                           <View style={styles.radioButtonContainer}>
                             <MaterialCommunityIcons name={'2' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
                             <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Search Address</Text>
@@ -1411,7 +1407,7 @@ const ShopCart = (props) => {
                             <MaterialCommunityIcons name={'3' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
                             <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Current Address</Text>
                           </View>
-                        </TouchableWithoutFeedback>
+                        </TouchableWithoutFeedback> */}
 
                         <View style={{height:30}} />
                         <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
@@ -1438,7 +1434,7 @@ const ShopCart = (props) => {
                 backdropColor='transparent'
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
                     <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Search Address</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled" >
 
@@ -1477,15 +1473,17 @@ const ShopCart = (props) => {
           />
                         
 
-                        <View style={{height:20}} />
-                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
-
+                        <View style={{height:20,}} />
+                        
                         {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
                           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
 
                     </ScrollView>
-
+                    <View style={{marginBottom:20}}>
+                       <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+                    </View>
+                   
                 </View>
             </Modal>
             {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
@@ -1524,6 +1522,33 @@ const styles = StyleSheet.create({
   radioButtonContainer:{
     flexDirection:'row',
     alignItems:'center',
+    backgroundColor:'white',
+    padding:20,
+    borderWidth:2,
+    borderColor:'#f5f5f5',
+    marginBottom:20,
+    borderRadius:10,
+  },
+  radioButtonContainerSelected:{
+    backgroundColor:'#F5F5F5',
+    borderColor:'#D00100',
+    borderWidth:1,
+    borderRadius:20,
+  },
+  iconContainer:{
+    width:60,
+    height:60,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#f5f5f5',
+    borderRadius:10,
+  },
+  selectedCheck:{
+    position:'absolute',
+    height:30, 
+    width:30, 
+    top:10, 
+    right:10
   },
   searchbar: {
     description: {
