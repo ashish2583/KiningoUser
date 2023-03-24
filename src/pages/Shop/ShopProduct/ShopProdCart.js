@@ -128,6 +128,26 @@ const ShopProduct = (props) => {
   const [discountPrice,setdiscountPrice]=useState('0.0')
   const [dilivery,setdilivery]=useState('0.0')
   const [vendorCharges, setVendorCharges] = useState('0.0')
+  const [addressMethodData, setAddressMethodData] = useState([
+    {
+      id:'1',
+      name1:'Enter',
+      name2:'Complete Address',
+      icon: require('../../../assets/danish_complete.png')
+    },
+    {
+      id:'2',
+      name1:'Seacrh',
+      name2:'Address',
+      icon: require('../../../assets/danish_search.png')
+    },
+    {
+      id:'3',
+      name1:'Current',
+      name2:'Address',
+      icon: require('../../../assets/danish_current.png')
+    },
+  ])
   const [taxes, setTaxes] = useState('0.0')
   const [totla,settotal]=useState('0.0')
   const [modlevisual,setmodlevisual]=useState(false)
@@ -1520,18 +1540,24 @@ const applyCoupan = async () => {
                 backdropColor='transparent'
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-                <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
-                    <Text style={{ fontSize: 22, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 25, marginTop: 30 }}>Choose Address Method</Text>
+                <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setChooseAddressModeModal(false) }} />
+                    <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Choose Address Method</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
-                        <TouchableWithoutFeedback onPress={()=>{setAddressMode('1')}}>
-                          <View style={styles.radioButtonContainer}>
-                            <MaterialCommunityIcons name={'1' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
-                            <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Enter Complete Address</Text>
-                          </View>
-                        </TouchableWithoutFeedback>  
+                        {addressMethodData?.map(el=>
+                            <TouchableOpacity onPress={()=>{setAddressMode(el.id)}} style={[styles.radioButtonContainer, el.id == addressMode ? styles.radioButtonContainerSelected: null]}>
+                              <View style={[styles.iconContainer, el.id == addressMode ? {backgroundColor:'white'} : null ]}>
+                                <Image source={el.icon} style={{height:40, width:40}} />
+                              </View>
+                              <View>
+                                <Text style={{ color: '#9B9B9B', fontWeight: '600', fontSize: 14, marginLeft:10, fontStyle: 'italic'}} >{el.name1}</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18, marginLeft:10}} >{el.name2}</Text>
+                              </View>
+                            </TouchableOpacity>
+                          )}
                         
-                        <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
+                        {/* <TouchableWithoutFeedback style={{marginTop:15}} onPress={()=>{setAddressMode('2')}}>
                           <View style={styles.radioButtonContainer}>
                             <MaterialCommunityIcons name={'2' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
                             <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Search Address</Text>
@@ -1542,7 +1568,7 @@ const applyCoupan = async () => {
                             <MaterialCommunityIcons name={'3' === addressMode ? "radiobox-marked":"radiobox-blank"} color={'#455A64'} size={24} />
                             <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft:10}} >Current Address</Text>
                           </View>
-                        </TouchableWithoutFeedback>
+                        </TouchableWithoutFeedback> */}
 
                         <View style={{height:30}} />
                         <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
@@ -1783,6 +1809,24 @@ const styles = StyleSheet.create({
   radioButtonContainer:{
     flexDirection:'row',
     alignItems:'center',
+    backgroundColor:'white',
+    padding:20,
+    borderWidth:1,
+    borderColor:'#f5f5f5',
+    marginBottom:10,
+    borderRadius:20,
+  },
+  radioButtonContainerSelected:{
+    backgroundColor:'#F5F5F5',
+    borderColor:'#D00100',
+    borderRadius:10,
+  },
+  iconContainer:{
+    width:60,
+    height:60,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#f5f5f5'
   },
   searchbar: {
     description: {
