@@ -645,7 +645,9 @@ const applyCoupan = async () => {
   if (responseJson.headers.success == 1) {
     Toast.show({text1:responseJson.headers.message})
     setdiscountPrice(responseJson.body.coupon_discount)
-      setsubTotal(responseJson.body.sub_total)  
+      setsubTotal(responseJson.body.sub_total)
+      setVendorCharges(responseJson.body.vendor_charges)
+      setTaxes(responseJson.body.taxes)  
       setdilivery(responseJson.body.delivery_charge)
       settotal(responseJson.body.total)
       setapplyedCoupen(responseJson.body.coupon)
@@ -978,6 +980,14 @@ const applyCoupan = async () => {
       <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
       <Text style={{color:Mycolors.Black,fontSize:13,}} >Delivery Charges</Text>
       <Text style={{color:Mycolors.TEXT_COLOR,fontSize:13,marginTop:5}} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
+      <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
+      <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
+      <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
+      <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(taxes).toFixed(2))}</Text>
       </View>
       <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
       <Text style={{color:Mycolors.Black,fontSize:13,}} >Discount</Text>
