@@ -892,7 +892,7 @@ const applyCoupan = async () => {
         <Text style={{color:Mycolors.RED,fontSize:13,}} onPress={()=>{setChooseAddressModeModal(true)}}>Choose Address</Text> 
         </View>
 
-     <View style={{width:'100%',marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
+     <View style={{width:'100%',marginVertical:5, padding:20,backgroundColor:'#fff',
       borderColor:'#dee4ec',
       borderWidth:1,
       elevation: 5,borderRadius:10,alignSelf:'center',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}
