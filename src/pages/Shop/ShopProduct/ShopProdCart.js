@@ -1451,7 +1451,7 @@ const applyCoupan = async () => {
                                                              
                                                             </View> */}
                                                             <View style={{ flex: 1, marginTop: 10, left: 0, marginLeft:23}}>
-                                                                <Text style={{ textAlign: 'left', fontSize: 12, color: '#000000', fontWeight: "500", fontSize: 16 }}>Location Name: {item.location_name}</Text>
+                                                                <Text style={{ textAlign: 'left', fontSize: 13, color: '#000000', fontWeight: "500", }}>Location Name: {item.location_name}</Text>
                                                             </View>
 
                                                         </View>
@@ -1459,8 +1459,8 @@ const applyCoupan = async () => {
 
                                                     <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 0, paddingTop: 4 }}>
                                                         <ScrollView>
-                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: 'black', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
-                                                            <Text style={{ textAlign: 'left', fontSize: 14, color: 'black', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
+                                                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
+                                                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400' ,marginTop:4}}>{item.address_line2} </Text>
                                                         </ScrollView>
                                                     </View>
                                                     </View>
@@ -1548,7 +1548,7 @@ const applyCoupan = async () => {
                 backdropColor='transparent'
                 style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-                <View style={{ height: '85%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal:20 }}>
+                <View style={{ height: '85%', backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingHorizontal:20 }}>
                 <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setChooseAddressModeModal(false) }} />
                     <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25,  }}>Choose Address Method</Text>
                     <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
