@@ -92,7 +92,8 @@ const WeelStack=(props)=>{
            <Stack.Navigator
             screenOptions={{ headerShown:false,}}
              >
-              <Stack.Screen component = {ShopEatStack} name="ShopEat" />
+              {/* <Stack.Screen component = {ShopEatStack} name="ShopEat" /> */}
+              <Stack.Screen component = {ShopProductStack} name="ShopProduct" />
             {/* <Stack.Screen component = {Weel} name="Weel" /> */}
 
             <Stack.Screen component = {Connect} name="Connect" />
@@ -146,7 +147,7 @@ const WeelStack=(props)=>{
             <Stack.Screen component = {Shop} name="Shop" />
             {/* <Stack.Screen component = {ShopEatStack} name="ShopEat" /> */}
             <Stack.Screen component = {shopEntertainmentStack} name="ShopIntertenment" />
-            <Stack.Screen component = {ShopProductStack} name="ShopProduct" />
+            {/* <Stack.Screen component = {ShopProductStack} name="ShopProduct" /> */}
 
             <Stack.Screen component = {Talkie} name="Talkie" />
             <Stack.Screen component = {Finenc} name="Finenc" />

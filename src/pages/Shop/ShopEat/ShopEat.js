@@ -232,7 +232,7 @@ const ShopEat = (props) => {
  <GooglePlacesAutocomplete
 placeholder={addre.substring(0, 45)}
 textInputProps={{
-placeholderTextColor: '#c9c9c9',
+placeholderTextColor: '#000',
 // placeholderTextColor: Colors.BLACK,
 returnKeyType: 'search',
 // onFocus: () => setShowPlacesList(true),
@@ -240,6 +240,7 @@ returnKeyType: 'search',
 multiline:true,
 // onTouchStart: ()=>{downButtonHandler()}
           height:45,
+          color:'#000' 
           // shadowColor:  'gray',
           //   shadowOffset: {
           //     width:3,
@@ -254,6 +255,33 @@ multiline:true,
 enablePoweredByContainer={false}
 listViewDisplayed={'auto'}
 styles={{
+  // textInputContainer: {
+  //     backgroundColor: 'grey',
+  //   },
+  poweredContainer: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderColor: '#c8c7cc',
+    borderTopWidth: 0.5,
+    color:'#000'
+  },
+  powered: {},
+  listView: {
+    // color:'#000'
+  },
+  row: {
+    backgroundColor: '#FFFFFF',
+    padding: 13,
+    height: 44,
+    flexDirection: 'row',
+  },
+  separator: {
+    height: 0.5,
+    backgroundColor: '#c8c7cc',
+    color:'#000'
+  },
   textInput: {
     backgroundColor: 'transparent',
     height: 35,
@@ -261,7 +289,7 @@ styles={{
     paddingVertical: 5,
     paddingHorizontal: 10,
     fontSize: 12,
-    color:'gray',
+    color:'#000',
     flex: 1,
   },
 }}
@@ -287,7 +315,6 @@ language: 'en',
 }}
 /> 
 
-   
     
 
    <TouchableOpacity onPress={()=>{props.navigation.navigate('ShopEatFilter')}}>

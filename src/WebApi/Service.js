@@ -37,7 +37,19 @@ export const menu_categorySearch_attribute_name=`menu/categorySearch?attribute_n
 export const  driver_reviews=`user/review`; 
 export const shop_remove_coupon=`shop/eat/cart/remove-coupon`;
 export const  notification_list=`/user/notification/list`;
-
+// export const shop_product = 'shop/product'
+export const shop_product_business = 'shop/product/business'
+export const shop_product_business_userid = 'shop/product/business/userid/'
+export const shop_product_cart = 'shop/product/cart'
+export const shop_product_productlist=`shop/product/productList/userid/`;
+export const shop_product_delete_cart_item=`shop/product/cart/id/`;
+export const shop_product_details=`shop/product/productDetails/id/`;
+export const shop_product_cart_place_order=`shop/product/cart/place-order`;
+export const shop_product_remove_coupon=`shop/product/cart/remove-coupon`;
+// start: new apis yet to be created
+export const shop_product_coupons_userid = 'shop/product/coupons/userid/'
+export const shop_product_cart_apply_coupon=`shop/product/cart/apply-coupon`;
+// end: new apis yet to be created
 
 export const  driver_corporate_vehicle=`driver/corporate_vehicle`;
 export const  buy_subscription=`driver/buy_subscription`;

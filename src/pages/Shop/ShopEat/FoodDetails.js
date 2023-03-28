@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform ,TouchableWithoutFeedback} from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -25,12 +25,12 @@ import Toast from 'react-native-toast-message';
 
 
 function newAddMinutes(time, minsToAdd) {
-  function D(J){ return (J<10? '0':'') + J;};
+  function D(J) { return (J < 10 ? '0' : '') + J; };
   var piece = time.split(':');
-  var mins = piece[0]*60 + +piece[1] + +minsToAdd;
-  return D(mins%(24*60)/60 | 0) + ':' + D(mins%60);
+  var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
+  return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
 }
- 
+
 const FoodDetails = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [searchValue, setsearchValue] = useState('')
@@ -82,9 +82,9 @@ const FoodDetails = (props) => {
     // Toast.show({
     //   text1: 'Hello',
     // }); 
-    vendorDetail() 
+    vendorDetail()
     menuList(null)
-  }, []) 
+  }, [])
 
   const checkcon = () => {
     vendorDetail()
@@ -163,7 +163,7 @@ const FoodDetails = (props) => {
   //   //    tt=selectedSlot
   //   //  }
   //   // }
-    
+
   //   if (Object.keys(selectedSlot)?.length === 0) {
   //       Toast.show({text1: 'Please Select Time Slot'}); 
   //     // setalert_sms('Please Select Time Slot')
@@ -179,7 +179,7 @@ const FoodDetails = (props) => {
   //     return
   //   } else {
   //     td =  date
-      
+
   //   }
   //   // else{
   //   //   if(selectedTime2==''){
@@ -232,73 +232,73 @@ const FoodDetails = (props) => {
   // }
 
   const bookTables = async () => {
-    var td=''
-    var tt=''
+    var td = ''
+    var tt = ''
 
-  
-  if(date==''){
-    Toast.show({text1:'Please Select Date'})
-    
-    return
-  }else{
-    td=date
-  }
-  if(Object.keys(selectedSlot)?.length === 0){
-    Toast.show({text1:'Please Select Time Slot'})
 
-    return
-  }else{
-    tt=selectedSlot
-  }
-  
-  // else{
-  //   if(selectedTime2==''){
-  //     // Toast.show('Please Select Time Slot')
-  //     setalert_sms('Please Select Time Slot')
-  //   setMy_Alert(true)
-  //     // Alert.alert('Please Select Time Slot')
-  //    }else{
-  //     td=date
-  //     tt=selectedTime2
-  //    }
-  // }
-  if(td!='' && tt!=''){
-     setLoading(true)
-    var data={
-      "business_id": props.route.params.data.business_id,
-      "no_of_person": counter,
-      "schedule_date": moment(td).format('YYYY-MM-DD'),
-      "schedule_time_from": tt?.start,
-      "schedule_time_to": tt?.end
-  }
-  console.log('bookTables data', data);
-    const { responseJson, err } = await requestPostApi(shop_eat_cart_book_table, data, 'POST', User.token)
-    setLoading(false)
-    console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // setmodlevisual3(false)
-      // setmodlevisual4(true)
-      // setmodlevisual1(false)
-      // setmodlevisual2(false)
-      setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
-      setMy_Alert(true)
-      // Alert.alert(
-      //   '',
-      //   'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
-      //   [
-      //     {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
-      //   ],
-      //   // {cancelable: false},
-      // );
-     // Alert.alert('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+    if (date == '') {
+      Toast.show({ text1: 'Please Select Date' })
+
+      return
     } else {
-    setalert_sms(err)
-    setMy_Alert(true)
+      td = date
     }
-  }else{
-    //Toast.show('Please Select date and time')
-  }
-   
+    if (Object.keys(selectedSlot)?.length === 0) {
+      Toast.show({ text1: 'Please Select Time Slot' })
+
+      return
+    } else {
+      tt = selectedSlot
+    }
+
+    // else{
+    //   if(selectedTime2==''){
+    //     // Toast.show('Please Select Time Slot')
+    //     setalert_sms('Please Select Time Slot')
+    //   setMy_Alert(true)
+    //     // Alert.alert('Please Select Time Slot')
+    //    }else{
+    //     td=date
+    //     tt=selectedTime2
+    //    }
+    // }
+    if (td != '' && tt != '') {
+      setLoading(true)
+      var data = {
+        "business_id": props.route.params.data.business_id,
+        "no_of_person": counter,
+        "schedule_date": moment(td).format('YYYY-MM-DD'),
+        "schedule_time_from": tt?.start,
+        "schedule_time_to": tt?.end
+      }
+      console.log('bookTables data', data);
+      const { responseJson, err } = await requestPostApi(shop_eat_cart_book_table, data, 'POST', User.token)
+      setLoading(false)
+      console.log('the res==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        // setmodlevisual3(false)
+        // setmodlevisual4(true)
+        // setmodlevisual1(false)
+        // setmodlevisual2(false)
+        setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+        setMy_Alert(true)
+        // Alert.alert(
+        //   '',
+        //   'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
+        //   [
+        //     {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
+        //   ],
+        //   // {cancelable: false},
+        // );
+        // Alert.alert('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+      } else {
+        setalert_sms(err)
+        setMy_Alert(true)
+      }
+    } else {
+      //Toast.show('Please Select date and time')
+    }
+
   }
 
   const bookDiningSlote = async () => {
@@ -329,7 +329,7 @@ const FoodDetails = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       // Alert.alert(responseJson.headers.message)
-      Toast.show({text1: responseJson.headers.message}); 
+      Toast.show({ text1: responseJson.headers.message });
       // Toast.show(responseJson.headers.message)
       setdiningItens1([])
       setmodlevisual3(false)
@@ -350,7 +350,7 @@ const FoodDetails = (props) => {
         quantity: item.cart_quantity + 1,
       }
     } else {
-      console.log('item.quantity',item);
+      console.log('item.quantity', item);
       if (item.cart_quantity > 1) {
         data = {
           id: item.cart_id,
@@ -363,13 +363,13 @@ const FoodDetails = (props) => {
       }
     }
 
-const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_id, data, 'PUT', User.token)
+    const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_id, data, 'PUT', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       //  Toast.show(responseJson.headers.message)
       // Alert.alert(responseJson.headers.message)
-      Toast.show({text1: responseJson.headers.message}); 
+      Toast.show({ text1: responseJson.headers.message });
       menuList(menutypevalue)
       setreloades(!reloades)
     } else {
@@ -387,7 +387,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       // Toast.show(responseJson.headers.message)
-      Toast.show({text1: responseJson.headers.message}); 
+      Toast.show({ text1: responseJson.headers.message });
       menuList(menutypevalue)
       setreloades(!reloades)
     } else {
@@ -404,14 +404,14 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
       product_id: items.id,
       quantity: 1,
       business_id: props.route.params.data.business_id,
-      product_type:items.serviceType
+      product_type: items.serviceType
     }
     const { responseJson, err } = await requestPostApi(shop_eat_cart, data, 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       //  Toast.show(responseJson.headers.message)
-      Toast.show({text1: responseJson.headers.message}); 
+      Toast.show({ text1: responseJson.headers.message });
       menuList(menutypevalue)
       //  props.navigation.navigate('ShopCart')
     } else {
@@ -476,7 +476,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
   }
 
   const vendorDetail = async () => {
-   
+
     setLoading(true)
     console.log('saurabh url', shop_eat_business_id + props.route.params.data.business_id);
     const { responseJson, err } = await requestGetApi(shop_eat_business_id + props.route.params.data.business_id, '', 'GET', '')
@@ -485,7 +485,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
     if (responseJson.headers.success == 1) {
       console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
       console.log('the res features ==>>', responseJson.body.features)
-      var updated = 0 
+      var updated = 0
       for (let j = 1; j <= responseJson.body.services.length; j++) {
         if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
           console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
@@ -591,7 +591,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
   }
 
   const searchmenuList = async (tt) => {
-
+    console.log('hello');
     setLoading(true)
 
     const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + tt, '', 'GET', User.token)
@@ -704,20 +704,20 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
         </View>
         <View style={{ marginLeft: 15 }}>
           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9 }} >{ti}</Text>
-          <View style={{marginTop:5,backgroundColor:'#fff',alignItems:'flex-start',flexDirection:'row'}}>
+          <View style={{ marginTop: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
 
-       <Rating
-                 type='custom'
-                 ratingCount={5}
-                 imageSize={12}
-                 startingValue={item.rating}
-               // style={{alignSelf:'flex-start',backgroundColor:'red'}}
-                // onSwipeRating={(d)=>{setvenderRating(d)}}
-                // onFinishRating={(d)=>{setvenderRating(d)}}
-                readonly={true}
-              />
-     <Text style={{ color: 'gray',  fontSize: 11,top:-2}}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
-       </View>
+            <Rating
+              type='custom'
+              ratingCount={5}
+              imageSize={12}
+              startingValue={item.rating}
+              // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+              // onSwipeRating={(d)=>{setvenderRating(d)}}
+              // onFinishRating={(d)=>{setvenderRating(d)}}
+              readonly={true}
+            />
+            <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
+          </View>
           <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 3 }} >Food Preparation Time:</Text>
@@ -744,7 +744,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
             </View>
           }
         </View>
-       
+
       </TouchableOpacity>
     )
   }
@@ -953,7 +953,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                   : null}
               </View>
 
- {/*  
+              {/*  
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:dimensions.SCREEN_WIDTH*95/100,alignSelf:'center'}}>
   {design(require('../../../assets/shape_39.png'),'Food Preparation Time','34 minutes','45%',25,28,'red',20)}
   {design(require('../../../assets/shape_40.png'),'Hygiene Food','','45%',25,28,'red',20)}
@@ -1007,7 +1007,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
             <>
 
               <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}
-              onPress={() => { setmodlevisual1(true) }}>
+                onPress={() => { setmodlevisual1(true) }}>
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
                   <TouchableOpacity style={{
@@ -1032,7 +1032,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
               <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
                 <View style={{ width: '98%', height: 40, zIndex: 999 }}>
 
-         
+
 
                   <DropDownPicker
                     open={menutypeOpen}
@@ -1095,119 +1095,82 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                 </View>
 
               </View>
-              {menuresData.length>0 ?   
-              
-              <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
-                {selectedTab != 'Dining' ?
-                  selectedTab == 'Take Away' ?
-                    menuresData.map((item, index) => {
-                      return (
-                        <View>
-                          {item.menuType == menutypevalue && item.serviceType == 'Take Away' ?
-                            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
-                              () => {
-                                setClickedItemData(item)
-                                setmodlevisual1(false)
-                                {/* setmodlevisual2(true) */ }
-                              },
-                              item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
-                            )
-                            :
-                            item.menuType != menutypevalue && item.serviceType == 'Take Away' ?
-                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
-                                setClickedItemData(item)
-                                setmodlevisual1(false)
-                                {/* setmodlevisual2(true) */ }
-                              },
-                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+              {menuresData.length > 0 ?
+
+                <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
+                  {selectedTab != 'Dining' ?
+                    selectedTab == 'Take Away' ?
+
+                      menuresData.map((item, index) => {
+                        return (
+                          <View>
+                            {item.menuType == menutypevalue && item.serviceType == 'Take Away' ?
+                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+                                () => {
+                                  setClickedItemData(item)
+                                  setmodlevisual1(false)
+                                  {/* setmodlevisual2(true) */ }
+                                },
+                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
                               )
-                              : null
-                          } 
-                        </View>
+                              :
+                              item.menuType != menutypevalue && item.serviceType == 'Take Away' ?
+                                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                                  setClickedItemData(item)
+                                  setmodlevisual1(false)
+                                  {/* setmodlevisual2(true) */ }
+                                },
+                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                                )
+                                : null
+                            }
+                          </View>
+                        )
+                      }
+
                       )
-                    }
-                    )
+                      :
+                      menuresData.map((item, index) => {
+                        return (
+                          <View>
+                            {item.menuType == selectedValue && item.serviceType == 'Delivery' ?
+                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+                                () => {
+                                  setClickedItemData(item)
+                                  setmodlevisual1(false)
+                                  {/* setmodlevisual2(true) */ }
+                                },
+                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
+                              )
+                              :
+                              item.menuType != selectedValue && item.serviceType == 'Delivery' ?
+                                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                                  setClickedItemData(item)
+                                  setmodlevisual1(false)
+                                  {/* setmodlevisual2(true) */ }
+                                },
+                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                                )
+                                : null
+                            }
+                          </View>
+                        )
+                      }
+                      )
                     :
                     menuresData.map((item, index) => {
                       return (
                         <View>
-                          {item.menuType == selectedValue && item.serviceType == 'Delivery' ?
-                            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
-                              () => {
-                                setClickedItemData(item)
-                                setmodlevisual1(false)
-                                {/* setmodlevisual2(true) */ }
-                              },
-                              item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
-                            )
-                            :
-                            item.menuType != selectedValue && item.serviceType == 'Delivery' ?
-                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
-                                setClickedItemData(item)
-                                setmodlevisual1(false)
-                                {/* setmodlevisual2(true) */ }
-                              },
-                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
-                              )
-                              : null
-                          }
-                        </View>
-                      )
-                    }
-                    )
-                  :
-                  menuresData.map((item, index) => {
-                    return (
-                      <View>
 
-                        {item.menuType == menutypevalue && item.serviceType == 'Dinning' ?
-                          DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
-                            () => {
-                              // let arr=diningItens
-                              let arr1 = diningItens1
-                              if (itemloop(item)) {
-
-                              } else {
-                                // arr.push(item)
-                                arr1.push({
-                                  "cart_id": item.cart_id,
-                                  "cart_quantity": 1,
-                                  "category": item.category,
-                                  "default_image": item.default_image,
-                                  "id": item.id,
-                                  "image": item.image,
-                                  "in_cart": item.in_cart,
-                                  "menuType": item.menuType,
-                                  "name": item.name,
-                                  "price": item.price,
-                                  "product_desc": item.product_desc,
-                                  "serviceType": item.serviceType,
-                                  "status": item.status,
-                                  "subcategory": item.subcategory
-                                })
-                              }
-
-                              //setdiningItens(arr)
-                              setdiningItens1(arr1)
-                              setreloades(!reloades)
-                            }, () => {
-                              setClickedItemData(item)
-                              // setmodlevisual1(false)
-                              // setmodlevisual2(true)
-                            },
-                            itemloop(item),
-                            () => { plushqty(item) },
-                            itemqty(item),
-                            () => { minus(item) }, 'green'
-                          )
-                          :
-                          item.menuType != menutypevalue && item.serviceType == 'Dinning' ?
+                          {item.menuType == menutypevalue && item.serviceType == 'Dinning' ?
                             DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
                               () => {
+                                // let arr=diningItens
                                 let arr1 = diningItens1
                                 if (itemloop(item)) {
 
                                 } else {
+                                  // arr.push(item)
                                   arr1.push({
                                     "cart_id": item.cart_id,
                                     "cart_quantity": 1,
@@ -1226,6 +1189,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                                   })
                                 }
 
+                                //setdiningItens(arr)
                                 setdiningItens1(arr1)
                                 setreloades(!reloades)
                               }, () => {
@@ -1236,22 +1200,61 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                               itemloop(item),
                               () => { plushqty(item) },
                               itemqty(item),
-                              () => { minus(item) }, 'red'
+                              () => { minus(item) }, 'green'
                             )
-                            : null
-                        }
-                      </View>
+                            :
+                            item.menuType != menutypevalue && item.serviceType == 'Dinning' ?
+                              DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                                () => {
+                                  let arr1 = diningItens1
+                                  if (itemloop(item)) {
+
+                                  } else {
+                                    arr1.push({
+                                      "cart_id": item.cart_id,
+                                      "cart_quantity": 1,
+                                      "category": item.category,
+                                      "default_image": item.default_image,
+                                      "id": item.id,
+                                      "image": item.image,
+                                      "in_cart": item.in_cart,
+                                      "menuType": item.menuType,
+                                      "name": item.name,
+                                      "price": item.price,
+                                      "product_desc": item.product_desc,
+                                      "serviceType": item.serviceType,
+                                      "status": item.status,
+                                      "subcategory": item.subcategory
+                                    })
+                                  }
+
+                                  setdiningItens1(arr1)
+                                  setreloades(!reloades)
+                                }, () => {
+                                  setClickedItemData(item)
+                                  // setmodlevisual1(false)
+                                  // setmodlevisual2(true)
+                                },
+                                itemloop(item),
+                                () => { plushqty(item) },
+                                itemqty(item),
+                                () => { minus(item) }, 'red'
+                              )
+                              : null
+                          }
+                        </View>
+                      )
+                    }
                     )
                   }
-                  )
-                }
 
-              </View>
-              :  
-              <Text style={{color:'#000',textAlign:'center',fontWeight:'bold',marginTop:10}}>No Items Found</Text>}
+                </View>
+                :
+                <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                }
             </>
-            : 
-           null
+            :
+            null
           }
         </View>
 
@@ -1306,7 +1309,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginVertical: 10 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 13 }}>For Later</Text>
               </View> */}
-             
+
               <View style={{
                 width: '95%', height: 50, marginHorizontal: 5, marginVertical: 10, padding: 10, backgroundColor: '#fff',
                 borderColor: '#DEE4EC', borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', shadowColor: '#000',
@@ -1384,27 +1387,27 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                 </View>
                 <View style={{ marginLeft: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 11, }} >Timings</Text>
-              <View style={{width:'100%', flexDirection:'row'}}>
-          <FlatList
-            data={slots}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-              // numColumns={2}
-              keyExtractor={item => item.start}
-              // style={{backgroundColor:'yellow',width:'100%'}}
-            renderItem={({item, index}) => {
-              return (
-                // <Text>abc</Text>
-                <TouchableWithoutFeedback onPress={()=>{setSelectedSlot(item)}}>
-                <View style={[styles.radioButtonContainer]}>
-                <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-                <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.start+' - '+item.end}</Text>
-              </View>
-                </TouchableWithoutFeedback>
-              );
-            }}
-          />
-          </View>
+                  <View style={{ width: '100%', flexDirection: 'row' }}>
+                    <FlatList
+                      data={slots}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      // numColumns={2}
+                      keyExtractor={item => item.start}
+                      // style={{backgroundColor:'yellow',width:'100%'}}
+                      renderItem={({ item, index }) => {
+                        return (
+                          // <Text>abc</Text>
+                          <TouchableWithoutFeedback onPress={() => { setSelectedSlot(item) }}>
+                            <View style={[styles.radioButtonContainer]}>
+                              <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked" : "radiobox-blank"} color={Mycolors.RED} size={24} />
+                              <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft: 5 }} >{item.start + ' - ' + item.end}</Text>
+                            </View>
+                          </TouchableWithoutFeedback>
+                        );
+                      }}
+                    />
+                  </View>
                 </View>
               </TouchableOpacity>
               <View style={{ width: '97%', alignSelf: 'center', marginTop: 10 }}>
@@ -1460,7 +1463,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
 
       </ScrollView>
       {selectedTab == 'Dining' ?
-        <View style={{ width: '92%', alignSelf: 'center', position: 'absolute', bottom: 60,height:80,backgroundColor:'#fff' }}>
+        <View style={{ width: '92%', alignSelf: 'center', position: 'absolute', bottom: 60, height: 80, backgroundColor: '#fff' }}>
           <MyButtons title="Confirm Order" height={45} width={'100%'} borderRadius={5} alignSelf="center"
             press={() => {
               if (diningItens1.length > 0) {
@@ -1469,7 +1472,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                 setmodlevisual1(false)
                 setmodlevisual2(false)
               } else {
-                Toast.show({text1: 'Please add items from the menu to place an order.'}); 
+                Toast.show({ text1: 'Please add items from the menu to place an order.' });
               }
 
             }} marginHorizontal={20} fontSize={12}
@@ -1500,8 +1503,8 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                 onChangeText={(e) => {
                   setsearchValue(e)
                   searchmenuList(e.text)
-                 }}
-                 // press={() => { Alert.alert('Hi') }}
+                }}
+                // press={() => { Alert.alert('Hi') }}
                 presssearch={() => { searchmenuList(searchValue.text) }}
                 paddingLeft={9} />
             </View>
@@ -1517,7 +1520,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
                       {
                         flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { selectedTab == 'Dining' ? '' : postcart(item) }, () => {
                           setClickedItemData(item)
-                          {/* setmodlevisual1(false) */}
+                          {/* setmodlevisual1(false) */ }
                           {/* setmodlevisual2(true) */ }
                         }, item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#fff'
                         )
@@ -1535,7 +1538,7 @@ const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_
 
         </View>
 
-      {loading ?  <Loader /> : null}
+        {loading ? <Loader /> : null}
 
       </Modal>
 
@@ -1838,10 +1841,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     color: '#fff',
   },
-  radioButtonContainer:{
-    flexDirection:'row',
-    alignItems:'center',
-    marginRight:5
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 5
   }
 });
 export default FoodDetails 

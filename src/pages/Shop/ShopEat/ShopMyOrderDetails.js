@@ -189,7 +189,7 @@ const ShopMyOrderDetails = (props) => {
                 <Image source={require('../../../assets/shape_41.png')} style={{ width: 22, height: 22, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Other</Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Destination Address</Text>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address}</Text>
               </View>
 
@@ -198,7 +198,7 @@ const ShopMyOrderDetails = (props) => {
             <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order Delivered on </Text>
-              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >07 Sep 2022, 08:00 Pm</Text>
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
             </View>
             <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: 9,height:17}}>
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>

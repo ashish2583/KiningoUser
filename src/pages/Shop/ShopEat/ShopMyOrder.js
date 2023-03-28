@@ -359,7 +359,9 @@ const ShopMyOrder = (props) => {
         <View style={{ width: '90%', alignSelf: 'center' }}>
 
           {
+            
             orderData.map((item, index) => {
+              
               return (
 
                 <>
@@ -409,7 +411,8 @@ const ShopMyOrder = (props) => {
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
                             <View style={{ marginLeft: 15 }}>
-                              {JSON.parse(item.items).map((sitem, index) => {
+                              { 
+                              item.items.map((sitem, index) => {
                                 return (
                                   <View style={{ flexDirection: 'row', top: -6, marginTop: 4,   width: '85%', }}>
                                     <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
