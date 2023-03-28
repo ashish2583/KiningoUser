@@ -1,4 +1,5 @@
-import React, { useEffect,useFocusEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -96,15 +97,15 @@ const ShopMyOrder = (props) => {
     myorderList()
   }, [])
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const onBackPress = () => {
-  //       return true;
-  //     };
-  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  //     return () =>
-  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  //   }, []))
+  const onBackPress = () => {
+    Alert.alert('cant go back')
+    return true;
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      const backhandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => backhandler.remove();
+    }, [props.navigation]))
   
 
   const submitDriverRewiew = async () => {
@@ -404,6 +405,7 @@ const ShopMyOrder = (props) => {
                           }}
                             onPress={() => {
                               if(item.status!=0 && item.status !=2){
+                              // BackHandler.removeEventListener('hardwareBackPress', onBackPress);
                             props.navigation.navigate('ShopMyOrderDetails', {data:item})
                               }
                               }}>
@@ -421,6 +423,8 @@ const ShopMyOrder = (props) => {
                                 )
                               })}
                               <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.paid_amount}</Text>
+                              <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >{item.status!=0 && item.status !=2 ? 'true': 'false'}</Text>
+
 
                               <View style={{ width: 120,marginTop:4 }}>
                                 <MyButtons title="Call Restaurant" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
