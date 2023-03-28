@@ -423,7 +423,6 @@ const ShopMyOrder = (props) => {
                                 )
                               })}
                               <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.paid_amount}</Text>
-                              <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >{item.status!=0 && item.status !=2 ? 'true': 'false'}</Text>
 
 
                               <View style={{ width: 120,marginTop:4 }}>
