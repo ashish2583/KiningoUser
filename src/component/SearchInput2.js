@@ -20,7 +20,7 @@ const SearchInput2 = (props) => {
       alignSelf: 'center',marginTop:props.marginTop? props.marginTop :'auto'}}>
 <View style={{width:'100%',height:45,backgroundColor:Mycolors.BG_COLOR,borderRadius:8}}>
 
-<View style={{width:'100%',height:45,borderRadius:8,backgroundColor:Mycolors.LogininputBox,alignSelf:'center',
+<View style={{width:'98%',height:45,borderRadius:8,backgroundColor:Mycolors.LogininputBox,alignSelf:'center',justifyContent:'space-between',flexDirection:'row'
 //  shadowColor: '#000',
 //  shadowOffset: {
 //    width: 0,
@@ -52,10 +52,10 @@ const SearchInput2 = (props) => {
           editable={ props.editable}
           multiline={ props.multiline}
         /> 
-    <View style={{width:'14%',height:45,backgroundColor:'transparent',borderRadius:8,left:5,position:'absolute'}}>
-    <TouchableOpacity style={{width:45,height:45,justifyContent:'center',backgroundColor:Mycolors.LogininputBox,borderRadius:8}}
+    <View style={{  height:45,backgroundColor:'transparent',borderRadius:8,left:-45  }}>
+    <TouchableOpacity style={{width:45,height:49,justifyContent:'center',backgroundColor:Mycolors.LogininputBox,borderRadius:8}}
     onPress={props.presssearch}>
-    <Image source={require('../assets/shape_7.png')} style={{ width: 18, height: 18, alignSelf: 'center'}}></Image>
+    <Image source={require('../assets/Search-red.png')} style={{ width: 45, height: 49, alignSelf: 'center'}}></Image>
     </TouchableOpacity>
 
 </View>

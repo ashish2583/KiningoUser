@@ -12,46 +12,13 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 import { CardField,CardFieldInput, useStripe,StripeContainer,} from '@stripe/stripe-react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { baseUrl,shop_eat_cart,user_payment_method, shop_eat_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
-import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
+import Toast from 'react-native-toast-message';
 
 const ShopPayment = (props) => {
   const [checkitem,setcheckitem]=useState('')
   const [reson,setreson]=useState('')
-  const [upData,setupData]=useState([
-    {
-      id: '1',
-      title: '**** **** **** 5967',
-      height:33,
-      width:55,
-      time:'Expires 24/22',
-      img:require('../../../assets/images/layer_48.png'),
-    },
-    {
-      id: '2',
-      title: '**** **** **** 5967',
-      height:18,
-      width:55,
-      time:'Expires 24/22',
-      img:require('../../../assets/images/group_36.png'),
-    },
-    {
-      id: '3',
-      title: '    john.doe@gmail.com',
-      height:35,
-      width:40,
-      time:'',
-      img:require('../../../assets/images/layer_51.png'),
-    },
-      {
-        id: '4',
-        title: 'Cash Payment',
-        height:40,
-        width:40,
-        time:'Default method',
-        img:require('../../../assets/images/cashondelivery.png'),
-      },  
-   ])
+
   const creditCardRef = React.useRef();
   const dispatch = useDispatch();
   const User = useSelector(state => state.user.user_details)
@@ -97,7 +64,12 @@ setRefreshing(false)
 }, []);
 
   const handlePayClick = async () => {
-   
+   if(card==0){
+    Toast.show({text1:'Please Add card details'})
+   }else if (!card.complete){
+    Toast.show({text1:'Please enter complete card details'})
+   }else{
+    
     setLoading(true);
   
       console.log('card', card);
@@ -116,19 +88,21 @@ setRefreshing(false)
       console.log('the res==>>', responseJson)
       if (responseJson.headers.success == 1) {
         getpaymentList()
-        Alert.alert(responseJson.headers.message)
-        // Toast.show(responseJson.headers.message)
+        Toast.show({text1:responseJson.headers.message})
+       
         setaddpayment(false)
       } else {
       // setalert_sms(err)
       // setMy_Alert(true) 
       }
+    
+     }
   };
 
   const placeOrder = async () => {
+    console.log(checkitem);
    if(checkitem==''){
-    // Toast.show('Please select payment method')
-    Alert.alert('Please select payment method')
+    Toast.show({text1:'Please select payment method'})
    }else{
      setLoading(true);
       var data={
@@ -144,15 +118,13 @@ setRefreshing(false)
       setLoading(false)
       console.log('the res shop_eat_cart_place_order==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        // Toast.show(responseJson.headers.message)
-        props.navigation.navigate('ShopEat')
+        Toast.show({text1:responseJson.headers.message})
+        props.navigation.navigate('ShopMyOrder')
       } else {
       // setalert_sms(err)
       // setMy_Alert(true)
       }
-    
    }
-   
   };
 
  const getpaymentList = async () => {

@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { createThumbnail } from "react-native-create-thumbnail";
+// import { createThumbnail } from "react-native-create-thumbnail";
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
 import LinearGradient from 'react-native-linear-gradient'
@@ -132,22 +132,22 @@ const ServiceProductDetail = (props) => {
 
  },[])
  useEffect(()=>{
-    generateThumb()
+    // generateThumb()
   },[])
-  const generateThumb = async () => {
-    setLoading(true)
-    try {
-      const resp = await createThumbnail({
-        url: videoDetails?.url,
-        timeStamp: 10000,
-        // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-      })
-      setVideoDetails({...videoDetails, thumbnail: resp.path})
-    } catch (error) {
-      console.log('thumbnail creating error', error);      
-    }
-    setLoading(false)
-  }
+  // const generateThumb = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const resp = await createThumbnail({
+  //       url: videoDetails?.url,
+  //       timeStamp: 10000,
+  //       // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+  //     })
+  //     setVideoDetails({...videoDetails, thumbnail: resp.path})
+  //   } catch (error) {
+  //     console.log('thumbnail creating error', error);      
+  //   }
+  //   setLoading(false)
+  // }
 
   
 const design=(img,ti,tit,w,imgh,imgw,bg,redious)=>{

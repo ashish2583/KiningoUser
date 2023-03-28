@@ -47,8 +47,7 @@ const SearchInputEnt = (props) => {
           placeholder={ props.placeholder}
          textContentType={ props.textContentType}
          onSubmitEditing={ props.multiline ? null  : Keyboard.dismiss}
-          // placeholderTextColor={Mycolors.placeholderTextColor}
-          placeholderTextColor={'gray'}
+          placeholderTextColor={Mycolors.placeholderTextColor}
           onChangeText={ props.onChangeText ? (text) =>  props.onChangeText({text}) : ()=>{}}
           editable={ props.editable}
           multiline={ props.multiline}

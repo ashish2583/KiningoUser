@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../../WebApi/Loader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const DiningAndBookTable = (props) => {
   const [searchValue, setsearchValue] = useState('')
@@ -78,7 +79,7 @@ const DiningAndBookTable = (props) => {
     {label: 'Cancelled', value: '6'},
     {label: 'Delivered', value: '12'},
   ]);
- 
+  const [showda, setshowda] = useState(false)
   const [keyword, setKeyword] = useState('');
   useEffect(() => {
     orderList()
@@ -124,7 +125,33 @@ const DiningAndBookTable = (props) => {
     }
     Linking.openURL(phoneNumber);
   };
-
+  const dateformates=(month,day,year)=>{
+    if(month=='Jan'){
+    return year+'-01-'+day
+    }else if(month=='Feb'){
+      return year+'-02-'+day
+    }else if(month=='Mar'){
+      return year+'-03-'+day
+    }else if(month=='Apr'){
+      return year+'-04-'+day
+    }else if(month=='May'){
+      return year+'-05-'+day
+    }else if(month=='Jun'){
+      return year+'-06-'+day
+    }else if(month=='Jul'){
+      return year+'-07-'+day
+    }else if(month=='Aug'){
+      return year+'-08-'+day
+    }else if(month=='Sep'){
+      return year+'-09-'+day
+    }else if(month=='Oct'){
+      return year+'-10-'+day
+    }else if(month=='Nov'){
+      return year+'-11-'+day
+    }else if(month=='Dec'){
+      return year+'-12-'+day
+    }
+    }
   const orderList = async (filters = false, closeModal = false) => {
     let endPoint =  shop_eat_orders
     if(filters){
@@ -136,7 +163,14 @@ const DiningAndBookTable = (props) => {
         data['from_date'] = timeDurationData.find(el=>el.label === timeDurationValue).value
       }
       if(orderDate !== ''){
-        data['order_date'] = orderDate
+        var m=orderDate.toString().substring(4, 7)
+        var d=orderDate.toString().substring(8, 10)
+        var y=orderDate.toString().substring(11, 15)
+        console.log(m);
+        console.log(d);
+        console.log(y);
+
+        data['order_date'] = dateformates(m,d,y)
       }
       if(keyword !== ''){
         data['keyword'] = keyword
@@ -191,8 +225,6 @@ const DiningAndBookTable = (props) => {
       </View>
     )
   }
-
-
 
   const cancleDesign = (title, press, check) => {
     return (
@@ -528,8 +560,10 @@ const DiningAndBookTable = (props) => {
         <View style={{ height: '90%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
          
-          <View style={{flexDirection:'row',justifyContent:'center', marginBottom:5, marginTop:10}}>
-            <Text style={{flex:4,color:Mycolors.Black,fontWeight:'500', textAlign:'center'}}>Filter</Text>
+          <View style={{flexDirection:'row',justifyContent:'space-between', marginBottom:5, marginTop:10}}>
+             <Text style={{color:Mycolors.Black,fontWeight:'500',}}></Text>
+            <Text style={{color:Mycolors.Black,fontWeight:'500',}}>Filter</Text>
+            <Text style={{color:'red',fontWeight:'bold',fontSize:22,top:-15}} onPress={()=>{setShowFiltersModal(false)}}>X</Text>
           </View>
        
           <KeyboardAvoidingView
@@ -537,7 +571,7 @@ const DiningAndBookTable = (props) => {
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
 {/* <View style={{ width: '100%', height: 100, borderRadius: 2, marginTop: 10, alignSelf: 'center' }}> */}
-<Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Keyword</Text>
+{/* <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Keyword</Text>
               <TextInput
                 value={keyword}
                 onChangeText={(e) => setKeyword(e)}
@@ -548,72 +582,16 @@ const DiningAndBookTable = (props) => {
                 // keyboardType="number-pad"
                 autoCapitalize='none'
                 style={[styles.input, {height:50}]}
-              />
+              /> */}
 
             {/* </View> */}
 
 
-  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Order Type</Text>
-  <FlatList
-    data={orderTypeData}
-      numColumns={2}
-      keyExtractor={item => item.label}
-    renderItem={({item, index}) => {
-      return (
-        <TouchableWithoutFeedback onPress={()=>{setOrderTypeValue(item.label)}}>
-          
-        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
-        <MaterialCommunityIcons name={item.label === orderTypeValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
-      </View>
-        </TouchableWithoutFeedback>
-      );
-    }}
-  />
-  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5  }}>Time Duration</Text>
-  <FlatList
-    data={timeDurationData}
-      numColumns={2}
-      keyExtractor={item => item.label}
-    renderItem={({item, index}) => {
-      return (
-        <TouchableWithoutFeedback onPress={()=>{setTimeDurationValue(item.label)}}>
-          
-        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
-        <MaterialCommunityIcons name={item.label === timeDurationValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
-      </View>
-        </TouchableWithoutFeedback>
-      );
-    }}
-  />
-
-  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Status</Text>
-  <FlatList
-    data={statusData}
-      numColumns={2}
-      keyExtractor={item => item.label}
-    renderItem={({item, index}) => {
-      return (
-        <TouchableWithoutFeedback onPress={()=>{setStatusValue(item.label)}}>
-          
-        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
-        <MaterialCommunityIcons name={item.label === statusValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
-      </View>
-        </TouchableWithoutFeedback>
-      );
-    }}
-  />
-  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Order Date</Text>
-{/* <View style={{ width: '100%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.025)', borderRadius: 10, borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2 }}>
-          <HomeHeader height={40} paddingHorizontal={15}
-            press1={() => { }} img1={require('../../../assets/calendar.png')} img1width={22} img1height={22}
-            press2={() => { }} title2={''} fontWeight={'500'} img2height={20} right={dimensions.SCREEN_WIDTH * 28 / 100} fontSize={10} color={Mycolors.GrayColor}
-            // press3={() => { }} img3={require('../../../assets/shape_32.png')} img3width={25} img3height={25} 
-            />
-<View style={{ position: 'absolute' }}>
-<DatePicker
+            <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Order Date</Text>
+          <View style={{ width: '100%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.025)', borderRadius: 10, borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2 }}>
+          <View style={{ }}>
+          {Platform.OS=='ios' ?
+           <DatePicker
               customStyles={{
                 dateInput: { borderColor: 'transparent', },
                 dateText: { color: Mycolors.GrayColor },
@@ -645,8 +623,83 @@ const DiningAndBookTable = (props) => {
                 setOrderDate(date)
               }}
             />
+             :
+                  showda ?
+                    <View>
+                      <DateTimePicker
+                        value={new Date()}
+                        mode='calendar'
+                        // is24Hour={false}
+                        display="spinner"
+                        onChange={(event, sTime) => {
+                          setshowda(false)
+                          console.log(sTime.toDateString());
+                          setOrderDate(sTime)
+                          console.log(event);
+                        }}
+                      />
+                    </View>
+                    :
+                    <TouchableOpacity style={{ width: '100%', height: 50, justifyContent: 'center', backgroundColor: Mycolors.HEADERCOLOR, borderColor: 'transparent', zIndex: -999, borderRadius: 5 }}>
+                      <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{orderDate ? orderDate.toString().substring(0, 16): 'Select Date'}</Text>
+                    </TouchableOpacity>
+                }
             </View>
-            </View> */}
+            </View>
+
+  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Order Type</Text>
+  <FlatList
+    data={orderTypeData}
+      numColumns={2}
+      keyExtractor={item => item.label}
+    renderItem={({item, index}) => {
+      return (
+        <TouchableWithoutFeedback onPress={()=>{setOrderTypeValue(item.label)}}>
+          
+        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
+        <MaterialCommunityIcons name={item.label === orderTypeValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
+        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
+      </View>
+        </TouchableWithoutFeedback>
+      );
+    }}
+  />
+  {/* <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5  }}>Time Duration</Text>
+  <FlatList
+    data={timeDurationData}
+      numColumns={2}
+      keyExtractor={item => item.label}
+    renderItem={({item, index}) => {
+      return (
+        <TouchableWithoutFeedback onPress={()=>{setTimeDurationValue(item.label)}}>
+          
+        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
+        <MaterialCommunityIcons name={item.label === timeDurationValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
+        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
+      </View>
+        </TouchableWithoutFeedback>
+      );
+    }}
+  /> */}
+
+  <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5 }}>Status</Text>
+  <FlatList
+    data={statusData}
+      numColumns={2}
+      keyExtractor={item => item.label}
+    renderItem={({item, index}) => {
+      return (
+        <TouchableWithoutFeedback onPress={()=>{setStatusValue(item.label)}}>
+          
+        <View style={[styles.radioButtonContainer, {width:'50%'}]}>
+        <MaterialCommunityIcons name={item.label === statusValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
+        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
+      </View>
+        </TouchableWithoutFeedback>
+      );
+    }}
+  />
+
 
             <View style={{height:30}} />
 

@@ -6,7 +6,7 @@ import { dimensions, Mycolors } from '../../utility/Mycolors';
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
 import {baseUrl,driver_profile,requestPostApi,requestGetApi} from '../../WebApi/Service'
 import Loader from '../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import {  useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setLoading,saveUserResult,saveUserToken} from '../../redux/actions/user_action';
@@ -35,15 +35,15 @@ const EditProfile = (props) => {
 
   const savePress=()=>{
     if(name==''|| name.trim().length == 0){
-        Toast.show('Enter Name')   
+      Alert.alert('Enter Name')
     }else if(email == '' || email.trim().length == 0){
-      Toast.show('Enter Email Id')
+      Alert.alert('Enter Email Id')
     }
     else if(!(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
       email))){
-        Toast.show('Enter Valid Email Id')
+        Alert.alert('Enter Valid Email Id')
     }else if(mobile==''|| mobile.trim().length == 0 || mobile.trim().length< 10){
-        Toast.show('Enter Mobile Number')  
+      Alert.alert('Enter Mobile Number')
     }else{
       AddName()
     }
@@ -72,12 +72,14 @@ const EditProfile = (props) => {
     if(err==null){
         if(responseJson.status){
           console.log('Edit Profile Data is',responseJson.data)
-         Toast.show(responseJson.message);
+     Alert.alert(responseJson.message)
+     
          AsyncStorage.setItem("driver",JSON.stringify(responseJson.data));
           dispatch(saveUserResult(responseJson.data)) 
          resetStacks('Myprofile')
         }else{
-          Toast.show(responseJson.message);
+          Alert.alert(responseJson.message)
+    
         }
     }else{
       setalert_sms(err)

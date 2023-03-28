@@ -6,12 +6,12 @@ import SerchInput from '../../../component/SerchInput';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business,menu_AllCategoryNames,menu_categorySearch_attribute_name, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken,setVenderDetail, setUserType } from '../../../redux/actions/user_action';
+import Toast from 'react-native-toast-message';
 
 const CatSearch = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -24,9 +24,11 @@ const CatSearch = (props) => {
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
+  const [relode,setrelode] = useState(false)
   useEffect(()=>{
    console.log('hohohohoho',props.route.params.datas);
-   setresData(props.route.params.datas)
+  //  setresData(props.route.params.datas)
+   AllVenders()
 //    if(props.route.params.from!='search'){
 //     AllVenders()
 //    }
@@ -43,31 +45,29 @@ const CatSearch = (props) => {
    // fetchSuccessDetails()
    checkcon()
    wait(2000).then(() => {
-
      setRefreshing(false)
-
    });
  }, []);
 
-const homePageSearch = async () => {
-
+const homePageSearch = async (ttt) => {
+  setresData([])
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_eat+'?name='+searchValue.text+'&lat='+lat+'&long='+lan, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt, '', 'GET', '')
   setLoading(false)
   console.log('the res==>>Home', responseJson)
   if (responseJson.headers.success == 1) {
-    setresData(responseJson.body.vendors)
+     setresData(responseJson.body)
+     setrelode(!relode)
   } else {
      setalert_sms(err)
      setMy_Alert(true)
   }
-
 }
 
 const AllVenders = async () => {
 
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_eat_business, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(menu_AllCategoryNames, '', 'GET', '')
   setLoading(false)
   console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
   if (responseJson.headers.success == 1) {
@@ -101,13 +101,13 @@ const AllVenders = async () => {
 serchValue={searchValue} 
 onChangeText={(e)=>{
   setsearchValue(e)
-//   homePageSearch()
-// if(e.text.length==0){
-//   AllVenders()
-// }
+  homePageSearch(e.text)
+if(e.text.length==0){
+  AllVenders()
+}
 }} 
 press={()=>{Alert.alert('Hi')}}
-presssearch={()=>{homePageSearch()}}
+presssearch={()=>{homePageSearch(searchValue.text)}}
 paddingLeft={9}/>
  
         

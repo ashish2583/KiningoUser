@@ -14,7 +14,7 @@ import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import { baseUrl,shop_eat_cart,shop_eat_cart_id,shop_eat_coupons_userid,shop_eat_cart_apply_coupon, login,shop_eat_business,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import Geolocation from "react-native-geolocation-service";

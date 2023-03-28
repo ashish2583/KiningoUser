@@ -5,7 +5,7 @@ import HomeHeaderRoundBottom from '../../Deal/B2b/Homeheaderroundbottom';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import MyButtons from '../../../component/MyButtons';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
 
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';

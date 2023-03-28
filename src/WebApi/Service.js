@@ -8,21 +8,20 @@ import {  useSelector, useDispatch } from 'react-redux';
 // shop/eat
 //API END POINT LISTS  
 
-export const profile = 'user/profile'
 export const register = 'auth/register'
 export const login = 'auth/login'
 export const verify_otp = 'auth/verify-otp'
 export const shop_eat = 'shop/eat'
+export const vendor_lists_subcat ='shop/eat/vendor-lists?subcat='
 export const shop_eat_business = 'shop/eat/business'
 export const shop_eat_business_id = 'shop/eat/business/id/'
-export const shop_eat_menu_userid = 'shop/eat/menu/userid/'
+export const shop_eat_menu_userid = 'shop/eat/vendor-menu/'
 export const shop_eat_cart = 'shop/eat/cart'
 export const shop_eat_cart_id = 'shop/eat/cart/id/'
 export const shop_eat_coupons_userid = 'shop/eat/coupons/userid/'
 export const shop_eat_cart_apply_coupon=`shop/eat/cart/apply-coupon`;
 export const user_payment_method=`user/payment-method`;
 export const user_address=`user/address`;
-export const shop_remove_coupon=`shop/eat/cart/remove-coupon`;
 export const shop_eat_cart_place_order=`shop/eat/cart/place-order`;
 export const shop_eat_cart_book_dining=`shop/eat/cart/book-dining`;
 export const shop_eat_cart_book_table=`shop/eat/cart/book-table`;
@@ -30,30 +29,16 @@ export const shop_eat_orders=`shop/eat/orders`;
 export const delete_Update_Address=`user/address/id/`; 
 export const cancelOrders=`orders`;
 export const vendor_reviews=`vendor/reviews`;
-
-// export const shop_product = 'shop/product'
-export const shop_product_business = 'shop/product/business'
-export const shop_product_business_userid = 'shop/product/business/userid/'
-export const shop_product_cart = 'shop/product/cart'
-export const shop_product_productlist=`shop/product/productList/userid/`;
-export const shop_product_delete_cart_item=`shop/product/cart/id/`;
-export const shop_product_details=`shop/product/productDetails/id/`;
-export const shop_product_cart_place_order=`shop/product/cart/place-order`;
-export const shop_product_remove_coupon=`shop/product/cart/remove-coupon`;
-// start: new apis yet to be created
-export const shop_product_coupons_userid = 'shop/product/coupons/userid/'
-export const shop_product_cart_apply_coupon=`shop/product/cart/apply-coupon`;
-// end: new apis yet to be created
+export const shop_eat_menu=`shop/eat/menu/userid/`;
+export const auth_send_otp=`auth/send-otp`;
+export const profile = 'user/profile'
+export const menu_AllCategoryNames=`menu/AllCategoryNames`; 
+export const menu_categorySearch_attribute_name=`menu/categorySearch?attribute_name=`; 
+export const  driver_reviews=`user/review`; 
+export const shop_remove_coupon=`shop/eat/cart/remove-coupon`;
+export const  notification_list=`/user/notification/list`;
 
 
-
-
-export const common_page_content=`common/page_content`;
-export const add_insurance=`driver/insurance`;
-export const driver_add_profile=`driver/add_profile`;  
-export const driver_update_corporate_profile=`driver/update_corporate_profile`; 
-export const  common_vehicle_info=`common/vehicle_info`; 
-export const  driver_get_drivers=`driver/get_drivers`;
 export const  driver_corporate_vehicle=`driver/corporate_vehicle`;
 export const  buy_subscription=`driver/buy_subscription`;
 export const  buy_corporate_subscription=`driver/buy_corporate_subscription`; 

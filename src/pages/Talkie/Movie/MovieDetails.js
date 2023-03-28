@@ -8,7 +8,7 @@ import MyButtons from '../../../component/MyButtons';
 // import B2BSearch from '../../Deal3/B2BSearch';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
 import RepliesModal from '../../../component/ReplesModal';
 import { Rating, AirbnbRating } from 'react-native-ratings';

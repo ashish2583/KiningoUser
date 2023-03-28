@@ -9,7 +9,7 @@ import {  useSelector, useDispatch } from 'react-redux';
 import { setLoading,saveUserToken,saveUserResult,saveCorporateUserResult} from '../../redux/actions/user_action';
 import {baseUrl,login,verify_otp,requestPostApi} from '../../WebApi/Service'
 import Loader from '../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import MyAlert from '../../component/MyAlert';
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -48,7 +48,9 @@ const Otp = (props) => {
        setMy_Alert(true)
            }
   }else{
-    Toast.show('Please enter valid opt')
+      setalert_sms('Please enter valid opt')
+       setMy_Alert(true)
+  
   } 
   }
 

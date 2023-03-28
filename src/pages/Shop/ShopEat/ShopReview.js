@@ -12,7 +12,7 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 import { CardField,CardFieldInput, useStripe,StripeContainer,} from '@stripe/stripe-react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { baseUrl,shop_eat_cart,user_payment_method, shop_eat_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import Loader from '../../../WebApi/Loader';
 
 
@@ -101,7 +101,7 @@ const ShopReview = (props) => {
        setsubData()
        setvenderRating('0')
        setreson('')
-       Alert.alert(responseJson.headers.message)
+       Toast.show({text1:responseJson.headers.message})
       props.navigation.navigate('ShopMyOrder')
      } else {
      // setalert_sms(err)

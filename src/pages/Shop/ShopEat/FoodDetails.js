@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform ,TouchableWithoutFeedback} from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -14,7 +14,6 @@ import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
 import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -22,15 +21,16 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import openMap from 'react-native-open-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
+import Toast from 'react-native-toast-message';
+
 
 function newAddMinutes(time, minsToAdd) {
   function D(J){ return (J<10? '0':'') + J;};
   var piece = time.split(':');
   var mins = piece[0]*60 + +piece[1] + +minsToAdd;
-
-  return D(mins%(24*60)/60 | 0) + ':' + D(mins%60);  
+  return D(mins%(24*60)/60 | 0) + ':' + D(mins%60);
 }
-
+ 
 const FoodDetails = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [searchValue, setsearchValue] = useState('')
@@ -47,57 +47,8 @@ const FoodDetails = (props) => {
   const [modlevisual2, setmodlevisual2] = useState(false)
   const [modlevisual3, setmodlevisual3] = useState(false)
   const [modlevisual4, setmodlevisual4] = useState(false)
-  const [upData, setupData] = useState([
-    {
-      id: '1',
-      title: 'Hair Cut',
-      desc: '',
-      time: '10:00AM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '2',
-      title: 'Shaving',
-      desc: '',
-      time: '10:30AM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '3',
-      title: 'Facial',
-      desc: '',
-      time: '11:00AM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '4',
-      title: 'Hair Color',
-      desc: '',
-      time: '11:30AM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '5',
-      title: 'Hair wash',
-      desc: '',
-      time: '12:00PM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '6',
-      title: 'Beard style',
-      desc: '',
-      time: '12:30PM',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '7',
-      title: 'Facial',
-      desc: '',
-      time: '01:00PM',
-      img: require('../../../assets/images/images.png'),
-    },
-  ])
+  const [slots, setSlots] = useState([])
+  const [selectedSlot, setSelectedSlot] = useState({})
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState([])
@@ -114,12 +65,10 @@ const FoodDetails = (props) => {
   const [futureTimes, setfutureTimes] = useState([])
   const [imgcartCount, setimgcartCount] = useState(1)
   const [timimgs, settimimgs] = useState('')
-  const [slots, setSlots] = useState([])
-  const [selectedSlot, setSelectedSlot] = useState({})
   const [refreshing, setRefreshing] = useState(false);
   const [selectedValue, setselectedValue] = useState('Regular')
   const [menutypeOpen, setmenutypeOpen] = useState(false);
-  const [menutypevalue, setmenutypevalue] = useState('Regular');
+  const [menutypevalue, setmenutypevalue] = useState(null);
   const [menutypedate, setmenutypedate] = useState([
     { label: 'Regular', value: 'Regular' },
     { label: 'Veggie', value: 'Veggie' },
@@ -130,13 +79,16 @@ const FoodDetails = (props) => {
   const [showda, setshowda] = useState(false)
 
   useEffect(() => {
-    vendorDetail()
+    // Toast.show({
+    //   text1: 'Hello',
+    // }); 
+    vendorDetail() 
     menuList(null)
-  }, [])
+  }, []) 
 
   const checkcon = () => {
     vendorDetail()
-    menuList(null)
+    menuList(menutypevalue)
   }
 
   const wait = (timeout) => {
@@ -196,33 +148,104 @@ const FoodDetails = (props) => {
     A()
   }
 
+  // const bookTables = async () => {
+  //   var td = ''
+  //   var tt = ''
+  //   // if(date==''){
+  //   // //  if(selectedTime==''){
+  //   //  if(Object.keys(selectedSlot)?.length === 0){
+  //   //   setalert_sms('Please Select Time Slot')
+  //   //   setMy_Alert(true)
+  //   //   // Alert.alert('Please Select Time Slot')
+  //   //   // Toast.show('Please Select Time Slot')
+  //   //  }else{
+  //   //    td=new Date()
+  //   //    tt=selectedSlot
+  //   //  }
+  //   // }
+    
+  //   if (Object.keys(selectedSlot)?.length === 0) {
+  //       Toast.show({text1: 'Please Select Time Slot'}); 
+  //     // setalert_sms('Please Select Time Slot')
+  //     // setMy_Alert(true)
+  //     return
+  //   } else {
+  //     tt = selectedSlot
+  //   }
+  //   if (date == '') {
+  //     Toast.show({text1: 'Please Select Date'}); 
+  //     // setalert_sms('Please Select Date')
+  //     // setMy_Alert(true)
+  //     return
+  //   } else {
+  //     td =  date
+      
+  //   }
+  //   // else{
+  //   //   if(selectedTime2==''){
+  //   //     // Toast.show('Please Select Time Slot')
+  //   //     setalert_sms('Please Select Time Slot')
+  //   //   setMy_Alert(true)
+  //   //     // Alert.alert('Please Select Time Slot')
+  //   //    }else{
+  //   //     td=date
+  //   //     tt=selectedTime2
+  //   //    }
+  //   // }
+  //   if (td != '' && tt != '') {
+  //     setLoading(true)
+  //     var data = {
+  //       "business_id": props.route.params.data.business_id,
+  //       "no_of_person": counter,
+  //       "schedule_date": moment(td).format('YYYY-MM-DD'),
+  //       "schedule_time_from": tt?.start,
+  //       "schedule_time_to": tt?.end
+  //     }
+  //     console.log('bookTables data', data);
+  //     const { responseJson, err } = await requestPostApi(shop_eat_cart_book_table, data, 'POST', User.token)
+  //     setLoading(false)
+  //     console.log('the res==>>', responseJson)
+  //     if (responseJson.headers.success == 1) {
+  //       // setmodlevisual3(false)
+  //       // setmodlevisual4(true)
+  //       // setmodlevisual1(false)
+  //       // setmodlevisual2(false)
+  //       setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+  //       setMy_Alert(true)
+  //       // Toast.show({text1: 'Please Select Date'}); 
+  //       // Alert.alert(
+  //       //   '',
+  //       //   'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
+  //       //   [
+  //       //     {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
+  //       //   ],
+  //       //   // {cancelable: false},
+  //       // );
+  //       // Alert.alert('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+  //     } else {
+  //       setalert_sms(err)
+  //       setMy_Alert(true)
+  //     }
+  //   } else {
+  //     //Toast.show('Please Select date and time')
+  //   }
+  // }
+
   const bookTables = async () => {
     var td=''
     var tt=''
-  // if(date==''){
-  // //  if(selectedTime==''){
-  //  if(Object.keys(selectedSlot)?.length === 0){
-  //   setalert_sms('Please Select Time Slot')
-  //   setMy_Alert(true)
-  //   // Alert.alert('Please Select Time Slot')
-  //   // Toast.show('Please Select Time Slot') 
-  //  }else{
-  //    td=new Date()
-  //    tt=selectedSlot
-  //  }
-   
-  // }
+
   
   if(date==''){
-    setalert_sms('Please Select Date')
-    setMy_Alert(true)
+    Toast.show({text1:'Please Select Date'})
+    
     return
   }else{
     td=date
   }
   if(Object.keys(selectedSlot)?.length === 0){
-    setalert_sms('Please Select Time Slot')
-    setMy_Alert(true)
+    Toast.show({text1:'Please Select Time Slot'})
+
     return
   }else{
     tt=selectedSlot
@@ -305,7 +328,8 @@ const FoodDetails = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      Alert.alert(responseJson.headers.message)
+      // Alert.alert(responseJson.headers.message)
+      Toast.show({text1: responseJson.headers.message}); 
       // Toast.show(responseJson.headers.message)
       setdiningItens1([])
       setmodlevisual3(false)
@@ -326,25 +350,27 @@ const FoodDetails = (props) => {
         quantity: item.cart_quantity + 1,
       }
     } else {
-      if (item.quantity > 1) {
+      console.log('item.quantity',item);
+      if (item.cart_quantity > 1) {
         data = {
-          id: item.id,
-          product_id: item.product_id,
+          id: item.cart_id,
+          product_id: item.id,
           quantity: item.cart_quantity - 1,
         }
       } else {
+        console.log('detel API');
         deletcart(item)
       }
-
     }
 
-    const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_id, data, 'PUT', User.token)
+const { responseJson, err } = await requestPostApi(shop_eat_cart_id + item.cart_id, data, 'PUT', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       //  Toast.show(responseJson.headers.message)
-      Alert.alert(responseJson.headers.message)
-      menuList()
+      // Alert.alert(responseJson.headers.message)
+      Toast.show({text1: responseJson.headers.message}); 
+      menuList(menutypevalue)
       setreloades(!reloades)
     } else {
       // setalert_sms(err)
@@ -361,10 +387,11 @@ const FoodDetails = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       // Toast.show(responseJson.headers.message)
-      menuList()
+      Toast.show({text1: responseJson.headers.message}); 
+      menuList(menutypevalue)
       setreloades(!reloades)
     } else {
-      menuList()
+      menuList(menutypevalue)
       // setalert_sms(err)
       // setMy_Alert(true)
     }
@@ -377,13 +404,15 @@ const FoodDetails = (props) => {
       product_id: items.id,
       quantity: 1,
       business_id: props.route.params.data.business_id,
+      product_type:items.serviceType
     }
     const { responseJson, err } = await requestPostApi(shop_eat_cart, data, 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       //  Toast.show(responseJson.headers.message)
-      menuList()
+      Toast.show({text1: responseJson.headers.message}); 
+      menuList(menutypevalue)
       //  props.navigation.navigate('ShopCart')
     } else {
       setalert_sms(err)
@@ -447,49 +476,49 @@ const FoodDetails = (props) => {
   }
 
   const vendorDetail = async () => {
-
+   
     setLoading(true)
+    console.log('saurabh url', shop_eat_business_id + props.route.params.data.business_id);
     const { responseJson, err } = await requestGetApi(shop_eat_business_id + props.route.params.data.business_id, '', 'GET', '')
     setLoading(false)
     console.log('the res shop_eat_business_id==>>', responseJson)
     if (responseJson.headers.success == 1) {
       console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
       console.log('the res features ==>>', responseJson.body.features)
-      var updated = 0
+      var updated = 0 
       for (let j = 1; j <= responseJson.body.services.length; j++) {
         if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
           console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
           console.log('verma===>>', responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00');
-          console.log('saurabh===>>',responseJson.body.services[j-1].attribute_detail);
+          console.log('saurabh===>>', responseJson.body.services[j - 1].attribute_detail);
           const slotDuration = 30
           const breakDuration = 15
-          const startTime  = responseJson.body.services[j-1].attribute_detail.substring(0,5)
-          const endTime  = responseJson.body.services[j-1].attribute_detail.substring(6)
-          const startInMinutes=startTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
-          const endInMinutes=endTime.split(':').reduce((a,b)=>Number(a)*60+Number(b),0)
+          const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
+          const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
+          const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+          const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
           const minutesDifferent = endInMinutes - startInMinutes
-          const isAdditionalSlot = (minutesDifferent % (slotDuration+breakDuration)) >= slotDuration
-          const slotsWithGap = Math.floor(minutesDifferent / (slotDuration+breakDuration))
+          const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
+          const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
           console.log('minutesDifferent', minutesDifferent);
           console.log('slotsWithGap', slotsWithGap);
           console.log('isAdditionalSlot', isAdditionalSlot);
           let allSlots = []
           let start = startTime
           let newTime = ''
-          Array.from(Array(slotsWithGap).keys()).map(el=>{
+          Array.from(Array(slotsWithGap).keys()).map(el => {
             newTime = newAddMinutes(start, slotDuration)
-            allSlots.push({start: start, end: newTime})
-            // console.log('{start: start, end: newTime}', {start: start, end: newTime});
-            start = newAddMinutes(newTime, Math.abs(slotDuration-breakDuration))
+            allSlots.push({ start: start, end: newTime })
+            console.log('{start: start, end: newTime}', { start: start, end: newTime });
+            start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
           })
-          if(isAdditionalSlot){
-            allSlots.push({start: start, end: newAddMinutes(start, slotDuration)})
+          if (isAdditionalSlot) {
+            allSlots.push({ start: start, end: newAddMinutes(start, slotDuration) })
           }
           setSlots(allSlots)
           console.log('all slots', allSlots);
           // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
           //  setfutureTimes(stimess)
-
           settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
         }
         if (responseJson.body.services[j - 1].attribute_value == 'yes' && updated == 0) {
@@ -511,8 +540,27 @@ const FoodDetails = (props) => {
     }
   }
 
-  const menuList = async (dd) => {
+  const cart_Count = async () => {
+    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid, '', 'GET', User.token)
+    setLoading(false)
+    console.log('the res in_cart cart_Count ==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      var counts = 0
+      for (let i = 1; i <= responseJson.body.length; i++) {
+        if (responseJson.body[i - 1].in_cart == '1') {
+          counts = parseInt(counts) + parseInt('1')
+        }
+      }
+      setcartCount(counts)
+      setreloades(!reloades)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
 
+  const menuList = async (dd) => {
+    cart_Count()
     setLoading(true)
     var urls = ''
     if (dd == null) {
@@ -527,28 +575,28 @@ const FoodDetails = (props) => {
     setLoading(false)
     console.log('the res in_cart shop_eat_menu_userid ==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      var counts = 0
-      for (let i = 1; i <= responseJson.body.length; i++) {
-        if (responseJson.body[i - 1].in_cart == '1') {
-          counts = parseInt(counts) + parseInt('1')
-        }
-      }
-      setcartCount(counts)
+      // var counts = 0
+      // for (let i = 1; i <= responseJson.body.length; i++) {
+      //   if (responseJson.body[i - 1].in_cart == '1') {
+      //     counts = parseInt(counts) + parseInt('1')
+      //   }
+      // }
+      // setcartCount(counts)
       setmenuresData(responseJson.body)
       setreloades(!reloades)
     } else {
-      setalert_sms(err)
-      setMy_Alert(true)
+      // setalert_sms(err)
+      // setMy_Alert(true)
     }
   }
 
-  const searchmenuList = async () => {
+  const searchmenuList = async (tt) => {
 
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + searchValue.text, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + tt, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res shop_eat_menu_userid ==>>', responseJson)
+    console.log('the res search shop_eat_menu_userid ==>>', responseJson)
     if (responseJson.headers.success == 1) {
       setmenuresData(responseJson.body)
       // setsearchValue('')
@@ -556,7 +604,6 @@ const FoodDetails = (props) => {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   const itemloop = (item) => {
@@ -638,7 +685,7 @@ const FoodDetails = (props) => {
   const flatliistDesign = (img, ti, rs, des, press, allpress, item, mpress, apress, boxcolor) => {
     return (
       <TouchableOpacity style={{
-        width: '95%', height: 120, marginHorizontal: 5, marginVertical: 8, padding: 10, backgroundColor: '#fff',
+        width: '100%', height: 145, marginHorizontal: 5, marginVertical: 8, padding: 10, backgroundColor: '#fff',
         // borderColor: '#dee4ec',
         shadowColor: 'black',
         shadowOffset: {
@@ -648,7 +695,7 @@ const FoodDetails = (props) => {
         shadowRadius: 10,
         shadowOpacity: 0.9,
         // borderWidth: 1,
-        overflow: 'hidden', 
+        overflow: 'hidden',
         elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
       }}
         onPress={allpress}>
@@ -657,10 +704,24 @@ const FoodDetails = (props) => {
         </View>
         <View style={{ marginLeft: 15 }}>
           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9 }} >{ti}</Text>
-          <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{rs}</Text>
+          <View style={{marginTop:5,backgroundColor:'#fff',alignItems:'flex-start',flexDirection:'row'}}>
+
+       <Rating
+                 type='custom'
+                 ratingCount={5}
+                 imageSize={12}
+                 startingValue={item.rating}
+               // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                // onSwipeRating={(d)=>{setvenderRating(d)}}
+                // onFinishRating={(d)=>{setvenderRating(d)}}
+                readonly={true}
+              />
+     <Text style={{ color: 'gray',  fontSize: 11,top:-2}}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
+       </View>
+          <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 6 }} >Food Preparation Time:</Text>
-            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{des}</Text>
+            <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 3 }} >Food Preparation Time:</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{des}</Text>
           </View>
 
 
@@ -683,9 +744,7 @@ const FoodDetails = (props) => {
             </View>
           }
         </View>
-        {/* <View style={{position:'absolute',width:20,height:20,top:10,right:10,borderRadius:3,backgroundColor:boxcolor,justifyContent:'center'}}>
-  <View style={{width:10,height:10,borderRadius:10,alignSelf:'center',backgroundColor:'#fff'}} />
-  </View> */}
+       
       </TouchableOpacity>
     )
   }
@@ -761,9 +820,10 @@ const FoodDetails = (props) => {
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')}
           img1width={30} img1height={30} img1backgroundColor={'#fff'} img1padding={5} img1borderRadius={4}
           press2={() => { }} title2={resData.name} fontWeight={'bold'} img2height={20} color={Mycolors.TEXT_COLOR}
-          press3={() => { props.navigation.navigate('ShopCart') }} img3width={45} img3height={45} img3={require('../../../assets/Cart.png')}
+          press3={() => { props.navigation.navigate('ShopCart') }} img3width={45} img3height={45}
+          img3={selectedTab != 'Book A Table' && selectedTab != 'Dining' ? require('../../../assets/Cart.png') : ''}
           img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
-        {cartCount != '0' ?
+        {cartCount != '0' && selectedTab != 'Book A Table' && selectedTab != 'Dining' ?
           <View style={{ position: 'absolute', right: 8, top: 4, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
             <Text style={{ fontSize: 11, textAlign: 'center', color: '#fff' }}>{cartCount}</Text>
           </View>
@@ -893,7 +953,7 @@ const FoodDetails = (props) => {
                   : null}
               </View>
 
-              {/*  
+ {/*  
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:dimensions.SCREEN_WIDTH*95/100,alignSelf:'center'}}>
   {design(require('../../../assets/shape_39.png'),'Food Preparation Time','34 minutes','45%',25,28,'red',20)}
   {design(require('../../../assets/shape_40.png'),'Hygiene Food','','45%',25,28,'red',20)}
@@ -906,7 +966,7 @@ const FoodDetails = (props) => {
 </TouchableOpacity>
 </View>
 {design(require('../../../assets/shape_43.png'),'Cost','Cost for two - $24.78(approx)','95%',35,24,5)}
-*/}
+ */}
 
             </View>
             :
@@ -946,7 +1006,8 @@ const FoodDetails = (props) => {
           {selectedTab != 'Book A Table' ?
             <>
 
-              <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}>
+              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}
+              onPress={() => { setmodlevisual1(true) }}>
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
                   <TouchableOpacity style={{
@@ -964,57 +1025,14 @@ const FoodDetails = (props) => {
                     <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image>
                   </TouchableOpacity>
 
-
-
                 </View>
 
 
-              </View>
+              </TouchableOpacity>
               <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
                 <View style={{ width: '98%', height: 40, zIndex: 999 }}>
 
-                  {/* <Toggle
-  value={toggleValue}
-  onPress={(newState) => {
-    setToggleValue(newState)
-    console.log(newState);
-  }}
-  //  leftTitle="Veg"
-  // rightTitle="Non-Veg"
-  trackBarStyle={{
-    borderColor: "red",
-    width:65,height:25,
-    backgroundColor:toggleValue?'red':'green'
-  }}
-  
-  trackBar={{
-    // activeBackgroundColor: "#9ee3fb",
-    // inActiveBackgroundColor: "#3c4145",
-    // borderActiveColor: "#86c3d7",
-    // borderInActiveColor: "#1c1c1c",
-    //borderWidth: 5,
-    backgroundColor:'#fff',
-    width: 62,
-  }}
-
-  thumbButton={{
-    width: 24,
-    height: 24,
-    radius: 24,
-    backgroundColor:'#fff',
-
-  }}
-  thumbStyle={{
-    left:2,
-    right:2,
-    backgroundColor:'#fff',
-  }}
-  containerStyle={{width:70,height:40}}
-/> 
-
-<View style={{position:'absolute',top:14,right:toggleValue ? 'auto' :8,left:toggleValue ? 5 :'auto'}}>
-  <Text style={{color:'#fff',fontSize:toggleValue ? 8 : 12,top:toggleValue ? 0:-2 }}>{toggleValue ? 'Non-Veg' : 'Veg'}</Text>
-</View>*/}
+         
 
                   <DropDownPicker
                     open={menutypeOpen}
@@ -1025,7 +1043,7 @@ const FoodDetails = (props) => {
                     setValue={(v) => { setmenutypevalue(v) }}
                     setItems={(i) => { setmenutypedate(i) }}
                     // listMode="MODAL"
-                    placeholder="Menu Type"
+                    placeholder="Select Item Type"
                     onChangeValue={(value) => {
                       setmenutypevalue(value)
                       console.log('hihiihi', value)
@@ -1077,6 +1095,8 @@ const FoodDetails = (props) => {
                 </View>
 
               </View>
+              {menuresData.length>0 ?   
+              
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
                 {selectedTab != 'Dining' ?
                   selectedTab == 'Take Away' ?
@@ -1102,7 +1122,7 @@ const FoodDetails = (props) => {
                                 item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
                               )
                               : null
-                          }
+                          } 
                         </View>
                       )
                     }
@@ -1227,18 +1247,19 @@ const FoodDetails = (props) => {
                 }
 
               </View>
+              :  
+              <Text style={{color:'#000',textAlign:'center',fontWeight:'bold',marginTop:10}}>No Items Found</Text>}
             </>
-            : null
+            : 
+           null
           }
         </View>
 
         {selectedTab == 'Book A Table' ?
           <>
             <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} style={{ paddingHorizontal: 15, top: -40 }}>
-
               {/* <Text style={{ fontWeight: 'bold', color: Mycolors.Black, marginVertical: 10 }}>Book A Table</Text> */}
               <View style={{ height: 20 }}></View>
-
               <View style={{
                 width: '95%', marginHorizontal: 5, marginVertical: 10, padding: 10, backgroundColor: Mycolors.TimingColor,
                 borderColor: Mycolors.RED, borderWidth: 0.2, borderRadius: 7, alignSelf: 'center',
@@ -1257,15 +1278,10 @@ const FoodDetails = (props) => {
                       press3={() => { setcounter(counter + 1) }} img3={require('../../../assets/add.png')} img3width={10} img3height={10} />
                   </View>
                 </View>
-
               </View>
-
-             
-
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginVertical: 10 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 13 }}>For Today</Text>
               </View> */}
-
               <View style={{ width: '97%', alignSelf: 'center' }}>
                 <FlatList
                   data={futureTimes}
@@ -1287,16 +1303,13 @@ const FoodDetails = (props) => {
                   keyExtractor={item => item}
                 />
               </View>
-
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginVertical: 10 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 13 }}>For Later</Text>
               </View> */}
-              <View style={{width:'95%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:10}}>
-                <Text style={{color:Mycolors.Black,fontWeight:'500',fontSize:13}}>Select Date</Text>
-              </View>
+             
               <View style={{
                 width: '95%', height: 50, marginHorizontal: 5, marginVertical: 10, padding: 10, backgroundColor: '#fff',
-                borderColor: '#dee4ec', borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', shadowColor: '#000',
+                borderColor: '#DEE4EC', borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
                   height: 3
@@ -1324,7 +1337,6 @@ const FoodDetails = (props) => {
                       },
                       zIndex: 99999
                     }}
-
                     androidMode={'spinner'}
                     readOnly={true}
                     style={[styles.datePickerSelectInput]}
@@ -1358,22 +1370,20 @@ const FoodDetails = (props) => {
                     </View>
                     :
                     <TouchableOpacity style={{ width: '100%', height: 50, justifyContent: 'center', backgroundColor: Mycolors.HEADERCOLOR, borderColor: 'transparent', zIndex: -999, borderRadius: 5 }}>
-                      <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{date.toString().substring(0, 16)}</Text>
+                      <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{date ? date.toString().substring(0, 16) : 'Select Date'}</Text>
                     </TouchableOpacity>
                 }
-
               </View>
               <TouchableOpacity style={{
                 width: '95%', height: 50, marginHorizontal: 5, marginVertical: 10, padding: 10, backgroundColor: Mycolors.TimingColor,
-                borderColor: '#dee4ec', borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
+                borderColor: '#DEE4EC', borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
               }}
               >
-                <View style={{ width: 25, height: 25, alignSelf: 'center', top: -2 }}>
+                <View style={{ width: 25, height: 25, alignSelf: 'center', top: 8 }}>
                   <Image source={require('../../../assets/shape_42.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                 </View>
                 <View style={{ marginLeft: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 11, }} >Timings</Text>
-                  
               <View style={{width:'100%', flexDirection:'row'}}>
           <FlatList
             data={slots}
@@ -1386,7 +1396,6 @@ const FoodDetails = (props) => {
               return (
                 // <Text>abc</Text>
                 <TouchableWithoutFeedback onPress={()=>{setSelectedSlot(item)}}>
-                  
                 <View style={[styles.radioButtonContainer]}>
                 <MaterialCommunityIcons name={item.start === selectedSlot.start ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
                 <Text style={{ color: 'black', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.start+' - '+item.end}</Text>
@@ -1398,7 +1407,6 @@ const FoodDetails = (props) => {
           </View>
                 </View>
               </TouchableOpacity>
-
               <View style={{ width: '97%', alignSelf: 'center', marginTop: 10 }}>
                 <FlatList
                   data={futureTimes}
@@ -1420,20 +1428,18 @@ const FoodDetails = (props) => {
                   keyExtractor={item => item}
                 />
               </View>
-
               <View style={{ width: '95%', height: 100, borderRadius: 2, marginTop: 5, alignSelf: 'center' }}>
                 <TextInput
                   value={cookingIns}
                   onChangeText={(e) => setcookingIns(e)}
                   placeholder={'Add Cooking Instructions'}
-                  placeholderTextColor="#bbbbbb"
+                  placeholderTextColor="#BBBBBB"
                   multiline={true}
                   // maxLength={500}
                   // keyboardType="number-pad"
                   autoCapitalize='none'
                   style={[styles.input]}
                 />
-
               </View>
               <View style={{ width: '95%', alignSelf: 'center', marginTop: 30, }}>
                 <MyButtons title="Confirm & Book a Table" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
@@ -1443,10 +1449,9 @@ const FoodDetails = (props) => {
                   //  setmodlevisual1(false)
                   //  setmodlevisual2(false)
                 }} marginHorizontal={20} fontSize={14}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#B10027', '#FD001F']} />
               </View>
             </ScrollView>
-
           </>
           : null
         }
@@ -1455,7 +1460,7 @@ const FoodDetails = (props) => {
 
       </ScrollView>
       {selectedTab == 'Dining' ?
-        <View style={{ width: '92%', alignSelf: 'center', position: 'absolute', bottom: 80 }}>
+        <View style={{ width: '92%', alignSelf: 'center', position: 'absolute', bottom: 60,height:80,backgroundColor:'#fff' }}>
           <MyButtons title="Confirm Order" height={45} width={'100%'} borderRadius={5} alignSelf="center"
             press={() => {
               if (diningItens1.length > 0) {
@@ -1464,7 +1469,7 @@ const FoodDetails = (props) => {
                 setmodlevisual1(false)
                 setmodlevisual2(false)
               } else {
-                Alert.alert('Please add items from the menu to place an order.')
+                Toast.show({text1: 'Please add items from the menu to place an order.'}); 
               }
 
             }} marginHorizontal={20} fontSize={12}
@@ -1494,10 +1499,10 @@ const FoodDetails = (props) => {
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   setsearchValue(e)
-                  searchmenuList()
-                }}
-                // press={() => { Alert.alert('Hi') }}
-                presssearch={() => { searchmenuList() }}
+                  searchmenuList(e.text)
+                 }}
+                 // press={() => { Alert.alert('Hi') }}
+                presssearch={() => { searchmenuList(searchValue.text) }}
                 paddingLeft={9} />
             </View>
 
@@ -1512,7 +1517,7 @@ const FoodDetails = (props) => {
                       {
                         flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { selectedTab == 'Dining' ? '' : postcart(item) }, () => {
                           setClickedItemData(item)
-                          setmodlevisual1(false)
+                          {/* setmodlevisual1(false) */}
                           {/* setmodlevisual2(true) */ }
                         }, item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#fff'
                         )
@@ -1529,6 +1534,9 @@ const FoodDetails = (props) => {
           </ScrollView>
 
         </View>
+
+      {loading ?  <Loader /> : null}
+
       </Modal>
 
       {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model2 Product Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
@@ -1552,15 +1560,15 @@ const FoodDetails = (props) => {
             <TouchableOpacity style={{
               width: '95%', height: 90, marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
               // borderColor: '#dee4ec',
-        shadowColor: 'black',
-        shadowOffset: {
-          width: 0,
-          height: 10
-        },
-        shadowRadius: 10,
-        shadowOpacity: 0.9,
-        // borderWidth: 1,
-        overflow: 'hidden',
+              shadowColor: 'black',
+              shadowOffset: {
+                width: 0,
+                height: 10
+              },
+              shadowRadius: 10,
+              shadowOpacity: 0.9,
+              // borderWidth: 1,
+              overflow: 'hidden',
               elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
             }}
             >
@@ -1795,9 +1803,7 @@ const FoodDetails = (props) => {
 
         </View>
       </Modal>
-      {loading ?
-        <Loader />
-        : null}
+      {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
 
     </SafeAreaView>

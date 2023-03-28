@@ -9,14 +9,14 @@ import { saveUserResult, saveUserToken, setUserType } from '../../redux/actions/
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { baseUrl, login, requestPostApi } from '../../WebApi/Service'
 import Loader from '../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import MyAlert from '../../component/MyAlert';
 import LinearGradient from 'react-native-linear-gradient'
 
 const Login = (props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false)
-  const mapdata = useSelector(state => state.maplocation)
+  const mapdata = useSelector(state => state.maplocation) 
   const [email, setemail] = useState('')
   const [pass, setpass] = useState('')
   const[passView,setPassView]=useState(true)
@@ -43,13 +43,10 @@ const Login = (props) => {
       Alert.alert('Enter password');
     } else {
       setLoading(true)
-      let formdata = new FormData();
-      formdata.append("email", email); 
-      formdata.append("password", pass);
-      // formdata.append("user_group", 3);
       var data={
         email:email,
-        password:pass
+        password:pass,
+        device_id:mapdata.devicetoken
       }
       const { responseJson, err } = await requestPostApi(login, data, 'POST', '')
       setLoading(false)
@@ -81,11 +78,10 @@ const Login = (props) => {
           style={{flex: 1,height:dimensions.SCREEN_HEIGHT}}
          >
        <MyButtons title="Sign In" height={55} width={'100%'} alignSelf="center" imgpress={() => { props.navigation.goBack() }} marginHorizontal={20} 
-       titlecolor={Mycolors.TEXT_COLOR} backgroundColor={'transparent'} img='left' imgtop={16} imgleft={10} imgheight={20} imgwidth={25}/>
+       titlecolor={Mycolors.TEXT_COLOR} backgroundColor={'transparent'}  imgtop={16} imgleft={10} imgheight={20} imgwidth={25}/>
 
       <ScrollView style={{ paddingHorizontal: 20 }}>
         
-
         <Text style={{ marginTop: '15%', fontSize: 25, color: Mycolors.TEXT_COLOR }}>Welcome to</Text>
 <View style={{width:'100%',height:50,padding:7}}>
                      <Image
@@ -136,9 +132,9 @@ const Login = (props) => {
       </ScrollView>
       <View style={{flexDirection:'row',alignSelf:'center',top:-30}}>
         <Text style={[styles.textStyle, { color: Mycolors.TEXT_COLOR }]}
-          onPress={() => { resetStacks('SignUp') }}>Don't have an account?</Text>
+          onPress={() => {}}>Don't have an account?</Text>
           <Text style={[styles.textStyle, { color: Mycolors.BLUE ,textDecorationLine: 'underline'}]}
-          onPress={() => { resetStacks('SignUp') }}> Sign Up</Text>
+          onPress={() => {  }}> Sign Up</Text>
       </View>
          
          {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }

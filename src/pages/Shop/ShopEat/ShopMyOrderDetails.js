@@ -23,30 +23,7 @@ const ShopMyOrderDetails = (props) => {
   const [date, setDate] = useState('')
   const [itemTotal, setItemTotal] = useState(0)
   const User = useSelector(state => state.user.user_details)
-  const [upData, setupData] = useState([
-    {
-      id: '1',
-      title: 'Dining',
-      desc: 'Booking placed by mistake',
-      time: '',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '2',
-      title: 'Table',
-      desc: 'Need to change the Booking slot and date',
-      time: '',
-      img: require('../../../assets/images/images.png'),
-    },
-    {
-      id: '4',
-      title: 'Table',
-      desc: 'Changed my mind',
-      time: '',
-      img: require('../../../assets/images/images.png'),
-    },
-
-  ])
+ 
   const [loading, setLoading] = useState(false)
   const [orderData, setorderData] = useState([])
   const [refreshing, setRefreshing] = useState(false);
@@ -74,9 +51,7 @@ const ShopMyOrderDetails = (props) => {
     // fetchSuccessDetails()
     checkcon()
     wait(2000).then(() => {
-
       setRefreshing(false)
-
     });
   }, []);
 
@@ -110,10 +85,6 @@ const ShopMyOrderDetails = (props) => {
     }
   }
 
-
-
-
-
   const cancleDesign = (title, press, check) => {
     return (
       <TouchableOpacity style={{ width: '100%', height: 50, flexDirection: 'row', alignItems: 'center', borderRadius: 7, borderColor: check ? Mycolors.RED : Mycolors.GrayColor, borderWidth: 0.5, paddingHorizontal: 10, marginTop: 10 }}
@@ -146,7 +117,6 @@ const ShopMyOrderDetails = (props) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-
           />
         }
       >
@@ -170,7 +140,7 @@ const ShopMyOrderDetails = (props) => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <View style={{ flexDirection: 'column' }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
-                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Deliverd, {data?.items?.length} items, ${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
+                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Delivered, {data?.items?.length} items, ${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
               </View>
 
 
@@ -220,7 +190,7 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Other</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>22, Janki colony, Rajasthan,India</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address}</Text>
               </View>
 
             </View>
@@ -234,10 +204,6 @@ const ShopMyOrderDetails = (props) => {
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
             </View>
 
-
-
-
-
           </View>
           {/* Second payment details box  */}
 
@@ -250,14 +216,14 @@ const ShopMyOrderDetails = (props) => {
             {data.items?.map(el=>
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, paddingRight: 20,marginBottom:15 }}>
               
-              <View style={{ width: 20, height: 40, justifyContent: 'center', borderRadius: 10 }}>
-                <Image source={require('../../../assets/Green-chekbox-icon.png')} style={{ width: 18, height: 18, overflow: 'hidden', alignSelf: 'center' }}></Image>
+              <View style={{ width: 22, height: 30, justifyContent: 'center', borderRadius: 10 }}>
+                <Image source={require('../../../assets/restaurant.png')} style={{ width: 22, height: 22, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{el.product_name} x {el.quantity}</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 2, lineHeight: 18 }}>Medium, Cheese burst</Text>
+                <Text style={{ fontSize: 14, color:'#ADC430', top: 2, lineHeight: 22,fontWeight:'600' }}>${parseFloat(Number(el.amount).toFixed(2))}</Text>
               </View>
-              <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>${parseFloat(Number(el.amount).toFixed(2))}</Text>
+              {/* <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>${parseFloat(Number(el.amount).toFixed(2))}</Text> */}
             </View>
             )}
             {/* <View style={{ borderColor: '#E8E7E9', borderWidth: 1, borderStyle: 'solid', }} />
@@ -273,13 +239,13 @@ const ShopMyOrderDetails = (props) => {
               <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>$78.00</Text>
             </View> */}
 
-
-
             <View style={{
               width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#ADC430',
                 borderRadius: 7, alignSelf: 'center'
             }}
             >
+
+
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
@@ -290,14 +256,21 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >$20.00</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${data.discount_amount}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.taxes).toFixed(2))}</Text>
               </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
+                <Text style={{ color: "white", fontSize: 13,  }} >Delivery Charges</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.delivery_charges).toFixed(2))}</Text>
+              </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ffff', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
-                <Text style={{ color: Mycolors.Black, fontSize: 13,   }} >Paid Via Bank</Text>
+               <View style={{flexDirection:'row'}}>
+                <Text style={{ color: Mycolors.Black, fontSize: 13,   }} >Paid Via </Text>
+                <Text style={{ color: Mycolors.Black, fontSize: 13,   }} >{data.payment_type}</Text>
+               </View>
                 <View style={{flexDirection:"column"}}>
                 <Text style={{ color: Mycolors.GrayColor, fontSize: 12, fontWeight: '600', textAlign: 'left' }} >Bill Total</Text>
                 <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
@@ -307,27 +280,7 @@ const ShopMyOrderDetails = (props) => {
             </View>
           </View>
 
-          {/* {
-            orderData.map((item, index) => {
-              return (
-
-                <>
-                  {item.order_type == 'booked-table' || item.order_type == 'dining' ?
-                   
-                    :
-                    null
-                  }
-                </>
-
-
-
-
-              )
-            }
-            )
-          } */}
-
-
+         
 
         </View>
         <View style={{ height: 100 }} />

@@ -4,8 +4,7 @@ import HomeHeaderRoundBottom from '../../Deal/B2b/Homeheaderroundbottom';
 import MovieSearch from './MovieSearch';
 
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
-// import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
-// import MyButtons from '../../component/MyButtons';
+
 
 const MovieHome = (props) => {
     const [searchValue, setsearchValue] = useState('')

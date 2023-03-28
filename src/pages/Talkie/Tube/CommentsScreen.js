@@ -3,7 +3,7 @@ import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import HomeHeader from '../../../component/HomeHeader';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import LinearGradient from 'react-native-linear-gradient'
 // import AppIntroSlider from 'react-native-app-intro-slider';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';

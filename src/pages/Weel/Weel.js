@@ -10,7 +10,7 @@ import { Circle, G, Path, TSpan, Svg, Image, Defs,Use, TextPath,Text as Ptext } 
 import * as d3 from 'd3'
 import {v4 as uuidv4 ,uuid} from 'uuid';
 import 'react-native-get-random-values'
-import Hand2 from '../../assets/svgs/BottomTabIcons/hand2'
+// import Hand2 from '../../assets/svgs/BottomTabIcons/hand2'
 const Weel = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const [goon,setgoon] = useState(false)
@@ -720,14 +720,7 @@ const ChartClick = Platform.select({
         <View style={{ alignSelf: 'center', marginVertical: 30 }}>
           <Text style={{ textAlign: 'center', fontSize: 18, color: Mycolors.TEXT_COLOR, fontWeight: '500' }}>Select From</Text>
           <Text style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>KinenGo Wheel</Text>
-          <Text onPress={()=>props.navigation.navigate('ShopEat')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopEat</Text>
-          {/* <Text onPress={()=>props.navigation.navigate('ShopIntertenment')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopIntertenment</Text> */}
-          <Text onPress={()=>props.navigation.navigate('ShopProduct')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ShopProduct</Text>
-          {/* <Text onPress={()=>props.navigation.navigate('ConnectPeople')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectPeople</Text>
-          <Text onPress={()=>props.navigation.navigate('ConnectDating')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>ConnectDating</Text>
-          <Text onPress={()=>props.navigation.navigate('DealService')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>DealService</Text>
-          <Text onPress={()=>props.navigation.navigate('DealLearning')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>DealLearning</Text>
-          <Text onPress={()=>props.navigation.navigate('CreationFashion')} style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }}>CreationFashion</Text> */}
+          <Text style={{ textAlign: 'center', fontSize: 24, color: Mycolors.SearchBoxColor, fontWeight: '600' }} onPress={()=>{props.navigation.navigate('ShopEat')}} >ShopEat</Text>
         </View>
 <View>
 <View style={{alignSelf:'center',borderColor:'#000',borderWidth:1,borderRadius:200,padding:4}}>

@@ -10,13 +10,13 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import LinearGradient from 'react-native-linear-gradient'
 import AppIntroSlider from 'react-native-app-intro-slider';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
-import { createThumbnail } from "react-native-create-thumbnail";
+// import { createThumbnail } from "react-native-create-thumbnail";
 
 const LearningMessage = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -164,36 +164,36 @@ const [teachersList, setTeachersList]=useState([
 
  },[])
  useEffect(()=>{
-  generateThumb()
+  // generateThumb()
 },[])
-const generateThumb = async () => {
-  setLoading(true)
-  const thumbs = []
-  try {
-    for(let i = 0; i < videoDetails?.length; i++){
-      const resp = await createThumbnail({
-        url: videoDetails[0].url,
-        timeStamp: 10000,
-        // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-      })
-      thumbs.push(resp.path)
-    }
-    // const resp = await createThumbnail({
-    //   url: videoDetails?.url,
-    //   timeStamp: 10000,
-    //   // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-    // })
-    const videoDetailsCopy = [...videoDetails]
-    const updatedVideoDetails = videoDetailsCopy.map((el, index)=>{
-      return {...el, thumbnail: thumbs[index]}
-    })
-    setVideoDetails([...updatedVideoDetails])
-    // setVideoDetails({...videoDetails, thumbnail: resp.path})
-  } catch (error) {
-    console.log('thumbnail creating error', error);      
-  }
-  setLoading(false)
-}
+// const generateThumb = async () => {
+//   setLoading(true)
+//   const thumbs = []
+//   try {
+//     for(let i = 0; i < videoDetails?.length; i++){
+//       const resp = await createThumbnail({
+//         url: videoDetails[0].url,
+//         timeStamp: 10000,
+//         // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+//       })
+//       thumbs.push(resp.path)
+//     }
+//     // const resp = await createThumbnail({
+//     //   url: videoDetails?.url,
+//     //   timeStamp: 10000,
+//     //   // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+//     // })
+//     const videoDetailsCopy = [...videoDetails]
+//     const updatedVideoDetails = videoDetailsCopy.map((el, index)=>{
+//       return {...el, thumbnail: thumbs[index]}
+//     })
+//     setVideoDetails([...updatedVideoDetails])
+//     // setVideoDetails({...videoDetails, thumbnail: resp.path})
+//   } catch (error) {
+//     console.log('thumbnail creating error', error);      
+//   }
+//   setLoading(false)
+// }
 
  const _renderItem = ({ item }) => {
   return (

@@ -19,6 +19,7 @@ const MyButtons = (props) => {
             height:props.height ? props.height : 'auto',
             right:props.right ? props.right : 'auto',
             overflow:'hidden',
+            paddingHorizontal: props.paddingHorizontal ? props.paddingHorizontal : 'auto',
             // shadowColor:  Mycolors.ORANGE,
             // shadowOffset: {
             //   width:3,

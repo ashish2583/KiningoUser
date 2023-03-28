@@ -8,10 +8,10 @@ import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import LinearGradient from 'react-native-linear-gradient'
 import VideoPlayer from 'react-native-video-player'
-import { createThumbnail } from "react-native-create-thumbnail";
+// import { createThumbnail } from "react-native-create-thumbnail";
 import Loader from '../../../WebApi/Loader';
 import PostsModal from './modals/PostsModal';
 import ProfileScreenMoreModal from './modals/ProfileScreenMoreModal';
@@ -142,7 +142,7 @@ const PeopleProfileScreen = (props) => {
   ])
   const multiSliderValuesChange = (values) => {setMultiSliderValue(values)}
   useEffect(()=>{
-    generateThumb()
+    // generateThumb()
   },[])
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('blur', () => {
@@ -151,29 +151,29 @@ const PeopleProfileScreen = (props) => {
     return unsubscribe;
   }, [props.navigation]);
 
-  const generateThumb = async () => {
-    setLoading(true)
-    try {
-      const resp = await createThumbnail({
-        url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
-        timeStamp: 10000,
-        // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-      })
-      const updatedData = upData.map(el=>{
-        if(el.type === 'video'){
-          return {...el, thumbnail: resp.path}
-        }else{
-          return el
-        }
-      })
-      setupData([...updatedData])
-      setOriginalData([...updatedData])
-      setFilteredData([...updatedData])
-    } catch (error) {
-      console.log('thumbnail creating error', error);      
-    }
-    setLoading(false)
-  } 
+  // const generateThumb = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const resp = await createThumbnail({
+  //       url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
+  //       timeStamp: 10000,
+  //       // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+  //     })
+  //     const updatedData = upData.map(el=>{
+  //       if(el.type === 'video'){
+  //         return {...el, thumbnail: resp.path}
+  //       }else{
+  //         return el
+  //       }
+  //     })
+  //     setupData([...updatedData])
+  //     setOriginalData([...updatedData])
+  //     setFilteredData([...updatedData])
+  //   } catch (error) {
+  //     console.log('thumbnail creating error', error);      
+  //   }
+  //   setLoading(false)
+  // } 
   
  const onChangeFilter = (newFilter) =>{
     if(newFilter === selectedFilter){

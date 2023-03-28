@@ -4,7 +4,7 @@ import MyButtons from '../../component/MyButtons';
 import MyInputText from '../../component/MyInputText';
 import { dimensions, Mycolors } from '../../utility/Mycolors';
 import MyAlert from '../../component/MyAlert';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import LinearGradient from 'react-native-linear-gradient'
 import CountryPicker, { getAllCountries, getCallingCode,DARK_THEME } from 'react-native-country-picker-modal';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
@@ -69,6 +69,7 @@ useEffect(()=>{
                 password: pass,
                 phone: code+number,
                 address:address
+                
               }
       const { responseJson, err } = await requestPostApi(register, data, 'POST', '')
       setLoading(false)

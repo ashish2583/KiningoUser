@@ -6,7 +6,7 @@ import MyButtons from '../../../component/MyButtons';
 import Share from 'react-native-share';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
  
 import { Rating, AirbnbRating } from 'react-native-ratings';

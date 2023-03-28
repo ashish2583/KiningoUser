@@ -18,7 +18,7 @@ import firestore from '@react-native-firebase/firestore'
 import messaging from '@react-native-firebase/messaging';
 import {baseUrl,common_vehicle_type,booking_ride_payment,booking_ride_request,requestPostApi,requestGetApi} from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyAlert from '../../../component/MyAlert'
 // User Home 5
@@ -111,7 +111,7 @@ const Traking = (props) => {
           stylers: [{color: '#17263c'}],
         },
       ];
-      const [modlevisual, setmodlevisual] = useState(true);
+      const [modlevisual, setmodlevisual] = useState(false);
       const [mtype,setmType]=useState('standard')
       const [rideSterted,setrideSterted]=useState(false)
       const [estimatedTime,setestimatedTime]=useState('')
@@ -197,7 +197,8 @@ const Traking = (props) => {
         AsyncStorage.removeItem('userRide'); 
         setpayments(true)
         setmodlevisual1(false)
-        Toast.show(responseJson.message)
+        Alert.alert(responseJson.message)
+        // Toast.show(responseJson.message)
         }
         // props.navigation.navigate('ReviewRating',{from:'Home5'})
       }else{
@@ -206,9 +207,10 @@ const Traking = (props) => {
             props.navigation.navigate('AddBusinessCard',{from:'Home5',item:''})
             }
           }
+          Alert.alert(responseJson.message)
         // setalert_sms(responseJson.message)
         // setMy_Alert(true)
-        Toast.show(responseJson.message)
+        // Toast.show(responseJson.message)
       }
     }else{  
       console.log('The error is==>>',err)
@@ -322,7 +324,7 @@ const Traking = (props) => {
           showsUserLocation={true}
           userLocationCalloutEnabled={true}
           showsMyLocationButton={true}
-          mapPadding={{ top: 50, right: 0, bottom: modlevisual? 150 : 0 , left: 0 }}
+          mapPadding={{ top: 0, right: 0, bottom: modlevisual? 150 : 0 , left: 0 }}
           showsScale={true}
           showsCompass={true}
           rotateEnabled={true}
@@ -375,11 +377,9 @@ const Traking = (props) => {
 
    
 <SafeAreaView>
-<View style={{position:'absolute',top:10,backgroundColor:Mycolors.BG_COLOR,borderRadius:12,width:(dimensions.SCREEN_WIDTH*100/100)-25,height:40,justifyContent:'center',paddingHorizontal:5,alignSelf:'center'}}>
-   <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between'}} onPress={()=>{props.navigation.goBack()}}>
-     <Text style={{fontSize:10,color:'#9FACBF',paddingHorizontal:5}}>Pizza</Text>
-    {/* <Image source={Mycolors.BG_COLOR=='#fff'? require('../../../assets/shape_33.png'):require('../../../assets/shape_33.png')} style={{ width: 15, height: 7,borderRadius:10,alignSelf:'center',left:-3}}></Image> */}
-    <Text style={{fontSize:10,color:Mycolors.TEXT_COLOR,paddingHorizontal:5}}>{mapdata.destnationAddress.substring(0,27)}</Text>
+<View style={{position:'absolute',top:10,backgroundColor:Mycolors.BG_COLOR,borderRadius:12,width:40,height:40,justifyContent:'center',paddingHorizontal:5,left:10}}>
+   <TouchableOpacity style={{}} onPress={()=>{props.navigation.goBack()}}>
+    <Image source={Mycolors.BG_COLOR=='#fff'? require('../../../assets/ArrowLeft.png'):require('../../../assets/shape_33.png')} style={{ width: 25, height: 15,alignSelf:'center'}}></Image>
     </TouchableOpacity>
     </View>
    </SafeAreaView> 
@@ -390,15 +390,7 @@ const Traking = (props) => {
     </TouchableOpacity>
     </View> 
    </SafeAreaView> */}
-   {Platform.OS=='android'  ?
-      <View style={{ position: 'absolute',bottom:modlevisual ? 150 : 10, right: 20, backgroundColor: '#fff', borderRadius: 10, width: 40, height: 40, justifyContent: 'center' }}>
-      <TouchableOpacity onPress={() => { c_pos_click() }}>
-        <Image source={require('../../../assets/shape_33.png')} style={{ width: 25, height: 25, alignSelf: 'center' }}></Image>
-      </TouchableOpacity>
-    </View>
-      : 
-      null
-    }
+  
 
 
 
@@ -431,11 +423,11 @@ const Traking = (props) => {
               <View style={{width:'auto',height:60,backgroundColor:Mycolors.BG_COLOR,alignSelf:'flex-end',position:'absolute',right:0,top:0}}>
               <View style={{flexDirection:'row',alignItems:'flex-end',position:'absolute',right:15,}}>
           
-          <TouchableOpacity style={{width: 38, height: 38,marginLeft:53,backgroundColor:'transparent',justifyContent:'center',borderRadius:5,borderColor:Mycolors.ORANGE,borderWidth:1}}
-           onPress={()=>{props.navigation.navigate('Chat',{from:'home3'})}}
-          >
-          <Image source={require('../../../assets/shapmessage.png')} style={{width: 25, height: 25,alignSelf:'center' }}></Image>
-          </TouchableOpacity>
+            <TouchableOpacity style={{width: 38, height: 38,marginLeft:53,backgroundColor:'transparent',justifyContent:'center',borderRadius:5,borderColor:Mycolors.ORANGE,borderWidth:1}}
+            onPress={()=>{props.navigation.navigate('Chat',{from:'home3'})}}
+            >
+            <Image source={require('../../../assets/shapmessage.png')} style={{width: 25, height: 25,alignSelf:'center' }}></Image>
+            </TouchableOpacity>
           <TouchableOpacity style={{width: 38, height: 38,marginLeft:3,backgroundColor:'transparent',justifyContent:'center',borderRadius:5,borderColor:Mycolors.TEXT_COLOR,borderWidth:1}}
           onPress={()=>{dialCall()}}
           >

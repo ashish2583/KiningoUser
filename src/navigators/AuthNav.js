@@ -17,7 +17,7 @@ const AuthNav=(props)=>{
            <Stack.Navigator
             screenOptions={{ headerShown:false,}}
              >
-            <Stack.Screen component = {Welcome} name="Welcome" />
+            {/* <Stack.Screen component = {Welcome} name="Welcome" /> */}
             <Stack.Screen component = {Login}  name="Login" />
             <Stack.Screen component = {Otp}  name="Otp" />
             <Stack.Screen component={SignUp} name={'SignUp'}/>

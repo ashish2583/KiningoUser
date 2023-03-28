@@ -11,7 +11,6 @@ const initialState = {
     selected_car_tab:1,
     drv_id:'',
     venderDeatil:'',
-    productVendorDetail:'',
     corp_user:null,
     dashdata:''
 }
@@ -87,11 +86,6 @@ export default (state = initialState ,action) => {
                     return {
                         ...state,
                         venderDeatil :action.venderDeatil
-                    }
-        case types.PRODUCTVERDERDETAILS :
-                    return {
-                        ...state,
-                        productVendorDetail :action.productVendorDetail
                     }
         case types.SAVE_CORP_USER_RESULTS :
                     return {

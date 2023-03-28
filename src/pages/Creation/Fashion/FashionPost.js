@@ -10,13 +10,13 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import LinearGradient from 'react-native-linear-gradient'
 import AppIntroSlider from 'react-native-app-intro-slider';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
-import { createThumbnail } from "react-native-create-thumbnail";
+// import { createThumbnail } from "react-native-create-thumbnail";
 import ViewMoreText from 'react-native-view-more-text';
 import RepliesModal from './components/RepliesModal'
 

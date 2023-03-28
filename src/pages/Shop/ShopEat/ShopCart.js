@@ -1475,9 +1475,7 @@ const getcart = async () => {
 
                         <View style={{height:20,}} />
                         
-                        {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
-                          titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
-
+                     
                     </ScrollView>
                     <View style={{marginBottom:20}}>
                        <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}

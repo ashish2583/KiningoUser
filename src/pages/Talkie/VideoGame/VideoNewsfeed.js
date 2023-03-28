@@ -6,7 +6,7 @@ import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import MyButtons from '../../../component/MyButtons';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
  
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker';

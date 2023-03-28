@@ -10,7 +10,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import ViewMoreText from 'react-native-view-more-text';
 
 const DatingMoreInfo = (props) => {
@@ -304,9 +304,11 @@ const DatingMoreInfo = (props) => {
                 onChangeText={(e) => {
                   const value = e.replace(/[^0-9]/g, '')
                   if(Number(value) > 100){
-                    Toast.show('Miles cannot be more than 100', Toast.SHORT)
+                    Alert.alert('Miles cannot be more than 100')
+                    // Toast.show('Miles cannot be more than 100', Toast.SHORT)
                   }else if(Number(value) < 0){
-                    Toast.show('Miles cannot be less than 0', Toast.SHORT)
+                    Alert.alert('Miles cannot be more than 0')
+                    // Toast.show('Miles cannot be less than 0', Toast.SHORT)
                   } else{
                     multiSliderValuesChange([Number(value)])
                   }

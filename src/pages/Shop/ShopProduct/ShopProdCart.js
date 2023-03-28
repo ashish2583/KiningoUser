@@ -8,7 +8,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
-import Loader2 from '../../../WebApi/Loader2';
+// import Loader2 from '../../../WebApi/Loader2';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
@@ -1065,7 +1065,7 @@ const applyCoupan = async () => {
 
 </ScrollView>
 {loading ? <Loader /> : null}
-{loading2 ? <Loader2 text={loaderText} /> : null}
+{/* {loading2 ? <Loader2 text={loaderText} /> : null} */}
 {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
 
 {modlevisual ?

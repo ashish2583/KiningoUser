@@ -25,14 +25,14 @@ const DrawerNav = (props) => {
       drawerWidth={dimensions.SCREEN_WIDTH}
       drawerContent={(props) => <MyDrawer {...props} />}
       >
-      <Drawer.Screen name="BottomNav" component={BottomNav} 
+      {/* <Drawer.Screen name="BottomNav" component={BottomNav} 
       options={{
         drawerLabel: () => null,
         title: null,
         drawerIcon: () => null
         }}
-      />
-      {/* <Drawer.Screen name="WeelStack" component={WeelStack} /> */}
+      /> */}
+      <Drawer.Screen name="WeelStack" component={WeelStack} />
     </Drawer.Navigator>
      );
   }

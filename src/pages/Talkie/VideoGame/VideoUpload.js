@@ -7,7 +7,7 @@ import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import MyButtons from '../../../component/MyButtons';
  
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
  

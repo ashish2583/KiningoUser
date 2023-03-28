@@ -9,7 +9,7 @@ import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import LinearGradient from 'react-native-linear-gradient'
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
 import VideoPlayer from 'react-native-video-player'

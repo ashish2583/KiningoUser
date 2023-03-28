@@ -8,11 +8,13 @@ import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import { baseUrl, login, vendor_lists_subcat, shop_eat_business, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
-
+import GetLocation from 'react-native-get-location'
+import Geocoder from "react-native-geocoding";
+import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 const ShopSearch = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const dispatch = useDispatch();
@@ -26,6 +28,19 @@ const ShopSearch = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        console.log('locations latitude longitude', location);
+        setlat(location.latitude)
+        setlan(location.longitude)
+      })
+      .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+      })
     AllVenders()
     console.log('hohohohoho', props.route.params.datas);
     setresData(props.route.params.datas)
@@ -79,10 +94,9 @@ const ShopSearch = (props) => {
   }, []);
 
 
-  const homePageSearch = async () => {
-
+  const homePageSearch = async (text) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_eat + '?name=' + searchValue.text + '&lat=' + lat + '&long=' + lan, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat + '?name=' + text + '&lat=' + lat + '&long=' + lan, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -97,7 +111,7 @@ const ShopSearch = (props) => {
   const AllVenders = async () => {
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_eat_business, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat_business+'?lat=' + lat + '&long=' + lan, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -131,7 +145,7 @@ const ShopSearch = (props) => {
               if (props.route.params.from == 'CatClick') {
                 catSerch(e.text)
               } else {
-                homePageSearch()
+                homePageSearch(e.text)
               }
               setsearchValue(e)
               if (e.text.length == 0) {
@@ -143,7 +157,7 @@ const ShopSearch = (props) => {
               if (props.route.params.from == 'CatClick') {
                 catSerch(searchValue.text)
               } else {
-                homePageSearch()
+                homePageSearch(searchValue.text)
               }
 
             }}

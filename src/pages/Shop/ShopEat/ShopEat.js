@@ -8,15 +8,18 @@ import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import { baseUrl, login, shop_eat_business, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-toast-message';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
 import GetLocation from 'react-native-get-location'
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import { log } from 'react-native-reanimated';
 
 Geocoder.init(GoogleApiKey);
+const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
 
 const ShopEat = (props) => {
   const [searchValue, setsearchValue] = useState('')
@@ -81,6 +84,11 @@ const ShopEat = (props) => {
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
   const [addre, setaddre] = useState(' ');
+  const [cartCount, setcartCount] = useState('0')
+  const mapdata = useSelector(state => state.maplocation) 
+  const [googleAddress, setGoogleAddress] = useState('');
+  const [googleLatLng, setGoogleLatLng] = useState({});
+
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -91,14 +99,14 @@ const ShopEat = (props) => {
         setlat(location.latitude)
         setlan(location.longitude)
         let My_cord = { latitude: location.latitude, longitude: location.longitude }
-
+         homePage(location.latitude,location.longitude)
         LatlongTo_address(My_cord)
       })
       .catch(error => {
         const { code, message } = error;
         console.warn(code, message);
       })
-    homePage()
+   
     // venderList()
   }, [])
 
@@ -133,11 +141,11 @@ const ShopEat = (props) => {
     });
   }, []);
 
-  const homePage = async () => {
-
+  const homePage = async (l,lo) => {
+    console.log('the res==>>Home')
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -147,7 +155,6 @@ const ShopEat = (props) => {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   const homePageSearch = async () => {
@@ -165,13 +172,10 @@ const ShopEat = (props) => {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   const venderList = async () => {
-
     setLoading(true)
-
     const { responseJson, err } = await requestGetApi(shop_eat_business, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>shop_eat_business', responseJson)
@@ -181,7 +185,6 @@ const ShopEat = (props) => {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   return (
@@ -191,29 +194,118 @@ const ShopEat = (props) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-
           />
         }
+        showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled"
       >
+      <View>
         <HomeHeader height={60} paddingHorizontal={15}
-          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
+          press1={() => { props.navigation.goBack() }}  img1width={18} img1height={15}
           press2={() => { }} title2={'Food'} fontWeight={'500'} img2height={20}
-          press3={() => { }} img3width={25} img3height={25} />
-        <View style={{ width: '95%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.025)', borderRadius: 10, borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2 }}>
+          press3={() => {props.navigation.navigate('ShopEatNotificationList') }} img3width={25} img3height={25} img3={require('../../../assets/Bell.png')} />
+        {cartCount != '0' ?
+          <View style={{ position: 'absolute', right: 8, top: 8, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
+            <Text style={{ fontSize: 11, textAlign: 'center', color: '#fff' }}>{cartCount}</Text>
+          </View>
+          : null
+        }
+      </View>
+
+    <View style={{flexDirection:'row',justifyContent:'space-between',
+    marginHorizontal:15,backgroundColor:'rgba(0,0,0,0.025)',
+   paddingHorizontal:15,paddingVertical:5,
+    alignSelf:'center',alignItems:'center',
+         shadowColor:  'gray',
+            shadowOffset: {
+              width:3,
+              height:3
+            }, 
+            shadowRadius: 3,
+            shadowOpacity: 0.5,
+            justifyContent: 'center',
+            elevation: 3, borderRadius:5,}}>
+<TouchableOpacity>
+<Image source={require('../../../assets/shape_33.png')} style={{width:11,height:15}}></Image>
+ </TouchableOpacity>  
+   
+
+ <GooglePlacesAutocomplete
+placeholder={addre.substring(0, 45)}
+textInputProps={{
+placeholderTextColor: '#c9c9c9',
+// placeholderTextColor: Colors.BLACK,
+returnKeyType: 'search',
+// onFocus: () => setShowPlacesList(true),
+// onBlur: () => setShowPlacesList(false),
+multiline:true,
+// onTouchStart: ()=>{downButtonHandler()}
+          height:45,
+          // shadowColor:  'gray',
+          //   shadowOffset: {
+          //     width:3,
+          //     height:3
+          //   }, 
+          //   shadowRadius: 5,
+          //   shadowOpacity: 1.0,
+          //   justifyContent: 'center',
+          //   elevation: 5
+
+}}
+enablePoweredByContainer={false}
+listViewDisplayed={'auto'}
+styles={{
+  textInput: {
+    backgroundColor: 'transparent',
+    height: 35,
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 12,
+    color:'gray',
+    flex: 1,
+  },
+}}
+onPress={(data, details = null) => {
+  console.log(data, details);
+// 'details' is provided when fetchDetails = true
+// setShowPlacesList(false)
+homePage(details.geometry.location.lat,details.geometry.location.lng)
+setGoogleLatLng({
+lat: details.geometry.location.lat,
+lng: details.geometry.location.lng,
+});
+setGoogleAddress(data?.description);
+}}
+GooglePlacesDetailsQuery={{
+fields: 'geometry',
+}}
+fetchDetails={true}
+// currentLocation={true}
+query={{
+key: GOOGLE_MAPS_APIKEY,
+language: 'en',
+}}
+/> 
+
+   
+    
+
+   <TouchableOpacity onPress={()=>{props.navigation.navigate('ShopEatFilter')}}>
+    <Image source={require('../../../assets/shape_32.png')} style={{width:25,height:25}}></Image>
+   </TouchableOpacity>
+    
+     </View> 
+
+{/*              
+                <View style={{ width: '95%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.025)', borderRadius: 10, borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2 }}>
           <HomeHeader height={40} paddingHorizontal={15}
             press1={() => { }} img1={require('../../../assets/shape_33.png')} img1width={11} img1height={15}
             press2={() => { }} title2={addre.substring(0, 45)} fontWeight={'500'} img2height={20} right={dimensions.SCREEN_WIDTH * 7 / 100} fontSize={10} color={Mycolors.GrayColor}
             press3={() => { props.navigation.navigate('ShopEatFilter') }} img3={require('../../../assets/shape_32.png')} img3width={25} img3height={25} />
-        </View>
+           </View> */}
 
         <View style={{ width: '96%', alignSelf: 'center' }}>
-          {/* <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
-serchValue={searchValue} 
-onChangeText={(e)=>{ props.navigation.navigate('ShopSearch',{datas:[],from:'search'})}} 
-press={()=>{Alert.alert('Hi')}}
-presssearch={()=>{homePageSearch()}}
-paddingLeft={50}/> */}
-
+         
           <TouchableOpacity style={{ width: '98%', height: 50, borderRadius: 10, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginTop: 10,justifyContent:"space-between" }}
             onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}>
             
@@ -276,7 +368,7 @@ paddingLeft={50}/> */}
                       </TouchableOpacity>
                       <View style={{left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: 'medium', left: 2,fontFamily: 'Roboto-italic' }}>Cusine Name: Italian +2</Text>
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Cusine Name: Italian +2</Text>
                       </View>
                       <View style={{ padding: 5,left: 5,top:-3 }}>
                         <View style={{ flexDirection: 'row', }}>
@@ -350,7 +442,7 @@ paddingLeft={50}/> */}
                           <Image source={{ uri: item.category_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 50, overflow: 'hidden' }}></Image>
                         </View>
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
-                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >+25 Places NearBy</Text>
+                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >{item.total_vendors==0 ? 'No Places NearBy' : '+'+item.total_vendors+'Places NearBy'} </Text>
                       </TouchableOpacity>
                       </ImageBackground>
                     </View>
@@ -367,7 +459,7 @@ paddingLeft={50}/> */}
         <View style={{ height: 100 }} />
 
       </ScrollView>
-      <View style={{ width: '95%', height: 60, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: 15, alignSelf: 'center' }}>
+      <View style={{ width: '100%', height: 60, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: 0, alignSelf: 'center',backgroundColor:'#fff', height:80,paddingHorizontal:'3%'}}>
         <View style={{ width: '47%' }}>
           <MyButtons title="Dining & Booked Table" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={() => { props.navigation.navigate('DiningAndBookTable') }} marginHorizontal={20} fontSize={11}
             titlecolor={Mycolors.BG_COLOR} hLinearColor={['#fd001f', '#b10027']} />

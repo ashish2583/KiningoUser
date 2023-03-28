@@ -6,7 +6,6 @@ import Shop from '../pages/Shop/Shop';
 import ShopEat from '../pages/Shop/ShopEat/ShopEat';
 import FoodDetails from '../pages/Shop/ShopEat/FoodDetails';
 import ShopMyOrder from '../pages/Shop/ShopEat/ShopMyOrder';
-import ShopMyOrderDetails from '../pages/Shop/ShopEat/ShopMyOrderDetails';
 import ShopReview from '../pages/Shop/ShopEat/ShopReview';
 import ShopPayment from '../pages/Shop/ShopEat/ShopPayment';
 import ShopCart from '../pages/Shop/ShopEat/ShopCart';
@@ -15,6 +14,8 @@ import ShopEatFilter from '../pages/Shop/ShopEat/ShopEatFilter';
 import CatSearch from '../pages/Shop/ShopEat/CatSearch';
 import DiningAndBookTable from '../pages/Shop/ShopEat/DiningAndBookTable';
 import Traking from '../pages/Shop/ShopEat/Traking';
+import ShopMyOrderDetails from '../pages/Shop/ShopEat/ShopMyOrderDetails';
+import ShopEatNotificationList from '../pages/Shop/ShopEat/ShopEatNotificationList'
 const ShopEatStack=(props)=>{
    
     const Stack = createNativeStackNavigator();
@@ -26,7 +27,6 @@ const ShopEatStack=(props)=>{
             <Stack.Screen component = {ShopEat} name="ShopEat" />
             <Stack.Screen component = {FoodDetails} name="FoodDetails" />
             <Stack.Screen component = {ShopMyOrder} name="ShopMyOrder" />
-            <Stack.Screen component = {ShopMyOrderDetails} name="ShopMyOrderDetails" />
             <Stack.Screen component = {ShopReview} name="ShopReview" />
             <Stack.Screen component = {ShopPayment} name="ShopPayment" />
             <Stack.Screen component = {ShopCart} name="ShopCart" />
@@ -36,6 +36,8 @@ const ShopEatStack=(props)=>{
             <Stack.Screen component = {DiningAndBookTable} name="DiningAndBookTable" />
             <Stack.Screen component = {Shop} name="Shop" />
             <Stack.Screen component = {Traking} name="Traking" />
+            <Stack.Screen component = {ShopMyOrderDetails} name="ShopMyOrderDetails" />
+            <Stack.Screen component = {ShopEatNotificationList} name="ShopEatNotificationList" />
 
         </Stack.Navigator>
 

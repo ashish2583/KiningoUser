@@ -10,7 +10,7 @@ import { requestPostApi, requestGetApi } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyAlert from '../../../component/MyAlert';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 // import HomeHeader from '../../component/HomeHeader';
 import HomeHeaderRoundBottom from './Homeheaderroundbottom';
 
