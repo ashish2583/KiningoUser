@@ -12,11 +12,13 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_details, shop_product_business_userid } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_productlist, shop_product_details, shop_product_similar_Products, shop_product_business_userid } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message'
+import moment from 'moment'
 
 const ShopProductDetails = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
@@ -90,8 +92,13 @@ const ShopProductDetails = (props) => {
   const [cartCount, setcartCount] = useState('0')
   const [productDetailsData, setProductDetailsData] = useState({})
   const [refreshing, setRefreshing] = useState(false);
+  const [showTakeAwayDate, setShowTakeAwayDate] = useState(false);
+  const [takeAwayDate, setTakeAwayDate] = useState('');
   useEffect(()=>{
+    console.log('userdetaile.token', userdetaile.token);
+    console.log('props.route.params', props.route.params);
     getProductDetails()
+    // getSimilarProducts()
   },[])
   const checkcon=()=>{
     getProductDetails()
@@ -114,7 +121,32 @@ const ShopProductDetails = (props) => {
   if(false){
     endPoint += '&product_type=Delivery'
   }
-  let endPoint = shop_product_details + props.route.params.productId
+  let endPoint = shop_product_details + '?id=pizza'
+  console.log('endPoint', endPoint);
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
+  setLoading(false)
+  console.log('the res==>>product details', responseJson)
+  if (responseJson.headers.success == 1) {
+    console.log('the res==>>body.product details', responseJson.body)
+    setProductDetailsData(responseJson.body)
+  } else {
+    Toast.show({text1: err})
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
+  }
+
+}
+ const getSimilarProducts = async () => {
+  // let endPoint = shop_product_business_userid+props.route.params.vendorId+'?category='+props.route.params.category+'&name='+props.route.params.productName
+  if(false){
+    endPoint += '&product_type=Take Away'
+  }
+  if(false){
+    endPoint += '&product_type=Delivery'
+  }
+  let endPoint = shop_product_similar_Products + props.route.params.productId
+  console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
   setLoading(false)
@@ -349,7 +381,24 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 <View>
 <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
 <View style={{width:'95%',marginTop:15,alignSelf:'center'}}>
-
+<TouchableOpacity
+  onPress={() => setShowTakeAwayDate(true)}
+  style={{
+    marginVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    backgroundColor: 'white',
+    shadowRadius: 15,
+    elevation: 2,
+    padding: 10,
+    borderRadius: 10,
+  }}>
+  <Text>{takeAwayDate ? moment(takeAwayDate).format('YYYY-DD-MM') : 'Select Take Away Date'}</Text>
+  {/* <Image source={require('../../assets/calendar.png')} style={{ width: 25, height: 25 }} /> */}
+</TouchableOpacity>
   <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
   <Text style={{color:Mycolors.Black,fontWeight:'600'}}>Explore Similar Products</Text>
   <Text style={{color:'#FFC40C',textDecorationLine: "underline", textDecorationColor:'#FFC40C'}} onPress={()=>{}}>View More</Text>
@@ -784,6 +833,28 @@ props.navigation.navigate('ShopPayment')}} marginHorizontal={20} fontSize={12} a
            
             </View>
 </Modal>
+{showTakeAwayDate ?
+                <View>
+                  <DateTimePicker
+                    value={new Date()}
+                    mode='calendar'
+                    // is24Hour={false}
+                    display="spinner"
+                    onChange={(event, sTime) => {
+                      // if (event.type == "set") {//ok button
+                      //   setTakeAwayDate(sTime)
+                      // } else {//cancel Button
+                      //     return null
+                      // }
+                      console.log(sTime.toDateString());
+                      setTakeAwayDate(sTime)
+                      setShowTakeAwayDate(false)
+                      console.log(event);
+                    }}
+                    onTouchCancel={()=>{setShowTakeAwayDate(false)}}
+                  />
+                </View>
+                : null}
 {loading ? <Loader /> : null}
 {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
     </SafeAreaView>

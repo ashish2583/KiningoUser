@@ -155,7 +155,7 @@ const ShopProductDetails = (props) => {
     setLoading(false)
     // console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
-      // console.log('the res==>>Home.body.vendors', responseJson.body)
+      console.log('the res==>>product all', responseJson.body)
       setresData(responseJson.body)
       const updatedData = responseJson.body.map(el => el.category)
       const cateList = [... new Set(updatedData)]

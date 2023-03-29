@@ -16,7 +16,7 @@ import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_pro
 import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
 import { useSelector, useDispatch } from 'react-redux';
-import { saveUserResult, saveUserToken, setProductVenderDetail, setUserType } from '../../../redux/actions/user_action';
+import { saveUserResult, saveUserToken, setUserType } from '../../../redux/actions/user_action';
 
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
@@ -214,7 +214,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
           // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
           onPress={()=>{
             props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})
-            dispatch(setProductVenderDetail(item))
+            // dispatch(setProductVenderDetail(item))
             }}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>
           </TouchableOpacity>
