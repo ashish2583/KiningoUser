@@ -121,7 +121,7 @@ const ShopProductDetails = (props) => {
   if(false){
     endPoint += '&product_type=Delivery'
   }
-  let endPoint = shop_product_details + '?id=pizza'
+  let endPoint = shop_product_details + props.route.params.productId
   console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
@@ -145,7 +145,7 @@ const ShopProductDetails = (props) => {
   if(false){
     endPoint += '&product_type=Delivery'
   }
-  let endPoint = shop_product_similar_Products + props.route.params.productId
+  let endPoint = shop_product_similar_Products + '?id=pizza'
   console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
