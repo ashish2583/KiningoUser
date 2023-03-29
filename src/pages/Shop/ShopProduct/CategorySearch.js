@@ -52,6 +52,8 @@ const ShopCategoryAll = (props) => {
   //     img:require('../../../assets/images/farmland.jpg'),
   //   },
   // ])
+  const [resData, setresData] = useState(null)
+  const [filteredData, setFilteredData] = useState([])
   const [categoryData, setCategoryData]=useState([])
   const [upData,setupData]=useState([
     {
@@ -120,7 +122,9 @@ const ShopCategoryAll = (props) => {
   ])
   const multiSliderValuesChange = (values) => {setMultiSliderValue(values)}
   useEffect(()=>{
-    getCategories()
+    // getCategories()
+    setresData(props.route.params.datas)
+    setFilteredData(props.route.params.datas)
  },[])
  const checkcon=()=>{
   getCategories()
@@ -151,12 +155,27 @@ setLoading(false)
 if (responseJson.headers.success == 1) {
   console.log('the res==>>category all', responseJson.body)
   setCategoryData(responseJson.body)
+  setresData(responseJson.body)
+    const data = responseJson.body.filter(el=>
+      el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim()) ||
+      el.category_name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())
+    )
+  setFilteredData([...data])
 } else {
   Toast.show({text1: err})
   // setalert_sms(err)
   // setMy_Alert(true)
 }
 
+}
+const getDataBasedOfSearch = (searchTerm) => {
+  // console.log('resData', resData);
+  // console.log('searchTerm', searchTerm);
+  const data = resData.filter(el=>
+    // el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim()) ||
+    el.category_name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())
+  )
+  setFilteredData([...data])
 }
   return(
     <SafeAreaView scrollEnabled={scrollEnabled} style={{height:'100%', backgroundColor: '#F8F8F8'}}>
@@ -174,22 +193,22 @@ if (responseJson.headers.success == 1) {
    press3={()=>{}} />
 
 <View style={{width:'96%',alignSelf:'center'}}>
-{/* <SearchInputEnt marginTop={10} placeholder={'Search Categories'} 
+<SearchInputEnt marginTop={10} placeholder={'Search Categories'} 
 serchValue={searchValue}
 searchIcon={require('../../../assets/images/product_search_icon.png')} 
-onChangeText={(e)=>{setsearchValue(e)}} 
+onChangeText={(e)=>{setsearchValue(e); getDataBasedOfSearch(e)}} 
 press={()=>{Alert.alert('Hi')}}
 presssearch={()=>{Alert.alert('Search Pressed')}}
-paddingLeft={50}/> */}
-<TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
-onPress={()=>{props.navigation.navigate('CategorySearch',{vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName, datas: categoryData})}}>
+paddingLeft={50}/>
+{/* <TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
+onPress={()=>{props.navigation.navigate('CategorySearch',{vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName})}}>
 <View style={{padding:5,marginLeft:10}}>
   <Image source={require('../../../assets/ent_search_icon.png')} style={{width:20,height:20}}></Image>
 </View>
 <View style={{padding:5}}>
   <Text style={{color:'gray',fontSize:12}}>Search Categories</Text>
 </View>
-</TouchableOpacity>
+</TouchableOpacity> */}
  
 
   {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
@@ -210,7 +229,7 @@ onPress={()=>{props.navigation.navigate('CategorySearch',{vendorId:props.route.p
 
 <View style={{width:'100%',alignSelf:'center',marginTop:20}}>
           <FlatList
-                  data={categoryData}
+                  data={filteredData}
                   showsHorizontalScrollIndicator={false}
                   numColumns={2}
                   renderItem={({item,index})=>{
