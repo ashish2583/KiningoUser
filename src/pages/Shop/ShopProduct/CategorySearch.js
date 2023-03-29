@@ -189,7 +189,7 @@ const getDataBasedOfSearch = (searchTerm) => {
       >
     <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
-   press2={()=>{}} title2={'Categories'} fontWeight={'500'} img2height={20}
+   press2={()=>{}} title2={'Search Categories'} fontWeight={'500'} img2height={20}
    press3={()=>{}} />
 
 <View style={{width:'96%',alignSelf:'center'}}>
@@ -231,11 +231,11 @@ onPress={()=>{props.navigation.navigate('CategorySearch',{vendorId:props.route.p
           <FlatList
                   data={filteredData}
                   showsHorizontalScrollIndicator={false}
-                  numColumns={2}
+                  numColumns={1}
                   renderItem={({item,index})=>{
                     return(
-                      <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5,marginVertical:5}}>
-          <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:200,backgroundColor:'#fff', alignItems:'center', borderRadius:15}}
+                      <View style={{width:dimensions.SCREEN_WIDTH*0.9,marginHorizontal:5,marginVertical:5, alignSelf:'center'}}>
+          <TouchableOpacity style={{width:'100%',height:200,backgroundColor:'#fff', alignItems:'center', borderRadius:15}}
           onPress={()=>{props.navigation.navigate('ShopCategoryProducts', {name: item.category_name, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName})}}>
           <Image source={item.category_image} style={{width:120,height:120,borderRadius:60, marginTop:20}}></Image>
           <Text style={{fontSize:12,color:'#263238',marginTop:5,textAlign:'left',fontWeight:'600', marginTop:15}}>{item.category_name}</Text>

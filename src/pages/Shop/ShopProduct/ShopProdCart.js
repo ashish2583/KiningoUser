@@ -9,7 +9,7 @@ import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
 // import Loader2 from '../../../WebApi/Loader2';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon, user_selected_address } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -289,11 +289,36 @@ const getAddress = async (newAddressId = '') => {
   console.log('the res get user_address get==>>', responseJson)
   if (responseJson.headers.success == 1) {
     setaddressListData(responseJson.body)
-    if(newAddressId){
-      setselectedAddress(responseJson.body.find(el=>el.id == newAddressId))
-    }else {
-      setselectedAddress(responseJson.body[0])
-    }
+    setselectedAddress(responseJson.body.find(el=>el.is_default == '1'))
+    // if(newAddressId){
+    //   setselectedAddress(responseJson.body.find(el=>el.id == newAddressId))
+    // }else {
+    //   setselectedAddress(responseJson.body[0])
+    // }
+  } else {
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
+  }
+}
+const getSelectedAddress = async () => {
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(user_selected_address, '', 'GET',  userdetaile.token)
+  setLoading(false)
+  console.log('the res getSelectedAddress', responseJson)
+  if (responseJson.headers.success == 1) {
+    // setselectedAddress()
+  } else {
+    //  setalert_sms(err)
+    //  setMy_Alert(true)
+  }
+}
+const sendSelectedAddress = async (id) => {
+  setLoading(true)
+  const { responseJson, err } = await requestPostApi(user_selected_address + `id/${id}` , '', 'PUT',  userdetaile.token)
+  setLoading(false)
+  console.log('the res sendSelectedAddress==>>', responseJson)
+  if (responseJson.headers.success == 1) {
+    // setselectedAddress()
   } else {
     //  setalert_sms(err)
     //  setMy_Alert(true)
@@ -1504,6 +1529,8 @@ const applyCoupan = async () => {
                                                         <TouchableOpacity style={{ width: 170, height: 30, justifyContent: "center", alignItems: 'center', borderRadius: 20, marginTop: 9, left: 80, backgroundColor: "red" }}
                                                             onPress={() => {
                                                               setselectedAddress(item)
+                                                              // console.log('item', item);
+                                                              sendSelectedAddress(item.id)
                                                               setaddressList(false)
                                                             }}>
                                                             <View style={{}}>
