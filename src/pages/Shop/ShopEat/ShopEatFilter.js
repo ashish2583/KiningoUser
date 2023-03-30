@@ -200,8 +200,9 @@ presssearch={()=>{
   var murl='?name='+searchValue.text+'&lat='+lat+'&long='+long
   getData(murl)
 }}
+
 paddingLeft={50}/>
-              <View style={{position:'absolute',right:5,top:13,backgroundColor:'red',paddingHorizontal:10,height:40,justifyContent:'center',borderRadius:5}}>
+              <View style={{position:'absolute',right:8,top:14,backgroundColor:'red',paddingHorizontal:10,height:36,justifyContent:'center',borderRadius:5}}>
               <TouchableOpacity onPress={()=>{setfilterClick(!filterClick) }} style={{with:'100%',height:'100%',justifyContent:'center',}}>
                <Image source={require('../../../assets/filter.png')}  style={{width:18,height:18,resizeMode: 'stretch',top:2}} ></Image>
               </TouchableOpacity>

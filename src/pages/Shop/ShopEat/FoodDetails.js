@@ -591,7 +591,8 @@ const FoodDetails = (props) => {
   }
 
   const searchmenuList = async (tt) => {
-    console.log('hello');
+    if(tt!=''|| tt.trim().length != 0){
+      console.log('hello');
     setLoading(true)
 
     const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + tt, '', 'GET', User.token)
@@ -601,9 +602,15 @@ const FoodDetails = (props) => {
       setmenuresData(responseJson.body)
       // setsearchValue('')
     } else {
-      setalert_sms(err)
-      setMy_Alert(true)
+      setmenuresData([])
+      Toast.show({text1: responseJson.headers.message})
+      // setalert_sms(err)
+      // setMy_Alert(true) 
     }
+    }else{
+      Toast.show({text1: 'Please enter the item name in search.'})
+    }
+    
   }
 
   const itemloop = (item) => {
@@ -868,7 +875,7 @@ const FoodDetails = (props) => {
               <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
-                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{parseInt(resData.rating)}.0</Text>
+                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating}</Text>
               </View>
             </View>
 
@@ -1275,10 +1282,21 @@ const FoodDetails = (props) => {
                     <Text style={{ fontSize: 10, fontWeight: '500', color: Mycolors.RED, marginTop: 4 }}>{counter}</Text>
                   </View>
                   <View style={{ width: 65, right: 5, borderWidth: 0.2, borderColor: Mycolors.RED, borderRadius: 2 }}>
-                    <HomeHeader height={21} paddingHorizontal={7}
+                    {/* <HomeHeader height={21} paddingHorizontal={7}
                       press1={() => { counter <= 0 ? setcounter(1) : setcounter(counter - 1) }} img1={require('../../../assets/remove.png')} img1width={10} img1height={3}
                       press2={() => { }} title2={counter} fontWeight={'500'} img2height={20} fontSize={12}
-                      press3={() => { setcounter(counter + 1) }} img3={require('../../../assets/add.png')} img3width={10} img3height={10} />
+                      press3={() => { setcounter(counter + 1) }} img3={require('../../../assets/add.png')} img3width={10} img3height={10} /> */}
+                 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',}}>
+                 <TouchableOpacity style={{width:15,height:15,justifyContent:'center',padding:7}} onPress={()=>{counter <= 0 ? setcounter(1) : setcounter(counter - 1) }}>
+                 <Image style={{width:10,height:3}} source={require('../../../assets/remove.png')}></Image>
+                 </TouchableOpacity>
+                 
+                 <Text style={{color:'#000',fontWeight:'500',fontSize:12}}>{counter}</Text>
+
+                 <TouchableOpacity style={{width:15,height:15,justifyContent:'center'}} onPress={()=>{setcounter(counter + 1)}}>
+                 <Image style={{width:10,height:10}} source={require('../../../assets/add.png')}></Image>
+                </TouchableOpacity>
+                 </View>
                   </View>
                 </View>
               </View>
@@ -1431,7 +1449,7 @@ const FoodDetails = (props) => {
                   keyExtractor={item => item}
                 />
               </View>
-              <View style={{ width: '95%', height: 100, borderRadius: 2, marginTop: 5, alignSelf: 'center' }}>
+              {/* <View style={{ width: '95%', height: 100, borderRadius: 2, marginTop: 5, alignSelf: 'center' }}>
                 <TextInput
                   value={cookingIns}
                   onChangeText={(e) => setcookingIns(e)}
@@ -1443,7 +1461,7 @@ const FoodDetails = (props) => {
                   autoCapitalize='none'
                   style={[styles.input]}
                 />
-              </View>
+              </View> */}
               <View style={{ width: '95%', alignSelf: 'center', marginTop: 30, }}>
                 <MyButtons title="Confirm & Book a Table" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
                   bookTables()

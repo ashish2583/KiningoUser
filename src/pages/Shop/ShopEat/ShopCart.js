@@ -55,7 +55,7 @@ const ShopCart = (props) => {
     },
     {
       id:'2',
-      name1:'Seacrh',
+      name1:'Search',
       name2:'Address',
       icon: require('../../../assets/danish_search.png')
     },
@@ -142,8 +142,6 @@ const ShopCart = (props) => {
 
     });
   }, []);
-
-
   const putcart = async (item, add) => {
 
     setLoading(true)
@@ -180,7 +178,6 @@ const ShopCart = (props) => {
       // setMy_Alert(true)
     }
   }
-
   const deletcart = async (item) => {
 
     setLoading(true)
@@ -197,8 +194,7 @@ const ShopCart = (props) => {
       // setMy_Alert(true)
     }
   }
-
-const getcart = async () => {
+  const getcart = async () => {
     // setresData([])
     setLoading(true)
     const { responseJson, err } = await requestGetApi(shop_eat_cart, '', 'GET', User.token)
@@ -231,8 +227,13 @@ const getcart = async () => {
         setsubTotal(responseJson.body.sub_total)
         setdilivery(responseJson.body.delivery_charge)
         setVendorCharges(responseJson.body.vendor_charges)
+        setdiscountPrice(responseJson.body.coupon_discount)
         setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
+        if(responseJson.body.coupon.coupon_code!=null){
+           setapplyedCoupen(responseJson.body.coupon)
+           setpromocode(responseJson.body.coupon.coupon_code)
+        }
         setreloades(!reloades)
       }
     } else {
@@ -245,7 +246,6 @@ const getcart = async () => {
       settotal('0')
       setreloades(!reloades)
     }
-
   }
   const deletAddress = async (item) => {
     console.log('itemsss', item);
@@ -264,7 +264,6 @@ const getcart = async () => {
       // setMy_Alert(true)
     }
   }
-
   const UpdateAddress = async (item) => {
 
     var data = {
@@ -301,18 +300,14 @@ const getcart = async () => {
       // setMy_Alert(true)
     }
   }
-
-  
-
   const applyCoupan = async () => {
     if (promocode == null || promocode=='') {
-      Toast.show({text1:'Please select or Enter any coupon'})
+      Toast.show({text1:'Please select coupon to avail discount'})
     } else {
       setLoading(true)
       var data = {
         discount_id: promocode,
       }
-    
       const { responseJson, err } = await requestPostApi(shop_eat_cart_apply_coupon, data, 'POST', User.token)
       setLoading(false)
       console.log('the res shop_eat_cart_apply_coupon==>>', responseJson)
@@ -326,8 +321,10 @@ const getcart = async () => {
         settotal(responseJson.body.total)
         setapplyedCoupen(responseJson.body.coupon)
         setpromoEdit(false)
+        setreloades(!reloades)
       } else {
-        Toast.show({text1:'Invalid Coupon Code. Please try again.'})
+        Toast.show({text1:responseJson.headers.message})
+        // Toast.show({text1:'Invalid Coupon Code. Please try again.'})
       }
     }
 
@@ -355,6 +352,7 @@ const getcart = async () => {
       setpromocode('')
       setdiscount_id(null)
       setpromoEdit(true)
+      setreloades(!reloades)
     } else {
       Toast.show({text1:responseJson.headers.message})
       // setalert_sms(err)
@@ -363,22 +361,27 @@ const getcart = async () => {
     
 
   }
-
   const AddAddress = async () => {
     if (full_name == '') {
-      Toast.show({text1:'Please Add Name'})
+      Toast.show({text1:'Please Enter Complete Address'})
      
-    } else if (area_village == '') {
-      Toast.show({text1:'Please Add Address'})
+    } else if (pincode == '') {
+      Toast.show({text1:'Please Enter Zip code'})
     
+    }else if (state == '') {
+      Toast.show({text1:'Please Enter State'})
+     
     } else if (city == '') {
-      Toast.show({text1:'Please Add City'})
+      Toast.show({text1:'Please Enter City'})
      
-    } else if (state == '') {
-      Toast.show({text1:'Please Add State'})
+    } else if (house_no == '') {
+      Toast.show({text1:'Please Enter Address'})
      
-    }
-    setLoading(true)
+    }else if (landmark == '') {
+      Toast.show({text1:'Please Enter Landmark'})
+     
+    }  else{
+      setLoading(true)
     var data = {
       "location_name": full_name,
       "location_type": address_type,
@@ -409,9 +412,10 @@ const getcart = async () => {
       // setMy_Alert(true)
     }
 
+    }
+    
 
   }
-
   const getMatches = (str) => {
     var count = (str.match(/,/g) || []).length;
     return count
@@ -420,71 +424,29 @@ const getcart = async () => {
     return str.lastIndexOf(",")
   }
   const AddAddressUsingGoogleSearch = async () => {
-    console.log('googleAddress', googleAddress);
+    console.log('googleAddress', googleAddress.terms);
     if(googleAddress === ''){
       Toast.show({text1:'Please Add Address'})
-   
       return
     }
-    
-    let matches = getMatches(googleAddress)
-    console.log('matches', matches);
-    const addressData = {
-      country: '',
-      state: '',
-      city: '',
-      address_line1: '',
-    }
-    let addressValue = googleAddress
-    console.log('googleAddress', googleAddress);
-    let lastindex = null
-    let partOfString = null
-    if(matches > 3){
-      matches = 3 
-    }
-    for(let i = 0; i < matches + 1; i++){
-      lastindex = getLastIndex(addressValue)
-      if(i !== 3){
-        partOfString = addressValue.substring(lastindex + 1)
-        addressValue = addressValue.substring(0, lastindex)
-      }
-      // console.log('i', i);
-      // console.log('lastindex', lastindex);
-      // console.log('partOfString', partOfString);
-      // console.log('addressValue', addressValue);
-      if(i == 0){
-        addressData.country = partOfString?.trim()
-      }else if(i == 1){
-        addressData.state = partOfString?.trim()
-      }else if(i == 2){
-        addressData.city = partOfString?.trim()
-      }else if(i == 3){
-        addressData.address_line1 = addressValue?.trim()
-      }
-      if(i == 3){
-        break
-      }
-    }
-    setLoading(true)
+     var mylast=googleAddress.terms.length
+  
+     setLoading(true)
     var data = {
       "location_name": '',
       "location_type": '1',
       "latitude": googleLatLng.lat,
       "longitude": googleLatLng.lng,
-      // "address_line1": house_no,
+      "address_line1": googleAddress.description,
       "address_line2": '',
-      // "city": city,
-      // "state": state,
+       "city": googleAddress.terms[mylast-3].value,
+       "state": googleAddress.terms[mylast-2].value,
       "country_id": 1,
       "is_default": 1,
-      ...addressData
     }
-    // console.log('addressData', addressData);
-    console.log('google address data===>>', data);
-    // return
+   console.log('google address data===>>', data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
-    // close modal
     setOpenGoogleAddressModal(false)
     console.log('the res google user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
@@ -497,7 +459,7 @@ const getcart = async () => {
       setstate('')
       setGoogleLatLng({})
       setGoogleAddress('')
-      setShippingAddressPopUp(false)
+      setShippingAddressPopUp(false) 
     } else {
       // setalert_sms(err)
       // setMy_Alert(true)
@@ -563,8 +525,7 @@ const getcart = async () => {
     console.log('current address data===>>', data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
-    // close modal
-    // setOpenGoogleAddressModal(false)
+    
     console.log('the res current user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
       getAddress()
@@ -614,11 +575,12 @@ const getcart = async () => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res get user_address get==>>body', responseJson)
+    console.log('the res get user_address get==>>body', responseJson.body.length)
     if (responseJson != null) {
       if (responseJson.headers.success == 1) {
         setaddressListData(responseJson.body)
-        setselectedAddress(responseJson.body[0])
+
+        setselectedAddress(responseJson.body[responseJson.body.length-1])
       } else {
         // setaddressListData(null)
         setselectedAddress(null)
@@ -631,8 +593,6 @@ const getcart = async () => {
     }
 
   }
-
-
   const getCopun = async () => {
 
     setLoading(true)
@@ -689,7 +649,7 @@ const getcart = async () => {
 
           <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >{rs}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >&{parseFloat(Number(item.price).toFixed(2))}</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >${parseFloat(Number(item.price).toFixed(2))}</Text>
 
           </View>
 
@@ -770,7 +730,7 @@ const getcart = async () => {
                 >
 
                   <View style={{width:'80%'}}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>{selectedAddress.location_name}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>Location Name : {selectedAddress.location_name}</Text>
                     <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
                     <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text>
                   </View>
@@ -875,7 +835,7 @@ const getcart = async () => {
               >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${subTotal}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
@@ -891,7 +851,7 @@ const getcart = async () => {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Discount</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${discountPrice}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${parseFloat(Number(discountPrice).toFixed(2))}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10,backgroundColor:'#ADC430',height:46,alignItems:"center",borderRadius:7 ,padding:10}}>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
@@ -1349,7 +1309,7 @@ const getcart = async () => {
                                 </View>
         
                             </View>
-                  <View style={{width:'90%',alignSelf:'center',position:'absolute',bottom:100}}>
+                  <View style={{width:'90%',alignSelf:'center',position:'absolute',bottom:0}}>
                   <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
                     // setShippingAddressPopUp(true) 
                     setChooseAddressModeModal(true)
@@ -1410,7 +1370,7 @@ const getcart = async () => {
                         </TouchableWithoutFeedback> */}
 
                         <View style={{height:30}} />
-                        <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
+                        <MyButtons title={"Continue"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
 
                         {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
@@ -1440,36 +1400,95 @@ const getcart = async () => {
 
                     <GooglePlacesAutocomplete
             placeholder="Add Location"
-            textInputProps={{
-              placeholderTextColor: '#c9c9c9',
-              // placeholderTextColor: Colors.BLACK,
-              returnKeyType: 'search',
-              // onFocus: () => setShowPlacesList(true),
-              // onBlur: () => setShowPlacesList(false),
-              multiline:true,
-              // onTouchStart: ()=>{downButtonHandler()}
-              height:55,
-            }}
-            enablePoweredByContainer={false}
-            listViewDisplayed={'auto'}
-            styles={styles.searchbar}
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              // setShowPlacesList(false)
-              setGoogleLatLng({
-                lat: details.geometry.location.lat,
-                lng: details.geometry.location.lng,
-              });
-              setGoogleAddress(data?.description);
-            }}
-            GooglePlacesDetailsQuery={{
-              fields: 'geometry',
-            }}
-            fetchDetails={true}
-            query={{
-              key: GOOGLE_MAPS_APIKEY,
-              language: 'en',
-            }}
+           
+textInputProps={{
+placeholderTextColor: '#000',
+// placeholderTextColor: Colors.BLACK,
+returnKeyType: 'search',
+// onFocus: () => setShowPlacesList(true),
+// onBlur: () => setShowPlacesList(false),
+multiline:true,
+// onTouchStart: ()=>{downButtonHandler()}
+          height:45,
+          color:'#000' 
+          // shadowColor:  'gray',
+          //   shadowOffset: {
+          //     width:3,
+          //     height:3
+          //   }, 
+          //   shadowRadius: 5,
+          //   shadowOpacity: 1.0,
+          //   justifyContent: 'center',
+          //   elevation: 5
+
+}}
+
+enablePoweredByContainer={false}
+listViewDisplayed={'auto'}
+styles={{
+  // textInputContainer: {
+  //     backgroundColor: 'grey',
+  //   },
+  description: {
+                    color: '#000',
+                    // fontWeight: '300'
+                },
+  poweredContainer: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderColor: '#c8c7cc',
+    borderTopWidth: 0.5,
+    color:'#000'
+  },
+  powered: {},
+  listView: {
+    // color:'#000'
+  },
+  row: {
+    backgroundColor: '#FFFFFF',
+    padding: 13,
+    height: 44,
+    flexDirection: 'row',
+  },
+  separator: {
+    height: 0.5,
+    backgroundColor: '#c8c7cc',
+    color:'#000'
+  },
+  textInput: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    height: 35,
+    borderRadius: 5, 
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 12,
+    color:'#000',
+    flex: 1,
+  },
+}}
+onPress={(data, details = null) => {
+  console.log(data, details);
+// 'details' is provided when fetchDetails = true
+// setShowPlacesList(false)
+setGoogleLatLng({
+lat: details.geometry.location.lat,
+lng: details.geometry.location.lng,
+});
+//setGoogleAddress(data?.description);
+setGoogleAddress(data);
+}}
+GooglePlacesDetailsQuery={{
+fields: 'geometry',
+}}
+fetchDetails={true}
+// currentLocation={true}
+query={{
+key: GOOGLE_MAPS_APIKEY,
+language: 'en',
+}}
+
           />
                         
 
@@ -1478,7 +1497,7 @@ const getcart = async () => {
                      
                     </ScrollView>
                     <View style={{marginBottom:20}}>
-                       <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
+                       <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{AddAddressUsingGoogleSearch()}} marginHorizontal={20} fontSize={11}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
                     </View>
                    

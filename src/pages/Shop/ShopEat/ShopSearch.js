@@ -26,6 +26,7 @@ const ShopSearch = (props) => {
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
+  const mapdata  = useSelector(state => state.maplocation)
 
   useEffect(() => {
     GetLocation.getCurrentPosition({
@@ -59,7 +60,6 @@ const ShopSearch = (props) => {
   }, [])
 
   const catSerch = async (ddd) => {
-
     setLoading(true)
     const { responseJson, err } = await requestGetApi(vendor_lists_subcat + ddd, '', 'GET', '')
     setLoading(false)
@@ -71,7 +71,6 @@ const ShopSearch = (props) => {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   const checkcon = () => {
@@ -96,7 +95,7 @@ const ShopSearch = (props) => {
 
   const homePageSearch = async (text) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_eat + '?name=' + text + '&lat=' + lat + '&long=' + lan, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat + '?name=' + text + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -111,7 +110,7 @@ const ShopSearch = (props) => {
   const AllVenders = async () => {
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_eat_business+'?lat=' + lat + '&long=' + lan, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {

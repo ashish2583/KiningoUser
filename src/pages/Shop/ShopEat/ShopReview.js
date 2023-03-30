@@ -84,8 +84,8 @@ const ShopReview = (props) => {
  }
 
  const submitRewiew = async () => {
-  
-    setLoading(true);
+ 
+     setLoading(true);
      var data={
       "business_id": itemdata.business_id,
       "rating": venderRating,
@@ -100,16 +100,13 @@ const ShopReview = (props) => {
      if (responseJson.headers.success == 1) {
        setsubData()
        setvenderRating('0')
-       setreson('')
+       setreson('') 
        Toast.show({text1:responseJson.headers.message})
       props.navigation.navigate('ShopMyOrder')
      } else {
      // setalert_sms(err)
      // setMy_Alert(true)
      }
-   
-  
-  
  };
 
  const checkcon=()=>{
@@ -236,6 +233,8 @@ return(
  <MyButtons title="Submit" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
   if(venderRating>0){
      submitRewiew()
+  }else{
+    Toast.show({ text1: 'Please add ratings to submit the review.' })
   }
 }} marginHorizontal={20} fontSize={14}
    titlecolor={Mycolors.BG_COLOR}  hLinearColor={venderRating>0 ? ['#b10027','#fd001f'] : ['gray','gray']}/>

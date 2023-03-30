@@ -25,6 +25,8 @@ const CatSearch = (props) => {
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
   const [relode,setrelode] = useState(false)
+  const mapdata  = useSelector(state => state.maplocation)
+
   useEffect(()=>{
    console.log('hohohohoho',props.route.params.datas);
   //  setresData(props.route.params.datas)
@@ -52,7 +54,7 @@ const CatSearch = (props) => {
 const homePageSearch = async (ttt) => {
   setresData([])
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt+'&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
   setLoading(false)
   console.log('the res==>>Home', responseJson)
   if (responseJson.headers.success == 1) {
@@ -65,9 +67,10 @@ const homePageSearch = async (ttt) => {
 }
 
 const AllVenders = async () => {
+  console.log('the res==>>Homethe res==>>Homethe res==>>Home')
 
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(menu_AllCategoryNames, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(menu_AllCategoryNames+'?lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
   setLoading(false)
   console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
   if (responseJson.headers.success == 1) {
@@ -136,7 +139,7 @@ paddingLeft={9}/>
                           <Image source={{ uri: item.category_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 50, overflow: 'hidden' }}></Image>
                         </View>
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
-                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >+25 Places NearBy</Text>
+                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >{item.total_vendors==0 ? 'No Places NearBy' : item.total_vendors+' Places NearBy'}</Text>
                       </TouchableOpacity>
                       </ImageBackground>
                     </View>

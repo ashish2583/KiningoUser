@@ -12,11 +12,18 @@ import Modal from 'react-native-modal';
 // import Toast from 'react-native-simple-toast'
 import Toast from 'react-native-toast-message'
 import Loader from '../../../WebApi/Loader';
-import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
+import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business, shop_product_home } from '../../../WebApi/Service'
 import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken, setUserType } from '../../../redux/actions/user_action';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import Geocoder from "react-native-geocoding";
+import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
+
+Geocoder.init(GoogleApiKey);
+const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+const isEmulator = true
 
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
@@ -81,32 +88,34 @@ const ShopProduct = (props) => {
   const [resData, setresData] = useState(null)
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
-  const [isLatlong, setIsLatlong] = useState(true)
+  // const [isLatlong, setIsLatlong] = useState(true)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [refreshing, setRefreshing] = useState(false);
+  const [addre, setaddre] = useState(' ');
 
   useEffect(()=>{
-    if(isLatlong){
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000,
-      })
-      .then(location => {
-          // console.log('locations latitude longitude',location);
-          setlat(location.latitude)
-          setlan(location.longitude)
-      })
-      .catch(error => {
-          const { code, message } = error;
-          console.warn(code, message);
-      })
-    }
-    homePage()
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+    .then(location => {
+        // console.log('locations latitude longitude',location);
+        setlat(location.latitude)
+        setlan(location.longitude)
+        let My_cord = { latitude: location.latitude, longitude: location.longitude }
+        // dispatch(setRestorentLocation(My_cord))
+        homePage(location.latitude,location.longitude)
+        LatlongTo_address(My_cord)
+    })
+    .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+    })
  },[])
 
  const checkcon=()=>{
-  homePage()
+  homePage(lat, lan)
  }   
  
  const wait = (timeout) => {
@@ -124,9 +133,41 @@ const ShopProduct = (props) => {
   });
  }, []);
 
- const homePage = async () => {
-  const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
-  console.log('endPoint', endPoint);
+ const LatlongTo_address = async (latlong) => {
+  console.log('LatlongTo_address called');
+  // var courentlocation = mapdata.curentPosition
+  // dispatch(setStartPosition(courentlocation))
+  let ll = ''
+  if(isEmulator){
+    ll = {latitude:28.6176, longitude:77.422}
+  }else{
+    ll = latlong
+  }
+  console.log('ll', ll);
+  Geocoder.from(ll.latitude, ll.longitude)
+    .then(json => {
+      var addressComponent = json.results[0].formatted_address;
+      console.log('The address is', json.results[0].formatted_address);
+      setaddre(addressComponent)
+      // setGoogleLatLng({
+      //   lat: latlong.latitude,
+      //   lng: latlong.longitude,
+      //   });
+      // setGoogleAddress(addressComponent);
+      // UpdateLocation(latlong,addressComponent)
+    })
+    .catch(error => console.warn(error));
+}
+
+ const homePage = async (l,lo) => {
+  // const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
+  let endPoint = ''
+  if(isEmulator){
+    endPoint = `${shop_product_home}?lat=${28.6176}&long=${77.422}`
+  }else{
+    endPoint = `${shop_product_home}?lat=${l}&long=${lo}`
+  }
+  console.log('homepage endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
   setLoading(false)
@@ -155,17 +196,153 @@ const ShopProduct = (props) => {
             onRefresh={onRefresh}
           />
         }
+        keyboardShouldPersistTaps="handled"
       >
     <HomeHeader height={60}  paddingHorizontal={15}
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
    press2={()=>{}} title2={'Shop'} fontWeight={'500'} img2height={20}
    press3={()=>{}} img3width={25} img3height={25} />
-<View style={{width:'95%',alignSelf:'center',backgroundColor:'rgba(0,0,0,0.025)',borderRadius:10,borderBottomColor:'rgba(0,0,0,0.5)',borderBottomWidth:0.2}}>
+{/* <View style={{width:'95%',alignSelf:'center',backgroundColor:'rgba(0,0,0,0.025)',borderRadius:10,borderBottomColor:'rgba(0,0,0,0.5)',borderBottomWidth:0.2}}>
   <HomeHeader height={40}  paddingHorizontal={15}
    press1={()=>{}} img1={require('../../../assets/images/product_location_icon.png')} img1width={11} img1height={15} 
    press2={()=>{}} title2={'New Yark USA'} fontWeight={'500'} img2height={20} right={dimensions.SCREEN_WIDTH*26/100} fontSize={10} color={Mycolors.GrayColor}
    press3={()=>{setShowChooseMilesModal(true)}} img3={require('../../../assets/images/shape_32.png')} img3width={25} img3height={25} />
-</View>
+</View> */}
+<View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginHorizontal: 10,
+          // backgroundColor: 'rgba(0,0,0,0.025)',
+          paddingHorizontal: 5,
+          // paddingVertical: 5,
+          // alignSelf: 'center',
+          // alignItems: 'center',
+          backgroundColor: '#fff',
+          width: '94%',
+          borderRadius: 10,
+        }}>
+          <TouchableOpacity style={{ justifyContent: 'center', position: 'absolute', height: 55, left: 15 }}>
+            <Image source={require('../../../assets/shape_33.png')} style={{ width: 12, height: 15 }}></Image>
+          </TouchableOpacity>
+          <View style={{ width: '86%', justifyContent: 'center', alignItems: 'center', }}>
+            <GooglePlacesAutocomplete
+              placeholder={addre.substring(0, 45)}
+              textInputProps={{
+                placeholderTextColor: '#000',
+                // width: '95%',
+                // placeholderTextColor: Colors.BLACK,
+                returnKeyType: 'search',
+                // onFocus: () => setShowPlacesList(true),
+                // onBlur: () => setShowPlacesList(false),
+                multiline: true,
+                numberOfLines: 3,
+                // onTouchStart: ()=>{downButtonHandler()}
+                height: 50,
+                color: '#000'
+                // shadowColor:  'gray',
+                //   shadowOffset: {
+                //     width:3,
+                //     height:3
+                //   },
+                //   shadowRadius: 5,
+                //   shadowOpacity: 1.0,
+                //   justifyContent: 'center',
+                //   elevation: 5
+              }}
+              enablePoweredByContainer={false}
+              listViewDisplayed={'auto'}
+              styles={{
+                textInputContainer: {
+                  width: '100%',
+                  marginLeft: 0,
+                  // backgroundColor: 'grey',
+                },
+                description: {
+                  color: '#000',
+                  width: '74%',
+                  // fontWeight: '300'
+                },
+                poweredContainer: {
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  borderBottomRightRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderColor: '#C8C7CC',
+                  borderTopWidth: 0.5,
+                  color: '#000'
+                },
+                powered: {},
+                listView: {
+                  // color:'#000'
+                },
+                row: {
+                  // backgroundColor: '#FFFFFF',
+                  paddingVertical: 10,
+                  height: 44,
+                  flexDirection: 'row',
+                },
+                separator: {
+                  height: 0.5,
+                  backgroundColor: '#C8C7CC',
+                  color: '#000'
+                },
+                textInput: {
+                  backgroundColor: 'transparent',
+                  height: 40,
+                  borderRadius: 5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  fontSize: 13,
+                  color: '#000',
+                  flex: 1,
+                  // paddingHorizontal: 5,
+                },
+              }}
+              onPress={(data, details = null) => {
+              console.log(data, details);
+            // 'details' is provided when fetchDetails = true
+            // setShowPlacesList(false)
+            homePage(details.geometry.location.lat,details.geometry.location.lng)
+            dispatch(setRestorentLocation({
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            }))
+
+            setGoogleLatLng({
+            lat: details.geometry.location.lat,
+            lng: details.geometry.location.lng,
+            });
+            setGoogleAddress(data?.description);
+            }}
+              GooglePlacesDetailsQuery={{
+                fields: 'geometry',
+              }}
+              fetchDetails={true}
+              // currentLocation={true}
+              query={{
+                key: GOOGLE_MAPS_APIKEY,
+                language: 'en',
+              }}
+            />
+          </View>
+          <View style={{
+            height: 55, position: 'absolute', right: -10,
+            borderTopRightRadius: 10,
+            borderBottomRightRadius: 10,
+            marginHorizontal: 8, top: 0,
+            backgroundColor: '#FFC40C',
+            paddingVertical: 5,
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 40,
+            borderTopRightRadius: 10, borderBottomRightRadius: 10
+          }}>
+            <TouchableOpacity onPress={() => { props.navigation.navigate('ShopEatFilter') }}>
+              <Image source={require('../../../assets/shape_32.png')} style={{ width: 25, height: 25 }}></Image>
+            </TouchableOpacity>
+          </View>
+        </View>
 
 <View style={{width:'96%',alignSelf:'center'}}>
 {/* <SearchInputEnt marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
@@ -184,7 +361,29 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
 <View style={{padding:5}}>
   <Text style={{color:'gray',fontSize:12}}>Search by Vendors, Categories</Text>
 </View>
-</TouchableOpacity> 
+</TouchableOpacity>
+
+<View style={{ width: '100%', alignSelf: 'center', marginTop: 15 }}>
+  {resData != null ?
+    <FlatList
+      data={resData.coupons}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      // numColumns={2}
+      renderItem={({ item, index }) => {
+        return (
+          <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10}}>
+            <TouchableOpacity style={{ width: '100%', height: 120, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf:'center' }}
+              onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: '' }) }}>
+              <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 10,  }}></Image>
+            </TouchableOpacity>
+          </View>
+        )
+      }}
+      keyExtractor={item => item.id}
+    />
+    : null}
+</View>
 
   {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
      <ImageSlider 
@@ -204,7 +403,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
 
 <View style={{width:'100%',alignSelf:'center',marginTop:20, backgroundColor:'#F8F8F8'}}>
           <FlatList
-                  data={resData}
+                  data={resData?.vendors}
                   showsHorizontalScrollIndicator={false}
                   numColumns={2}
                   renderItem={({item,index})=>{
@@ -241,6 +440,56 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
                   keyExtractor={item => item.id}
                 />
          </View>
+
+
+         <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+            {resData != null ?
+              <FlatList
+                data={resData.categories}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                // numColumns={2}
+                renderItem={({ item, index }) => {
+                  return (
+                    
+
+                 
+                    <View style={{ width: 140, height: 200, marginHorizontal: 0, marginVertical: 5, }}>
+                      <ImageBackground source={require('../../../assets/Food-Cover-image.png')}style={{width:'100%',height:'95%',  borderRadius: 10, }}resizeMode='cover'> 
+                      <TouchableOpacity style={{ paddingTop:20
+                        // width: 100, height: 120, padding: 10, backgroundColor: '#fff',
+                        // shadowOffset: {
+                        //   width: 0,
+                        //   height: 3
+                        // },
+                        // shadowRadius: 1,
+                        // shadowOpacity: 0.3,
+                        // // justifyContent: 'center',
+                        // elevation: 5, borderRadius: 10
+                      }} onPress={() => { props.navigation.navigate('ShopSearch', { datas: [item], from: 'CatClick' }) }}>
+                        <View style={{ width: 60, height: 60, alignSelf: 'center',borderRadius:60/2,shadowOffset: {
+                          width: 0,
+                          height: 3
+                        },
+                        shadowRadius: 1,
+                        shadowOpacity: 0.5,
+                       elevation: 10,
+                       }}>
+                          <Image source={{ uri: item.category_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 50, overflow: 'hidden' }}></Image>
+                        </View>
+                        <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
+                        <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >{item.total_vendors==0 || item.total_vendors==undefined ? 'No Places NearBy' : item.total_vendors+' Places NearBy'} </Text>
+                      </TouchableOpacity>
+                      </ImageBackground>
+                    </View>
+                    
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
+              : null}
+
+          </View>       
 
 
 

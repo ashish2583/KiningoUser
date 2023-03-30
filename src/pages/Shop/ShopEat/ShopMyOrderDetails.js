@@ -139,13 +139,16 @@ const ShopMyOrderDetails = (props) => {
           }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <View style={{ flexDirection: 'column' }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
-                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Delivered, {data?.items?.length} items, ${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
+<View style={{flexDirection:'row'}}>
+ <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
+ <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12,marginLeft:5 }}>Placed At : {data.created_date}</Text>
+</View>
+             
+                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Status : {data.status_label}</Text>
+            
               </View>
 
-
-
-              <View style={{ flexDirection: 'row', left: -10 }}>
+              <View style={{ flexDirection: 'row', left: -10 ,top:10}}>
                 <Image source={require('../../../assets/circle-dot.png')} style={{ width: 22, height: 22, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', top: 1 }} ></Image>
                 <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, marginLeft: 6,fontWeight:'800' }}>Help</Text>
               </View>
@@ -194,19 +197,22 @@ const ShopMyOrderDetails = (props) => {
               </View>
 
             </View>
-
-            <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
+            {data.delivered_date!=null ?
+  <View>
+    <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order Delivered on </Text>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
             </View>
-            <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: 9,height:17}}>
+            <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
             </View>
+  </View>
+            : null }
 
           </View>
-          {/* Second payment details box  */}
-
+         
+         
           <View style={{
             top: 0,
             backgroundColor: '#FAF9FB', padding: 12, borderRadius: 10,
@@ -248,7 +254,7 @@ const ShopMyOrderDetails = (props) => {
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.amount).toFixed(2))}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
@@ -256,7 +262,7 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${data.discount_amount}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${data.discount_amount}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
