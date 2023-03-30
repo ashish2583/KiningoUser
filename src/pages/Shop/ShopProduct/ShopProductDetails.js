@@ -19,7 +19,26 @@ import MyAlert from '../../../component/MyAlert'
 import {  useSelector, useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message'
 import moment from 'moment'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
+const features = [
+  {
+      "id": 19,
+      "attribute_type": "MenuBadges",
+      "attribute_code": "hygiene-food",
+      "attribute_value": "Hygiene Food",
+      "attribute_image": "http://54.153.75.225/images/admin/fork.png",
+      "status": "Approved"
+  },
+  {
+      "id": 21,
+      "attribute_type": "MenuBadges",
+      "attribute_code": "vaccinated",
+      "attribute_value": "Vaccinated",
+      "attribute_image": "http://54.153.75.225/images/admin/vaccinated.png",
+      "status": "Approved"
+  }
+]
 const ShopProductDetails = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
   const [searchValue,setsearchValue]=useState('')
@@ -103,6 +122,9 @@ const ShopProductDetails = (props) => {
   const checkcon=()=>{
     getProductDetails()
  }
+ const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
  const onRefresh = React.useCallback(() => {
   // setRefreshing(true);
   // fetchSuccessDetails()
@@ -174,6 +196,20 @@ const design=(img,ti,tit,w,imgh,imgw,bg,redious)=>{
    </View>
    
   </View>
+  )
+}
+const featureDesign = (img, ti, tit, w, imgh, imgw, bg, redious) => {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', width: w, marginTop: 10 }}>
+      <View style={{ width: 50, height: 50, backgroundColor: bg, justifyContent: 'center', borderRadius: redious, borderColor: 'gray', borderWidth: 0.5 }}>
+        <Image source={{ uri: img }} style={{ width: imgw, height: imgh, overflow: 'hidden', alignSelf: 'center' }}></Image>
+      </View>
+      <View style={{ marginLeft: 15, }}>
+        <Text style={{ fontSize: 12, fontWeight: 'bold', color: Mycolors.Black }}>{ti}</Text>
+        <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3 }}>{tit}</Text>
+      </View>
+
+    </View>
   )
 }
 
@@ -278,8 +314,8 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 
 <View style={{width:'96%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',backgroundColor:'#F8F8F8',borderRadius:9,paddingVertical:10}}>
   <View>
-<Text style={{color:Mycolors.Black,fontWeight:'600'}}>{props.route.params.productName}</Text>
-<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>{props.route.params.category}</Text>
+<Text style={{color:Mycolors.Black,fontWeight:'600'}}>{'props.route.params.productName'}</Text>
+<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>{'props.route.params.category'}</Text>
   </View>
 
   <View>
@@ -328,6 +364,9 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
         <Image source={require('../../../assets/images/Star.png')} style={{width:18,height:18}}></Image>
         <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>4.5</Text>
       </View>
+      <TouchableOpacity onPress={()=>setmodlevisual1(true)} >
+        <AntDesign name="infocirlce" color={'#FFC40C'} size={24} />
+      </TouchableOpacity>
     </View>
     </View>
     <TouchableOpacity style={{justifyContent:'center',alignItems:'center',marginTop:5,height:45, width:'35%', borderRadius:20, backgroundColor:'#FFC40C', shadowColor:  '#000',shadowOffset: {width:3,height:3}, shadowRadius: 5,shadowOpacity: 1.0,elevation: 5}}>
@@ -335,7 +374,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
     </TouchableOpacity>
   </View>
 
-  <Text style={{fontSize:14, fontWeight:'400', color:'#455A64', marginTop:15}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+  {/* <Text style={{fontSize:14, fontWeight:'400', color:'#455A64', marginTop:15}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text> */}
 
   <View style={{flexDirection:'row', marginTop:15, marginBottom:20}}>
     <Image source={require('../../../assets/images/product_location2.png')} style={{height:30, width:30, flex:1 }} resizeMode='contain'/>
@@ -500,6 +539,7 @@ setmodlevisual4(true)}} fontSize={12}
         onSwipeComplete={(e) => {
           setmodlevisual1(false)
         }}
+        onBackdropPress={() => setmodlevisual1(false)}
           scrollTo={() => {}}
           scrollOffset={1}
           propagateSwipe={true}
@@ -509,31 +549,26 @@ setmodlevisual4(true)}} fontSize={12}
       >
         <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
-            <View style={{paddingHorizontal:4}}>
-               <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
-          serchValue={searchValue} 
-          onChangeText={(e)=>{setsearchValue(e)}} 
-          press={()=>{Alert.alert('Hi')}}
-          presssearch={()=>{Alert.alert('Search Pressed')}}
-          paddingLeft={50}/>
-            </View>
-        
-         <Text style={{fontWeight:'bold',fontSize:16,marginTop:15,left:5,color:'#cbcbcb'}}>7 Result Found</Text>
-        
-          <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
-          {
-      upData.map((item,index)=> {
-        return(
-          <View>
-          {flatliistDesign(require('../../../assets/images/layer_40.png'),'Match Time Feast','$140.00',' 34 minutes',()=>{Alert.alert('Add Pressed')},()=>{})}
-           </View>
-        )
-      }
-      )
-    }
-         
-         </View>
-
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, marginTop: 5 }}>
+              <Text style={{ color: Mycolors.Black, fontWeight: '500', }}></Text>
+              <Text style={{ color: Mycolors.Black, fontWeight: '500',fontSize:22 }}>Vendor Info</Text>
+              <TouchableOpacity onPress={() => { setmodlevisual1(false) }}>
+              <Image source={require('../../../assets/crossed.png')} style={{ width: 24, height: 24, alignSelf: 'center',top: -8  }}></Image>
+              </TouchableOpacity>
+             
+            </View> 
+          <Text style={{fontSize:14, fontWeight:'400', color:'#455A64', marginTop:15}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+          <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+                {features ?
+                  features.map((item, index) => {
+                    return (
+                      <View style={{ alignSelf: 'center', width: '95%' }}>
+                        {featureDesign(item.attribute_image, item.attribute_value, item.attribute_detail, '45%', 25, 28, 'transparent', 40)}
+                      </View>
+                    )
+                  })
+                  : null}
+              </View>
             <View style={{width:100,height:100}} />
             </ScrollView>
            

@@ -185,7 +185,7 @@ const ShopProductDetails = (props) => {
         <HomeHeader height={60} paddingHorizontal={15}
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
           press2={() => { }} title2={props.route.params.vendorName} fontWeight={'500'} img2height={20}
-          press3={() => { }} img3={require('../../../assets/images/layer_9.png')} img3width={15} img3height={18} />
+          press3={() => { props.navigation.navigate('ShopProductDetails', {vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }} img3={require('../../../assets/images/layer_9.png')} img3width={15} img3height={18} />
 
         <View style={{ width: '96%', alignSelf: 'center' }}>
           {/* <SearchInputEnt marginTop={10} placeholder={'Search Products'}
