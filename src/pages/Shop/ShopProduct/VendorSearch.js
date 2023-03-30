@@ -14,6 +14,9 @@ import Loader from '../../../WebApi/Loader';
 import { baseUrl, login,shop_eat_business, requestPostApi,requestGetApi,shop_product_business } from '../../../WebApi/Service'
 import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
+import { useSelector, useDispatch } from 'react-redux';
+
+const isEmulator = true
 
 const ShopProduct = (props) => {
   const [searchValue,setsearchValue]=useState('')
@@ -79,6 +82,7 @@ const ShopProduct = (props) => {
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [refreshing, setRefreshing] = useState(false);
+  const mapdata  = useSelector(state => state.maplocation)
 
   useEffect(()=>{
     console.log('hohohohoho',props.route.params.datas);
@@ -106,7 +110,13 @@ const ShopProduct = (props) => {
  }, []);
 
  const homePage = async () => {
-  const endPoint = isLatlong ? `${shop_product_business}?lat=${props.route.params.lat}&long=${props.route.params.lan}` : `${shop_product_business}?name=Nile`
+  // const endPoint = isLatlong ? `${shop_product_business}?lat=${props.route.params.lat}&long=${props.route.params.lan}` : `${shop_product_business}?name=Nile`
+  let endPoint = ''
+  if(isEmulator){
+    endPoint = `${shop_product_business}?lat=${28.6176}&long=${77.422}`
+  }else{
+    endPoint = `${shop_product_business}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`
+  }
   console.log('endPoint', endPoint);
   setLoading(true)
   const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')

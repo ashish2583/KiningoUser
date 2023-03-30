@@ -13,7 +13,8 @@ const initialState = {
     notify:false,
     notificationdata:'',
     messagecount:0,
-    bidamount:''
+    bidamount:'',
+    restorentlocation:'',
 }
 
 
@@ -55,6 +56,11 @@ export default (state = initialState ,action) => {
            return{
                ...state ,
                netinfos : action.netinfos,
+           }
+           case types.RESTORENTLOCATION : 
+           return{
+               ...state ,
+               restorentlocation : action.restorentlocation,
            }
            case types.NOTIFY :
            return{

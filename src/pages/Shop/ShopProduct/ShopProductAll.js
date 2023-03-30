@@ -149,7 +149,7 @@ const ShopProductDetails = (props) => {
   const getProducts = async () => {
 
     setLoading(true)
-
+    console.log('getProducts endpoint', shop_product_productlist+props.route.params.vendorId);
     // const { responseJson, err } = await requestGetApi(shop_product_productlist+'12', '', 'GET', '')
     const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
     setLoading(false)

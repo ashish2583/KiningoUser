@@ -20,6 +20,7 @@ import { saveUserResult, saveUserToken, setUserType } from '../../../redux/actio
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
+import {setRestorentLocation } from '../../../redux/actions/latLongAction';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
@@ -104,7 +105,7 @@ const ShopProduct = (props) => {
         setlat(location.latitude)
         setlan(location.longitude)
         let My_cord = { latitude: location.latitude, longitude: location.longitude }
-        // dispatch(setRestorentLocation(My_cord))
+        dispatch(setRestorentLocation(My_cord))
         homePage(location.latitude,location.longitude)
         LatlongTo_address(My_cord)
     })
@@ -354,7 +355,7 @@ presssearch={()=>{Alert.alert('Search Pressed')}}
 paddingLeft={50}/> */}
 
 <TouchableOpacity style={{width:'98%',height:50,borderRadius:10,backgroundColor:'#fff',flexDirection:'row',alignItems:'center',alignSelf:'center',marginTop:10}}
-onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, lan:lan,from:'search'})}}>
+onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData.vendors, lat:lat, lan:lan,from:'search'})}}>
 <View style={{padding:5,marginLeft:10}}>
   <Image source={require('../../../assets/images/product_search_icon.png')} style={{width:20,height:20}}></Image>
 </View>
@@ -403,7 +404,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
 <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
   <Text style={{ color: Mycolors.Black, fontWeight: 'bold',fontSize:22}}>Explore Nearby</Text>
   <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline",fontSize:14, }}
-    onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}>View More</Text>
+    onPress={() => { props.navigation.navigate('VendorSearch', { datas: resData?.vendors, from: 'search' }) }}>View More</Text>
 </View>
 
 <View style={{width:'100%',alignSelf:'center',marginTop:10, backgroundColor:'#F8F8F8'}}>
@@ -452,7 +453,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
             <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline",fontSize:14,top:10 }}
               onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
           </View>
-          
+
          <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
             {resData != null ?
               <FlatList
@@ -644,11 +645,10 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
            
             </View>
 </Modal>
-{!showChooseMilesModal && !loading ?
-// {!showChooseMilesModal?
+{/* {!showChooseMilesModal && !loading ?
 <TouchableOpacity onPress={()=>props.navigation.navigate('ShopProdCart')} style={{width:'80%',height:60,flexDirection:'row',justifyContent:'flex-end',position:'absolute',bottom:40, right:20, shadowColor: '#FFD037', shadowOffset: {width: 0,height: 3},shadowRadius: 1,shadowOpacity: 0.1,elevation: 5}}>
 <Image source={require('../../../assets/images/prod_cart_img.png')} style={{width:100,height:100 }}/>
-</TouchableOpacity>:null}
+</TouchableOpacity>:null} */}
 {loading ? <Loader /> : null}
 {My_Alert ? <MyAlert sms={alert_sms} okPress={()=>{setMy_Alert(false)}} /> : null }
     </SafeAreaView>

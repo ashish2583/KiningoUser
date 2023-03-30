@@ -75,3 +75,10 @@ export const setBidAmount = (data) => {
         bidamount:data
     }
 }
+
+export const setRestorentLocation = (data) => {
+    return {
+        type:types.RESTORENTLOCATION,
+        restorentlocation:data
+    }
+}

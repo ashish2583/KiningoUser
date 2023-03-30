@@ -40,5 +40,6 @@ export const NOOFCAR = "NOOFCAR";
 
 export const VERDERDETAILS = "VERDERDETAILS";
 
+export const RESTORENTLOCATION = "RESTORENTLOCATION";
 
 export const DASHDATA = "DASHDATA";
