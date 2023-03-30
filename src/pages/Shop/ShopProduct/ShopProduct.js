@@ -400,8 +400,13 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
     closeIconColor="transparent"
 />
    </View> */}
+<View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
+  <Text style={{ color: Mycolors.Black, fontWeight: 'bold',fontSize:22}}>Explore Nearby</Text>
+  <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline",fontSize:14, }}
+    onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}>View More</Text>
+</View>
 
-<View style={{width:'100%',alignSelf:'center',marginTop:20, backgroundColor:'#F8F8F8'}}>
+<View style={{width:'100%',alignSelf:'center',marginTop:10, backgroundColor:'#F8F8F8'}}>
           <FlatList
                   data={resData?.vendors}
                   showsHorizontalScrollIndicator={false}
@@ -442,6 +447,12 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData, lat:lat, 
          </View>
 
 
+         <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
+            <Text style={{ color: Mycolors.Black, fontWeight: 'bold',fontSize:22, width: '70%', }}>Eat what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold',fontSize:22, width: '70%', }}> HAPPY!</Text></Text>
+            <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline",fontSize:14,top:10 }}
+              onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
+          </View>
+          
          <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
             {resData != null ?
               <FlatList
