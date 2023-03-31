@@ -12,8 +12,10 @@ import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message'
 import { requestGetApi, shop_product_productlist } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
+import {  useSelector, useDispatch } from 'react-redux';
 
 const ShopProductDetails = (props) => {
+  const userdetaile  = useSelector(state => state.user.user_details)
   const [searchValue, setsearchValue] = useState('')
   const [scrollEnabled, setScrollEnabled] = useState(false)
   const myTextInput = useRef()
@@ -151,7 +153,7 @@ const ShopProductDetails = (props) => {
     setLoading(true)
     console.log('getProducts endpoint', shop_product_productlist+props.route.params.vendorId);
     // const { responseJson, err } = await requestGetApi(shop_product_productlist+'12', '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', userdetaile.token)
     setLoading(false)
     // console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {

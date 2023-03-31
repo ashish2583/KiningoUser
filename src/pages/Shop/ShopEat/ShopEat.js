@@ -11,13 +11,14 @@ import Loader from '../../../WebApi/Loader';
 import Toast from 'react-native-toast-message';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
+import { saveUserResult, saveUserToken, setVenderDetail,onLogoutUser, setUserType } from '../../../redux/actions/user_action';
 import {setRestorentLocation } from '../../../redux/actions/latLongAction';
 import GetLocation from 'react-native-get-location'
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import { log } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
@@ -147,6 +148,7 @@ const ShopEat = (props) => {
     console.log('the res==>>Home')
     setLoading(true)
 
+    // const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
     const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + '28.6176' + '&long=' + '77.422', '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
@@ -204,7 +206,11 @@ const ShopEat = (props) => {
         <HomeHeader height={60} paddingHorizontal={15}
           press1={() => { props.navigation.goBack() }}  img1width={18} img1height={15}
           press2={() => { }} title2={'Food'} fontWeight={'500'} img2height={20}
-          press3={() => {props.navigation.navigate('ShopEatNotificationList') }} img3width={25} img3height={25} img3={require('../../../assets/Bell.png')} />
+          press3={() => {
+            // props.navigation.navigate('ShopEatNotificationList') 
+            AsyncStorage.clear(); 
+          dispatch(onLogoutUser())
+            }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
         {cartCount != '0' ?
           <View style={{ position: 'absolute', right: 8, top: 8, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
             <Text style={{ fontSize: 11, textAlign: 'center', color: '#fff' }}>{cartCount}</Text>

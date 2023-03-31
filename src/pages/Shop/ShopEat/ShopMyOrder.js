@@ -273,7 +273,7 @@ const ShopMyOrder = (props) => {
         setorderData(responseJson.body)
         setShowFiltersModal(false)
       } else {
-         setorderData([])
+         setorderData(null)
         // setShowFiltersModal(false)
         Toast.show({ text1: responseJson.headers.message })
         //  setalert_sms(err) 
@@ -494,21 +494,8 @@ const ShopMyOrder = (props) => {
                       {design(require('../../../assets/shape_39.png'), 'Order Status', item.status_label, '100%', 25, 28, 'red', 20)}
 
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
-                        {/* {item.status!= 5 ?
-                         <MyButtons title={"Cancel Order"} height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                            setcancleitem(item)
-                            setmodlevisual1(true)
-                          }} fontSize={12}
-                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1}/>
-                       : null
-                          } */}
-                          <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                            if (item.business_rating == null) {
-                              props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                            }
-                          }} fontSize={12}
-                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                        
+                         
                         {item.order_type == 'take-away' && item.business_rating == null ?
                           <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             if (item.business_rating == null) {
@@ -591,22 +578,24 @@ const ShopMyOrder = (props) => {
             }
             )
             :
-            (<View style={{ width: '100%', justifyContent: 'center', height: '100%', marginHorizontal: 'auto' }}>
+            
+              <View style={{ width: '100%', justifyContent: 'center', height: '100%', marginHorizontal: 'auto' }}>
               <View style={{ width: 220, height: 220, alignSelf: 'center', }}>
                 <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
               </View>
               <View style={{ width: '100%', marginTop: 25,  }}>
 
                 <Text style={{ color: '#ADC430', textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>No Order Found</Text>
-                <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}>Looks like you have not placed any order yet. </Text>
+                <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}>Looks you like you have no order in the selected time or type. </Text>
                 
                 <View style={{ width: '40%', alignSelf: 'center',marginTop: 10 }}>
-              <MyButtons title="Back to home" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {  props.navigation.goBack() }} marginHorizontal={20} fontSize={14}
+              <MyButtons title="View all orders" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { resetFilter()  }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
               </View>
 
-            </View>)
+            </View>
+            
           }
 
 

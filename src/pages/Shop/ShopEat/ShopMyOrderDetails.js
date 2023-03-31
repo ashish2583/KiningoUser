@@ -197,7 +197,8 @@ const ShopMyOrderDetails = (props) => {
               </View>
 
             </View>
-            {data.delivered_date!=null ?
+            
+            {data.delivered_date!=null && data.status!= 11 ?
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>

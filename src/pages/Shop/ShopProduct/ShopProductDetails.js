@@ -146,7 +146,7 @@ const ShopProductDetails = (props) => {
   let endPoint = shop_product_details + props.route.params.productId
   console.log('endPoint', endPoint);
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', userdetaile.token)
   setLoading(false)
   console.log('the res==>>product details', responseJson)
   if (responseJson.headers.success == 1) {
@@ -315,7 +315,7 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
 <View style={{width:'96%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',backgroundColor:'#F8F8F8',borderRadius:9,paddingVertical:10}}>
   <View>
 <Text style={{color:Mycolors.Black,fontWeight:'600'}}>{'props.route.params.productName'}</Text>
-<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>{'props.route.params.category'}</Text>
+<Text style={{color:Mycolors.GrayColor,fontSize:13,fontWeight:'500',marginVertical:4}}>{productDetailsData.MainCategory}</Text>
   </View>
 
   <View>
@@ -359,11 +359,13 @@ titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0}
     <View style={{flexDirection:'row'}}>
     <Image source={require('../../../assets/images/store_image.png')}/>
     <View style={{marginLeft:15, marginTop:5}}>
-      <Text style={{fontSize:16, fontWeight:'500', color:'#263238'}}>Favlily Store</Text>
-      <View style={{flexDirection:'row',marginTop:5}}>
-        <Image source={require('../../../assets/images/Star.png')} style={{width:18,height:18}}></Image>
-        <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>4.5</Text>
-      </View>
+      <Text style={{fontSize:16, fontWeight:'500', color:'#263238'}}>{productDetailsData.Business_name}</Text>
+      {productDetailsData['AVG(star)'] ? 
+        <View style={{flexDirection:'row',marginTop:5}}>
+          <Image source={require('../../../assets/images/Star.png')} style={{width:18,height:18}}></Image>
+          <Text style={{color:Mycolors.Black,fontSize:14,fontWeight:'600',left:5}}>4.5</Text>
+        </View>
+      :null}
       <TouchableOpacity onPress={()=>setmodlevisual1(true)} >
         <AntDesign name="infocirlce" color={'#FFC40C'} size={24} />
       </TouchableOpacity>
