@@ -92,8 +92,8 @@ const WeelStack=(props)=>{
            <Stack.Navigator
             screenOptions={{ headerShown:false,}}
              >
-              <Stack.Screen component = {ShopEatStack} name="ShopEat" />
-              {/* <Stack.Screen component = {ShopProductStack} name="ShopProduct" /> */}
+              {/* <Stack.Screen component = {ShopEatStack} name="ShopEat" /> */}
+              <Stack.Screen component = {ShopProductStack} name="ShopProduct" />
             {/* <Stack.Screen component = {Weel} name="Weel" /> */}
 
             <Stack.Screen component = {Connect} name="Connect" />
