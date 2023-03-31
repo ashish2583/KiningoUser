@@ -418,7 +418,7 @@ onPress={()=>{props.navigation.navigate('VendorSearch',{datas:resData.vendors, l
           <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#F8F8F8',alignSelf:'center'}}
           // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
           onPress={()=>{
-            props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name})
+            props.navigation.navigate('ShopProductAll', {vendorId: item.userid, vendorName: item.name, businessid:item.business_id})
             // dispatch(setProductVenderDetail(item))
             }}>
           <Image source={{uri:item.banner_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:7}}></Image>

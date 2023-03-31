@@ -265,7 +265,7 @@ onPress={()=>{props.navigation.navigate('ShopSearch',{vendorId:props.route.param
                 return (
                   <View style={{ width: dimensions.SCREEN_WIDTH / 2.2, marginHorizontal: 5 }}>
                     <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH / 2.2, height: 170, backgroundColor: '#fff', alignSelf: 'center', borderRadius: 15, overflow: 'hidden' }}
-                      onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, productId:item.id, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName}) }}>
+                      onPress={() => { props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, productId:item.id, vendorId:props.route.params.vendorId, vendorName:props.route.params.vendorName, businessid:props.route.params.businessid, }) }}>
                       <Image source={{ uri: `${item.image}` }} style={{ width: '100%', height: '100%', alignSelf: 'center' }}></Image>
                     </TouchableOpacity>
                     <View style={{}}>

@@ -378,8 +378,8 @@ const FoodDetails = (props) => {
     var data = {
       product_id: items.id,
       quantity: 1,
-      // business_id: props.route.params.data.business_id,
-      business_id: props.route.params.vendorId,
+      business_id: props.route.params.business_id,
+      // business_id: props.route.params.vendorId,
       product_type: items.product_type
     }
     console.log('postcart data', data);
@@ -455,8 +455,8 @@ const FoodDetails = (props) => {
   const vendorDetail = async () => {
 
     setLoading(true)
-    console.log('saurabh url', shop_vendor_details + props.route.params.vendorId);
-    const { responseJson, err } = await requestGetApi(shop_vendor_details + props.route.params.vendorId, '', 'GET', User.token)
+    console.log('saurabh url', shop_vendor_details + props.route.params.businessid);
+    const { responseJson, err } = await requestGetApi(shop_vendor_details + props.route.params.businessid, '', 'GET', User.token)
     setLoading(false)
     console.log('vendorDetail responseJson', responseJson);
     if (responseJson.headers.success == 1) {
@@ -800,6 +800,7 @@ const FoodDetails = (props) => {
   const getDropdownData = () => {
     const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
+    console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
       <>
       {data?.length > 0 ?
