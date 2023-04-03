@@ -825,7 +825,7 @@ const FoodDetails = (props) => {
   const getDropdownData = () => {
     const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
-    console.log('getDropdownData menuresData', menuresData, selectedTab);
+    // console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
       <>
       {data?.length > 0 ?
