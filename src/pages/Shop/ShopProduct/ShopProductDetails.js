@@ -94,7 +94,7 @@ const FoodDetails = (props) => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
       menuList(null);
-      getSimilarProducts();
+      // getSimilarProducts();
        })
         return unsubscribe;
   }, [])
@@ -102,7 +102,7 @@ const FoodDetails = (props) => {
   const checkcon = () => {
     vendorDetail()
     menuList(menutypevalue)
-    getSimilarProducts();
+    // getSimilarProducts();
   }
 
   const wait = (timeout) => {
@@ -1299,7 +1299,7 @@ const FoodDetails = (props) => {
 
         <View style={{ height: 140 }} />
 
-        <View>
+        {/* <View>
 <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
 <View style={{width:'95%',marginTop:15,alignSelf:'center'}}>
 
@@ -1338,7 +1338,7 @@ const FoodDetails = (props) => {
 </View>
 </View>
 
-</View>
+</View> */}
 
       </ScrollView>
       {selectedTab == 'Dining' ?
