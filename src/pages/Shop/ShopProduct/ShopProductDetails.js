@@ -378,7 +378,7 @@ const FoodDetails = (props) => {
     var data = {
       product_id: items.id,
       quantity: 1,
-      business_id: props.route.params.business_id,
+      business_id: props.route.params.businessid,
       // business_id: props.route.params.vendorId,
       product_type: items.product_type
     }
@@ -464,40 +464,40 @@ const FoodDetails = (props) => {
       console.log('the res features ==>>', responseJson.body.features)
       var updated = 0
       for (let j = 1; j <= responseJson.body.services.length; j++) {
-        if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
-          console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
-          console.log('verma===>>', responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00');
-          console.log('saurabh===>>', responseJson.body.services[j - 1].attribute_detail);
-          const slotDuration = 30
-          const breakDuration = 15
-          const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
-          const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
-          const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
-          const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
-          const minutesDifferent = endInMinutes - startInMinutes
-          const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
-          const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
-          console.log('minutesDifferent', minutesDifferent);
-          console.log('slotsWithGap', slotsWithGap);
-          console.log('isAdditionalSlot', isAdditionalSlot);
-          let allSlots = []
-          let start = startTime
-          let newTime = ''
-          Array.from(Array(slotsWithGap).keys()).map(el => {
-            newTime = newAddMinutes(start, slotDuration)
-            allSlots.push({ start: start, end: newTime })
-            console.log('{start: start, end: newTime}', { start: start, end: newTime });
-            start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
-          })
-          if (isAdditionalSlot) {
-            allSlots.push({ start: start, end: newAddMinutes(start, slotDuration) })
-          }
-          setSlots(allSlots)
-          console.log('all slots', allSlots);
-          // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
-          //  setfutureTimes(stimess)
-          settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
-        }
+        // if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
+        //   console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
+        //   console.log('verma===>>', responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00');
+        //   console.log('saurabh===>>', responseJson.body.services[j - 1].attribute_detail);
+        //   const slotDuration = 30
+        //   const breakDuration = 15
+        //   const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
+        //   const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
+        //   const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+        //   const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+        //   const minutesDifferent = endInMinutes - startInMinutes
+        //   const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
+        //   const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
+        //   console.log('minutesDifferent', minutesDifferent);
+        //   console.log('slotsWithGap', slotsWithGap);
+        //   console.log('isAdditionalSlot', isAdditionalSlot);
+        //   let allSlots = []
+        //   let start = startTime
+        //   let newTime = ''
+        //   Array.from(Array(slotsWithGap).keys()).map(el => {
+        //     newTime = newAddMinutes(start, slotDuration)
+        //     allSlots.push({ start: start, end: newTime })
+        //     console.log('{start: start, end: newTime}', { start: start, end: newTime });
+        //     start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
+        //   })
+        //   if (isAdditionalSlot) {
+        //     allSlots.push({ start: start, end: newAddMinutes(start, slotDuration) })
+        //   }
+        //   setSlots(allSlots)
+        //   console.log('all slots', allSlots);
+        //   // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
+        //   //  setfutureTimes(stimess)
+        //   settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
+        // }
         if (responseJson.body.services[j - 1].attribute_value == 'yes' && updated == 0) {
           setselectedTab(responseJson.body.services[j - 1].attribute_label)
           updated = 1
