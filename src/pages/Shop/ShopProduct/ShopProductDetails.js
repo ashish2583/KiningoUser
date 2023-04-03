@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_product_delete_cart_item, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_product_productlist, shop_product_cart, shop_vendor_details } from '../../../WebApi/Service'
+import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_product_delete_cart_item, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_product_productlist, shop_product_cart, shop_vendor_details, shop_product_similar_Products } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
@@ -53,6 +53,7 @@ const FoodDetails = (props) => {
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState([])
   const [menuresData, setmenuresData] = useState([])
+  const [similarProducts, setSimilarProducts] = useState([])
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [bannerimg, setbannerimg] = useState('')
@@ -93,6 +94,7 @@ const FoodDetails = (props) => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
       menuList(null);
+      getSimilarProducts();
        })
         return unsubscribe;
   }, [])
@@ -100,6 +102,7 @@ const FoodDetails = (props) => {
   const checkcon = () => {
     vendorDetail()
     menuList(menutypevalue)
+    getSimilarProducts();
   }
 
   const wait = (timeout) => {
@@ -563,6 +566,27 @@ const FoodDetails = (props) => {
       // }
       // setcartCount(counts)
       setmenuresData(responseJson.body)
+      setreloades(!reloades)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
+  const getSimilarProducts = async (dd) => {
+    setLoading(true)
+    console.log('similar endpoint', shop_product_similar_Products + props.route.params.category);
+    const { responseJson, err } = await requestGetApi(shop_product_similar_Products + props.route.params.category, '', 'GET', User.token)
+    setLoading(false)
+    console.log('getSimilarProducts responseJson', responseJson)
+    if (responseJson.headers.success == 1) {
+      setSimilarProducts(responseJson.body)
+      // var counts = 0
+      // for (let i = 1; i <= responseJson.body.length; i++) {
+      //   if (responseJson.body[i - 1].in_cart == '1') {
+      //     counts = parseInt(counts) + parseInt('1')
+      //   }
+      // }
+      // setcartCount(counts)
       setreloades(!reloades)
     } else {
       // setalert_sms(err)
@@ -1274,6 +1298,47 @@ const FoodDetails = (props) => {
 
 
         <View style={{ height: 140 }} />
+
+        <View>
+<View style={{width:'100%',alignSelf:'center',marginTop:10}}>
+<View style={{width:'95%',marginTop:15,alignSelf:'center'}}>
+
+  <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
+  <Text style={{color:Mycolors.Black,fontWeight:'600'}}>Explore Similar Products</Text>
+  <Text style={{color:'#FFC40C',textDecorationLine: "underline", textDecorationColor:'#FFC40C'}} onPress={()=>{}}>View More</Text>
+</View>
+
+<FlatList
+                  data={similarProducts}
+                  showsHorizontalScrollIndicator={true}
+                  horizontal
+                  renderItem={({item,index})=>{
+                    console.log('similar item', item);
+                    return(
+                      <View style={{width:dimensions.SCREEN_WIDTH/2.2,marginHorizontal:5}}>
+          <TouchableOpacity style={{width:dimensions.SCREEN_WIDTH/2.2,height:170,backgroundColor:'#fff',alignSelf:'center', borderRadius:15, overflow:'hidden'}}
+          onPress={()=>{props.navigation.navigate('ShopProductDetails', {category: item.category, productName:item.name, productId:item.id, vendorId:props.route.params.vendorId, businessid:props.route.params.businessid, })}}
+          >
+          <Image source={{uri: item.image}} style={{width:'100%',height:'100%',alignSelf:'center'}}></Image>
+          </TouchableOpacity>
+          <View style={{}}>
+          <Text style={{fontSize:11,color:Mycolors.Black,marginTop:5,textAlign:'left',fontWeight:'bold'}}>{item.name}</Text>
+          </View>
+          <View style={{padding:5,paddingLeft:0,top:-5}}>
+          <Text style={{fontSize:9,color:Mycolors.GrayColor,marginTop:5,textAlign:'left',}}>{item.price}</Text>
+          </View>
+          </View>
+                    )
+                  }}
+                  keyExtractor={item => item.id}
+                />
+
+                <View style={{height:100}} />  
+
+</View>
+</View>
+
+</View>
 
       </ScrollView>
       {selectedTab == 'Dining' ?

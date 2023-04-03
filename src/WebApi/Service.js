@@ -50,7 +50,7 @@ export const shop_product_remove_coupon=`shop/product/cart/remove-coupon`;
 export const shop_product_coupons_userid = 'shop/product/coupons/userid/'
 export const shop_product_cart_apply_coupon=`shop/product/cart/apply-coupon`;
 // end: new apis yet to be created
-export const shop_product_similar_Products = `shop/product/similarProducts`;
+export const shop_product_similar_Products = `shop/product/similar-products?name=`;
 export const shop_product_category_names = `shop/product/AllCategoryNames`;
 export const user_selected_address= `user/selectedAddress/`;
 export const shop_product_home= `shop/product/home`;
