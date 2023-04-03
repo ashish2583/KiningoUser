@@ -522,7 +522,8 @@ const FoodDetails = (props) => {
   }
 
   const cart_Count = async () => {
-    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId, '', 'GET', User.token)
+    // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId, '', 'GET', User.token)
     setLoading(false)
     console.log('the res in_cart cart_Count ==>>', responseJson)
     if (responseJson.headers.success == 1) {
@@ -541,7 +542,7 @@ const FoodDetails = (props) => {
   }
 
   const menuList = async (dd) => {
-    // cart_Count()
+    cart_Count()
     console.log('menuList inside', dd, props.route.params.vendorId);
     setLoading(true)
     var urls = ''
@@ -599,7 +600,8 @@ const FoodDetails = (props) => {
       console.log('hello');
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
+    // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
     setLoading(false)
     console.log('the res search shop_eat_menu_userid ==>>', responseJson)
     if (responseJson.headers.success == 1) {
@@ -858,7 +860,7 @@ const FoodDetails = (props) => {
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')}
           img1width={30} img1height={30} img1backgroundColor={'#fff'} img1padding={5} img1borderRadius={4}
           press2={() => { }} title2={resData.name} fontWeight={'bold'} img2height={20} color={Mycolors.TEXT_COLOR}
-          press3={() => { props.navigation.navigate('ShopCart') }} img3width={45} img3height={45}
+          press3={() => { props.navigation.navigate('ShopProdCart') }} img3width={45} img3height={45}
           img3={selectedTab != 'Book A Table' && selectedTab != 'Dining' ? require('../../../assets/Cart.png') : ''}
           img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
         {cartCount != '0' && selectedTab != 'Book A Table' && selectedTab != 'Dining' ?
@@ -904,7 +906,7 @@ const FoodDetails = (props) => {
             <View>
               {/* <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text> */}
               <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
-              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
+              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>E-commerce store</Text>
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating?resData.rating:'0.0'}</Text>
