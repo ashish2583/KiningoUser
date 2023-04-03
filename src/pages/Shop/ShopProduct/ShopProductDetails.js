@@ -461,7 +461,7 @@ const FoodDetails = (props) => {
     console.log('vendorDetail responseJson', responseJson);
     if (responseJson.headers.success == 1) {
       console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
-      console.log('the res features ==>>', responseJson.body.features)
+      // console.log('the res features ==>>', responseJson.body.features)
       var updated = 0
       for (let j = 1; j <= responseJson.body.services.length; j++) {
         // if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
@@ -508,6 +508,7 @@ const FoodDetails = (props) => {
       for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
         allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
       }
+      console.log('allimgs', allimgs);
       setAllImg(allimgs)
       setresData(responseJson.body)
       //  A()
@@ -877,7 +878,8 @@ const FoodDetails = (props) => {
 
           <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
             <View>
-              <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
+              {/* <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text> */}
+              <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
               <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
