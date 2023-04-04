@@ -22,6 +22,7 @@ import openMap from 'react-native-open-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 function newAddMinutes(time, minsToAdd) {
@@ -962,7 +963,7 @@ const FoodDetails = (props) => {
                       <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
                         <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
                           press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
-                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab == item.attribute_label ? ['#fd001f', '#b10027'] : ['transparent', 'transparent']} backgroundColor={'transparent'} />
+                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#FFC40C':'transparent'} />
                       </View>
                       :
                       <>
@@ -1070,18 +1071,21 @@ const FoodDetails = (props) => {
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
                   <TouchableOpacity style={{
-                    width: 40, height: 40, backgroundColor: 'transparent', justifyContent: 'center', shadowOffset: {
+                    width: 40, height: 40, backgroundColor: '#FFC40C', justifyContent: 'center', shadowOffset: {
                       width: 0,
                       height: 3
                     },
                     shadowColor: '#F5F5F5',
                     shadowRadius: 1,
                     shadowOpacity: 0.3,
-                    // justifyContent: 'center',
-                    elevation: 5, paddingTop: 4
+                    justifyContent: 'center',
+                    alignItems:'center',
+                    borderRadius:10,
+                    elevation: 5,
                   }}
                     onPress={() => { setmodlevisual1(true) }}>
-                    <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image>
+                      <AntDesign name="search1" color={'#FFF'} size={24} />
+                    {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
                   </TouchableOpacity>
 
                 </View>
@@ -1161,10 +1165,11 @@ const FoodDetails = (props) => {
                   <Text style={{color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C'}} >View All</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
+              <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
                   horizontal={true}
+                  style={{marginBottom:20}}
                   showsHorizontalScrollIndicator={false}
                   // numColumns={2}
                   renderItem={({ item, index }) => {

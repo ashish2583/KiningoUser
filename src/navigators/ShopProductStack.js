@@ -15,6 +15,7 @@ import ShopProdCart from '../pages/Shop/ShopProduct/ShopProdCart';
 import ShopSearch from '../pages/Shop/ShopProduct/ShopSearch';
 import VendorSearch from '../pages/Shop/ShopProduct/VendorSearch';
 import CategorySearch from '../pages/Shop/ShopProduct/CategorySearch';
+import ShopProductSearch from '../pages/Shop/ShopProduct/ShopProductSearch';
 const ShopProductStack=(props)=>{
    
     const Stack = createNativeStackNavigator();
@@ -36,6 +37,7 @@ const ShopProductStack=(props)=>{
             <Stack.Screen component = {ShopSearch} name="ShopSearch" />
             <Stack.Screen component = {VendorSearch} name="VendorSearch" />
             <Stack.Screen component = {CategorySearch} name="CategorySearch" />
+            <Stack.Screen component = {ShopProductSearch} name="ShopProductSearch" />
             <Stack.Screen component = {Shop} name="Shop" />
             
 
