@@ -240,7 +240,7 @@ const ShopProduct = (props) => {
       // console.log('moment(newTime)', moment(newTime).format('HH'));
       let endHours = newTime.split(':')[0]
       let timeOfDay = ''
-      console.log('isbetween', moment(slotDate).isBetween(createDate('05:00'), createDate('12:00')));
+      // console.log('isbetween', moment(slotDate).isBetween(createDate('05:00'), createDate('12:00')));
       if(moment(slotDate).isBetween(createDate('05:00'), createDate('12:00'))){
         timeOfDay = 'day'
       }else if(moment(slotDate).isBetween(createDate('12:00'), createDate('18:00'))){
