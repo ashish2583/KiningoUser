@@ -126,7 +126,9 @@ const ShopProduct = (props) => {
   const [res, setres] = useState('')
   const [resData, setresData] = useState(null)
   const [selectedTime,setselectedTime]=useState('1')
-  const [selectedTime2,setselectedTime2]=useState('1')
+  const [selectedTime2,setselectedTime2]=useState('')
+  const [selectedSlot,setSelectedSlot]=useState({})
+  
   const [takeAwayDate,setTakeAwayDate]=useState('')
   const [dayData, setDayData]=useState([{dayPart:'Day', id: 1},{dayPart:'Afternoon', id: 2},{dayPart:'Evening', id: 3}])
   const [showda, setshowda] = useState(false)
@@ -166,7 +168,7 @@ const ShopProduct = (props) => {
   const [taxes, setTaxes] = useState('0.0')
   const [totla, settotal] = useState('0.0')
   const [modlevisual, setmodlevisual] = useState(false)
-  const [addressList, setaddressList] = useState(false)
+  const [showTimeModal, setShowTimeModal] = useState(false)
   const [timeData, setTimeData] = useState([
     {
       id:'1',
@@ -213,12 +215,12 @@ const ShopProduct = (props) => {
     return d
   }
 
-  const getTimeSlots = () => {
-    const allTime = "10:00,15:16"
+  const getTimeSlots = (startTime, endTime) => {
+    // const allTime = "10:00,15:16"
     const slotDuration = 30
     const breakDuration = 15
-    const startTime = allTime.substring(0, 5)
-    const endTime = allTime.substring(6)
+    // const startTime = allTime.substring(0, 5)
+    // const endTime = allTime.substring(6)
     // const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
     // const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
     const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
@@ -275,7 +277,6 @@ const ShopProduct = (props) => {
 
   useEffect(() => {
     console.log('userdetaile.token', userdetaile.token);
-    getTimeSlots()
     getcart()
     // getCopun()
     getAddress()
@@ -345,6 +346,9 @@ const ShopProduct = (props) => {
         setsubTotal(responseJson.body.sub_total)
         setdilivery(responseJson.body.delivery_charge)
         setVendorCharges(responseJson.body.vendor_charges)
+        // console.log('nnn', responseJson.body);
+        console.log('nnn', responseJson.body.business_start_time, responseJson.body.business_end_time);
+        getTimeSlots(responseJson.body.business_start_time, responseJson.body.business_end_time)
         setTaxes(responseJson.body.taxes)
         settotal(responseJson.body.total)
         setreloades(!reloades)
@@ -465,7 +469,7 @@ const ShopProduct = (props) => {
       Toast.show({ text1: responseJson.headers.message })
       // Alert.alert(responseJson.headers.message)
       setShippingAddressPopUp(false)
-      setaddressList(true)
+      setShowTimeModal(true)
       setedit(false)
       setAddressId('')
       setfull_name('')
@@ -1014,8 +1018,8 @@ const ShopProduct = (props) => {
           {resData?.length > 0 ?
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5, width: '100%' }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Choose Delivery Address</Text>
-                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Choose Address</Text>
+                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                {/* <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Choose Address</Text> */}
               </View>
 
               <View style={{
@@ -1027,12 +1031,15 @@ const ShopProduct = (props) => {
               >
 
                 <View style={{ width: '80%' }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>{selectedAddress.location_name}</Text>
+                  {/* <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>{selectedAddress.location_name}</Text>
                   <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
-                  <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text>
+                  <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text> */}
+                  {selectedTime2 !== '' ?
+                  <Text style={{fontSize:11,color:Mycolors.GrayColor,fontWeight:'bold'}}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
+                   :null}
                 </View>
 
-                <TouchableOpacity style={{ width: 25, height: 25, alignSelf: 'center' }} onPress={() => { setaddressList(true) }}>
+                <TouchableOpacity style={{ width: 25, height: 25, alignSelf: 'center' }} onPress={() => { setShowTimeModal(true) }}>
                   <Image source={require('../../../assets/arrow_right_black.png')} style={{ width: 25, height: 25, resizeMode: 'stretch' }} ></Image>
                 </TouchableOpacity>
 
@@ -1508,11 +1515,11 @@ const ShopProduct = (props) => {
 
 
       <Modal
-        isVisible={addressList}
+        isVisible={showTimeModal}
         swipeDirection="down"
-        onBackdropPress={() => setaddressList(false)}
+        onBackdropPress={() => setShowTimeModal(false)}
         onSwipeComplete={(e) => {
-          setaddressList(false)
+          setShowTimeModal(false)
         }}
         scrollTo={() => { }}
         scrollOffset={1}
@@ -1536,8 +1543,8 @@ const ShopProduct = (props) => {
 
                                           />
                                       </TouchableOpacity> */}
-            <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setaddressList(false) }} />
-            <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25, }}>Select Delivery Address</Text>
+            <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setShowTimeModal(false) }} />
+            <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25, }}>Select PickUp Time and Date</Text>
             <View
               style={{
                 justifyContent: "center",
@@ -1570,7 +1577,7 @@ const ShopProduct = (props) => {
                     <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{takeAwayDate ? takeAwayDate.toString().substring(0, 16) : 'Select Date'}</Text>
                   </TouchableOpacity>
               }
-              <FlatList
+              {/* <FlatList
                 data={dayData}
                 horizontal={true}
                 // style={{backgroundColor:'yellow', height:'auto'}}
@@ -1580,16 +1587,16 @@ const ShopProduct = (props) => {
                     <TouchableOpacity style={{ flexDirection: 'row', width: 100, marginRight: 10, height: 40, justifyContent: 'space-between', alignItems: 'center', borderWidth: 0.5, borderRadius: 5, paddingHorizontal: 10, borderColor: selectedTime == item.id ? '#FFC40C' : Mycolors.GrayColor, backgroundColor: selectedTime == item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent' }}
                       onPress={() => { setselectedTime(item.id) }}>
                       <Text style={{ fontSize: 11, color: selectedTime == item.id ? '#FFC40C' : Mycolors.GrayColor, textAlign: 'center', fontWeight: 'bold' }}>{item.dayPart}</Text>
-                      {/* {selectedTime == item.id ?
+                      {selectedTime == item.id ?
                         <Image source={require('../../../assets/images/product_sel_circle.png')} style={{ width: 20, height: 20, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                         :
                         <Image source={require('../../../assets/images/ent_unsel_circle.png')} style={{ width: 20, height: 20, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
-                      } */}
+                      }
                     </TouchableOpacity>
                   )
                 }}
                 keyExtractor={item => item.id}
-              />
+              /> */}
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}> */}
                 <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 13, marginTop:10, marginBottom:10 }}>Select Time Slot</Text>
               {/* </View> */}
@@ -1604,7 +1611,8 @@ const ShopProduct = (props) => {
                     return(
                       <View style={{width:90,marginRight:5}}>
           <TouchableOpacity style={{width:90,height:40,justifyContent:'center',borderWidth:0.5,borderRadius:5,borderColor:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor, backgroundColor: selectedTime2==item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent'}}
-          onPress={()=>{setselectedTime2(item.id)}}>
+          onPress={()=>{setselectedTime2(item.id); setSelectedSlot(item)}}>
+  
           <Text style={{fontSize:11,color:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.start}-{item.end}</Text>
           </TouchableOpacity>
           </View>
@@ -1619,9 +1627,7 @@ const ShopProduct = (props) => {
           </View>
           <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 100 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
-              // setShippingAddressPopUp(true) 
-              setChooseAddressModeModal(true)
-              setaddressList(false)
+              setShowTimeModal(false)
             }} marginHorizontal={20} fontSize={11}
               titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
           </View>
