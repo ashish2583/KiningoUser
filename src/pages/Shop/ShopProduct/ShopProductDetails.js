@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_product_delete_cart_item, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_product_productlist, shop_product_cart, shop_vendor_details, shop_product_similar_Products } from '../../../WebApi/Service'
+import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_product_delete_cart_item, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat, shop_product_productlist, shop_product_cart, shop_vendor_details, shop_product_similar_Products, shop_product_categories } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
@@ -94,6 +94,7 @@ const FoodDetails = (props) => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
       menuList(null);
+      getMenuTypeDate();
       // getSimilarProducts();
        })
         return unsubscribe;
@@ -521,6 +522,18 @@ const FoodDetails = (props) => {
     }
   }
 
+  const getMenuTypeDate = async () => {
+    // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(shop_product_categories, '', 'GET', User.token)
+    setLoading(false)
+    console.log('getMenuTypeDate', responseJson)
+    if (responseJson.headers.success == 1) {
+      // setmenutypedate(responseJson.body)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
   const cart_Count = async () => {
     // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId, '', 'GET', User.token)
     const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId, '', 'GET', User.token)

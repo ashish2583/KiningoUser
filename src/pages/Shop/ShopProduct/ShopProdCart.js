@@ -23,10 +23,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
 Geolocation.setRNConfiguration(GoogleApiKey);
 Geocoder.init(GoogleApiKey);
+
+
+function newAddMinutes(time, minsToAdd) {
+  function D(J) { return (J < 10 ? '0' : '') + J; };
+  var piece = time.split(':');
+  var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
+  return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
+}
 
 const ShopProduct = (props) => {
   const userdetaile = useSelector(state => state.user.user_details)
@@ -196,9 +205,77 @@ const ShopProduct = (props) => {
   const [googleAddress, setGoogleAddress] = useState('');
   const [googleLatLng, setGoogleLatLng] = useState({});
   const [loaderText, setLoaderText] = useState('');
+  const [slots, setSlots] = useState([]);
+
+  const createDate = (timeParam) => {
+    let d = new Date();
+    d.setHours(timeParam.split(':')[0], timeParam.split(':')[1], 0);
+    return d
+  }
+
+  const getTimeSlots = () => {
+    const allTime = "10:00,15:16"
+    const slotDuration = 30
+    const breakDuration = 15
+    const startTime = allTime.substring(0, 5)
+    const endTime = allTime.substring(6)
+    // const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
+    // const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
+    const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+    const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+    const minutesDifferent = endInMinutes - startInMinutes
+    const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
+    const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
+    console.log('minutesDifferent', minutesDifferent);
+    console.log('slotsWithGap', slotsWithGap);
+    console.log('isAdditionalSlot', isAdditionalSlot);
+    let allSlots = []
+    let start = startTime
+    let newTime = ''
+    Array.from(Array(slotsWithGap).keys()).map((el, index) => {
+      newTime = newAddMinutes(start, slotDuration)
+      const slotDate = createDate(newTime)
+      console.log('slotDate', slotDate);
+      moment(slotDate).isBetween()
+      // console.log('moment(newTime)', moment(newTime).format('HH'));
+      let endHours = newTime.split(':')[0]
+      let timeOfDay = ''
+      console.log('isbetween', moment(slotDate).isBetween(createDate('05:00'), createDate('12:00')));
+      if(moment(slotDate).isBetween(createDate('05:00'), createDate('12:00'))){
+        timeOfDay = 'day'
+      }else if(moment(slotDate).isBetween(createDate('12:00'), createDate('18:00'))){
+        timeOfDay = 'afternoon'
+      }else if(moment(slotDate).isBetween(createDate('18:00'), createDate('22:00'))){
+        timeOfDay = 'evening'
+      }else if(moment(slotDate).isBetween(createDate('22:00'), createDate('05:00'))){
+        timeOfDay = 'night'
+      }
+      console.log('timeOfDay', timeOfDay);
+      // if(endHours > 5  && endHours <= 12){
+      //   timeOfDay = 'day'
+      // }else if(endHours > 12 && endHours <= 18){
+      //   timeOfDay = 'afternoon'
+      // }else if(endHours > 18 && endHours <= 22){
+      //   timeOfDay = 'evening'
+      // }else if(endHours > 22 || endHours <= 5){
+      //   timeOfDay = 'night'
+      // } 
+      allSlots.push({id: String(index), start: start, end: newTime, timeOfDay })
+      // allSlots.push({id: String(index), start: start, end: newTime })
+      console.log('{start: start, end: newTime}', { start: start, end: newTime });
+      start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
+    })
+    if (isAdditionalSlot) {
+      allSlots.push({id: String(slotsWithGap?.length), start: start, end: newAddMinutes(start, slotDuration) })
+    }
+    console.log('setSlots', allSlots);
+    setSlots(allSlots)
+
+  }
 
   useEffect(() => {
     console.log('userdetaile.token', userdetaile.token);
+    getTimeSlots()
     getcart()
     // getCopun()
     getAddress()
@@ -259,7 +336,7 @@ const ShopProduct = (props) => {
         setres(responseJson.body)
         var myCartItem = []
         for (let i = 1; i <= responseJson.body.items.length; i++) {
-          if (responseJson.body.items[i - 1].serviceType != null) {
+          if (responseJson.body.items[i - 1].product_type != null) {
             myCartItem.push(responseJson.body.items[i - 1])
           }
         }
@@ -1056,10 +1133,10 @@ const ShopProduct = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
-                </View>
+                </View> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
@@ -1496,7 +1573,7 @@ const ShopProduct = (props) => {
               <FlatList
                 data={dayData}
                 horizontal={true}
-                style={{backgroundColor:'yellow', height:'auto'}}
+                // style={{backgroundColor:'yellow', height:'auto'}}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) => {
                   return (
@@ -1519,7 +1596,7 @@ const ShopProduct = (props) => {
 
               {/* <View style={{ width: '97%', marginTop: 10, backgroundColor:'yellow' }}> */}
                 <FlatList
-                  data={timeData}
+                  data={slots}
                   horizontal={true}
                   style={{}}
                   showsHorizontalScrollIndicator={false}
@@ -1528,7 +1605,7 @@ const ShopProduct = (props) => {
                       <View style={{width:90,marginRight:5}}>
           <TouchableOpacity style={{width:90,height:40,justifyContent:'center',borderWidth:0.5,borderRadius:5,borderColor:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor, backgroundColor: selectedTime2==item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent'}}
           onPress={()=>{setselectedTime2(item.id)}}>
-          <Text style={{fontSize:11,color:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.time}</Text>
+          <Text style={{fontSize:11,color:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.start}-{item.end}</Text>
           </TouchableOpacity>
           </View>
                     )
