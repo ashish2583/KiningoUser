@@ -73,22 +73,22 @@ const FoodDetails = (props) => {
   const [menutypevalue, setmenutypevalue] = useState(null);
   const [menutypedate, setmenutypedate] = useState([
     {
-        "label": "Electrical",
-        "value": "Electrical"
+      "label": "Electrical",
+      "value": "Electrical"
     },
     {
-        "label": "Plumbing",
-        "value": "Plumbing"
+      "label": "Plumbing",
+      "value": "Plumbing"
     },
     {
-        "label": "Farm, Pet & Ranch",
-        "value": "Farm, Pet & Ranch"
+      "label": "Farm, Pet & Ranch",
+      "value": "Farm, Pet & Ranch"
     },
     {
-        "label": "Hand Tools",
-        "value": "Hand Tools"
+      "label": "Hand Tools",
+      "value": "Hand Tools"
     }
-]);
+  ]);
   const [showda, setshowda] = useState(false)
   const [categoryData, setCategoryData] = useState([])
   const [selectedCategory, setSelectedCategory] = useState({})
@@ -99,8 +99,8 @@ const FoodDetails = (props) => {
       menuList(null);
       getMenuTypeDate();
       // getSimilarProducts();
-       })
-        return unsubscribe;
+    })
+    return unsubscribe;
   }, [])
 
   const checkcon = () => {
@@ -319,7 +319,7 @@ const FoodDetails = (props) => {
 
   }
 
-  
+
   const putcart = async (item, add) => {
 
     setLoading(true)
@@ -613,27 +613,27 @@ const FoodDetails = (props) => {
   }
 
   const searchmenuList = async (tt) => {
-    if(tt!=''|| tt.trim().length != 0){
+    if (tt != '' || tt.trim().length != 0) {
       console.log('hello');
-    setLoading(true)
+      setLoading(true)
 
-    // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
-    const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
-    setLoading(false)
-    console.log('the res search shop_eat_menu_userid ==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      setmenuresData(responseJson.body)
-      // setsearchValue('')
+      // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
+      const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
+      setLoading(false)
+      console.log('the res search shop_eat_menu_userid ==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        setmenuresData(responseJson.body)
+        // setsearchValue('')
+      } else {
+        setmenuresData([])
+        // Toast.show({text1: responseJson.headers.message})
+        // setalert_sms(err)
+        // setMy_Alert(true) 
+      }
     } else {
-      setmenuresData([])
-      // Toast.show({text1: responseJson.headers.message})
-      // setalert_sms(err)
-      // setMy_Alert(true) 
+      Toast.show({ text1: 'Please enter the item name in search.' })
     }
-    }else{
-      Toast.show({text1: 'Please enter the item name in search.'})
-    }
-    
+
   }
 
   const itemloop = (item) => {
@@ -848,24 +848,24 @@ const FoodDetails = (props) => {
     // console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
       <>
-      {data?.length > 0 ?
-      data?.map(item=>
-        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
-          () => {
-            setClickedItemData(item)
-            setmodlevisual1(false)
-            {/* setmodlevisual2(true) */ }
-          },
-          item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
+        {data?.length > 0 ?
+          data?.map(item =>
+            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+              () => {
+                setClickedItemData(item)
+                setmodlevisual1(false)
+                {/* setmodlevisual2(true) */ }
+              },
+              item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
+            )
           )
-        )
-         :
-         <View >
-        <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
-      </View>
+          :
+          <View >
+            <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+          </View>
         }
-        </>
-       
+      </>
+
     )
   }
 
@@ -927,7 +927,7 @@ const FoodDetails = (props) => {
               <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>E-commerce store</Text>
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
-                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating?resData.rating:'0.0'}</Text>
+                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
               </View>
             </View>
             <View>
@@ -995,8 +995,8 @@ const FoodDetails = (props) => {
                 >
                   <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{resData.business_info}</Text>
                 </ViewMoreText> */}
-                <Text style={{fontSize: 11, color: Mycolors.TEXT_COLOR}}>{viewmore ? resData.business_info ? resData.business_info.substring(0,150) : resData.business_info : resData.business_info}</Text>
-                <Text onPress={()=>{setviewmore(!viewmore)}} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ?  'View more': 'View less'}</Text>
+                <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
 
               </View>
 
@@ -1155,12 +1155,12 @@ const FoodDetails = (props) => {
 
               </View>
 
-              <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-                <Text>Pick from a wide range of categories</Text>
-                <TouchableOpacity onPress={()=>{setmodlevisual5(true)}}>
-                  <Text>View All</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal:10, marginTop:20, }}>
+                <Text style={{color: Mycolors.Black, fontWeight: '500'}} >Pick from a wide range of categories</Text>
+                <TouchableOpacity onPress={() => { setmodlevisual5(true) }}>
+                  <Text style={{color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C'}} >View All</Text>
                 </TouchableOpacity>
-              </View>      
+              </View>
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
                 <FlatList
                   data={categoryData}
@@ -1168,12 +1168,12 @@ const FoodDetails = (props) => {
                   showsHorizontalScrollIndicator={false}
                   // numColumns={2}
                   renderItem={({ item, index }) => {
-                  
+
                     return (
                       <View style={{ width: 100, marginHorizontal: 5 }}>
                         <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                           onPress={() => { setSelectedCategory(item) }}>
-                          <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
+                          <Image source={{ uri: item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
                         </TouchableOpacity>
                         <View style={{}}>
                           <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
@@ -1181,9 +1181,9 @@ const FoodDetails = (props) => {
                       </View>
                     )
                   }}
-                  // keyExtractor={item => item.id}
+                // keyExtractor={item => item.id}
                 />
-              </View>      
+              </View>
 
               {getDropdownData()}
               {/* {menuresData.length > 0 ?
@@ -1402,7 +1402,7 @@ const FoodDetails = (props) => {
                 setmodlevisual1(false)
                 setmodlevisual2(false)
               } else {
-                Toast.show({text1: 'Please add items from the menu to place an order.',});
+                Toast.show({ text1: 'Please add items from the menu to place an order.', });
               }
 
             }} marginHorizontal={20} fontSize={12}
@@ -1449,7 +1449,7 @@ const FoodDetails = (props) => {
                       {
                         flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { selectedTab == 'Dining' ? '' : postcart(item) }, () => {
                           setClickedItemData(item)
-                          {/* setmodlevisual1(false)*/  }
+                          {/* setmodlevisual1(false)*/ }
                           {/* setmodlevisual2(true) */ }
                         }, item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#fff'
                         )
@@ -1459,15 +1459,15 @@ const FoodDetails = (props) => {
                 }
                 ))
                 :
-                <View style={{ width: '100%', justifyContent: 'center',paddingTop:20, }}>
-                  <View style={{width: '80%', marginLeft:8 }}>
-                    <Text style={{ color: '#B4B4B4',textAlign:'left',fontWeight: '500',fontSize:21}}>Hungry for a</Text>
-                    <Text style={{ color: '#ADC430',textAlign:'left',fontWeight: 'bold',fontSize:25 }}>Specific Cuisine?</Text>
-                    <Text style={{ color: '#000000',textAlign:'left',fontSize:14 }}>Just type it in and let our search menu do the rest. </Text>
-                    </View>
-                    <View style={{ width: 220, height: 220, alignSelf: 'flex-end',marginTop:20,marginRight:15 }}>
-                  <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
-                </View>
+                <View style={{ width: '100%', justifyContent: 'center', paddingTop: 20, }}>
+                  <View style={{ width: '80%', marginLeft: 8 }}>
+                    <Text style={{ color: '#B4B4B4', textAlign: 'left', fontWeight: '500', fontSize: 21 }}>Hungry for a</Text>
+                    <Text style={{ color: '#ADC430', textAlign: 'left', fontWeight: 'bold', fontSize: 25 }}>Specific Cuisine?</Text>
+                    <Text style={{ color: '#000000', textAlign: 'left', fontSize: 14 }}>Just type it in and let our search menu do the rest. </Text>
+                  </View>
+                  <View style={{ width: 220, height: 220, alignSelf: 'flex-end', marginTop: 20, marginRight: 15 }}>
+                    <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
+                  </View>
                 </View>
               }
             </View>
@@ -1561,7 +1561,7 @@ const FoodDetails = (props) => {
       </Modal>
 
       {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model3 Book A Table sloat Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
-      
+
       {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model4 Book A Sloat Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
       <Modal
         isVisible={modlevisual4}
@@ -1645,87 +1645,55 @@ const FoodDetails = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+        <View style={{ height: '80%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, paddingVertical: 10, }}>
+          <Text style={{color: Mycolors.Black, fontWeight: '500', fontSize:22, textAlign:'center'}} >Pick from a wide range of categories</Text>
 
-              <View>
-                <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
-                {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
-                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
-                  <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
-                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
-
-                  
-                </View>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between',position:'absolute',right:10,top:0   }}>
-
-                {/* <MyButtons title2="Call Restaurant" height={40} width={50} borderRadius={5} press={() => {
-                  dialCall('1234567899')
-                }}
-                  img={require('../../../assets/call.png')} imgleft={0} imgheight={40} imgwidth={40} tit2left={10}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} marginVertical={10} />
-                <MyButtons title2="Send Message" height={40} width={50} borderRadius={5} press={() => { }}
-                  img={require('../../../assets/Envelope.png')} imgleft={0} imgheight={40} imgwidth={40} tit2left={10}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} marginVertical={10} /> */}
-              </View>
-
-              {/* <View>
-                <TouchableOpacity style={{
-                  width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 3
-                  },
-                  shadowOpacity: 0.3,
-                  justifyContent: 'center',
-                  elevation: 5
-                }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
-                  <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
-                </TouchableOpacity>
-              </View> */}
-
-            </View>
-
-            <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
-                <FlatList
-                  data={categoryData}
-                  // horizontal={true}
-                  // showsHorizontalScrollIndicator={false}
-                  // numColumns={2}
-                  renderItem={({ item, index }) => {
-                  
-                    return (
-                      <View style={{ width: 100, marginHorizontal: 5 }}>
-                        <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
-                          onPress={() => { setSelectedCategory(item) }}>
-                          <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
-                        </TouchableOpacity>
-                        <View style={{}}>
-                          <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
-                        </View>
+            <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+              <FlatList
+                data={categoryData}
+                // horizontal={true}
+                // showsHorizontalScrollIndicator={false}
+                // numColumns={2}
+                renderItem={({ item, index }) => {
+                  return (
+                    <TouchableOpacity
+                      style={{
+                        width: '96%', marginHorizontal: 10, flexDirection: 'row', alignItems: 'center', borderRadius: 10, marginBottom: 20,
+                        overflow: 'hidden',
+                        // borderWidth:1, borderColor:'black'
+                        shadowColor: '#E0E0E0',
+                        shadowOffset: {
+                          width: 0,
+                          height: 3
+                        },
+                        shadowRadius: 5,
+                        shadowOpacity: 0.6,
+                        elevation: 3,
+                      }}
+                      onPress={() => { setSelectedCategory(item); setmodlevisual5(false) }}
+                    >
+                      <Image source={{ uri: item.category_image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
+                      <View style={{ justifyContent: 'center', alignItems: 'center', width: "60%" }}>
+                        <Text style={{ fontSize: 14, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
                       </View>
-                    )
-                  }}
-                  // keyExtractor={item => item.id}
-                />
-              </View>   
-            
-
-            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
-              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+                    </TouchableOpacity>
+                    // <View style={{ width: 100, marginHorizontal: 5 }}>
+                    //   <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
+                    //     onPress={() => { setSelectedCategory(item) }}>
+                    //     <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
+                    //   </TouchableOpacity>
+                    //   <View style={{}}>
+                    //     <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                    //   </View>
+                    // </View>
+                  )
+                }}
+              // keyExtractor={item => item.id}
+              />
             </View>
 
-            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
-
-
-              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
-
-            </View>
 
             <View style={{ width: 100, height: 100 }} />
           </ScrollView>
@@ -1773,104 +1741,104 @@ const styles = StyleSheet.create({
     marginRight: 5
   }
 });
-export default FoodDetails 
+export default FoodDetails
 
 
 const vendorDetailData = {
   "headers": {
-      "success": 1,
-      "message": "Vendor Details"
+    "success": 1,
+    "message": "Vendor Details"
   },
   "body": {
-      "first_name": "Nile",
-      "last_name": "Dev",
-      "emailid": "support@nileprojects.in",
-      "phone": "9999887766",
-      "status": 1,
-      "business_id": 9,
-      "name": "Dominos Restaurant",
-      "address_line": "Sector 57, Noida, India",
-      "latitude": 28.704099655151367,
-      "longitude": 77.10250091552734,
-      "business_info": "Dominos Restaurant in Patiala Ho, Patiala is a top player in the category North Indian Restaurants in the Patiala. This well-known establishment acts as a one-stop destination servicing customers both local and from other parts of Patiala. Over the course of its journey, this business has established a firm foothold in it’s industry. The belief that customer satisfaction is as important as their products and services, have helped this establishment garner a vast base of customers, which continues to grow by the day. This business employs individuals that are dedicated towards their respective roles and put in a lot of effort to achieve the common vision and larger goals of the company. In the near future, this business aims to expand its line of products and services and cater to a larger client base. In Patiala, this establishment occupies a prominent location in Patiala Ho. It is an effortless task in commuting to this establishment as there are various modes of transport readily available. It is at Bhupindra Road, Oppsite Dashera Ground,, which makes it easy for first-time visitors in locating this establishment. It is known to provide top service in the following categories: Restaurants, North Indian Restaurants, North Indian Delivery Restaurants, Multicuisine Restaurants, Indian Restaurants, Multicuisine Delivery Restaurants, South Indian Restaurants, Home Delivery Restaurants.",
-      "rating": "3.1",
-      "total_orders": 31,
-      "address": "Sector 57, Noida, India",
-      "tentative_time": "30 Minutes",
-      "services": [
-          {
-              "id": 73,
-              "business_id": 9,
-              "attribute_type": "rest_service",
-              "attribute_code": "delivery",
-              "attribute_value": "yes",
-              "attribute_detail": "",
-              "attribute_label": "Delivery"
-          },
-          {
-              "id": 77,
-              "business_id": 9,
-              "attribute_type": "rest_service",
-              "attribute_code": "capacity",
-              "attribute_value": "300",
-              "attribute_detail": "",
-              "attribute_label": "Sitting Capacity"
-          },
-          {
-              "id": 89,
-              "business_id": 9,
-              "attribute_type": "rest_service",
-              "attribute_code": "takeaway",
-              "attribute_value": "yes",
-              "attribute_detail": "",
-              "attribute_label": "Take Away"
-          },
-          {
-              "id": 90,
-              "business_id": 9,
-              "attribute_type": "rest_service",
-              "attribute_code": "dining",
-              "attribute_value": "yes",
-              "attribute_detail": "",
-              "attribute_label": "Dining"
-          },
-          {
-              "id": 93,
-              "business_id": 9,
-              "attribute_type": "rest_service",
-              "attribute_code": "booktable",
-              "attribute_value": "yes",
-              "attribute_detail": "10:00,15:16",
-              "attribute_label": "Book A Table"
-          }
-      ],
-      "features": [
-          {
-              "id": 19,
-              "attribute_type": "MenuBadges",
-              "attribute_code": "hygiene-food",
-              "attribute_value": "Hygiene Food",
-              "attribute_image": "http://54.153.75.225/images/admin/fork.png",
-              "status": "Approved"
-          },
-          {
-              "id": 21,
-              "attribute_type": "MenuBadges",
-              "attribute_code": "vaccinated",
-              "attribute_value": "Vaccinated",
-              "attribute_image": "http://54.153.75.225/images/admin/vaccinated.png",
-              "status": "Approved"
-          }
-      ],
-      "bannerImages": [
-          {
-              "id": 1,
-              "image": "http://54.153.75.225/images/vendor/1.jpg"
-          },
-          {
-              "id": 2,
-              "image": "http://54.153.75.225/images/vendor/3.jpg"
-          }
-      ]
+    "first_name": "Nile",
+    "last_name": "Dev",
+    "emailid": "support@nileprojects.in",
+    "phone": "9999887766",
+    "status": 1,
+    "business_id": 9,
+    "name": "Dominos Restaurant",
+    "address_line": "Sector 57, Noida, India",
+    "latitude": 28.704099655151367,
+    "longitude": 77.10250091552734,
+    "business_info": "Dominos Restaurant in Patiala Ho, Patiala is a top player in the category North Indian Restaurants in the Patiala. This well-known establishment acts as a one-stop destination servicing customers both local and from other parts of Patiala. Over the course of its journey, this business has established a firm foothold in it’s industry. The belief that customer satisfaction is as important as their products and services, have helped this establishment garner a vast base of customers, which continues to grow by the day. This business employs individuals that are dedicated towards their respective roles and put in a lot of effort to achieve the common vision and larger goals of the company. In the near future, this business aims to expand its line of products and services and cater to a larger client base. In Patiala, this establishment occupies a prominent location in Patiala Ho. It is an effortless task in commuting to this establishment as there are various modes of transport readily available. It is at Bhupindra Road, Oppsite Dashera Ground,, which makes it easy for first-time visitors in locating this establishment. It is known to provide top service in the following categories: Restaurants, North Indian Restaurants, North Indian Delivery Restaurants, Multicuisine Restaurants, Indian Restaurants, Multicuisine Delivery Restaurants, South Indian Restaurants, Home Delivery Restaurants.",
+    "rating": "3.1",
+    "total_orders": 31,
+    "address": "Sector 57, Noida, India",
+    "tentative_time": "30 Minutes",
+    "services": [
+      {
+        "id": 73,
+        "business_id": 9,
+        "attribute_type": "rest_service",
+        "attribute_code": "delivery",
+        "attribute_value": "yes",
+        "attribute_detail": "",
+        "attribute_label": "Delivery"
+      },
+      {
+        "id": 77,
+        "business_id": 9,
+        "attribute_type": "rest_service",
+        "attribute_code": "capacity",
+        "attribute_value": "300",
+        "attribute_detail": "",
+        "attribute_label": "Sitting Capacity"
+      },
+      {
+        "id": 89,
+        "business_id": 9,
+        "attribute_type": "rest_service",
+        "attribute_code": "takeaway",
+        "attribute_value": "yes",
+        "attribute_detail": "",
+        "attribute_label": "Take Away"
+      },
+      {
+        "id": 90,
+        "business_id": 9,
+        "attribute_type": "rest_service",
+        "attribute_code": "dining",
+        "attribute_value": "yes",
+        "attribute_detail": "",
+        "attribute_label": "Dining"
+      },
+      {
+        "id": 93,
+        "business_id": 9,
+        "attribute_type": "rest_service",
+        "attribute_code": "booktable",
+        "attribute_value": "yes",
+        "attribute_detail": "10:00,15:16",
+        "attribute_label": "Book A Table"
+      }
+    ],
+    "features": [
+      {
+        "id": 19,
+        "attribute_type": "MenuBadges",
+        "attribute_code": "hygiene-food",
+        "attribute_value": "Hygiene Food",
+        "attribute_image": "http://54.153.75.225/images/admin/fork.png",
+        "status": "Approved"
+      },
+      {
+        "id": 21,
+        "attribute_type": "MenuBadges",
+        "attribute_code": "vaccinated",
+        "attribute_value": "Vaccinated",
+        "attribute_image": "http://54.153.75.225/images/admin/vaccinated.png",
+        "status": "Approved"
+      }
+    ],
+    "bannerImages": [
+      {
+        "id": 1,
+        "image": "http://54.153.75.225/images/vendor/1.jpg"
+      },
+      {
+        "id": 2,
+        "image": "http://54.153.75.225/images/vendor/3.jpg"
+      }
+    ]
   }
 }
