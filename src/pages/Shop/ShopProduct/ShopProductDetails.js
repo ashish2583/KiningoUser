@@ -47,6 +47,7 @@ const FoodDetails = (props) => {
   const [modlevisual2, setmodlevisual2] = useState(false)
   const [modlevisual3, setmodlevisual3] = useState(false)
   const [modlevisual4, setmodlevisual4] = useState(false)
+  const [modlevisual5, setmodlevisual5] = useState(false)
   const [slots, setSlots] = useState([])
   const [selectedSlot, setSelectedSlot] = useState({})
   const dispatch = useDispatch();
@@ -89,6 +90,8 @@ const FoodDetails = (props) => {
     }
 ]);
   const [showda, setshowda] = useState(false)
+  const [categoryData, setCategoryData] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState({})
   const [viewmore, setviewmore] = useState(true)
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -528,6 +531,7 @@ const FoodDetails = (props) => {
     setLoading(false)
     console.log('getMenuTypeDate', responseJson)
     if (responseJson.headers.success == 1) {
+      setCategoryData(responseJson.body)
       // setmenutypedate(responseJson.body)
     } else {
       // setalert_sms(err)
@@ -838,7 +842,8 @@ const FoodDetails = (props) => {
     });
   }
   const getDropdownData = () => {
-    const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
+    // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
+    const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_name?.toLowerCase())
     // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     // console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
@@ -1149,6 +1154,37 @@ const FoodDetails = (props) => {
                 </View>
 
               </View>
+
+              <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+                <Text>Pick from a wide range of categories</Text>
+                <TouchableOpacity onPress={()=>{setmodlevisual5(true)}}>
+                  <Text>View All</Text>
+                </TouchableOpacity>
+              </View>      
+              <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
+                <FlatList
+                  data={categoryData}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  // numColumns={2}
+                  renderItem={({ item, index }) => {
+                  
+                    return (
+                      <View style={{ width: 100, marginHorizontal: 5 }}>
+                        <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
+                          onPress={() => { setSelectedCategory(item) }}>
+                          <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
+                        </TouchableOpacity>
+                        <View style={{}}>
+                          <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                        </View>
+                      </View>
+                    )
+                  }}
+                  // keyExtractor={item => item.id}
+                />
+              </View>      
+
               {getDropdownData()}
               {/* {menuresData.length > 0 ?
 
@@ -1588,6 +1624,107 @@ const FoodDetails = (props) => {
                 <Text style={{ fontWeight: '600', color: Mycolors.Black, fontSize: 12 }}>Note:</Text>
                 <Text style={{ fontWeight: '400', color: Mycolors.Black, fontSize: 12 }}> Show your booking number when asked</Text>
               </View>
+            </View>
+
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
+
+        </View>
+      </Modal>
+      <Modal
+        isVisible={modlevisual5}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          setmodlevisual5(false)
+        }}
+        scrollTo={() => { }}
+        onBackdropPress={() => setmodlevisual5(false)}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, paddingVertical: 10, }}>
+
+              <View>
+                <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
+                {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
+                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
+                  <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
+
+                  
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between',position:'absolute',right:10,top:0   }}>
+
+                {/* <MyButtons title2="Call Restaurant" height={40} width={50} borderRadius={5} press={() => {
+                  dialCall('1234567899')
+                }}
+                  img={require('../../../assets/call.png')} imgleft={0} imgheight={40} imgwidth={40} tit2left={10}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} marginVertical={10} />
+                <MyButtons title2="Send Message" height={40} width={50} borderRadius={5} press={() => { }}
+                  img={require('../../../assets/Envelope.png')} imgleft={0} imgheight={40} imgwidth={40} tit2left={10}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} marginVertical={10} /> */}
+              </View>
+
+              {/* <View>
+                <TouchableOpacity style={{
+                  width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowOpacity: 0.3,
+                  justifyContent: 'center',
+                  elevation: 5
+                }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
+                  <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
+                </TouchableOpacity>
+              </View> */}
+
+            </View>
+
+            <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, backgroundColor: '#F8F8F8' }}>
+                <FlatList
+                  data={categoryData}
+                  // horizontal={true}
+                  // showsHorizontalScrollIndicator={false}
+                  // numColumns={2}
+                  renderItem={({ item, index }) => {
+                  
+                    return (
+                      <View style={{ width: 100, marginHorizontal: 5 }}>
+                        <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
+                          onPress={() => { setSelectedCategory(item) }}>
+                          <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
+                        </TouchableOpacity>
+                        <View style={{}}>
+                          <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                        </View>
+                      </View>
+                    )
+                  }}
+                  // keyExtractor={item => item.id}
+                />
+              </View>   
+            
+
+            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+            </View>
+
+            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
+
+
+              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
+
             </View>
 
             <View style={{ width: 100, height: 100 }} />
