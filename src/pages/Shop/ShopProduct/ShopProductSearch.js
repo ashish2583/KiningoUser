@@ -1,173 +1,170 @@
-import React, { useEffect,useState ,useRef} from 'react';
-import {RefreshControl,View,Image,Text,StyleSheet,SafeAreaView,TextInput,FlatList,Alert,TouchableOpacity, ScrollView, ImageBackground, StatusBar} from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, StatusBar } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
-import SearchInputEnt from '../../../component/SearchInputEnt';
 import SerchInput from '../../../component/SerchInput';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
-import { ImageSlider,ImageCarousel } from "react-native-image-slider-banner";
+import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
-import { baseUrl, login,shop_product_business, requestPostApi,requestGetApi,shop_product, shop_product_productlist, shop_product_business_bycategory } from '../../../WebApi/Service'
+import { baseUrl, login, vendor_lists_subcat, shop_eat_business, requestPostApi, requestGetApi, shop_eat, shop_product_business_bycategory, shop_product_home, shop_product_business } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
-import Toast from 'react-native-toast-message'
+// import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveUserResult, saveUserToken,setVenderDetail, setUserType } from '../../../redux/actions/user_action';
-
+import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
+import GetLocation from 'react-native-get-location'
+import Geocoder from "react-native-geocoding";
+import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 const ShopProductSearch = (props) => {
-  const [searchValue,setsearchValue]=useState('')
-  // const dispatch = useDispatch();
+  const [searchValue, setsearchValue] = useState('')
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState([])
-  const [filteredData, setFilteredData] = useState([])
   const [venderdata, setvenderdata] = useState(null)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
+  const mapdata  = useSelector(state => state.maplocation)
 
-  useEffect(()=>{
-   console.log('hohohohoho',props.route.params.datas);
-  //  setresData(props.route.params.datas)
-  //  setFilteredData(props.route.params.datas)
-  AllVenders()
-  setresData(props.route.params.datas)
-   if (props.route.params.from != 'search') {
+  useEffect(() => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        console.log('locations latitude longitude', location);
+        setlat(location.latitude)
+        setlan(location.longitude)
+      })
+      .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+      })
+    AllVenders()
+    console.log('hohohohoho', props.route.params.datas);
+    setresData(props.route.params.datas)
+    if (props.route.params.from != 'search') {
       
-    if (props.route.params.from == 'CatClick') {
-      console.log('props.CatClick',props.route.params.datas);
-      catSerch(props.route.params.datas[0].category_code)
+      if (props.route.params.from == 'CatClick') {
+        // console.log('props.route.params.datas',props.route.params.datas);
+        catSerch(props.route.params.datas[0].category_name)
 
+      } else {
+        // AllVenders()
+      }
+
+    }
+
+  }, [])
+
+  const catSerch = async (ddd) => {
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
+    setLoading(false)
+    console.log('the res==>>vendor_lists_subcat', responseJson)
+    if (responseJson.headers.success == 1) {
+      setresData(responseJson.body)
+      //  setRefreshing(!refreshing)
     } else {
-      // AllVenders()
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+
+  const checkcon = () => {
+    AllVenders()
+  }
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const onRefresh = React.useCallback(() => {
+    // setRefreshing(true);
+    // fetchSuccessDetails()
+    checkcon()
+    wait(2000).then(() => {
+
+      setRefreshing(false)
+
+    });
+  }, []);
+
+
+  const homePageSearch = async (text) => {
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi('shop/product/' + '?name=' + text + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
+    setLoading(false)
+    console.log('the res==>>Home', responseJson)
+    if (responseJson.headers.success == 1) {
+      setresData(responseJson.body.vendors)
+    } else {
+      setalert_sms(err)
+      setMy_Alert(true)
     }
 
   }
- },[])
 
- const checkcon=()=>{
-  getProducts()
- }   
- 
- const wait = (timeout) => {
- return new Promise(resolve => setTimeout(resolve, timeout));
- }
- 
- const onRefresh = React.useCallback(() => {
- // setRefreshing(true);
- // fetchSuccessDetails()
- checkcon()
- wait(2000).then(() => {
- 
- setRefreshing(false)
- 
- });
- }, []);
- 
- const catSerch = async (ddd) => {
-  console.log(".................ddd.........",ddd);
-  setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_product_business_bycategory +ddd, '', 'GET', '')
-  setLoading(false)
-  console.log('the res==>>Productvendor_lists_subcat', responseJson)
-  if (responseJson.headers.success == 1) {
-    setresData(responseJson.body)
-    //  setRefreshing(!refreshing)
-  } else {
-    setalert_sms(err)
-    setMy_Alert(true)
-  }
-}
-const AllVenders = async () => {
+  const AllVenders = async () => {
 
-  setLoading(true)
-  const { responseJson, err } = await requestGetApi(shop_product_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
-  setLoading(false)
-  console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
-  if (responseJson.headers.success == 1) {
-    setresData(responseJson.body)
-  } else {
-    setalert_sms(err)
-    setMy_Alert(true)
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi(shop_product_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    setLoading(false)
+    console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
+    if (responseJson.headers.success == 1) {
+      setresData(responseJson.body)
+    } else {
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+
   }
 
-}
-
-const getProducts = async () => {
-
-  setLoading(true)
-
-  // const { responseJson, err } = await requestGetApi(shop_product_productlist+'12', '', 'GET', '')
-  const { responseJson, err } = await requestGetApi(shop_product_productlist+props.route.params.vendorId, '', 'GET', '')
-  setLoading(false)
-  // console.log('the res==>>Home', responseJson)
-  if (responseJson.headers.success == 1) {
-    // console.log('the res==>>Home.body.vendors', responseJson.body)
-    setresData(responseJson.body)
-    // setFilteredData(responseJson.body.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
-  } else {
-    Toast.show({text1: err})
-    // setalert_sms(err)
-    // setMy_Alert(true)
-  }
-
-}
-
-const getDataBasedOfSearch = (searchTerm) => {
-  // console.log('resData', resData);
-  // console.log('searchTerm', searchTerm);
-  // setFilteredData(resData.filter(el=>el.name?.toLowerCase()?.includes(String(searchTerm.text?.toLowerCase())?.trim())))
-}
-
-  return(
+  return (
     <SafeAreaView style={{}}>
       <ScrollView
-       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
-    <HomeHeader height={60}  paddingHorizontal={15}
-   press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15} 
-   press2={()=>{}} title2={'Search'} fontWeight={'500'} img2height={20}
-   press3={()=>{}} img3width={25} img3height={25} />
+        <HomeHeader height={60} paddingHorizontal={15}
+          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
+          press2={() => { }} title2={'Search'} fontWeight={'500'} img2height={20}
+          press3={() => { }} img3width={25} img3height={25} />
 
-<View style={{width:'96%',alignSelf:'center'}}>
+        <View style={{ width: '96%', alignSelf: 'center' }}>
+          <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'}
+            serchValue={searchValue}
+            onChangeText={(e) => {
+              if (props.route.params.from == 'CatClick') {
+                catSerch(e.text)
+              } else {
+                homePageSearch(e.text)
+              }
+              setsearchValue(e)
+              if (e.text.length == 0) {
+                AllVenders()
+              }
+            }}
+            press={() => { Alert.alert('Hi') }}
+            presssearch={() => {
+              if (props.route.params.from == 'CatClick') {
+                catSerch(searchValue.text)
+              } else {
+                homePageSearch(searchValue.text)
+              }
 
-<SearchInputEnt marginTop={10} 
-// placeholder={'Restaurant Name. Cuisine, Dishes'} 
-placeholder={'Search Products'} 
-serchValue={searchValue} 
-onChangeText={(e)=>{
+            }}
+            paddingLeft={9} />
 
-  // setsearchValue(e)
-  // getDataBasedOfSearch(e)
-  if (props.route.params.from == 'CatClick') {
-    catSerch(e.text)
-  } else {
-    // homePageSearch(e.text)
-  }
-  setsearchValue(e)
-  if (e.text.length == 0) {
-    // AllVenders()
-  }
-}} 
-press={()=>{Alert.alert('Hi')}}
-presssearch={()=>{
-  if (props.route.params.from == 'CatClick') {
-    catSerch(searchValue.text)
-  } else {
-    // homePageSearch(searchValue.text)
-  }
-
-}}
-paddingLeft={50}/>
- 
-         <View style={{width:'100%',alignSelf:'center',marginTop:20}}>
-         {
+          <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
+            {
               resData.map((item, index) => {
                 return (
 
@@ -201,8 +198,8 @@ paddingLeft={50}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ width: '100%', height: 180, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center' }}
                       onPress={() => {
-                        props.navigation.navigate('ShopProductDetails', { data: item })
-                        // dispatch(setVenderDetail(item))
+                        props.navigation.navigate('FoodDetails', { data: item })
+                        dispatch(setVenderDetail(item))
                       }}>
                       <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderTopLeftRadius: 5, borderTopRightRadius: 5, resizeMode: 'stretch' }} resizeMode={'stretch'}></Image>
 
@@ -231,20 +228,20 @@ paddingLeft={50}/>
               })
 
             }
-              
-         </View>
+
+          </View>
 
 
 
- </View>
-<View style={{height:100}} />
+        </View>
+        <View style={{ height: 60 }} />
 
-</ScrollView>
+      </ScrollView>
 
-{loading ? <Loader /> : null}
+      {loading ? <Loader /> : null}
     </SafeAreaView>
-     );
-  }
+  );
+}
 const styles = StyleSheet.create({
 
 });

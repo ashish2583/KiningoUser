@@ -367,7 +367,7 @@ paddingLeft={50}/> */}
 
           <TouchableOpacity style={{ width: '98%', height: 50, borderRadius: 10, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginTop: 10, justifyContent: "space-between" }}
             // onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}
-            onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: resData.vendors, lat: lat, lan: lan, from: 'search' }) }}
+            onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}
             >
 
             <View style={{ padding: 5 }}>
@@ -433,7 +433,7 @@ paddingLeft={50}/> */}
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22 }}>Explore Nearby</Text>
             <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
-              onPress={() => { props.navigation.navigate('VendorSearch', { datas: resData?.vendors, from: 'search' }) }}>View More</Text>
+              onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, }}>

@@ -98,9 +98,9 @@ const ShopEat = (props) => {
     })
       .then(location => {
         console.log('locations latitude longitude', location);
-        setlat(location.latitude)
-        setlan(location.longitude)
-        let My_cord = { latitude: location.latitude, longitude: location.longitude }
+        setlat(28.6176)
+        setlan(77.422)
+        let My_cord = { latitude: 28.6176, longitude: 77.422 }
         dispatch(setRestorentLocation(My_cord))
          homePage(location.latitude,location.longitude)
         LatlongTo_address(My_cord)
