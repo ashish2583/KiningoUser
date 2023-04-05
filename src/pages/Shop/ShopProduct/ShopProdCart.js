@@ -849,7 +849,7 @@ const ShopProduct = (props) => {
       return (
         <View
           style={{
-            backgroundColor: '#FFC40C',
+            backgroundColor: '#835E23',
             justifyContent: 'center',
             alignItems: 'flex-end',
             width: 100,
@@ -995,7 +995,7 @@ const ShopProduct = (props) => {
             <>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: Mycolors.Black, marginTop: 5, fontWeight: 'bold' }}>Total {resData?.length} items</Text>
-                <Text style={{ fontSize: 13, color: '#FFC40C', marginTop: 5, textDecorationColor: '#FFC40C', textDecorationLine: 'underline' }}>Select All</Text>
+                <Text style={{ fontSize: 13, color: '#835E23', marginTop: 5, textDecorationColor: '#835E23', textDecorationLine: 'underline' }}>Select All</Text>
               </View>
 
               <View style={{ marginTop: 40 }}>
@@ -1177,7 +1177,7 @@ const ShopProduct = (props) => {
                     props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype })
                   }}
                   marginHorizontal={20} fontSize={11}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'#FFC40C'} marginVertical={0} />
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />
               </View>
 
             </View>
@@ -1187,7 +1187,7 @@ const ShopProduct = (props) => {
               <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 20, color: '#000' }}>Your cart is empty.</Text>
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#000' }}> Please add </Text>
-                <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#FFC40C', textDecorationLine: 'underline' }} onPress={() => { props.navigation.navigate('ShopEat') }}>items </Text>
+                <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#835E23', textDecorationLine: 'underline' }} onPress={() => { props.navigation.navigate('ShopEat') }}>items </Text>
                 <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#000', }}>to order.</Text>
 
               </View>
@@ -1197,7 +1197,7 @@ const ShopProduct = (props) => {
 
           {/* <View style={{width:'95%',alignSelf:'center',marginTop:15}}>
   <MyButtons title="Proceed to payment" height={40} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{props.navigation.navigate('ShopPayment')}} marginHorizontal={20} fontSize={11}
-  titlecolor={Mycolors.BG_COLOR} backgroundColor={'#FFC40C'} marginVertical={0}/>
+  titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0}/>
 </View> */}
         </View>
         <View style={{ height: 100 }} />
@@ -1584,9 +1584,9 @@ const ShopProduct = (props) => {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) => {
                   return (
-                    <TouchableOpacity style={{ flexDirection: 'row', width: 100, marginRight: 10, height: 40, justifyContent: 'space-between', alignItems: 'center', borderWidth: 0.5, borderRadius: 5, paddingHorizontal: 10, borderColor: selectedTime == item.id ? '#FFC40C' : Mycolors.GrayColor, backgroundColor: selectedTime == item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent' }}
+                    <TouchableOpacity style={{ flexDirection: 'row', width: 100, marginRight: 10, height: 40, justifyContent: 'space-between', alignItems: 'center', borderWidth: 0.5, borderRadius: 5, paddingHorizontal: 10, borderColor: selectedTime == item.id ? '#835E23' : Mycolors.GrayColor, backgroundColor: selectedTime == item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent' }}
                       onPress={() => { setselectedTime(item.id) }}>
-                      <Text style={{ fontSize: 11, color: selectedTime == item.id ? '#FFC40C' : Mycolors.GrayColor, textAlign: 'center', fontWeight: 'bold' }}>{item.dayPart}</Text>
+                      <Text style={{ fontSize: 11, color: selectedTime == item.id ? '#835E23' : Mycolors.GrayColor, textAlign: 'center', fontWeight: 'bold' }}>{item.dayPart}</Text>
                       {selectedTime == item.id ?
                         <Image source={require('../../../assets/images/product_sel_circle.png')} style={{ width: 20, height: 20, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                         :
@@ -1610,10 +1610,10 @@ const ShopProduct = (props) => {
                   renderItem={({item,index})=>{
                     return(
                       <View style={{width:90,marginRight:5}}>
-          <TouchableOpacity style={{width:90,height:40,justifyContent:'center',borderWidth:0.5,borderRadius:5,borderColor:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor, backgroundColor: selectedTime2==item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent'}}
+          <TouchableOpacity style={{width:90,height:40,justifyContent:'center',borderWidth:0.5,borderRadius:5,borderColor:selectedTime2==item.id ? '#835E23' : Mycolors.GrayColor, backgroundColor: selectedTime2==item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent'}}
           onPress={()=>{setselectedTime2(item.id); setSelectedSlot(item)}}>
   
-          <Text style={{fontSize:11,color:selectedTime2==item.id ? '#FFC40C' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.start}-{item.end}</Text>
+          <Text style={{fontSize:11,color:selectedTime2==item.id ? '#835E23' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.start}-{item.end}</Text>
           </TouchableOpacity>
           </View>
                     )

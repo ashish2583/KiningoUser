@@ -838,7 +838,7 @@ const FoodDetails = (props) => {
             />
             <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
           </View>
-          <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
+          <Text style={{ color: '#835E23', fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 3 }} >Food Preparation Time:</Text>
             <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{des}</Text>
@@ -848,7 +848,7 @@ const FoodDetails = (props) => {
           {item.in_cart != '1' ?
             <View style={{ width: 70 }}>
               <MyButtons title="ADD" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={press} marginHorizontal={20} fontSize={11}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />
             </View>
             :
             <View style={{ width: 100, height: 30, flexDirection: 'row', alignItems: 'center', marginTop: 5, }}>
@@ -1030,18 +1030,19 @@ const FoodDetails = (props) => {
             <View>
               {/* <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text> */}
               <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
-              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>E-commerce store</Text>
+              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 10 }}>E-commerce store</Text>
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => setmodlevisual6(true)} style={{ position: 'absolute', right: 15, top: 15 }}>
-              <Text style={{ color: '#fd001f', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text>
+            <TouchableOpacity onPress={() => setmodlevisual6(true)} style={{ position: 'absolute', right: 22, top: 15, marginVertical: 4,  }}>
+            <AntDesign name="infocirlce" color={'#835E23'} size={24} />
+              {/* <Text style={{ color: '#fd001f', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text> */}
             </TouchableOpacity>
             <View>
               <TouchableOpacity style={{
-                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
+                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff', marginTop:10,
                 shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
@@ -1052,7 +1053,7 @@ const FoodDetails = (props) => {
                 justifyContent: 'center',
                 elevation: 5,
               }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
-                <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
+              <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
               </TouchableOpacity>
             </View>
 
@@ -1071,7 +1072,7 @@ const FoodDetails = (props) => {
                       <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
                         <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
                           press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
-                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#FFC40C' : 'transparent'} />
+                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#835E23' : 'transparent'} />
                       </View>
                       :
                       <>
@@ -1087,27 +1088,11 @@ const FoodDetails = (props) => {
 
           {selectedTab == 'Take Away' || selectedTab == 'Delivery' ?
             <View>
-              <View style={{ width: '95%', alignSelf: 'center', top: -5 }}>
-                {/* <ViewMoreText
-                  numberOfLines={3}
-                  renderViewMore={(onPress) => {
-                    return (
-                      <Text onPress={onPress} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>View more</Text>
-                    )
-                  }}
-                  renderViewLess={(onPress) => {
-                    return (
-                      <Text onPress={onPress} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>View less</Text>
-                    )
-                  }}
-                   textStyle={{ textAlign: 'left', width: '95%' }}
-                >
-                  <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{resData.business_info}</Text>
-                </ViewMoreText> */}
+              {/* <View style={{ width: '95%', alignSelf: 'center', top: -5 }}>
                 <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: '#835E23', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
 
-              </View>
+              </View> */}
 
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
                 {resData.features ?
@@ -1174,12 +1159,12 @@ const FoodDetails = (props) => {
           {selectedTab != 'Book A Table' ?
             <>
 
-              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}
+              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 0 }}
                 onPress={() => { setmodlevisual1(true) }}>
-                <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
+                <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Products</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
                   <TouchableOpacity style={{
-                    width: 40, height: 40, backgroundColor: '#FFC40C', justifyContent: 'center', shadowOffset: {
+                    width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
                       width: 0,
                       height: 3
                     },
@@ -1200,7 +1185,7 @@ const FoodDetails = (props) => {
 
 
               </TouchableOpacity>
-              <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
+              {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
                 <View style={{ width: '98%', height: 40, zIndex: 999 }}>
 
 
@@ -1265,12 +1250,12 @@ const FoodDetails = (props) => {
 
                 </View>
 
-              </View>
+              </View> */}
 
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '500' }} >Pick from a wide range of categories</Text>
                 <TouchableOpacity onPress={() => { setmodlevisual5(true) }}>
-                  <Text style={{ color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C' }} >View All</Text>
+                  <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#835E23' }} >View All</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
@@ -1281,15 +1266,14 @@ const FoodDetails = (props) => {
                   showsHorizontalScrollIndicator={false}
                   // numColumns={2}
                   renderItem={({ item, index }) => {
-
                     return (
-                      <View style={{ width: 100, marginHorizontal: 5 }}>
+                      <View style={[{ width: 100, marginHorizontal: 5, }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
                         <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                           onPress={() => { setSelectedCategory(item) }}>
                           <Image source={{ uri: item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
                         </TouchableOpacity>
                         <View style={{}}>
-                          <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                          <Text style={{ fontSize: 11, color: (selectedCategory?.category_code === item?.category_code) ? '#835E23' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
                         </View>
                       </View>
                     )
@@ -1469,7 +1453,7 @@ const FoodDetails = (props) => {
 
   <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:20, marginBottom:20,}}>
   <Text style={{color:Mycolors.Black,fontWeight:'600'}}>Explore Similar Products</Text>
-  <Text style={{color:'#FFC40C',textDecorationLine: "underline", textDecorationColor:'#FFC40C'}} onPress={()=>{}}>View More</Text>
+  <Text style={{color:'#835E23',textDecorationLine: "underline", textDecorationColor:'#835E23'}} onPress={()=>{}}>View More</Text>
 </View>
 
 <FlatList
@@ -1789,7 +1773,7 @@ const FoodDetails = (props) => {
                     >
                       <Image source={{ uri: item.category_image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
                       <View style={{ justifyContent: 'center', alignItems: 'center', width: "60%" }}>
-                        <Text style={{ fontSize: 14, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                        <Text style={{ fontSize: 14, color: (selectedCategory?.category_id === item?.category_id) ? '#835E23' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
                       </View>
                     </TouchableOpacity>
                     // <View style={{ width: 100, marginHorizontal: 5 }}>
@@ -1798,7 +1782,7 @@ const FoodDetails = (props) => {
                     //     <Image source={{ uri:  item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
                     //   </TouchableOpacity>
                     //   <View style={{}}>
-                    //     <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#FFC40C' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
+                    //     <Text style={{ fontSize: 11, color: (selectedCategory?.category_id === item?.category_id) ? '#835E23' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.category_name}</Text>
                     //   </View>
                     // </View>
                   )
@@ -1966,6 +1950,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 5
+  },
+  categorySelectedStyle:{
+    borderWidth:1,
+    borderColor: '#835E23',
+    borderRadius:10
   }
 });
 export default FoodDetails

@@ -543,7 +543,7 @@ const ShopMyOrder = (props) => {
                           :
                           null
                         }
-                        {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
+                        {/* {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
                           <View style={{}}>
                             <MyButtons title="Rate Driver" height={45} width={'100%'} paddingHorizontal={40} borderRadius={5} alignSelf="center" press={() => {
                               setdrvReviewData(item)
@@ -566,7 +566,7 @@ const ShopMyOrder = (props) => {
                               />
                             </View>
                             : null
-                        }
+                        } */}
                       </View>
 
                     </View>
