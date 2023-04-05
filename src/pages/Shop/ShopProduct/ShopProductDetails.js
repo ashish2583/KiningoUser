@@ -24,7 +24,8 @@ import moment from 'moment';
 import Toast from 'react-native-toast-message';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
-import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
+import { GoogleApiKey } from '../../../WebApi/GoogleApiKey'
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 
 function newAddMinutes(time, minsToAdd) {
@@ -959,7 +960,7 @@ const FoodDetails = (props) => {
   }
 
   const dialCall = (num) => {
-    console.log('numbers',num);
+    console.log('numbers', num);
     let phoneNumber = '';
 
     if (Platform.OS === 'android') {
@@ -973,7 +974,7 @@ const FoodDetails = (props) => {
 
   const sendEmail = (myMail) => {
     console.log('sendEmail email', myMail);
-    Linking.openURL(`mailto:${myMail}`) 
+    Linking.openURL(`mailto:${myMail}`)
   }
 
   return (
@@ -1070,7 +1071,7 @@ const FoodDetails = (props) => {
                       <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
                         <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
                           press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
-                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#FFC40C':'transparent'} />
+                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#FFC40C' : 'transparent'} />
                       </View>
                       :
                       <>
@@ -1186,12 +1187,12 @@ const FoodDetails = (props) => {
                     shadowRadius: 1,
                     shadowOpacity: 0.3,
                     justifyContent: 'center',
-                    alignItems:'center',
-                    borderRadius:10,
+                    alignItems: 'center',
+                    borderRadius: 10,
                     elevation: 5,
                   }}
                     onPress={() => { setmodlevisual1(true) }}>
-                      <AntDesign name="search1" color={'#FFF'} size={24} />
+                    <AntDesign name="search1" color={'#FFF'} size={24} />
                     {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
                   </TouchableOpacity>
 
@@ -1266,17 +1267,17 @@ const FoodDetails = (props) => {
 
               </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal:10, marginTop:20, }}>
-                <Text style={{color: Mycolors.Black, fontWeight: '500'}} >Pick from a wide range of categories</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
+                <Text style={{ color: Mycolors.Black, fontWeight: '500' }} >Pick from a wide range of categories</Text>
                 <TouchableOpacity onPress={() => { setmodlevisual5(true) }}>
-                  <Text style={{color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C'}} >View All</Text>
+                  <Text style={{ color: '#FFC40C', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#FFC40C' }} >View All</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
                   horizontal={true}
-                  style={{marginBottom:20}}
+                  style={{ marginBottom: 20 }}
                   showsHorizontalScrollIndicator={false}
                   // numColumns={2}
                   renderItem={({ item, index }) => {
@@ -1760,7 +1761,7 @@ const FoodDetails = (props) => {
         <View style={{ height: '80%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
-          <Text style={{color: Mycolors.Black, fontWeight: '500', fontSize:22, textAlign:'center'}} >Pick from a wide range of categories</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 22, textAlign: 'center' }} >Pick from a wide range of categories</Text>
 
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
               <FlatList
@@ -1834,38 +1835,42 @@ const FoodDetails = (props) => {
               <View>
                 <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
                 {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
-                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
+                <View style={{ flexDirection: 'row', marginTop: 5, width: '100%', }}>
                   <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
 
-                  
+
                 </View>
               </View>
-              <View style={{ flexDirection: 'row',alignItems:'center', justifyContent: 'space-between',position:'absolute',right:10,top:10   }}>
-                <TouchableWithoutFeedback onPress={()=>dialCall(resData.phone)} >
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'absolute', right: 10, top: 10 }}>
+                <TouchableWithoutFeedback onPress={() => dialCall(resData.phone)} >
                   <Image source={require('../../../assets/call.png')} />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={()=>sendEmail(resData.emailid)} >
+                <TouchableWithoutFeedback onPress={() => sendEmail(resData.emailid)} >
                   <Image source={require('../../../assets/Envelope.png')} />
                 </TouchableWithoutFeedback>
               </View>
 
             </View>
-            
-            {resData.business_info ?
-            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
-              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
-            </View>
-             :null}
 
-            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
+            {resData.business_info ?
+              <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+                <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+              </View>
+              : null}
+
+            <View style={{
+              // alignItems:'center',
+              width: '95%', borderRadius: 10, overflow: 'hidden', marginTop: 10,
+            }}>
 
               <MapView
                 style={{
                   height: dimensions.SCREEN_HEIGHT * 22 / 100,
                   width: 400,
                   justifyContent: 'flex-end',
+                  alignSelf: 'center',
                   alignItems: 'center', borderRadius: 10
                 }}
                 apikey={GoogleApiKey}
@@ -1902,6 +1907,11 @@ const FoodDetails = (props) => {
 
 
               </MapView>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
+                <EvilIcons name="location" color={'#FFD037'} size={24} />
+                <Text style={{fontSize:13, fontWeight:'400', color:'#B2B7B9'}} >{resData.address}</Text>
+              </View>
 
 
 

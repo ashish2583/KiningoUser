@@ -54,7 +54,8 @@ const CatSearch = (props) => {
 const homePageSearch = async (ttt) => {
   setresData([])
   setLoading(true)
-  const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt+'&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+  // const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt+'&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+  const { responseJson, err } = await requestGetApi(shop_product_categories+'?category_name='+ttt+'&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
   setLoading(false)
   console.log('the res==>>Home', responseJson)
   if (responseJson.headers.success == 1) {
