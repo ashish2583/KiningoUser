@@ -6,7 +6,7 @@ import SerchInput from '../../../component/SerchInput';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
-import { baseUrl, login, vendor_lists_subcat, shop_eat_business, requestPostApi, requestGetApi, shop_eat, shop_product_business_bycategory, shop_product_home, shop_product_business } from '../../../WebApi/Service'
+import { baseUrl, login, vendor_lists_subcat, shop_eat_business, requestPostApi, requestGetApi, shop_eat, shop_product_business_bycategory, shop_product_home, shop_product_business, shop_product } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 // import Toast from 'react-native-simple-toast'
 import MyAlert from '../../../component/MyAlert';
@@ -27,6 +27,7 @@ const ShopProductSearch = (props) => {
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
   const mapdata  = useSelector(state => state.maplocation)
+  const User = useSelector(state => state.user.user_details)
 
   useEffect(() => {
     GetLocation.getCurrentPosition({
@@ -95,12 +96,13 @@ const ShopProductSearch = (props) => {
 
   const homePageSearch = async (text) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi('shop/product/' + '?name=' + text + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_product_business + '?name=' + text + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
-      setresData(responseJson.body.vendors)
+      // setresData(responseJson.body.vendors)
+      setresData(responseJson.body)
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -111,7 +113,7 @@ const ShopProductSearch = (props) => {
   const AllVenders = async () => {
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_product_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -164,6 +166,7 @@ const ShopProductSearch = (props) => {
             paddingLeft={9} />
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
+            {/* {console.log('resData resData', resData)} */}
             {
               resData.map((item, index) => {
                 return (

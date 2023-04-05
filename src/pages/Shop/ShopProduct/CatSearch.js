@@ -128,7 +128,7 @@ paddingLeft={9}/>
                       <ImageBackground source={require('../../../assets/Food-Cover-image.png')}style={{width:'100%',height:'100%',  borderRadius: 10,  }}resizeMode='stretch'> 
                       <TouchableOpacity style={{ paddingTop:20
                    
-                      }} onPress={() => { props.navigation.navigate('ShopSearch', { datas: [item], from: 'CatClick' }) }}>
+                      }} onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [item], from: 'CatClick' }) }}>
                         <View style={{ width: 100, height: 100, alignSelf: 'center',borderRadius:100/2,shadowOffset: {
                           width: 0,
                           height: 3
