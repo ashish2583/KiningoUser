@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback, Linking } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -23,6 +23,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
+import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
 
 
 function newAddMinutes(time, minsToAdd) {
@@ -49,6 +51,7 @@ const FoodDetails = (props) => {
   const [modlevisual3, setmodlevisual3] = useState(false)
   const [modlevisual4, setmodlevisual4] = useState(false)
   const [modlevisual5, setmodlevisual5] = useState(false)
+  const [modlevisual6, setmodlevisual6] = useState(false)
   const [slots, setSlots] = useState([])
   const [selectedSlot, setSelectedSlot] = useState({})
   const dispatch = useDispatch();
@@ -94,6 +97,91 @@ const FoodDetails = (props) => {
   const [categoryData, setCategoryData] = useState([])
   const [selectedCategory, setSelectedCategory] = useState({})
   const [viewmore, setviewmore] = useState(true)
+  const [mtype, setmType] = useState('standard')
+  const [curentCord, setCurentCord] = useState({
+    latitude: 26.4788922,
+    longitude: 83.7454171,
+  })
+  const mapStyle = [
+    { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+    { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#d59563' }],
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#d59563' }],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{ color: '#263c3f' }],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#6b9a76' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{ color: '#38414e' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#212a37' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#9ca5b3' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{ color: '#746855' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#1f2835' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#f3d19c' }],
+    },
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{ color: '#2f3948' }],
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#d59563' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{ color: '#17263c' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#515c6d' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.stroke',
+      stylers: [{ color: '#17263c' }],
+    },
+  ];
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
@@ -870,7 +958,23 @@ const FoodDetails = (props) => {
     )
   }
 
+  const dialCall = (num) => {
+    console.log('numbers',num);
+    let phoneNumber = '';
 
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${' + num + '}';
+    }
+    else {
+      phoneNumber = 'telprompt:${' + num + '}';
+    }
+    Linking.openURL(phoneNumber);
+  };
+
+  const sendEmail = (myMail) => {
+    console.log('sendEmail email', myMail);
+    Linking.openURL(`mailto:${myMail}`) 
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: Mycolors.BG_COLOR }}>
@@ -931,6 +1035,9 @@ const FoodDetails = (props) => {
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
               </View>
             </View>
+            <TouchableOpacity onPress={() => setmodlevisual6(true)} style={{ position: 'absolute', right: 15, top: 15 }}>
+              <Text style={{ color: '#fd001f', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text>
+            </TouchableOpacity>
             <View>
               <TouchableOpacity style={{
                 width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
@@ -1699,6 +1806,111 @@ const FoodDetails = (props) => {
               />
             </View>
 
+
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
+
+        </View>
+      </Modal>
+      <Modal
+        isVisible={modlevisual6}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          setmodlevisual6(false)
+        }}
+        scrollTo={() => { }}
+        onBackdropPress={() => setmodlevisual6(false)}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, paddingVertical: 10, }}>
+
+              <View>
+                <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
+                {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
+                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
+                  <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
+
+                  
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row',alignItems:'center', justifyContent: 'space-between',position:'absolute',right:10,top:10   }}>
+                <TouchableWithoutFeedback onPress={()=>dialCall(resData.phone)} >
+                  <Image source={require('../../../assets/call.png')} />
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={()=>sendEmail(resData.emailid)} >
+                  <Image source={require('../../../assets/Envelope.png')} />
+                </TouchableWithoutFeedback>
+              </View>
+
+            </View>
+            
+            {resData.business_info ?
+            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+            </View>
+             :null}
+
+            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
+
+              <MapView
+                style={{
+                  height: dimensions.SCREEN_HEIGHT * 22 / 100,
+                  width: 400,
+                  justifyContent: 'flex-end',
+                  alignItems: 'center', borderRadius: 10
+                }}
+                apikey={GoogleApiKey}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                  // latitude: curentCord.latitude,
+                  // longitude: curentCord.longitude,
+                  latitude: resData.latitude,
+                  longitude: resData.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                customMapStyle={mapStyle}
+                showsUserLocation={true}
+                userLocationCalloutEnabled={true}
+                showsMyLocationButton={true}
+                mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
+                showsScale={true}
+                showsCompass={true}
+                rotateEnabled={true}
+                // onRegionChange={data=>console.log('the resion change',data)}
+                // onPress={(data)=>onMapPress(data)}
+                mapType={mtype}
+                zoomEnabled={true}
+                pitchEnabled={true}
+                followsUserLocation={true}
+                // showsCompass={true}
+                showsBuildings={true}
+                //showsTraffic={true}
+                showsIndoors={true}
+                showsIndoorLevelPicker={true}
+              >
+
+
+
+              </MapView>
+
+
+
+              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
+
+
+
+
+            </View>
 
             <View style={{ width: 100, height: 100 }} />
           </ScrollView>
