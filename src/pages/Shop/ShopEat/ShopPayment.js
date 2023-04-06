@@ -111,7 +111,7 @@ setRefreshing(false)
         "shipping_address_id": props.route.params.address.id,
         "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
         "order_type" : props.route.params.orderType, //delivery/take-away 
-        "cookingInstruction" :props.route.params.cooking
+        "cooking_instruction" :props.route.params.cooking
           }
     console.log('the form data==>>', data)
       const { responseJson, err } = await requestPostApi(shop_eat_cart_place_order, data, 'POST', User.token)

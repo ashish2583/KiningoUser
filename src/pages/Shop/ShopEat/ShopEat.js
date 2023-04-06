@@ -21,7 +21,7 @@ import { log } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Geocoder.init(GoogleApiKey);
-const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+const GOOGLE_MAPS_APIKEY = GoogleApiKey;
 
 const ShopEat = (props) => {
   const [searchValue, setsearchValue] = useState('')
@@ -82,6 +82,8 @@ const ShopEat = (props) => {
   const [venderdata, setvenderdata] = useState(null)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
+  const [My_Alert2, setMy_Alert2] = useState(false)
+  const [alert_sms2, setalert_sms2] = useState('')
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
@@ -98,9 +100,9 @@ const ShopEat = (props) => {
     })
       .then(location => {
         console.log('locations latitude longitude', location);
-        setlat(28.6176)
-        setlan(77.422)
-        let My_cord = { latitude: 28.6176, longitude: 77.422 }
+        setlat(location.latitude)
+        setlan(location.longitude)
+        let My_cord = { latitude: location.latitude, longitude: location.longitude }
         dispatch(setRestorentLocation(My_cord))
          homePage(location.latitude,location.longitude)
         LatlongTo_address(My_cord)
@@ -148,8 +150,7 @@ const ShopEat = (props) => {
     console.log('the res==>>Home')
     setLoading(true)
 
-    // const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + '28.6176' + '&long=' + '77.422', '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -191,16 +192,24 @@ const ShopEat = (props) => {
     }
   }
 
+  const logoutDriver=async()=>{
+    AsyncStorage.clear(); 
+    dispatch(onLogoutUser())
+}
+
   return (
     <SafeAreaView style={{}}>
       <ScrollView
+        style={{flexGrow: 1}}
+        nestedScrollEnabled={true}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
         }
-        showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
       <View>
         <HomeHeader height={60} paddingHorizontal={15}
@@ -208,8 +217,10 @@ const ShopEat = (props) => {
           press2={() => { }} title2={'Food'} fontWeight={'500'} img2height={20}
           press3={() => {
             // props.navigation.navigate('ShopEatNotificationList') 
-            AsyncStorage.clear(); 
-          dispatch(onLogoutUser())
+            setalert_sms2('Are you sure want to logout?')
+            setMy_Alert2(true)
+          //   AsyncStorage.clear(); 
+          // dispatch(onLogoutUser())
             }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
         {cartCount != '0' ?
           <View style={{ position: 'absolute', right: 8, top: 8, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
@@ -219,130 +230,6 @@ const ShopEat = (props) => {
         }
       </View>
 
-   
-
-     {/* <View style={{
-          flexDirection: 'row', justifyContent: 'space-between',
-          marginHorizontal: 15, backgroundColor: 'rgba(0,0,0,0.025)',
-          paddingVertical: 5,
-          alignSelf: 'center', alignItems: 'center',
-          backgroundColor: '#fff',
-          // shadowColor: 'gray',
-          // shadowOffset: {
-          //   width: 3,
-          //   height: 3
-          // },
-          // shadowRadius: 3,
-          // shadowOpacity: 0.5,
-          // justifyContent: 'center',
-          // elevation: 5,
-          borderRadius: 10,
-        }}>
-          <View style={{position:'absolute',flexDirection:'row', justifyContent: 'space-between',width:'100%', paddingHorizontal: 15,}}>
-          <TouchableOpacity style={{justifyContent: 'flex-start',top:4 }}>
-            <Image source={require('../../../assets/shape_33.png')} style={{ width: 12, height: 15 }}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ justifyContent: 'flex-end',zIndex:999 ,width: 25, height: 25}} onPress={() => { props.navigation.navigate('ShopEatFilter') }}>
-            <Image source={require('../../../assets/shape_32.png')} style={{ width: 25, height: 25 }}></Image>
-          </TouchableOpacity>
-          </View>
-          <GooglePlacesAutocomplete
-            placeholder={addre.substring(0, 45)}
-            textInputProps={{
-              placeholderTextColor: '#000',
-              // placeholderTextColor: Colors.BLACK,
-              returnKeyType: 'search',
-              // onFocus: () => setShowPlacesList(true),
-              // onBlur: () => setShowPlacesList(false),
-              multiline: true,
-              // onTouchStart: ()=>{downButtonHandler()}
-              height: 45,
-              color: '#000'
-              // shadowColor:  'gray',
-              //   shadowOffset: {
-              //     width:3,
-              //     height:3
-              //   },
-              //   shadowRadius: 5,
-              //   shadowOpacity: 1.0,
-              //   justifyContent: 'center',
-              //   elevation: 5
-            }}
-            enablePoweredByContainer={false}
-            listViewDisplayed={'auto'}
-            styles={{
-              textInputContainer: {
-                marginLeft:10,
-                  // backgroundColor: 'grey',
-                },
-              description: {
-                color: '#000',
-                // fontWeight: '300'
-              },
-              poweredContainer: {
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                borderColor: '#C8C7CC',
-                borderTopWidth: 0.5,
-                color: '#000'
-              },
-              powered: {},
-              listView: {
-                // color:'#000'
-              },
-              row: {
-                backgroundColor: '#FFFFFF',
-                padding: 13,
-                height: 44,
-                flexDirection: 'row',
-              },
-              separator: {
-                height: 0.5,
-                backgroundColor: '#C8C7CC',
-                color: '#000'
-              },
-              textInput: {
-                backgroundColor: 'transparent',
-                height: 35,
-                borderRadius: 5,
-                paddingVertical: 5,
-                fontSize: 13,
-                color: '#000',
-                flex: 1,
-                paddingLeft: 25,
-                paddingRight:40,
-              },
-            }}
-            onPress={(data, details = null) => {
-              console.log(data, details);
-            // 'details' is provided when fetchDetails = true
-            // setShowPlacesList(false)
-            homePage(details.geometry.location.lat,details.geometry.location.lng)
-            dispatch(setRestorentLocation({
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            }))
-
-            setGoogleLatLng({
-            lat: details.geometry.location.lat,
-            lng: details.geometry.location.lng,
-            });
-            setGoogleAddress(data?.description);
-            }}
-
-            GooglePlacesDetailsQuery={{
-              fields: 'geometry',
-            }}
-            fetchDetails={true}
-            // currentLocation={true}
-            query={{
-              key: GOOGLE_MAPS_APIKEY,
-              language: 'en',
-            }}
-          />
-        </View> */}
 
         <View style={{
           flexDirection: 'row',
@@ -650,6 +537,8 @@ const ShopEat = (props) => {
       </View>
       {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
+     
+      {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={()=>{ logoutDriver() }} canclePress={()=>{setMy_Alert2(false)}}/> : null }
 
     </SafeAreaView>
   );

@@ -143,8 +143,7 @@ const ShopMyOrderDetails = (props) => {
  <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
  <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12,marginLeft:5 }}>Placed At : {data.created_date}</Text>
 </View>
-             
-                <Text style={{ color: '#C1C1C1', fontWeight: '600', fontSize: 12 }}>Status : {data.status_label}</Text>
+         <Text style={{ color: '#000', fontWeight: '600', fontSize: 12 }}>Status : {data.status_label}</Text>
             
               </View>
 
@@ -169,7 +168,6 @@ const ShopMyOrderDetails = (props) => {
             // elevation: 5,
             borderColor: '#D8E9FA', borderWidth: 1,
           }}>
-
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10 }}>
               <View style={{ width: 40, height: 40, justifyContent: 'center', borderRadius: 10 }}>
                 <Image source={require('../../../assets/ent_location_image.png')} style={{ width: 18, height: 23, overflow: 'hidden', alignSelf: 'center' }}></Image>
@@ -193,12 +191,12 @@ const ShopMyOrderDetails = (props) => {
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Destination Address</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address}</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address},{data.destination_city},{data.destination_state}</Text>
               </View>
-
             </View>
-            
-            {data.delivered_date!=null && data.status!= 11 ?
+           
+
+            {data.delivered_date!=null && data.status!= 11 && data.status!=13 && data.status!=15 ?
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
@@ -209,7 +207,22 @@ const ShopMyOrderDetails = (props) => {
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
             </View>
   </View>
-            : null }
+            : 
+            data.status!= 0 ?
+            <View>
+             <View style={{width:'100%',height:0.5,backgroundColor:'gray',marginVertical:5}}></View>
+            <View style={{ flexDirection: 'row', width: '100%', marginTop: 10, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
+              <View style={{ width: 40, height: 40, justifyContent: 'center', borderRadius: 10 }}>
+                <Image source={require('../../../assets/noRide.png')} style={{ width: 30, height: 30, overflow: 'hidden', alignSelf: 'center' }}></Image>
+              </View>
+              <View style={{ marginLeft: 10, width: '80%' }}>
+                <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>{data.driver_name} has been assigned to your order</Text>
+              </View>
+            </View>
+
+            </View>
+            : null
+             }
 
           </View>
          

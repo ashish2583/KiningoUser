@@ -23,10 +23,11 @@ import Geolocation from "react-native-geolocation-service";
 import {GoogleApiKey} from '../../../WebApi/GoogleApiKey'
 import Geocoder from "react-native-geocoding";
 import Toast from 'react-native-toast-message';
+import { log } from 'react-native-reanimated';
 
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
-const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+const GOOGLE_MAPS_APIKEY = GoogleApiKey;
 Geolocation.setRNConfiguration(GoogleApiKey);
 Geocoder.init(GoogleApiKey);
 
@@ -131,7 +132,6 @@ const ShopCart = (props) => {
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   }
-
   const onRefresh = React.useCallback(() => {
     // setRefreshing(true);
     // fetchSuccessDetails()
@@ -379,7 +379,6 @@ const ShopCart = (props) => {
      
     }else if (landmark == '') {
       Toast.show({text1:'Please Enter Landmark'})
-     
     }  else{
       setLoading(true)
     var data = {
@@ -444,6 +443,7 @@ const ShopCart = (props) => {
       "country_id": 1,
       "is_default": 1,
     }
+    Alert.alert(googleLatLng.lat+'--'+googleLatLng.lng)
    console.log('google address data===>>', data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
@@ -708,6 +708,8 @@ const ShopCart = (props) => {
           }
           {resData.length > 0 ?
             <View>
+            {ordertype!='take-away' ? 
+            <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 8, width: '100%',marginTop:18 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Choose Delivery Address</Text>
                 {/* <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setShippingAddressPopUp(true) }}>Add Address</Text> */}
@@ -739,6 +741,9 @@ const ShopCart = (props) => {
                   </TouchableOpacity>
                 </View>
                 : null}
+
+                </View>
+                : null }
                 
               <View style={{ width: '100%', marginHorizontal: 5, height: 100, borderRadius: 2, marginTop: 10, alignSelf: 'center' }}>
 
@@ -896,7 +901,7 @@ const ShopCart = (props) => {
         <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, backgroundColor: 'rgba(0,0,0,0.4)', position: 'absolute', left: 0, top: 0, justifyContent: 'center' }} onPress={() => { setmodlevisual(false) }}>
           <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '95%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10 }}>
 
-            {
+            {rescopun.length>0 ?
               rescopun.map((item, index) => {
                 return (
                   <View style={{
@@ -925,6 +930,10 @@ const ShopCart = (props) => {
                 )
               }
               )
+              :
+              <View style={{width:'100%',height:'100%',justifyContent:'center',alignSelf:'center'}}>
+              <Text style={{textAlign:'center',fontSize:22,fontWeight:'bold',color:'#000'}}>No Coupons Found</Text>
+              </View>
             }
 
 
@@ -1471,11 +1480,12 @@ styles={{
 onPress={(data, details = null) => {
   console.log(data, details);
 // 'details' is provided when fetchDetails = true
-// setShowPlacesList(false)
+// setShowPlacesList(false)    
 setGoogleLatLng({
 lat: details.geometry.location.lat,
 lng: details.geometry.location.lng,
 });
+console.log('helloji Ashish==>>',details.geometry.location)
 //setGoogleAddress(data?.description);
 setGoogleAddress(data);
 }}

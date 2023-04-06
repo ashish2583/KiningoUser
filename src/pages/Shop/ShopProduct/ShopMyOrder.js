@@ -69,7 +69,7 @@ const ShopMyOrder = (props) => {
     // {label: 'Dining', value: 'dining'},
     { label: 'Delivery', value: 'delivery' },
     // {label: 'Table Booking', value: 'booked-table'},
-    { label: 'Take Away', value: 'take-away' },
+    // { label: 'Take Away', value: 'take-away' },
   ]);
   const [timeDurationValue, setTimeDurationValue] = useState('');
   const [timeDurationData, setTimeDurationData] = useState([
@@ -317,11 +317,11 @@ const ShopMyOrder = (props) => {
 
   const cancleDesign = (title, press, check) => {
     return (
-      <TouchableOpacity style={{ width: '100%', height: 50, flexDirection: 'row', alignItems: 'center', borderRadius: 7, borderColor: check ? Mycolors.RED : Mycolors.GrayColor, borderWidth: 0.5, paddingHorizontal: 10, marginTop: 10 }}
+      <TouchableOpacity style={{ width: '100%', height: 50, flexDirection: 'row', alignItems: 'center', borderRadius: 7, borderColor: check ? '#835E23' : Mycolors.GrayColor, borderWidth: 0.5, paddingHorizontal: 10, marginTop: 10 }}
         onPress={press}>
-        <View style={{ width: 25, height: 25, borderColor: check ? Mycolors.RED : Mycolors.GrayColor, borderWidth: 0.3, justifyContent: 'center', borderRadius: 20, }}>
+        <View style={{ width: 25, height: 25, borderColor: check ? '#835E23' : Mycolors.GrayColor, borderWidth: 0.3, justifyContent: 'center', borderRadius: 20, }}>
           {check ?
-            <View style={{ width: 15, height: 15, borderRadius: 15, backgroundColor: Mycolors.RED, alignSelf: 'center' }} />
+            <View style={{ width: 15, height: 15, borderRadius: 15, backgroundColor: '#835E23', alignSelf: 'center' }} />
             : null
           }
         </View>
@@ -437,7 +437,7 @@ const ShopMyOrder = (props) => {
                         </View>
                       </View>
                       <View style={{flexDirection:'row'}}>
-                      <Text style={{ color: Mycolors.RED, fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
+                      <Text style={{ color: '#835E23', fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
                       <Text style={{ color: Mycolors.GrayColor, fontWeight: '400', fontSize: 12, marginTop: 5,left:10 }}>Placed At : {item.created_date}</Text>
                       </View>
                       {item.order_type != 'booked-table' ?
@@ -479,7 +479,7 @@ const ShopMyOrder = (props) => {
 
                               <View style={{ width: 120, marginTop: 4 }}>
                                 <MyButtons title="Call Restaurant" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
-                                  titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.4} />
+                                  titlecolor={'#835E23'} backgroundColor={'transparent'} marginVertical={0} borderColor={'#835E23'} borderWidth={0.4} />
                               </View>
 
                             </View>
@@ -590,7 +590,7 @@ const ShopMyOrder = (props) => {
                 
                 <View style={{ width: '40%', alignSelf: 'center',marginTop: 10 }}>
               <MyButtons title="View all orders" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { resetFilter()  }} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
               </View>
 
@@ -662,7 +662,7 @@ const ShopMyOrder = (props) => {
             </View>
 
             <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', marginTop: 20, backgroundColor: Mycolors.TimingColor, borderRadius: 5, padding: 10 }}>
-              <View style={{ width: 22, height: 22, backgroundColor: Mycolors.RED, borderRadius: 20, justifyContent: 'center' }}>
+              <View style={{ width: 22, height: 22, backgroundColor: '#835E23', borderRadius: 20, justifyContent: 'center' }}>
                 <Image source={require('../../../assets/info.png')} style={{ width: 13, height: 13, alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
@@ -902,8 +902,8 @@ const ShopMyOrder = (props) => {
         <TouchableWithoutFeedback onPress={()=>{setTimeDurationValue(item.label)}}>
           
         <View style={[styles.radioButtonContainer, {width:'50%'}]}>
-        <MaterialCommunityIcons name={item.label === timeDurationValue ? "radiobox-marked":"radiobox-blank"} color={Mycolors.RED} size={24} />
-        <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
+        <MaterialCommunityIcons name={item.label === timeDurationValue ? "radiobox-marked":"radiobox-blank"} color={'#835E23'} size={24} />
+        <Text style={{ color: '#835E23', fontWeight: '600', fontSize: 12, marginLeft:5}} >{item.label}</Text>
       </View>
         </TouchableWithoutFeedback>
       );
@@ -933,7 +933,7 @@ const ShopMyOrder = (props) => {
               <MyButtons title="Submit" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={() => { orderList(true) }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />
               <MyButtons title="Reset" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={resetFilter} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED}  hLinearColor={['#b10027', '#fd001f']} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'}  hLinearColor={['#b10027', '#fd001f']} />
                 <View style={{ height: 20,  }} />
             </KeyboardAvoidingView>
           </ScrollView>
@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Mycolors.RED,
+    backgroundColor: '#835E23',
     width: '15%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

@@ -22,17 +22,19 @@ const Chat = (props) => {
     const [userid,setuid]=useState('')
     const [driverid,setDriverid]=useState('')
       useEffect(()=>{
-        removeMessageCount()
-        // var userId=user_details.location[0] ? user_details.location[0].user_id : user_details.user_id
-        var userId=16
-        //user_details.user_id
-        var driverId=12
+         removeMessageCount()
+        var userId=user_details.userid
+        var driverId=props.route.params.data.driver_id
+        // var userId=12
+        // var driverId=34
         //mapdata.notificationdata.driver_id
         setuid(userId)
         setDriverid(driverId)
-     const docid  = driverId > userId ? userId+ "-" + driverId : driverId+"-"+userId 
+        const docid  = driverId > userId ? userId+ "-" + driverId : driverId+"-"+userId 
       //  const docid  = driverId > userId ? driverId+"-"+userId :userId+ "-" + driverId    //for testing only Uid 5,   D id149
-          // 5-149
+     
+      //  const docid  = '123'
+
           console.log('the DOC ID  is==>>',docid)
         const messageRef = firestore().collection('chatrooms')
         .doc(docid)
@@ -95,7 +97,7 @@ const senNoti= async()=>{
        // console.log('result')
 }
 const onSend = (messageArray) => {
-  senNoti()
+  // senNoti()
   const msg=messageArray[0]
   const mymsg={
     ...msg,
@@ -106,6 +108,7 @@ const onSend = (messageArray) => {
       setMessages(previousMessages => GiftedChat.append(previousMessages, mymsg))
      // const docid  = driverid > userid ?  driverid+"-"+userid :userid+ "-" + driverid 
       const docid  = driverid > userid ?  userid+ "-" + driverid :driverid+"-"+userid 
+      // const docid  = '123'
 
       console.log('the DOC 2 ID  is==>>',docid)
         //const docid='123'  //here use driverid and user id 
@@ -197,8 +200,6 @@ const deletuser=()=>{
     })
   }
 
-
-
      return(
     <SafeAreaView style={styles.container}>
  
@@ -260,7 +261,7 @@ const deletuser=()=>{
   <Text>Check login or not</Text>
 </TouchableOpacity> */}
 
- <View style={{width:dimensions.SCREEN_WIDTH,top:-100,backgroundColor:'red'}}>
+ {/* <View style={{width:dimensions.SCREEN_WIDTH,top:-100,backgroundColor:'red'}}>
  <GiftedChat
       messages={messages}
       onSend={messages => onSend(messages)}
@@ -339,8 +340,86 @@ const deletuser=()=>{
     />
     <View style={{width:10,height:30}} />
     
-</View>
+</View> */}
   
+<View style={{flex:1,width:dimensions.SCREEN_WIDTH}}>
+ <GiftedChat
+      messages={messages}
+      onSend={messages => onSend(messages)}
+      user={{
+        _id: user_details.userid, //userId  and from driver side driver 
+      }}
+
+      renderTime={()=>{
+        <Time
+                textStyle={{
+                    right: {
+                        color: 'red',
+                        // fontFamily: 'Montserrat-Light',
+                        // fontSize: 14
+                    },
+                    left: {
+                        color: 'black',
+                      
+                    }
+                }}
+            />
+      }}
+
+      renderBubble={(props)=>{
+        return <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor:'#FF8C00',
+             right:8
+          },
+          left:{
+            backgroundColor:"white",
+             left:-33,
+          }
+        }}
+        textStyle={{
+          right: {
+            color: "white"
+          },
+          left: {
+            color: Mycolors.TEXT_COLOR
+          }
+        }}
+      />
+    }}
+      renderInputToolbar={(props)=>{
+         return (
+           <>
+           <View style={{width:'100%',height:70,alignSelf:'center',backgroundColor:'#fff',justifyContent:'center',flexDirection:'row'}}>
+
+            <View style={{width:'80%',height:45,borderRadius:28,marginTop:10}}>
+               <InputToolbar {...props}
+                containerStyle={styles.input} 
+                textInputStyle={{ color: "black" }}
+                />
+          </View>
+          </View>
+           </>
+         )
+    }}
+    renderSend={(props) =>{
+      return (
+          <Send
+              {...props}
+          >
+              <View style={{width: 40, height: 40,marginTop:10,borderRadius:20,backgroundColor:Mycolors.ORANGE,justifyContent:'center',left:15}}>
+                  <Image source={require('../../../assets/send.png')} resizeMode={'center'}style={{ width: 19, height: 19, alignSelf: 'center' }}/>
+              </View>
+          </Send>
+      );
+     }}
+
+
+    />
+     <View style={{width:10,height:30}} />
+</View>
 
     </SafeAreaView>
      );

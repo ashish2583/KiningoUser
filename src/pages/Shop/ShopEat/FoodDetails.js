@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
+import { baseUrl, shop_eat_cart, user_payment_method,shop_eat_cart_charges, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,7 @@ import openMap from 'react-native-open-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
-
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
 
 function newAddMinutes(time, minsToAdd) {
   function D(J) { return (J < 10 ? '0' : '') + J; };
@@ -78,18 +78,109 @@ const FoodDetails = (props) => {
   ]);
   const [showda, setshowda] = useState(false)
   const [viewmore, setviewmore] = useState(true)
+  const [total, settotal] = useState('0')
+  const [subtotal, setsubtotal] = useState('0')
+  const [tex, settex] = useState('0')
+  const [venderCharg, setvenderCharg] = useState('0')
+  const [modlevisual5, setmodlevisual5] = useState(false)
+  const [mtype, setmType] = useState('standard')
+  const [curentCord, setCurentCord] = useState({
+    latitude: 26.4788922,
+    longitude: 83.7454171,
+  })
+  const mapStyle = [
+    { elementType: 'geometry', stylers: [{ color: '#242F3E' }] },
+    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+    { elementType: 'labels.text.stroke', stylers: [{ color: '#242F3E' }] },
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#D59563' }],
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#D59563' }],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{ color: '#263C3F' }],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#6B9A76' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{ color: '#38414E' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#212A37' }],
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#9CA5B3' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{ color: '#746855' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#1F2835' }],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#F3D19C' }],
+    },
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{ color: '#2F3948' }],
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#D59563' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{ color: '#17263C' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#515C6D' }],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.stroke',
+      stylers: [{ color: '#17263C' }],
+    },
+  ];
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
       menuList(null);
+      diningCharges();
        })
         return unsubscribe;
   }, [])
 
   const checkcon = () => {
-    vendorDetail()
-    menuList(menutypevalue)
-  }
+    // vendorDetail()
+    // menuList(menutypevalue)
+  } 
 
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -320,8 +411,12 @@ const FoodDetails = (props) => {
     var data = {
       "business_id": props.route.params.data.business_id,
       "items": itemss,
+      "total": totals,
+      "cooking_instruction" : cookingIns,
+      "taxes": (subtotal * 0.5) / 100,
+      "vendor_charges": venderCharg,
       "sub_total": totals,
-      "total": totals
+      "total": (subtotal + ((subtotal * 0.5) / 100) + venderCharg),
     }
     console.log(data);
     const { responseJson, err } = await requestPostApi(shop_eat_cart_book_dining, data, 'POST', User.token)
@@ -334,6 +429,7 @@ const FoodDetails = (props) => {
       // Toast.show(responseJson.headers.message)
       setdiningItens1([])
       setmodlevisual3(false)
+      props.navigation.navigate('DiningAndBookTable')
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -405,7 +501,9 @@ const FoodDetails = (props) => {
       product_id: items.id,
       quantity: 1,
       business_id: props.route.params.data.business_id,
-      product_type: items.serviceType
+      product_type: items.product_type,
+      service_type:items.service_type
+      // service_type
     }
     const { responseJson, err } = await requestPostApi(shop_eat_cart, data, 'POST', User.token)
     setLoading(false)
@@ -416,8 +514,9 @@ const FoodDetails = (props) => {
       menuList(menutypevalue)
       //  props.navigation.navigate('ShopCart')
     } else {
-      setalert_sms(err)
-      setMy_Alert(true)
+      Toast.show({ text1: responseJson.headers.message });
+      // setalert_sms(err)
+      // setMy_Alert(true)
     }
   }
   const myfun = (stime, etime) => {
@@ -614,17 +713,37 @@ const FoodDetails = (props) => {
     
   }
 
+  const diningCharges = async () => {
+    console.log('the res shop_eat_cart_charges==>>//', shop_eat_cart_charges + props.route.params.data.business_id)
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi(shop_eat_cart_charges + props.route.params.data.business_id, '', 'GET', User.token)
+    setLoading(false)
+    console.log('the res shop_eat_cart_charges Ashish Kumar==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      // {"delivery_charge": 10, "taxes": 0.5, "vendor_charges": 10}
+      settex(responseJson.body.taxes)
+      setvenderCharg(responseJson.body.vendor_charges)
+    } else {
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+
   const itemloop = (item) => {
     // diningItens.includes(item) ? true : false,
     var rdata = false
     var resdd = diningItens1
+    var subtotals = 0
     console.log('klklkl', resdd);
     console.log('lklklklkl', item);
     for (let i = 1; i <= resdd.length; i++) {
       if (resdd[i - 1].id == item.id) {
         rdata = true
       }
+      // subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
+
     }
+    // setsubtotal(subtotals)
     return rdata;
   }
 
@@ -644,12 +763,17 @@ const FoodDetails = (props) => {
     // diningItens.includes(item) ? true : false,
     console.log('state1');
     var resdd = diningItens1
+    var subtotals = 0
     for (let i = 1; i <= resdd.length; i++) {
       if (resdd[i - 1].id == item.id) {
         console.log('state2');
         resdd[i - 1].cart_quantity = parseInt(resdd[i - 1].cart_quantity) + 1
       }
+      subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
     }
+
+    setsubtotal(subtotals)
+   
     console.log('state3', resdd);
     setdiningItens1(resdd)
     setreloades(!reloades)
@@ -658,6 +782,7 @@ const FoodDetails = (props) => {
   const minus = (item) => {
     // diningItens.includes(item) ? true : false,
     var resdd = diningItens1
+   
     for (let i = 1; i <= resdd.length; i++) {
       if (resdd[i - 1].id == item.id) {
         console.log('state2');
@@ -666,10 +791,17 @@ const FoodDetails = (props) => {
         } else {
           resdd[i - 1].cart_quantity = parseInt(resdd[i - 1].cart_quantity) - 1
         }
-
       }
     }
+    var subtotals = 0
+    for (let i = 1; i <= resdd.length; i++) {
+      subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
+    }
+   if(subtotals==0){
+    setmodlevisual3(false)
+   }
     console.log('state3', resdd);
+    setsubtotal(subtotals) 
     setdiningItens1(resdd)
     setreloades(!reloades)
 
@@ -689,7 +821,6 @@ const FoodDetails = (props) => {
       </View>
     )
   }
-
   const flatliistDesign = (img, ti, rs, des, press, allpress, item, mpress, apress, boxcolor) => {
     return (
       <TouchableOpacity style={{
@@ -756,7 +887,6 @@ const FoodDetails = (props) => {
       </TouchableOpacity>
     )
   }
-
   const DiningflatliistDesign = (img, ti, rs, des, press, allpress, border, plush, qty, minus, boxcolor) => {
     return (
       <TouchableOpacity style={{
@@ -781,7 +911,7 @@ const FoodDetails = (props) => {
         <View style={{ marginLeft: 15 }}>
           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9 }} >{ti}</Text>
           <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{rs}</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row',width:'75%' }}>
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 6 }} >Food Preparation Time:</Text>
             <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{des}</Text>
           </View>
@@ -870,7 +1000,37 @@ const FoodDetails = (props) => {
         </View>
         <View style={{ width: '96%', alignSelf: 'center', backgroundColor: Mycolors.BG_COLOR }}>
 
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
+        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
+            <View>
+              <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
+              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
+              <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
+              </View>
+            </View>
+            <TouchableOpacity onPress={() => setmodlevisual5(true)} style={{ position: 'absolute', right: 15, top: 15 }}>
+              <Text style={{ color: '#FD001F', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text>
+            </TouchableOpacity>
+            <View>
+              <TouchableOpacity style={{
+                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 3
+                },
+                shadowRadius: 1,
+                shadowOpacity: 0.3,
+                justifyContent: 'center',
+                elevation: 5, marginTop: 25
+              }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
+                <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
             <View>
               <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
               <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
@@ -896,7 +1056,7 @@ const FoodDetails = (props) => {
               </TouchableOpacity>
             </View>
 
-          </View>
+          </View> */}
 
           <View style={{ width: '92%', alignSelf: 'center', top: -30, backgroundColor: '#F5F5F5', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
             <FlatList
@@ -927,29 +1087,15 @@ const FoodDetails = (props) => {
 
           {selectedTab == 'Take Away' || selectedTab == 'Delivery' ?
             <View>
-              <View style={{ width: '95%', alignSelf: 'center', top: -5 }}>
-                {/* <ViewMoreText
-                  numberOfLines={3}
-                  renderViewMore={(onPress) => {
-                    return (
-                      <Text onPress={onPress} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>View more</Text>
-                    )
-                  }}
-                  renderViewLess={(onPress) => {
-                    return (
-                      <Text onPress={onPress} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>View less</Text>
-                    )
-                  }}
-                   textStyle={{ textAlign: 'left', width: '95%' }}
-                >
-                  <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{resData.business_info}</Text>
-                </ViewMoreText> */}
+              {/* <View style={{ width: '95%', alignSelf: 'center', top: -5 }}>
+                
                 <Text style={{fontSize: 11, color: Mycolors.TEXT_COLOR}}>{viewmore ? resData.business_info ? resData.business_info.substring(0,150) : resData.business_info : resData.business_info}</Text>
+                {resData.business_info ?
                 <Text onPress={()=>{setviewmore(!viewmore)}} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ?  'View more': 'View less'}</Text>
+                : null}
+              </View> */}
 
-              </View>
-
-              <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+              <View style={{ width: '100%', alignSelf: 'center',}}>
                 {resData.features ?
                   resData.features.map((item, index) => {
                     return (
@@ -961,53 +1107,10 @@ const FoodDetails = (props) => {
                   : null}
               </View>
 
-              {/*  
-<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:dimensions.SCREEN_WIDTH*95/100,alignSelf:'center'}}>
-  {design(require('../../../assets/shape_39.png'),'Food Preparation Time','34 minutes','45%',25,28,'red',20)}
-  {design(require('../../../assets/shape_40.png'),'Hygiene Food','','45%',25,28,'red',20)}
-</View>
-{design(require('../../../assets/shape_41.png'),'Location','Disneys Hollvwood Studios Main Entrance.Kissimmee. FL 34747. United States','95%',25,28,5)}
-<View>
-  {design(require('../../../assets/shape_42.png'),'Timing','Open at 10:00 AM','95%',28,28,5)}
-<TouchableOpacity style={{width:100,height:30,borderColor:'red',borderWidth:0.5,position:'absolute',right:5,top:15,justifyContent:'center',borderRadius:5}}>
-<Text style={{fontSize:11,textAlign:'center',color:"red",fontWeight:'bold'}}>Call Restaurant</Text>
-</TouchableOpacity>
-</View>
-{design(require('../../../assets/shape_43.png'),'Cost','Cost for two - $24.78(approx)','95%',35,24,5)}
- */}
+         
 
             </View>
-            :
-            selectedTab == 'Dining' ?
-              <View>
-                {/* <View style={{width:'100%',alignSelf:'center',marginTop:10}}>
-         <FlatList
-                  data={upData}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  // numColumns={2}
-                  renderItem={({item,index})=>{
-                    return(
-                      <TouchableOpacity style={{width:100,height:130,marginHorizontal:5,backgroundColor:'#fff',
-                      shadowOffset: {
-                      width: 0,
-                      height: 3
-                    },
-                    shadowRadius: 1,
-                    shadowOpacity: 0.3,
-                   // justifyContent: 'center',
-                    elevation: 5,borderRadius:10}}>
-          <View style={{width:100,height:130,alignSelf:'center'}}>
-          <Image source={require('../../../assets/images/diningimg.png')} style={{width:'100%',height:'100%',alignSelf:'center',resizeMode: 'stretch'}}></Image>
-          </View>
-          </TouchableOpacity>
-                    )
-                  }}
-                  keyExtractor={item => item.id}
-                /> 
-         </View>*/}
-
-              </View>
+           
               :
               null
           }
@@ -1107,22 +1210,21 @@ const FoodDetails = (props) => {
 
                 <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
                   {selectedTab != 'Dining' ?
-                    selectedTab == 'Take Away' ?
+                    selectedTab == 'Take Away' ? 
 
                       menuresData.map((item, index) => {
                         return (
                           <View>
-                            {item.menuType == menutypevalue && item.serviceType == 'Take Away' ?
+                            {item.menuType == menutypevalue && item.service_type_value  == 'Take Away' ?
                               flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
                                 () => {
                                   setClickedItemData(item)
                                   setmodlevisual1(false)
-                                
                                 },
                                 item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
                               )
                               :
-                              item.menuType != menutypevalue && item.serviceType == 'Take Away' ?
+                              item.menuType != menutypevalue && item.service_type_value == 'Take Away' ?
                                 flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
                                   setClickedItemData(item)
                                   setmodlevisual1(false)
@@ -1141,7 +1243,7 @@ const FoodDetails = (props) => {
                       menuresData.map((item, index) => {
                         return (
                           <View>
-                            {item.menuType == selectedValue && item.serviceType == 'Delivery' ?
+                            {item.menuType == selectedValue && item.service_type_value == 'Delivery' ?
                               flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
                                 () => {
                                   setClickedItemData(item)
@@ -1150,7 +1252,7 @@ const FoodDetails = (props) => {
                                 item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
                               )
                               :
-                              item.menuType != selectedValue && item.serviceType == 'Delivery' ?
+                              item.menuType != selectedValue && item.service_type_value == 'Delivery' ?
                                 flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
                                   setClickedItemData(item)
                                   setmodlevisual1(false)
@@ -1168,7 +1270,7 @@ const FoodDetails = (props) => {
                       return (
                         <View>
 
-                          {item.menuType == menutypevalue && item.serviceType == 'Dinning' ?
+                          {item.menuType == menutypevalue && item.service_type_value == 'Dining' ?
                             DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
                               () => {
                                 // let arr=diningItens
@@ -1189,10 +1291,13 @@ const FoodDetails = (props) => {
                                     "name": item.name,
                                     "price": item.price,
                                     "product_desc": item.product_desc,
-                                    "serviceType": item.serviceType,
+                                    "service_type_value": item.service_type_value,
                                     "status": item.status,
-                                    "subcategory": item.subcategory
+                                    "subcategory": item.subcategory,
+                                    "tentative_time":item.tentative_time
                                   })
+                                  setsubtotal(parseInt(subtotal)+parseInt(item.price))
+                                  
                                 }
 
                                 //setdiningItens(arr)
@@ -1209,7 +1314,7 @@ const FoodDetails = (props) => {
                               () => { minus(item) }, 'green'
                             )
                             :
-                            item.menuType != menutypevalue && item.serviceType == 'Dinning' ?
+                            item.menuType != menutypevalue && item.service_type_value == 'Dining' ?
                               DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
                                 () => {
                                   let arr1 = diningItens1
@@ -1228,10 +1333,12 @@ const FoodDetails = (props) => {
                                       "name": item.name,
                                       "price": item.price,
                                       "product_desc": item.product_desc,
-                                      "serviceType": item.serviceType,
+                                      "service_type_value": item.service_type_value,
                                       "status": item.status,
-                                      "subcategory": item.subcategory
+                                      "subcategory": item.subcategory,
+                                      "tentative_time":item.tentative_time
                                     })
+                                    setsubtotal(parseInt(subtotal)+parseInt(item.price))
                                   }
 
                                   setdiningItens1(arr1)
@@ -1404,7 +1511,7 @@ const FoodDetails = (props) => {
                 </View>
                 <View style={{ marginLeft: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 11, }} >Timings</Text>
-                  <View style={{ width: '100%', flexDirection: 'row' }}>
+                  <View style={{ width: '95%', flexDirection: 'row' }}>
                     <FlatList
                       data={slots}
                       horizontal
@@ -1506,13 +1613,16 @@ const FoodDetails = (props) => {
         }}
         scrollTo={() => { }}
         scrollOffset={1}
-        onBackdropPress={() => setmodlevisual1(false)}
+        onBackdropPress={() => {
+          menuList(null);
+          setmodlevisual1(false)
+          }}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+        <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 10 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
             <View style={{ paddingHorizontal: 4 }}>
               <SearchInput2 marginTop={10} placeholder={'Search Cuisine,Dishes'}
@@ -1530,17 +1640,84 @@ const FoodDetails = (props) => {
 
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
               {menuresData.length > 0 ?
+                selectedTab != 'Dining' ?
+                (menuresData.map((item, index) => {
+                  return (
+                    <View>
+                      
+                        { selectedTab == 'Delivery' && item.service_type_value == 'Delivery' ?
+                        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), 
+                        item.tentative_time,
+                         () => { selectedTab == 'Dining' ? '' : postcart(item) },
+                         () => { setClickedItemData(item) }, 
+                         item, 
+                         () => { putcart(item, '-') }, 
+                         () => { putcart(item, '+') }, '#fff'
+                        )
+                        :
+                        selectedTab == 'Take Away' && item.service_type_value  == 'Take Away' ?
+                        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), 
+                        item.tentative_time,
+                         () => { selectedTab == 'Dining' ? '' : postcart(item) },
+                         () => { setClickedItemData(item) }, 
+                         item, 
+                         () => { putcart(item, '-') }, 
+                         () => { putcart(item, '+') }, '#fff'
+                        )
+                        : 
+                        null
+                      }
+                      
+                    </View>
+                  )
+                }
+                ))
+                :
                 (menuresData.map((item, index) => {
                   return (
                     <View>
                       {
-                        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { selectedTab == 'Dining' ? '' : postcart(item) }, () => {
-                          setClickedItemData(item)
-                          {/* setmodlevisual1(false)*/  }
-                          {/* setmodlevisual2(true) */ }
-                        }, item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#fff'
-                        )
-                      }
+                        item.service_type_value == 'Dining' ?
+                         DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                                     () => {
+                                  let arr1 = diningItens1
+                                  if (itemloop(item)) {
+
+                                  } else {
+                                    arr1.push({
+                                      "cart_id": item.cart_id,
+                                      "cart_quantity": 1,
+                                      "category": item.category,
+                                      "default_image": item.default_image,
+                                      "id": item.id,
+                                      "image": item.image,
+                                      "in_cart": item.in_cart,
+                                      "menuType": item.menuType,
+                                      "name": item.name,
+                                      "price": item.price,
+                                      "product_desc": item.product_desc,
+                                      "service_type_value": item.service_type_value,
+                                      "status": item.status,
+                                      "subcategory": item.subcategory,
+                                      "tentative_time":item.tentative_time
+                                    })
+                                    setsubtotal(parseInt(subtotal)+parseInt(item.price))
+                                  }
+
+                                  setdiningItens1(arr1)
+                                  setreloades(!reloades)
+                                }, () => {
+                                  setClickedItemData(item)
+                                  // setmodlevisual1(false)
+                                  // setmodlevisual2(true)
+                                },
+                                itemloop(item),
+                                () => { plushqty(item) },
+                                itemqty(item),
+                                () => { minus(item) }, 'red'
+                              )
+                     : null
+                            }
                     </View>
                   )
                 }
@@ -1662,7 +1839,7 @@ const FoodDetails = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '60%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20 }}>
+        <View style={{ height: '60%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 10 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
 
             <Text style={{ fontWeight: 'bold', color: Mycolors.Black, marginVertical: 10 }}>Review Order</Text>
@@ -1706,10 +1883,12 @@ const FoodDetails = (props) => {
                             "name": item.name,
                             "price": item.price,
                             "product_desc": item.product_desc,
-                            "serviceType": item.serviceType,
+                            "service_type_value": item.service_type_value,
                             "status": item.status,
-                            "subcategory": item.subcategory
+                            "subcategory": item.subcategory,
+                            "tentative_time":item.tentative_time
                           })
+                          setsubtotal(parseInt(subtotal)+parseInt(item.price))
                         }
 
                         setdiningItens1(arr1)
@@ -1749,11 +1928,43 @@ const FoodDetails = (props) => {
               />
 
             </View>
-            <View style={{ width: '95%', alignSelf: 'center' }}>
+
+{/* <View style={{width:'95%',height:40,borderRadius:10,backgroundColor:'rgba(100,150,100,0.5)',alignSelf:'center',flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:20}}>
+<Text style={{color:'#000',fontWeight:'bold'}}>Total Amount :</Text>
+<Text style={{color:'#000',fontWeight:'bold'}}>$10</Text>
+</View> */}
+
+<View style={{
+                width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
+                 elevation: 5, borderRadius: 7, alignSelf: 'center'
+              }}
+              >
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:5 }}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${subtotal}</Text>
+                </View>
+               
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${venderCharg}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${(subtotal * 0.5) / 100}</Text>
+                </View>
+               
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10,backgroundColor:'#ADC430',height:46,alignItems:"center",borderRadius:7 ,padding:10}}>
+                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14,  fontWeight: '600',textAlign:'center' }} >${(subtotal + ((subtotal * 0.5) / 100) + venderCharg)}</Text>
+                </View>
+              </View>
+
+
+            <View style={{ width: '95%', alignSelf: 'center',marginTop:10 }}>
               <MyButtons title="Confirm & Place Order" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { bookDiningSlote() }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
-
+          
             <View style={{ width: 100, height: 100 }} />
 
           </ScrollView>
@@ -1832,6 +2043,107 @@ const FoodDetails = (props) => {
 
         </View>
       </Modal>
+      {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model5 Book A Sloat Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
+      <Modal
+        isVisible={modlevisual5}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          setmodlevisual5(false)
+        }}
+        scrollTo={() => { }}
+        onBackdropPress={() => setmodlevisual5(false)}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between',  alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, }}>
+              <View>
+                <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
+                {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
+                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
+                  <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row',position:'absolute',right:0,top:0 }}>
+                <MyButtons title2="Call Restaurant" height={40} width={40} borderRadius={5} press={() => {
+                  dialCall('1234567899')
+                }}
+                  img={require('../../../assets/call.png')}  imgheight={40} imgwidth={40} 
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13}  />
+                <MyButtons title2="Send Message" height={40} width={40} borderRadius={5} press={() => { }}
+                  img={require('../../../assets/Envelope.png')} imgheight={40} imgwidth={40} 
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13}  />
+              </View>
+              {/* <View>
+                <TouchableOpacity style={{
+                  width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowOpacity: 0.3,
+                  justifyContent: 'center',
+                  elevation: 5
+                }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
+                  <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
+                </TouchableOpacity>
+              </View> */}
+            </View>
+            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+            </View>
+            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
+              <MapView
+                style={{
+                  height: dimensions.SCREEN_HEIGHT * 22 / 100,
+                  width: 400,
+                  justifyContent: 'flex-end',
+                  alignItems: 'center', borderRadius: 10
+                }}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                  latitude: curentCord.latitude,
+                  longitude: curentCord.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                customMapStyle={mapStyle}
+                showsUserLocation={true}
+                userLocationCalloutEnabled={true}
+                showsMyLocationButton={true}
+                mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
+                showsScale={true}
+                showsCompass={true}
+                rotateEnabled={true}
+                // onRegionChange={data=>console.log('the resion change',data)}
+                // onPress={(data)=>onMapPress(data)}
+                mapType={mtype}
+                zoomEnabled={true}
+                pitchEnabled={true}
+                followsUserLocation={true}
+                // showsCompass={true}
+                showsBuildings={true}
+                //showsTraffic={true}
+                showsIndoors={true}
+                showsIndoorLevelPicker={true}
+              >
+              </MapView>
+              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
+            </View>
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
+        </View>
+      </Modal>
+
+
+
       {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
 

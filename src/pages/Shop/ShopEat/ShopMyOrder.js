@@ -94,10 +94,17 @@ const ShopMyOrder = (props) => {
   const [keyword, setKeyword] = useState('');
   const [relode, setrelode] = useState(false)
   useEffect(() => {
-    const unsubscribe = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      myorderList()
+       })
+    const unsubscribes = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  
     myorderList()
-    return () =>
+    return () =>{
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      unsubscribe
+    }
   }, [])
 
   const handleBackButton = () => {
@@ -115,7 +122,8 @@ const ShopMyOrder = (props) => {
         "object_id": drvReviewData.driver_id,
         "object_type": "driver",
         "star": drvRating,
-        "comments": drv_Review
+        "comments": drv_Review,
+        'order_id' :drvReviewData.id
       }
       console.log('the form data==>>', data)
       const { responseJson, err } = await requestPostApi(driver_reviews, data, 'POST', User.token)
@@ -288,7 +296,7 @@ const ShopMyOrder = (props) => {
     }
 
 
-
+ 
   }
   const resetFilter = () => {
     setKeyword('')
@@ -355,6 +363,7 @@ const ShopMyOrder = (props) => {
             :
             null
         } */}
+       
           {
           orderData != null ?
             <TouchableOpacity onPress={() => { setShowFiltersModal(true) }} style={{
@@ -525,7 +534,14 @@ const ShopMyOrder = (props) => {
 
                         }
 
-                      </View>
+                      </View> 
+                      {item.driver_id!=null ?
+                      <MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="flex-start" press={() => {
+                        props.navigation.navigate('Chat',{data:item})
+                        }} fontSize={12}
+                        titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          : null
+                          }
                       <View style={{ flexDirection: item.business_rating == null && item.driver_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
                         {item.business_rating != null ?
                           <View style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
