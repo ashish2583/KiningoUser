@@ -935,7 +935,7 @@ const ShopProduct = (props) => {
               <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 50, height: 50, marginHorizontal: 10 }} />
             </View>
             <View>
-              <Text style={{ fontSize: 16, color: '#263238' }}>{item.name}</Text>
+              <Text style={{ fontSize: 16, color: '#263238', width:'55%' }}>{item.name}</Text>
               <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.item_total.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
@@ -946,12 +946,12 @@ const ShopProduct = (props) => {
                     <AntDesign
                       name='minus'
                       size={16}
-                      color={'red'}
+                      color={'#835E23'}
                     />
-                    {/* <Text style={{textAlign:'center',fontSize:25,color:'red'}}>-</Text> */}
+                    {/* <Text style={{textAlign:'center',fontSize:25,color:'#835E23'}}>-</Text> */}
                   </TouchableOpacity>
                   <Text style={{ fontSize: 12, color: '#263238' }}>{item.quantity}</Text>
-                  <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}
+                  <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: '#835E23', justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}
                     onPress={() => apress(item.id)}>
                     <AntDesign
                       name='plus'
@@ -963,11 +963,10 @@ const ShopProduct = (props) => {
                 </View>
               </View>
               {/* </View> */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, width: '70%' }}>
+              {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, width: '70%' }}>
                 <Text style={{ fontSize: 12, color: '#263238', textDecorationColor: '#263238', textDecorationLine: 'underline', fontWeight: 'bold' }}>View Breakup Amount</Text>
-                {/* <Image resizeMode="contain" source={index == selectedIndex ? require('../../../assets/images/prod_unsel_circle.png') : require('../../../assets/images/prod_sel_circle.png')} style={{width:30, height:30}}/> */}
                 <Image resizeMode="contain" source={false ? require('../../../assets/images/prod_unsel_circle.png') : require('../../../assets/images/prod_sel_circle.png')} style={{ width: 30, height: 30 }} />
-              </View>
+              </View> */}
             </View>
           </View>
         </Swipeable>
@@ -995,10 +994,10 @@ const ShopProduct = (props) => {
             <>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: Mycolors.Black, marginTop: 5, fontWeight: 'bold' }}>Total {resData?.length} items</Text>
-                <Text style={{ fontSize: 13, color: '#835E23', marginTop: 5, textDecorationColor: '#835E23', textDecorationLine: 'underline' }}>Select All</Text>
+                {/* <Text style={{ fontSize: 13, color: '#835E23', marginTop: 5, textDecorationColor: '#835E23', textDecorationLine: 'underline' }}>Select All</Text> */}
               </View>
 
-              <View style={{ marginTop: 40 }}>
+              <View style={{ marginTop: 20 }}>
                 <FlatList
                   data={resData}
                   numColumns={1}
@@ -1017,17 +1016,17 @@ const ShopProduct = (props) => {
 
           {resData?.length > 0 ?
             <View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5, width: '100%' }}>
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5, width: '100%' }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
-                {/* <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setChooseAddressModeModal(true) }}>Choose Address</Text> */}
-              </View>
+              </View> */}
 
-              <View style={{
+              <TouchableOpacity style={{
                 width: '100%', marginVertical: 5, padding: 20, backgroundColor: '#fff',
                 borderColor: '#dee4ec',
                 borderWidth: 1,
                 elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
               }}
+              onPress={() => { setShowTimeModal(true) }}
               >
 
                 <View style={{ width: '80%' }}>
@@ -1036,14 +1035,16 @@ const ShopProduct = (props) => {
                   <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text> */}
                   {selectedTime2 !== '' ?
                   <Text style={{fontSize:11,color:Mycolors.GrayColor,fontWeight:'bold'}}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
-                   :null}
+                   :
+                   <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                   }
                 </View>
 
                 <TouchableOpacity style={{ width: 25, height: 25, alignSelf: 'center' }} onPress={() => { setShowTimeModal(true) }}>
                   <Image source={require('../../../assets/arrow_right_black.png')} style={{ width: 25, height: 25, resizeMode: 'stretch' }} ></Image>
                 </TouchableOpacity>
 
-              </View>
+              </TouchableOpacity>
               {/* <View style={{width:'95%',height:100,borderRadius:2,marginTop:10,alignSelf:'center'}}>
 
    <TextInput
@@ -1074,7 +1075,7 @@ const ShopProduct = (props) => {
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%' }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Coupons</Text>
-                <Text style={{ color: Mycolors.RED, fontSize: 13, }} onPress={() => { setmodlevisual(true) }}>View All</Text>
+                <Text style={{ color: '#835E23', fontSize: 13, }} onPress={() => { setmodlevisual(true) }}>View All</Text>
               </View>
 
               <View style={{ width: '100%', marginTop: 5, marginBottom: 25, alignSelf: 'center' }}>
@@ -1088,7 +1089,7 @@ const ShopProduct = (props) => {
                   placeholderTextColor={Mycolors.placeholdercolor}
                   style={[styles.input, { paddingRight: 70 }]}
                 />
-                <View style={{ position: 'absolute', right: 3, top: 3, backgroundColor: 'red', paddingHorizontal: 10, height: 40, justifyContent: 'center', borderRadius: 5 }}>
+                <View style={{ position: 'absolute', right: 3, top: 3, backgroundColor: '#835E23', paddingHorizontal: 10, height: 40, justifyContent: 'center', borderRadius: 5 }}>
                   <TouchableOpacity onPress={() => { applyCoupan() }} style={{ with: '100%', height: '100%', justifyContent: 'center', }}>
                     <Text style={{ textAlign: 'center', color: '#fff' }}>Apply</Text>
                   </TouchableOpacity>
@@ -1113,10 +1114,10 @@ const ShopProduct = (props) => {
                       setpromocode(applyedCoupen.coupon_code)
                       setdiscount_id(applyedCoupen.discount_id)
                     }} fontSize={12}
-                      titlecolor={Mycolors.RED} borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
+                      titlecolor={'#835E23'} borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
                   </View>
                   <TouchableOpacity onPress={removeCoupan} style={{ paddingHorizontal: 10, height: 30, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }} >
-                    <Text style={{ color: 'red', textAlign: 'center' }}>Remove</Text>
+                    <Text style={{ color: '#835E23', textAlign: 'center' }}>Remove</Text>
                   </TouchableOpacity>
                   <View style={{ position: 'absolute', right: 10, top: 10 }}>
                     <View style={{ width: 80, }}>
@@ -1124,7 +1125,7 @@ const ShopProduct = (props) => {
           setpromocode(applyedCoupen.coupon_code)
           setdiscount_id(applyedCoupen.discount_id)
         }} marginHorizontal={20} fontSize={12}
-          titlecolor={Mycolors.RED}   borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'}/> */}
+          titlecolor={'#835E23'}   borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'}/> */}
                     </View>
                   </View>
                 </View>
@@ -1174,7 +1175,7 @@ const ShopProduct = (props) => {
                         return
                       }
                     }
-                    props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype })
+                    props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, selectedSlot, takeAwayDate })
                   }}
                   marginHorizontal={20} fontSize={11}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />
@@ -1233,7 +1234,7 @@ const ShopProduct = (props) => {
                           setdiscount_id(item.discount_id)
                           setmodlevisual(false)
                         }} marginHorizontal={20} fontSize={12}
-                          titlecolor={Mycolors.RED} borderColor={Mycolors.RED} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
+                          titlecolor={'#835E23'} borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
                       </View>
                     </View>
                   </View>
@@ -1434,7 +1435,7 @@ const ShopProduct = (props) => {
               }}
                 // marginHorizontal={20} 
                 fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
 
             <View style={{ width: '100%', height: 200 }}></View>
@@ -1503,7 +1504,7 @@ const ShopProduct = (props) => {
 
             <View style={{ height: 20 }} />
             <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={AddAddressUsingGoogleSearch} marginHorizontal={20} fontSize={11}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
 
             {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
                           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
@@ -1529,7 +1530,7 @@ const ShopProduct = (props) => {
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
         {/* <View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}> */}
-        <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+        <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 60 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
 
           <View style={{ flex: 1 }}>
             {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
@@ -1629,7 +1630,7 @@ const ShopProduct = (props) => {
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
               setShowTimeModal(false)
             }} marginHorizontal={20} fontSize={11}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
           </View>
 
         </View>
@@ -1685,7 +1686,7 @@ const ShopProduct = (props) => {
 
             <View style={{ height: 30 }} />
             <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={14}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
 
             {/* <MyButtons title="Submit" height={45} width={'50%'} borderRadius={10} alignSelf="center" press={openAddressModel} marginHorizontal={20} fontSize={11}
                           titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />   */}
@@ -1875,7 +1876,7 @@ const ShopProduct = (props) => {
               }}
                 // marginHorizontal={20} 
                 fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
 
             <View style={{ width: '100%', height: 200 }}></View>

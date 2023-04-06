@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { baseUrl,shop_eat_cart,user_payment_method, shop_product_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
 import Toast from 'react-native-toast-message';
 import Loader from '../../../WebApi/Loader';
+import moment from 'moment';
 
 const ShopPayment = (props) => {
   const [checkitem,setcheckitem]=useState('')
@@ -136,9 +137,12 @@ setRefreshing(false)
         "shipping_address_id": props.route.params.address.id,
         "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
         "order_type" : props.route.params.orderType, //delivery/take-away 
+        "schedule_date" : moment(props.route.params.takeAwayDate).format('YYYY-MM-DD'),
+        "schedule_time_from": props.route.params.selectedSlot.start,
+        "schedule_time_to": props.route.params.selectedSlot.end,
         // "cookingInstruction" :props.route.params.cooking
           }
-    console.log('the form data==>>', data)
+    console.log('placeOrder the form data==>>', data)
       const { responseJson, err } = await requestPostApi(shop_product_cart_place_order, data, 'POST', User.token)
       setLoading(false)
       console.log('the res shop_product_cart_place_order==>>', responseJson)

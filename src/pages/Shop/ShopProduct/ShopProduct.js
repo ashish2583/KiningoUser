@@ -25,7 +25,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
-const isEmulator = false
+const isEmulator = true
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
