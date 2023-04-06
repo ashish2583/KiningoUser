@@ -105,33 +105,6 @@ const ShopMyOrder = (props) => {
     return true;
   }
 
-  const submitDriverRewiew = async () => {
-    console.log('drvReviewDatadrvReviewDatadrvReviewData', drvReviewData);
-    if (drvRating == 0) {
-      Toast.show({ text1: 'Please add ratings to submit the review.' })
-    } else {
-      setLoading(true);
-      var data = {
-        "object_id": drvReviewData.driver_id,
-        "object_type": "driver",
-        "star": drvRating,
-        "comments": drv_Review
-      }
-      console.log('the form data==>>', data)
-      const { responseJson, err } = await requestPostApi(driver_reviews, data, 'POST', User.token)
-      setLoading(false)
-      console.log('the res shop_eat_cart_place_order==>>', responseJson)
-      if (responseJson.headers.success == 1) {
-        myorderList()
-        setmodlevisual2(false)
-        Toast.show({ text1: responseJson.headers.message })
-      } else {
-        // setalert_sms(err)
-        // setMy_Alert(true)
-      }
-    }
-  };
-
   const checkcon = () => {
     myorderList()
     resetFilter()
@@ -496,7 +469,7 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {item.order_type == 'take-away' && item.business_rating == null ?
+                        {/* {item.order_type == 'take-away' && item.business_rating == null ?
                           <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             if (item.business_rating == null) {
                               props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
@@ -504,17 +477,9 @@ const ShopMyOrder = (props) => {
                           }} fontSize={12}
                             titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           : null
-                        }
+                        } */}
  
-                        {item.order_type == 'delivery' && item.status != 5 && item.status != 12 && item.status != 0 && item.driver_id != null && item.status != 11 ?
-                          <MyButtons title="Track Driver" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-
-                            props.navigation.navigate('Traking', { data: item })
-
-                          }} fontSize={12}
-                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
-                          :
-                          item.order_type == 'delivery' && item.status == 12 && item.business_rating == null ?
+                        {item.order_type == 'delivery' && item.status == 12 && item.business_rating == null ?
                             <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                               if (item.business_rating == null) {
                                 props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
@@ -526,7 +491,7 @@ const ShopMyOrder = (props) => {
                         }
 
                       </View>
-                      <View style={{ flexDirection: item.business_rating == null && item.driver_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
+                      <View style={{ flexDirection: item.business_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
                         {item.business_rating != null ?
                           <View style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
                             <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rated</Text>
@@ -543,30 +508,6 @@ const ShopMyOrder = (props) => {
                           :
                           null
                         }
-                        {/* {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
-                          <View style={{}}>
-                            <MyButtons title="Rate Driver" height={45} width={'100%'} paddingHorizontal={40} borderRadius={5} alignSelf="center" press={() => {
-                              setdrvReviewData(item)
-                              setmodlevisual2(true)
-                            }} fontSize={12}
-                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
-                          </View>
-                          :
-                          item.order_type == 'delivery' && item.status == 12 && item.driver_rating != null ?
-                            <View style={{ marginVertical: 5, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
-                              <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rated</Text>
-                              <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.driver_name}</Text>
-                              <Rating
-                                type='custom'
-                                ratingCount={5}
-                                imageSize={16}
-                                startingValue={item.driver_rating}
-                                // style={{alignSelf:'flex-start',backgroundColor:'red'}}
-                                readonly={true}
-                              />
-                            </View>
-                            : null
-                        } */}
                       </View>
 
                     </View>
@@ -680,82 +621,6 @@ const ShopMyOrder = (props) => {
       </Modal>
 
       {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 Submit Driver Review Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
-      <Modal
-        isVisible={modlevisual2}
-        swipeDirection="down"
-        onSwipeComplete={(e) => {
-          setmodlevisual2(false)
-        }}
-        scrollTo={() => { }}
-        scrollOffset={1}
-        propagateSwipe={true}
-        coverScreen={false}
-        onBackdropPress={() => { setmodlevisual2(false) }}
-        backdropColor='transparent'
-        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
-      >
-
-        <View style={{ height: '40%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
-          <View style={{ width: '100%', height: 50, backgroundColor: Mycolors.TimingColor, borderTopLeftRadius: 30, borderTopRightRadius: 30, justifyContent: 'center' }}>
-            <Text style={{ fontWeight: '600', fontSize: 14, marginTop: 5, color: Mycolors.Black, textAlign: 'center' }}>Submit Driver Review</Text>
-          </View>
-          <ScrollView>
-            {/* <Text style={{fontWeight:'500',fontSize:13,marginTop:20,color:Mycolors.Black,lineHeight:20}}>Please provide rating for the restaurant here.</Text> */}
-            <View style={{ marginTop: 20, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', alignSelf: 'center' }}>
-
-              <Rating
-                type='custom'
-                ratingCount={5}
-                imageSize={25}
-                startingValue={0}
-                // style={{alignSelf:'flex-start',backgroundColor:'red'}}
-                onSwipeRating={(d) => { setdrvRating(d) }}
-                onFinishRating={(d) => { setdrvRating(d) }}
-              //readonly={true}
-              />
-            </View>
-
-            <View style={{ width: '90%', alignSelf: 'center' }}>
-              <Text style={{ fontWeight: '500', fontSize: 13, marginTop: 20, color: Mycolors.Black, lineHeight: 20 }}>Write a review for driver</Text>
-              <View style={{ width: '100%', height: 50, borderRadius: 2, marginTop: 10, alignSelf: 'center' }}>
-                <TextInput
-                  value={drv_Review}
-                  onChangeText={(e) => setdrv_Review(e)}
-                  placeholder={'Type here.....'}
-                  placeholderTextColor="#bbbbbb"
-                  multiline={true}
-                  autoCapitalize='none'
-                  style={[{
-                    paddingLeft: 15,
-                    width: '100%',
-                    fontSize: 13,
-                    borderColor: 'rgba(0,0,0,0.2)',
-                    borderWidth: 0.5,
-                    // backgroundColor: '#34333a',
-                    color: '#fff',
-                    height: 60,
-                    borderRadius: 5,
-                    paddingHorizontal: 15,
-                    paddingVertical: 10,
-                    color: Mycolors.Black,
-                  }]}
-                />
-
-              </View>
-            </View>
-
-            <View style={{ width: '100%', marginTop: 20 }}>
-              <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => {
-                // setmodlevisual2(false) 
-                submitDriverRewiew()
-              }} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
-            </View>
-            <View style={{ width: 10, height: 50 }}></View>
-          </ScrollView>
-        </View>
-        {loading ? <Loader /> : null}
-      </Modal>
       {/* ##############&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Model1 showFiltersModal Clicked &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   */}
 
       <Modal
@@ -933,7 +798,7 @@ const ShopMyOrder = (props) => {
               <MyButtons title="Submit" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={() => { orderList(true) }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />
               <MyButtons title="Reset" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={resetFilter} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'}  hLinearColor={['#b10027', '#fd001f']} />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} />
                 <View style={{ height: 20,  }} />
             </KeyboardAvoidingView>
           </ScrollView>
