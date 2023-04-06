@@ -940,7 +940,7 @@ const FoodDetails = (props) => {
       data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_code?.toLowerCase())
       // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     }
-    console.log('getDropdownData menuresData', menuresData, selectedTab);
+    // console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
       <>
         {data?.length > 0 ?

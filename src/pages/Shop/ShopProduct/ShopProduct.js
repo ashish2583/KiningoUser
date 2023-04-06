@@ -25,7 +25,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
-const isEmulator = true
+const isEmulator = false
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
@@ -466,8 +466,10 @@ paddingLeft={50}/> */}
    </View> */}
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22 }}>Explore Nearby</Text>
+            {resData?.vendors?.length > 0 ?
             <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
               onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
+             :null}
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, }}>
@@ -510,7 +512,7 @@ paddingLeft={50}/> */}
               }}
               keyExtractor={item => item.id}
             /> */}
-            {resData != null ?
+            {resData?.vendors?.length > 0 ?
               <FlatList
                 data={resData.vendors}
                 horizontal={true}
@@ -560,7 +562,9 @@ paddingLeft={50}/> */}
                 keyExtractor={item => item.id}
               />
 
-              : null}
+              :
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Vendors Found</Text> 
+              }
           </View>
 
 
