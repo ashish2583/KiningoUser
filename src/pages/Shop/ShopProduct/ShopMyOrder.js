@@ -464,7 +464,7 @@ const ShopMyOrder = (props) => {
                       }
                       <View style={{ borderColor: Mycolors.GrayColor, borderWidth: 1, borderStyle: 'dashed', marginTop: 8 }} />
 
-                      {design(require('../../../assets/shape_39.png'), 'Order Status', item.status_label, '100%', 25, 28, 'red', 20)}
+                      {design(require('../../../assets/product_order_status.png'), 'Order Status', item.status_label, '100%', 25, 28, 'red', 20)}
 
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        

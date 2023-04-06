@@ -596,7 +596,7 @@ const FoodDetails = (props) => {
         //   settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
         // }
         if (responseJson.body.services[j - 1].attribute_value == 'yes' && updated == 0) {
-          setselectedTab(responseJson.body.services[j - 1].attribute_label)
+          console.log('setselectedTab', responseJson.body.services[j - 1].attribute_label);
           updated = 1
         }
       }
@@ -839,10 +839,10 @@ const FoodDetails = (props) => {
             <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
           </View>
           <Text style={{ color: '#835E23', fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
-          <View style={{ flexDirection: 'row' }}>
+          {/* <View style={{ flexDirection: 'row' }}>
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 3 }} >Food Preparation Time:</Text>
             <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{des}</Text>
-          </View>
+          </View> */}
 
 
           {item.in_cart != '1' ?
@@ -932,10 +932,15 @@ const FoodDetails = (props) => {
     });
   }
   const getDropdownData = () => {
-    // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
-    const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_name?.toLowerCase())
-    // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
-    // console.log('getDropdownData menuresData', menuresData, selectedTab);
+    let data = ''
+    if(!selectedCategory?.category_code){
+      data = menuresData
+    }else{
+      // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
+      data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_code?.toLowerCase())
+      // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
+    }
+    console.log('getDropdownData menuresData', menuresData, selectedTab);
     return (
       <>
         {data?.length > 0 ?
@@ -1026,7 +1031,7 @@ const FoodDetails = (props) => {
         </View>
         <View style={{ width: '96%', alignSelf: 'center', backgroundColor: Mycolors.BG_COLOR }}>
 
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
+          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingTop: 15, top: -30 }}>
             <View>
               {/* <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text> */}
               <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
@@ -1059,7 +1064,33 @@ const FoodDetails = (props) => {
 
           </View>
 
-          <View style={{ width: '92%', alignSelf: 'center', top: -30, backgroundColor: '#F5F5F5', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
+              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: -10 }}
+                onPress={() => { setmodlevisual1(true) }}>
+                <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Products</Text>
+                <View style={{ height: 40, flexDirection: 'row' }}>
+                  <TouchableOpacity style={{
+                    width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
+                      width: 0,
+                      height: 3
+                    },
+                    shadowColor: '#F5F5F5',
+                    shadowRadius: 1,
+                    shadowOpacity: 0.3,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    elevation: 5,
+                  }}
+                    onPress={() => { setmodlevisual1(true) }}>
+                    <AntDesign name="search1" color={'#FFF'} size={24} />
+                  </TouchableOpacity>
+
+                </View>
+
+
+              </TouchableOpacity>    
+
+          <View style={{ width: '92%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
             <FlatList
               data={resData.services}
               horizontal={true}
@@ -1069,7 +1100,7 @@ const FoodDetails = (props) => {
                 return (
                   <>
                     {item.attribute_value == 'yes' ?
-                      <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
+                      <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 0, paddingVertical: 5 }}>
                         <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
                           press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
                           titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} backgroundColor={selectedTab == item.attribute_label ? '#835E23' : 'transparent'} />
@@ -1159,7 +1190,7 @@ const FoodDetails = (props) => {
           {selectedTab != 'Book A Table' ?
             <>
 
-              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 0 }}
+              {/* <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 0 }}
                 onPress={() => { setmodlevisual1(true) }}>
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Products</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
@@ -1178,13 +1209,12 @@ const FoodDetails = (props) => {
                   }}
                     onPress={() => { setmodlevisual1(true) }}>
                     <AntDesign name="search1" color={'#FFF'} size={24} />
-                    {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
                   </TouchableOpacity>
 
                 </View>
 
 
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
                 <View style={{ width: '98%', height: 40, zIndex: 999 }}>
 
@@ -1267,7 +1297,7 @@ const FoodDetails = (props) => {
                   // numColumns={2}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={[{ width: 100, marginHorizontal: 5, }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
+                      <View style={[{ width: 100, minHeight:110,marginHorizontal: 5, overflow:'hidden', height:100 }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
                         <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                           onPress={() => { setSelectedCategory(item) }}>
                           <Image source={{ uri: item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
@@ -1952,7 +1982,7 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   categorySelectedStyle:{
-    borderWidth:1,
+    borderWidth:2,
     borderColor: '#835E23',
     borderRadius:10
   }

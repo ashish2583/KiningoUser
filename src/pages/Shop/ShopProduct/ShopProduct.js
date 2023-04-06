@@ -24,7 +24,7 @@ import { setRestorentLocation } from '../../../redux/actions/latLongAction';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 Geocoder.init(GoogleApiKey);
-const GOOGLE_MAPS_APIKEY = 'AIzaSyACzgsZq8gI9VFkOw_fwLJdmezbc4iUxiM';
+const GOOGLE_MAPS_APIKEY = GoogleApiKey;
 const isEmulator = true
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
@@ -193,6 +193,21 @@ const ShopProduct = (props) => {
   const handleNavigate = (latitude, longitude) => {
 
   }
+  function renderDescription(rowData) {
+    const title = rowData.structured_formatting.main_text;
+    const address = rowData.structured_formatting.secondary_text;
+    return (
+      <View style={{minHeight:200}}>
+        <Text style={styles.rowTitle}>
+          {title}
+        </Text>
+        <Text style={[styles.rowAddress]}>
+          {address}
+        </Text>
+      </View>
+      
+    );
+  }
 
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
@@ -285,13 +300,14 @@ const ShopProduct = (props) => {
                 row: {
                   // backgroundColor: '#FFFFFF',
                   paddingVertical: 10,
-                  height: 44,
+                  height: 46,
                   flexDirection: 'row',
                 },
                 separator: {
                   height: 0.5,
                   backgroundColor: '#C8C7CC',
-                  color: '#000'
+                  color: '#000',
+                  marginTop:10
                 },
                 textInput: {
                   backgroundColor: 'transparent',
@@ -330,6 +346,13 @@ const ShopProduct = (props) => {
                 key: GOOGLE_MAPS_APIKEY,
                 language: 'en',
               }}
+              renderRow={rowData => {
+                return (
+                  <View>
+                    {renderDescription(rowData)}
+                  </View>
+                )
+              }}
             />
           </View>
           <View style={{
@@ -346,7 +369,7 @@ const ShopProduct = (props) => {
             borderTopRightRadius: 10, borderBottomRightRadius: 10
           }}>
             <TouchableOpacity onPress={() => { props.navigation.navigate('ShopEatFilter') }}>
-              <Image source={require('../../../assets/shape_32.png')} style={{ width: 25, height: 25 }}></Image>
+              <Image source={require('../../../assets/product_filter.png')} style={{ width: 25, height: 25 }}></Image>
             </TouchableOpacity>
           </View>
         </View>
