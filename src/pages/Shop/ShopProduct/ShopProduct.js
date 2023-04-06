@@ -196,6 +196,7 @@ const ShopProduct = (props) => {
   function renderDescription(rowData) {
     const title = rowData.structured_formatting.main_text;
     const address = rowData.structured_formatting.secondary_text;
+    // console.log('renderDescription', address);
     return (
       <View style={{minHeight:200}}>
         <Text style={styles.rowTitle}>
@@ -296,6 +297,11 @@ const ShopProduct = (props) => {
                 powered: {},
                 listView: {
                   // color:'#000'
+                  borderWidth:0.5,
+                  borderColor:'#000',
+                  // borderRadius:10,
+                  overflow:'hidden',
+                  paddingBottom:10,
                 },
                 row: {
                   // backgroundColor: '#FFFFFF',
