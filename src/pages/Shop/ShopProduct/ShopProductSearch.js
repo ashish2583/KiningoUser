@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, StatusBar } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
+import ProductSearchInput from './components/ProductSearchInput';
 import SerchInput from '../../../component/SerchInput';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
@@ -141,7 +142,7 @@ const ShopProductSearch = (props) => {
           press3={() => { }} img3width={25} img3height={25} />
 
         <View style={{ width: '96%', alignSelf: 'center' }}>
-          <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'}
+          <ProductSearchInput marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'}
             serchValue={searchValue}
             onChangeText={(e) => {
               if (props.route.params.from == 'CatClick') {
@@ -164,6 +165,7 @@ const ShopProductSearch = (props) => {
 
             }}
             paddingLeft={9} />
+            
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
             {/* {console.log('resData resData', resData)} */}

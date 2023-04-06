@@ -831,7 +831,7 @@ const FoodDetails = (props) => {
               ratingCount={5}
               imageSize={12}
               startingValue={item.rating}
-              // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+              // style={{alignSelf:'flex-start',backgroundColor:'#835E23'}}
               // onSwipeRating={(d)=>{setvenderRating(d)}}
               // onFinishRating={(d)=>{setvenderRating(d)}}
               readonly={true}
@@ -854,10 +854,10 @@ const FoodDetails = (props) => {
             <View style={{ width: 100, height: 30, flexDirection: 'row', alignItems: 'center', marginTop: 5, }}>
               <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: '#FFE2E6', justifyContent: 'center' }}
                 onPress={mpress}>
-                <Text style={{ textAlign: 'center', fontSize: 25, color: 'red', top: -4 }}>-</Text>
+                <Text style={{ textAlign: 'center', fontSize: 25, color: '#835E23', top: -4 }}>-</Text>
               </TouchableOpacity>
               <Text style={{ marginHorizontal: 10, color: Mycolors.Black }}>{item.cart_quantity}</Text>
-              <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center' }}
+              <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: '#835E23', justifyContent: 'center' }}
                 onPress={apress}>
                 <Text style={{ textAlign: 'center', fontSize: 25, color: '#fff', top: -3 }}>+</Text>
               </TouchableOpacity>
@@ -909,10 +909,10 @@ const FoodDetails = (props) => {
             <View style={{ width: 100, height: 30, flexDirection: 'row', alignItems: 'center', marginTop: 5, }}>
               <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: '#FFE2E6', justifyContent: 'center' }}
                 onPress={minus}>
-                <Text style={{ textAlign: 'center', fontSize: 25, color: 'red', top: -4 }}>-</Text>
+                <Text style={{ textAlign: 'center', fontSize: 25, color: '#835E23', top: -4 }}>-</Text>
               </TouchableOpacity>
               <Text style={{ marginHorizontal: 10, color: Mycolors.Black }}>{qty}</Text>
-              <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center' }}
+              <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 20, backgroundColor: '#835E23', justifyContent: 'center' }}
                 onPress={plush}>
                 <Text style={{ textAlign: 'center', fontSize: 25, color: '#fff', top: -3 }}>+</Text>
               </TouchableOpacity>
@@ -988,7 +988,7 @@ const FoodDetails = (props) => {
           img3={selectedTab != 'Book A Table' && selectedTab != 'Dining' ? require('../../../assets/Cart.png') : ''}
           img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
         {cartCount != '0' && selectedTab != 'Book A Table' && selectedTab != 'Dining' ?
-          <View style={{ position: 'absolute', right: 8, top: 4, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
+          <View style={{ position: 'absolute', right: 8, top: 4, width: 20, height: 20, borderRadius: 20, backgroundColor: '#835E23', justifyContent: 'center', zIndex: 999 }}>
             <Text style={{ fontSize: 11, textAlign: 'center', color: '#fff' }}>{cartCount}</Text>
           </View>
           : null
@@ -1108,13 +1108,13 @@ const FoodDetails = (props) => {
 
               {/*  
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:dimensions.SCREEN_WIDTH*95/100,alignSelf:'center'}}>
-  {design(require('../../../assets/shape_39.png'),'Food Preparation Time','34 minutes','45%',25,28,'red',20)}
-  {design(require('../../../assets/shape_40.png'),'Hygiene Food','','45%',25,28,'red',20)}
+  {design(require('../../../assets/shape_39.png'),'Food Preparation Time','34 minutes','45%',25,28,'#835E23',20)}
+  {design(require('../../../assets/shape_40.png'),'Hygiene Food','','45%',25,28,'#835E23',20)}
 </View>
 {design(require('../../../assets/shape_41.png'),'Location','Disneys Hollvwood Studios Main Entrance.Kissimmee. FL 34747. United States','95%',25,28,5)}
 <View>
   {design(require('../../../assets/shape_42.png'),'Timing','Open at 10:00 AM','95%',28,28,5)}
-<TouchableOpacity style={{width:100,height:30,borderColor:'red',borderWidth:0.5,position:'absolute',right:5,top:15,justifyContent:'center',borderRadius:5}}>
+<TouchableOpacity style={{width:100,height:30,borderColor:'#835E23',borderWidth:0.5,position:'absolute',right:5,top:15,justifyContent:'center',borderRadius:5}}>
 <Text style={{fontSize:11,textAlign:'center',color:"red",fontWeight:'bold'}}>Call Restaurant</Text>
 </TouchableOpacity>
 </View>
@@ -1223,7 +1223,7 @@ const FoodDetails = (props) => {
                     style={{ borderColor: 'transparent', backgroundColor: 'transparent', height: 40, zIndex: 999, top: -5, }}
                     containerStyle={{
                       width: '102%',
-                      borderColor: 'red',
+                      borderColor: '#835E23',
                       height: 40,
                       zIndex: 999
                     }}
@@ -1308,7 +1308,7 @@ const FoodDetails = (props) => {
                                   setmodlevisual1(false)
                                 
                                 },
-                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#835E23'
                                 )
                                 : null
                             }
@@ -1335,7 +1335,7 @@ const FoodDetails = (props) => {
                                   setClickedItemData(item)
                                   setmodlevisual1(false)
                                 },
-                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, '#835E23'
                                 )
                                 : null
                             }
@@ -1424,7 +1424,7 @@ const FoodDetails = (props) => {
                                 itemloop(item),
                                 () => { plushqty(item) },
                                 itemqty(item),
-                                () => { minus(item) }, 'red'
+                                () => { minus(item) }, '#835E23'
                               )
                               : null
                           }
@@ -1621,7 +1621,7 @@ const FoodDetails = (props) => {
                   <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 6 }} > {resData.tentative_time}</Text>
                 </View>
               </View>
-              <View style={{ position: 'absolute', width: 20, height: 20, top: 10, right: 10, borderRadius: 3, backgroundColor: 'red', justifyContent: 'center' }}>
+              <View style={{ position: 'absolute', width: 20, height: 20, top: 10, right: 10, borderRadius: 3, backgroundColor: '#835E23', justifyContent: 'center' }}>
                 <View style={{ width: 10, height: 10, borderRadius: 10, alignSelf: 'center', backgroundColor: '#fff' }} />
               </View>
             </TouchableOpacity>
@@ -1840,7 +1840,7 @@ const FoodDetails = (props) => {
             {resData.business_info ?
               <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
                 <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: '#835E23', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
               </View>
               : null}
 

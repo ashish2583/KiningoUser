@@ -337,7 +337,7 @@ const ShopProduct = (props) => {
             borderTopRightRadius: 10,
             borderBottomRightRadius: 10,
             marginHorizontal: 8, top: 0,
-            backgroundColor: '#FFC40C',
+            backgroundColor: '#835E23',
             paddingVertical: 5,
             alignSelf: 'center',
             justifyContent: 'center',
@@ -379,7 +379,7 @@ paddingLeft={50}/> */}
               <Text style={{ color: 'gray', fontSize: 12, left: 9 }}>Search by Vendors, Categories</Text>
             </View>
             <TouchableOpacity style={{
-                    width: 40, height: 40, backgroundColor: '#FFC40C', justifyContent: 'center', shadowOffset: {
+                    width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
                       width: 0,
                       height: 3
                     },
@@ -437,7 +437,7 @@ paddingLeft={50}/> */}
    </View> */}
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22 }}>Explore Nearby</Text>
-            <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
+            <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
               onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
           </View>
 
@@ -537,7 +537,7 @@ paddingLeft={50}/> */}
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22, width: '70%', }}>Buy what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 22, width: '70%', }}> HAPPY!</Text></Text>
-            <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
+            <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
               onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
           </View>
 
