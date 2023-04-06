@@ -150,7 +150,7 @@ const ShopEat = (props) => {
     console.log('the res==>>Home')
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + '28.6176' + '&long=' + '77.422', '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {

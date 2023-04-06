@@ -141,13 +141,17 @@ const ShopMyOrderDetails = (props) => {
               <View style={{ flexDirection: 'column' }}>
 <View style={{flexDirection:'row'}}>
  <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>Order #{data.id}</Text>
- <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12,marginLeft:5 }}>Placed At : {data.created_date}</Text>
+ {/* <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12,marginLeft:5 }}>Order Date & Time : {data.created_date}</Text> */}
 </View>
-         <Text style={{ color: '#000', fontWeight: '600', fontSize: 12 }}>Status : {data.status_label}</Text>
-            
-              </View>
+   <View style={{flexDirection:'row'}}>
+   <Text style={{ color: 'Gray', fontWeight: '600', fontSize: 12 }}>Status :</Text>
+   <Text style={{ color:  'red', fontWeight: '600', fontSize: 12 }}> {data.status_label}</Text>
+   </View>
+       
+         <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12 }}>Order Date & Time : {data.created_date}</Text>
 
-              <View style={{ flexDirection: 'row', left: -10 ,top:10}}>
+              </View>
+              <View style={{ flexDirection: 'row', left: -10,top:-10 }}>
                 <Image source={require('../../../assets/circle-dot.png')} style={{ width: 22, height: 22, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', top: 1 }} ></Image>
                 <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, marginLeft: 6,fontWeight:'800' }}>Help</Text>
               </View>

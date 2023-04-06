@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setSelectedCarTab } from '../../../redux/actions/user_action';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, shop_eat_cart, user_payment_method,shop_eat_cart_charges, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
+import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_cart_charges, shop_eat_menu, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
@@ -23,6 +23,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 function newAddMinutes(time, minsToAdd) {
   function D(J) { return (J < 10 ? '0' : '') + J; };
@@ -168,19 +169,31 @@ const FoodDetails = (props) => {
       stylers: [{ color: '#17263C' }],
     },
   ];
+  const [badgesData, setBadgesData] = useState([
+    {
+      id: '1',
+      img: require('../../../assets/HygieneFood.png'),
+      text: 'Hygiene Food'
+    },
+    {
+      id: '2',
+      img: require('../../../assets/VaccinatedFood.png'),
+      text: 'Vaccinated Food'
+    },
+  ])
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
       menuList(null);
       diningCharges();
-       })
-        return unsubscribe;
+    })
+    return unsubscribe;
   }, [])
 
   const checkcon = () => {
     // vendorDetail()
     // menuList(menutypevalue)
-  } 
+  }
 
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -412,7 +425,7 @@ const FoodDetails = (props) => {
       "business_id": props.route.params.data.business_id,
       "items": itemss,
       "total": totals,
-      "cooking_instruction" : cookingIns,
+      "cooking_instruction": cookingIns,
       "taxes": (subtotal * 0.5) / 100,
       "vendor_charges": venderCharg,
       "sub_total": totals,
@@ -502,7 +515,7 @@ const FoodDetails = (props) => {
       quantity: 1,
       business_id: props.route.params.data.business_id,
       product_type: items.product_type,
-      service_type:items.service_type
+      service_type: items.service_type
       // service_type
     }
     const { responseJson, err } = await requestPostApi(shop_eat_cart, data, 'POST', User.token)
@@ -691,26 +704,26 @@ const FoodDetails = (props) => {
   }
 
   const searchmenuList = async (tt) => {
-    if(tt!=''|| tt.trim().length != 0){
+    if (tt != '' || tt.trim().length != 0) {
       console.log('hello');
-    setLoading(true)
+      setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + tt, '', 'GET', User.token)
-    setLoading(false)
-    console.log('the res search shop_eat_menu_userid ==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      setmenuresData(responseJson.body)
-      // setsearchValue('')
+      const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid + '?name=' + tt, '', 'GET', User.token)
+      setLoading(false)
+      console.log('the res search shop_eat_menu_userid ==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        setmenuresData(responseJson.body)
+        // setsearchValue('')
+      } else {
+        setmenuresData([])
+        // Toast.show({text1: responseJson.headers.message})
+        // setalert_sms(err)
+        // setMy_Alert(true) 
+      }
     } else {
-      setmenuresData([])
-      // Toast.show({text1: responseJson.headers.message})
-      // setalert_sms(err)
-      // setMy_Alert(true) 
+      Toast.show({ text1: 'Please enter the item name in search.' })
     }
-    }else{
-      Toast.show({text1: 'Please enter the item name in search.'})
-    }
-    
+
   }
 
   const diningCharges = async () => {
@@ -773,7 +786,7 @@ const FoodDetails = (props) => {
     }
 
     setsubtotal(subtotals)
-   
+
     console.log('state3', resdd);
     setdiningItens1(resdd)
     setreloades(!reloades)
@@ -782,7 +795,7 @@ const FoodDetails = (props) => {
   const minus = (item) => {
     // diningItens.includes(item) ? true : false,
     var resdd = diningItens1
-   
+
     for (let i = 1; i <= resdd.length; i++) {
       if (resdd[i - 1].id == item.id) {
         console.log('state2');
@@ -797,11 +810,11 @@ const FoodDetails = (props) => {
     for (let i = 1; i <= resdd.length; i++) {
       subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
     }
-   if(subtotals==0){
-    setmodlevisual3(false)
-   }
+    if (subtotals == 0) {
+      setmodlevisual3(false)
+    }
     console.log('state3', resdd);
-    setsubtotal(subtotals) 
+    setsubtotal(subtotals)
     setdiningItens1(resdd)
     setreloades(!reloades)
 
@@ -911,7 +924,7 @@ const FoodDetails = (props) => {
         <View style={{ marginLeft: 15 }}>
           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9 }} >{ti}</Text>
           <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{rs}</Text>
-          <View style={{ flexDirection: 'row',width:'75%' }}>
+          <View style={{ flexDirection: 'row', width: '75%' }}>
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 6 }} >Food Preparation Time:</Text>
             <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 6 }} >{des}</Text>
           </View>
@@ -949,7 +962,31 @@ const FoodDetails = (props) => {
       routes: [{ name: page }],
     });
   }
+  const design1 = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
+    return (
+      <View style={{
+        alignItems: 'center', width: '38%', borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+        shadowRadius: 1,
+        shadowOpacity: 0.8,
+        elevation: 5, paddingTop: 10, marginHorizontal: 4
+      }}>
+        <TouchableOpacity onPress={press ? press : () => { }}
+          style={{ width: 80, height: 70, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
+          <Image resizeMode='stretch' source={img} style={{ width: imgw, height: imgh, overflow: 'hidden', alignSelf: 'center' }}></Image>
+        </TouchableOpacity>
+        <View style={{ alignItems: 'center', }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#455A64' }}>{ti}</Text>
 
+        </View>
+
+      </View>
+
+    )
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: Mycolors.BG_COLOR }}>
@@ -1000,7 +1037,7 @@ const FoodDetails = (props) => {
         </View>
         <View style={{ width: '96%', alignSelf: 'center', backgroundColor: Mycolors.BG_COLOR }}>
 
-        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
+          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
             <View>
               <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
               <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
@@ -1095,7 +1132,7 @@ const FoodDetails = (props) => {
                 : null}
               </View> */}
 
-              <View style={{ width: '100%', alignSelf: 'center',}}>
+              <View style={{ width: '100%', alignSelf: 'center', }}>
                 {resData.features ?
                   resData.features.map((item, index) => {
                     return (
@@ -1107,18 +1144,21 @@ const FoodDetails = (props) => {
                   : null}
               </View>
 
-         
+
 
             </View>
-           
-              :
-              null
+
+            :
+            null
           }
           {selectedTab != 'Book A Table' ?
             <>
 
               <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}
-                onPress={() => { setmodlevisual1(true) }}>
+                onPress={() => {
+                  menuList(null);
+                  setmodlevisual1(true)
+                }}>
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
                 <View style={{ height: 40, flexDirection: 'row' }}>
                   <TouchableOpacity style={{
@@ -1210,12 +1250,12 @@ const FoodDetails = (props) => {
 
                 <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
                   {selectedTab != 'Dining' ?
-                    selectedTab == 'Take Away' ? 
+                    selectedTab == 'Take Away' ?
 
                       menuresData.map((item, index) => {
                         return (
                           <View>
-                            {item.menuType == menutypevalue && item.service_type_value  == 'Take Away' ?
+                            {item.menuType == menutypevalue && item.service_type_value == 'Take Away' ?
                               flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
                                 () => {
                                   setClickedItemData(item)
@@ -1228,7 +1268,7 @@ const FoodDetails = (props) => {
                                 flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
                                   setClickedItemData(item)
                                   setmodlevisual1(false)
-                                
+
                                 },
                                   item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
                                 )
@@ -1294,10 +1334,10 @@ const FoodDetails = (props) => {
                                     "service_type_value": item.service_type_value,
                                     "status": item.status,
                                     "subcategory": item.subcategory,
-                                    "tentative_time":item.tentative_time
+                                    "tentative_time": item.tentative_time
                                   })
-                                  setsubtotal(parseInt(subtotal)+parseInt(item.price))
-                                  
+                                  setsubtotal(parseInt(subtotal) + parseInt(item.price))
+
                                 }
 
                                 //setdiningItens(arr)
@@ -1336,9 +1376,9 @@ const FoodDetails = (props) => {
                                       "service_type_value": item.service_type_value,
                                       "status": item.status,
                                       "subcategory": item.subcategory,
-                                      "tentative_time":item.tentative_time
+                                      "tentative_time": item.tentative_time
                                     })
-                                    setsubtotal(parseInt(subtotal)+parseInt(item.price))
+                                    setsubtotal(parseInt(subtotal) + parseInt(item.price))
                                   }
 
                                   setdiningItens1(arr1)
@@ -1364,7 +1404,7 @@ const FoodDetails = (props) => {
                 </View>
                 :
                 <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
-                }
+              }
             </>
             :
             null
@@ -1392,17 +1432,17 @@ const FoodDetails = (props) => {
                       press1={() => { counter <= 0 ? setcounter(1) : setcounter(counter - 1) }} img1={require('../../../assets/remove.png')} img1width={10} img1height={3}
                       press2={() => { }} title2={counter} fontWeight={'500'} img2height={20} fontSize={12}
                       press3={() => { setcounter(counter + 1) }} img3={require('../../../assets/add.png')} img3width={10} img3height={10} /> */}
-                 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',}}>
-                 <TouchableOpacity style={{width:15,height:15,justifyContent:'center',padding:7}} onPress={()=>{counter <= 0 ? setcounter(1) : setcounter(counter - 1) }}>
-                 <Image style={{width:10,height:3}} source={require('../../../assets/remove.png')}></Image>
-                 </TouchableOpacity>
-                 
-                 <Text style={{color:'#000',fontWeight:'500',fontSize:12}}>{counter}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+                      <TouchableOpacity style={{ width: 15, height: 15, justifyContent: 'center', padding: 7 }} onPress={() => { counter <= 0 ? setcounter(1) : setcounter(counter - 1) }}>
+                        <Image style={{ width: 10, height: 3 }} source={require('../../../assets/remove.png')}></Image>
+                      </TouchableOpacity>
 
-                 <TouchableOpacity style={{width:15,height:15,justifyContent:'center'}} onPress={()=>{setcounter(counter + 1)}}>
-                 <Image style={{width:10,height:10}} source={require('../../../assets/add.png')}></Image>
-                </TouchableOpacity>
-                 </View>
+                      <Text style={{ color: '#000', fontWeight: '500', fontSize: 12 }}>{counter}</Text>
+
+                      <TouchableOpacity style={{ width: 15, height: 15, justifyContent: 'center' }} onPress={() => { setcounter(counter + 1) }}>
+                        <Image style={{ width: 10, height: 10 }} source={require('../../../assets/add.png')}></Image>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -1487,6 +1527,7 @@ const FoodDetails = (props) => {
                         mode='calendar'
                         // is24Hour={false}
                         display="spinner"
+                        minimumDate={new Date()}
                         onChange={(event, sTime) => {
                           setshowda(false)
                           console.log(sTime.toDateString());
@@ -1596,7 +1637,7 @@ const FoodDetails = (props) => {
                 setmodlevisual1(false)
                 setmodlevisual2(false)
               } else {
-                Toast.show({text1: 'Please add items from the menu to place an order.',});
+                Toast.show({ text1: 'Please add items from the menu to place an order.', });
               }
 
             }} marginHorizontal={20} fontSize={12}
@@ -1615,8 +1656,9 @@ const FoodDetails = (props) => {
         scrollOffset={1}
         onBackdropPress={() => {
           menuList(null);
+          setmenutypevalue(null)
           setmodlevisual1(false)
-          }}
+        }}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
@@ -1641,97 +1683,97 @@ const FoodDetails = (props) => {
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
               {menuresData.length > 0 ?
                 selectedTab != 'Dining' ?
-                (menuresData.map((item, index) => {
-                  return (
-                    <View>
-                      
-                        { selectedTab == 'Delivery' && item.service_type_value == 'Delivery' ?
-                        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), 
-                        item.tentative_time,
-                         () => { selectedTab == 'Dining' ? '' : postcart(item) },
-                         () => { setClickedItemData(item) }, 
-                         item, 
-                         () => { putcart(item, '-') }, 
-                         () => { putcart(item, '+') }, '#fff'
-                        )
-                        :
-                        selectedTab == 'Take Away' && item.service_type_value  == 'Take Away' ?
-                        flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), 
-                        item.tentative_time,
-                         () => { selectedTab == 'Dining' ? '' : postcart(item) },
-                         () => { setClickedItemData(item) }, 
-                         item, 
-                         () => { putcart(item, '-') }, 
-                         () => { putcart(item, '+') }, '#fff'
-                        )
-                        : 
-                        null
-                      }
-                      
-                    </View>
-                  )
-                }
-                ))
-                :
-                (menuresData.map((item, index) => {
-                  return (
-                    <View>
-                      {
-                        item.service_type_value == 'Dining' ?
-                         DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
-                                     () => {
-                                  let arr1 = diningItens1
-                                  if (itemloop(item)) {
+                  (menuresData.map((item, index) => {
+                    return (
+                      <View>
 
-                                  } else {
-                                    arr1.push({
-                                      "cart_id": item.cart_id,
-                                      "cart_quantity": 1,
-                                      "category": item.category,
-                                      "default_image": item.default_image,
-                                      "id": item.id,
-                                      "image": item.image,
-                                      "in_cart": item.in_cart,
-                                      "menuType": item.menuType,
-                                      "name": item.name,
-                                      "price": item.price,
-                                      "product_desc": item.product_desc,
-                                      "service_type_value": item.service_type_value,
-                                      "status": item.status,
-                                      "subcategory": item.subcategory,
-                                      "tentative_time":item.tentative_time
-                                    })
-                                    setsubtotal(parseInt(subtotal)+parseInt(item.price))
-                                  }
+                        {selectedTab == 'Delivery' && item.service_type_value == 'Delivery' ?
+                          flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)),
+                            item.tentative_time,
+                            () => { selectedTab == 'Dining' ? '' : postcart(item) },
+                            () => { setClickedItemData(item) },
+                            item,
+                            () => { putcart(item, '-') },
+                            () => { putcart(item, '+') }, '#fff'
+                          )
+                          :
+                          selectedTab == 'Take Away' && item.service_type_value == 'Take Away' ?
+                            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)),
+                              item.tentative_time,
+                              () => { selectedTab == 'Dining' ? '' : postcart(item) },
+                              () => { setClickedItemData(item) },
+                              item,
+                              () => { putcart(item, '-') },
+                              () => { putcart(item, '+') }, '#fff'
+                            )
+                            :
+                            null
+                        }
 
-                                  setdiningItens1(arr1)
-                                  setreloades(!reloades)
-                                }, () => {
-                                  setClickedItemData(item)
-                                  // setmodlevisual1(false)
-                                  // setmodlevisual2(true)
-                                },
-                                itemloop(item),
-                                () => { plushqty(item) },
-                                itemqty(item),
-                                () => { minus(item) }, 'red'
-                              )
-                     : null
-                            }
-                    </View>
-                  )
-                }
-                ))
+                      </View>
+                    )
+                  }
+                  ))
+                  :
+                  (menuresData.map((item, index) => {
+                    return (
+                      <View>
+                        {
+                          item.service_type_value == 'Dining' ?
+                            DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                              () => {
+                                let arr1 = diningItens1
+                                if (itemloop(item)) {
+
+                                } else {
+                                  arr1.push({
+                                    "cart_id": item.cart_id,
+                                    "cart_quantity": 1,
+                                    "category": item.category,
+                                    "default_image": item.default_image,
+                                    "id": item.id,
+                                    "image": item.image,
+                                    "in_cart": item.in_cart,
+                                    "menuType": item.menuType,
+                                    "name": item.name,
+                                    "price": item.price,
+                                    "product_desc": item.product_desc,
+                                    "service_type_value": item.service_type_value,
+                                    "status": item.status,
+                                    "subcategory": item.subcategory,
+                                    "tentative_time": item.tentative_time
+                                  })
+                                  setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                                }
+
+                                setdiningItens1(arr1)
+                                setreloades(!reloades)
+                              }, () => {
+                                setClickedItemData(item)
+                                // setmodlevisual1(false)
+                                // setmodlevisual2(true)
+                              },
+                              itemloop(item),
+                              () => { plushqty(item) },
+                              itemqty(item),
+                              () => { minus(item) }, 'red'
+                            )
+                            : null
+                        }
+                      </View>
+                    )
+                  }
+                  ))
                 :
-                <View style={{ width: '100%', justifyContent: 'center',paddingTop:20, }}>
-                  <View style={{width: '80%', marginLeft:8 }}>
-                    <Text style={{ color: '#B4B4B4',textAlign:'left',fontWeight: '500',fontSize:21}}>Hungry for a</Text>
-                    <Text style={{ color: '#ADC430',textAlign:'left',fontWeight: 'bold',fontSize:25 }}>Specific Cuisine?</Text>
-                    <Text style={{ color: '#000000',textAlign:'left',fontSize:14 }}>Just type it in and let our search menu do the rest. </Text>
-                    </View>
-                    <View style={{ width: 220, height: 220, alignSelf: 'flex-end',marginTop:20,marginRight:15 }}>
-                  <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
-                </View>
+                <View style={{ width: '100%', justifyContent: 'center', paddingTop: 20, }}>
+                  <View style={{ width: '80%', marginLeft: 8 }}>
+                    <Text style={{ color: '#B4B4B4', textAlign: 'left', fontWeight: '500', fontSize: 21 }}>Hungry for a</Text>
+                    <Text style={{ color: '#ADC430', textAlign: 'left', fontWeight: 'bold', fontSize: 25 }}>Specific Cuisine?</Text>
+                    <Text style={{ color: '#000000', textAlign: 'left', fontSize: 14 }}>Just type it in and let our search menu do the rest. </Text>
+                  </View>
+                  <View style={{ width: 220, height: 220, alignSelf: 'flex-end', marginTop: 20, marginRight: 15 }}>
+                    <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
+                  </View>
                 </View>
               }
             </View>
@@ -1886,9 +1928,9 @@ const FoodDetails = (props) => {
                             "service_type_value": item.service_type_value,
                             "status": item.status,
                             "subcategory": item.subcategory,
-                            "tentative_time":item.tentative_time
+                            "tentative_time": item.tentative_time
                           })
-                          setsubtotal(parseInt(subtotal)+parseInt(item.price))
+                          setsubtotal(parseInt(subtotal) + parseInt(item.price))
                         }
 
                         setdiningItens1(arr1)
@@ -1929,42 +1971,42 @@ const FoodDetails = (props) => {
 
             </View>
 
-{/* <View style={{width:'95%',height:40,borderRadius:10,backgroundColor:'rgba(100,150,100,0.5)',alignSelf:'center',flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:20}}>
+            {/* <View style={{width:'95%',height:40,borderRadius:10,backgroundColor:'rgba(100,150,100,0.5)',alignSelf:'center',flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:20}}>
 <Text style={{color:'#000',fontWeight:'bold'}}>Total Amount :</Text>
 <Text style={{color:'#000',fontWeight:'bold'}}>$10</Text>
 </View> */}
 
-<View style={{
-                width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
-                 elevation: 5, borderRadius: 7, alignSelf: 'center'
-              }}
-              >
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:5 }}>
-                  <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${subtotal}</Text>
-                </View>
-               
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
-                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${venderCharg}</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5,paddingHorizontal:5 }}>
-                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${(subtotal * 0.5) / 100}</Text>
-                </View>
-               
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10,backgroundColor:'#ADC430',height:46,alignItems:"center",borderRadius:7 ,padding:10}}>
-                  <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14,  fontWeight: '600',textAlign:'center' }} >${(subtotal + ((subtotal * 0.5) / 100) + venderCharg)}</Text>
-                </View>
+            <View style={{
+              width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
+              elevation: 5, borderRadius: 7, alignSelf: 'center'
+            }}
+            >
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
+                <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${subtotal}</Text>
               </View>
 
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
+                <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${venderCharg}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
+                <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${(subtotal * 0.5) / 100}</Text>
+              </View>
 
-            <View style={{ width: '95%', alignSelf: 'center',marginTop:10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ADC430', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
+                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, fontWeight: '600', textAlign: 'center' }} >${(subtotal + ((subtotal * 0.5) / 100) + venderCharg)}</Text>
+              </View>
+            </View>
+
+
+            <View style={{ width: '95%', alignSelf: 'center', marginTop: 10 }}>
               <MyButtons title="Confirm & Place Order" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { bookDiningSlote() }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
             </View>
-          
+
             <View style={{ width: 100, height: 100 }} />
 
           </ScrollView>
@@ -2058,26 +2100,26 @@ const FoodDetails = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+        <View style={{ height: '78%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between',  alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, }}>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', backgroundColor: '#F8F8F8', borderRadius: 9, paddingHorizontal: 10, }}>
               <View>
                 <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
                 {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
-                <View style={{ flexDirection: 'row', marginTop: 5,width: '100%', }}>
+                <View style={{ flexDirection: 'row', marginTop: 5, width: '100%', }}>
                   <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
                 </View>
               </View>
-              <View style={{ flexDirection: 'row',position:'absolute',right:0,top:0 }}>
+              <View style={{ flexDirection: 'row', position: 'absolute', right: 0, top: 0 }}>
                 <MyButtons title2="Call Restaurant" height={40} width={40} borderRadius={5} press={() => {
                   dialCall('1234567899')
                 }}
-                  img={require('../../../assets/call.png')}  imgheight={40} imgwidth={40} 
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13}  />
+                  img={require('../../../assets/call.png')} imgheight={40} imgwidth={40}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} />
                 <MyButtons title2="Send Message" height={40} width={40} borderRadius={5} press={() => { }}
-                  img={require('../../../assets/Envelope.png')} imgheight={40} imgwidth={40} 
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13}  />
+                  img={require('../../../assets/Envelope.png')} imgheight={40} imgwidth={40}
+                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} />
               </View>
               {/* <View>
                 <TouchableOpacity style={{
@@ -2099,7 +2141,8 @@ const FoodDetails = (props) => {
               <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
               <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
             </View>
-            <View style={{ alignItems: 'center', width: '95%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
+
+            <View style={{ alignItems: 'center', width: '96%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
               <MapView
                 style={{
                   height: dimensions.SCREEN_HEIGHT * 22 / 100,
@@ -2137,6 +2180,52 @@ const FoodDetails = (props) => {
               </MapView>
               {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
             </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', borderColor: '#B2B7B9', borderWidth: 1, height: 70, width: '96%', marginHorizontal: 7, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, top: -6, borderTopColor: 'transparent', paddingLeft: 12 }}>
+              <EvilIcons name="location" color={'#FFD037'} size={24} />
+              <View style={{ width: '85%', marginLeft: 8 }}>
+                <Text numberOfLines={2} style={{ fontSize: 13, fontWeight: '400', color: '#B2B7B9' }} >{resData.address}</Text>
+              </View>
+
+            </View>
+            <View style={{ marginTop: 20, marginLeft: 7 }}>
+              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Services Offerings</Text>
+            </View>
+
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: "80%", marginTop: 20, justifyContent: 'space-between', }}>
+
+              {design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '25%', 42, 40, '', 20)}
+              {design1(require('../../../assets/dining_icon.png'), 'Dining', '', '25%', 42, 47, '', 20, () => { props.navigation.navigate('') })}
+              {design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '25%', 42, 45, '', 20)}
+
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: "80%", marginTop: 20 }}>
+              {design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '25%', 42, 42, '', 20, () => { })}
+            </View>
+
+            <View style={{ marginTop: 40, marginLeft: 7, marginBottom: 20 }}>
+              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Badges</Text>
+            </View>
+
+            <FlatList
+              data={badgesData}
+              horizontal={true}
+              style={{ marginBottom: 20, }}
+              showsHorizontalScrollIndicator={false}
+              // numColumns={2}
+              renderItem={({ item, index }) => {
+                return (
+                  <ImageBackground source={require('../../../assets/badges_background.png')} style={styles.badgeContainer}>
+                    <View style={styles.badgeView}>
+                      <Image source={item.img} />
+                    </View>
+                    <Text style={styles.badgeText}>{item.text}</Text>
+                  </ImageBackground>
+                )
+              }}
+            keyExtractor={item => item.id}
+            />
+
             <View style={{ width: 100, height: 100 }} />
           </ScrollView>
         </View>
@@ -2150,6 +2239,7 @@ const FoodDetails = (props) => {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   input: {
     paddingLeft: 15,
@@ -2183,6 +2273,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 5
+  },
+  badgeContainer: {
+    // flexDirection:'row',
+    justifyContent:'center',
+    // alignItems:'center',
+    // width: '80%',
+    width: 173,
+    height: 102,
+    marginBottom: 20,
+    marginLeft: 7,
+    backgroundColor: '#FFD037',
+    borderRadius: 17,
+    padding: 15,
+    marginRight:10
+  },
+  badgeView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+    borderWidth: 1,
+    borderColor: '#DBDBDB',
+  },
+  badgeText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#fff',
+    marginTop:10
+  },
+  badgeTextView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '50%'
   }
 });
 export default FoodDetails 
