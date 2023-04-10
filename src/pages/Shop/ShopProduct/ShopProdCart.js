@@ -970,7 +970,8 @@ const ShopProduct = (props) => {
                       date={takeAwayDate}
                       mode="date"
                       placeholder={'Pick a Date'}
-                      maximumDate={new Date()}
+                      minimumDate={new Date()}
+                      // maximumDate={new Date()}
                       format='YYYY-MM-DD'
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
@@ -993,6 +994,7 @@ const ShopProduct = (props) => {
                             setTakeAwayDate(sTime)
                             console.log(event);
                           }}
+                          minimumDate={new Date()}
                         />
                       </View>
                       :
