@@ -965,6 +965,30 @@ const FoodDetails = (props) => {
     )
   }
 
+  const design1 = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
+    return (
+      <View style={{
+        alignItems: 'center', width: dimensions.SCREEN_WIDTH*30/100, borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+        shadowRadius: 1,
+        shadowOpacity: 0.8,
+        elevation: 5, paddingTop: 10, marginHorizontal: 4,marginVertical:5
+      }}>
+        <TouchableOpacity onPress={press ? press : () => { }}
+          style={{ width: '100%', height: 70, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
+          <Image resizeMode='stretch' source={img} style={{ width: imgw, height: imgh, overflow: 'hidden', alignSelf: 'center' }}></Image>
+        </TouchableOpacity>
+        <View style={{ alignItems: 'center', }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#455A64' }}>{ti}</Text>
+        </View>
+      </View>
+
+    )
+  }
+
   const dialCall = (num) => {
     console.log('numbers', num);
     let phoneNumber = '';
@@ -1851,57 +1875,47 @@ const FoodDetails = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '58%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+        <View style={{ height: '78%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
-
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 10, paddingVertical: 10, }}>
-
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', backgroundColor: '#F8F8F8', borderRadius: 9, paddingHorizontal: 10, }}>
               <View>
                 <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.business_name}</Text>
                 {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text> */}
                 <View style={{ flexDirection: 'row', marginTop: 5, width: '100%', }}>
                   <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
-
-
                 </View>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'absolute', right: 10, top: 10 }}>
-                <TouchableWithoutFeedback onPress={() => dialCall(resData.phone)} >
-                  <Image source={require('../../../assets/call.png')} />
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => sendEmail(resData.emailid)} >
-                  <Image source={require('../../../assets/Envelope.png')} />
-                </TouchableWithoutFeedback>
+              <View style={{ flexDirection: 'row',top:9 }}>
+              <TouchableOpacity onPress={()=>{
+                 dialCall(resData.phone)
+              }} style={{height:40,width:40}}>
+              <Image source={require('../../../assets/call.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
+              </TouchableOpacity>
+                  
+              <TouchableOpacity onPress={()=>{
+                 sendEmail(resData.emailid)
+              }} style={{height:40,width:40}}>
+              <Image source={require('../../../assets/Envelope.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
+              </TouchableOpacity>
+                  
               </View>
-
+            </View>
+            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
             </View>
 
-            {resData.business_info ?
-              <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
-                <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: '#835E23', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
-              </View>
-              : null}
-
-            <View style={{
-              // alignItems:'center',
-              width: '95%', borderRadius: 10, overflow: 'hidden', marginTop: 10,
-            }}>
-
+            <View style={{ alignItems: 'center', width: '96%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
               <MapView
                 style={{
                   height: dimensions.SCREEN_HEIGHT * 22 / 100,
                   width: 400,
                   justifyContent: 'flex-end',
-                  alignSelf: 'center',
                   alignItems: 'center', borderRadius: 10
                 }}
-                apikey={GoogleApiKey}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                  // latitude: curentCord.latitude,
-                  // longitude: curentCord.longitude,
                   latitude: resData.latitude,
                   longitude: resData.longitude,
                   latitudeDelta: 0.0922,
@@ -1910,10 +1924,10 @@ const FoodDetails = (props) => {
                 customMapStyle={mapStyle}
                 showsUserLocation={true}
                 userLocationCalloutEnabled={true}
-                showsMyLocationButton={true}
+                // showsMyLocationButton={true}
                 mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
                 showsScale={true}
-                showsCompass={true}
+                // showsCompass={true} 
                 rotateEnabled={true}
                 // onRegionChange={data=>console.log('the resion change',data)}
                 // onPress={(data)=>onMapPress(data)}
@@ -1927,28 +1941,89 @@ const FoodDetails = (props) => {
                 showsIndoors={true}
                 showsIndoorLevelPicker={true}
               >
-
-
+                <Marker
+                coordinate={{ latitude: resData.latitude, longitude: resData.longitude}}
+                    >
+                <Image
+                source={require('../../../assets/shape_33.png')}
+                style={{width: 26, height: 28,
+                  }}
+                resizeMode="contain"
+               /> 
+               </Marker>
 
               </MapView>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
-                <EvilIcons name="location" color={'#FFD037'} size={24} />
-                <Text style={{fontSize:13, fontWeight:'400', color:'#B2B7B9'}} >{resData.address}</Text>
-              </View>
-
-
-
-              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
-
-
-
-
             </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', borderColor: '#B2B7B9', borderWidth: 1, height: 70, width: '96%', marginHorizontal: 7, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, top: -6, borderTopColor: 'transparent', paddingLeft: 12 }}>
+              <EvilIcons name="location" color={'#FFD037'} size={24} />
+              <View style={{ width: '85%', marginLeft: 8 }}>
+                <Text numberOfLines={2} style={{ fontSize: 13, fontWeight: '400', color: '#000' }} >{resData.address}</Text>
+              </View>
+            </View>
+            <View style={{ marginTop: 20, marginLeft: 7 }}>
+              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Service Offerings</Text>
+            </View>
+
+            <View style={{ width: '100%', alignSelf: 'center', }}>
+              <FlatList
+                data={resData?.services}
+                 horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                // numColumns={3}
+                renderItem={({ item, index }) => { 
+                  return (    
+                    <>
+                      {item.attribute_value == 'yes' ?
+                      item.attribute_label=='Delivery' ?
+                      design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '23%', 42, 45, '', 20,() => {})
+                      :
+                      item.attribute_label=='Take Away' ?
+                      design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '23%', 42, 40, '', 20,() => {})
+                      :
+                      item.attribute_label=='Dining' ?
+                     design1(require('../../../assets/dining_icon.png'), 'Dining', '', '23%', 42, 47, '', 20, () => {})
+                      :
+                      item.attribute_label=='Book A Table' ?
+                     design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '23%', 42, 42, '', 20, () => { })
+                      :
+                      null
+                      :
+                      null
+                      }
+                    </>
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
+            </View>
+
+            <View style={{ marginTop: 40, marginLeft: 7, marginBottom: 20 }}>
+              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Badges</Text>
+            </View>
+
+
+
+            <FlatList
+              data={resData?.features}
+              horizontal={true}
+              style={{ marginBottom: 20, }}
+              showsHorizontalScrollIndicator={false}
+              // numColumns={2}
+              renderItem={({ item, index }) => {
+                return (
+                  <ImageBackground source={require('../../../assets/badges_background.png')} style={styles.badgeContainer}>
+                    <View style={styles.badgeView}>
+                      <Image source={{ uri: item.attribute_image }} style={{ height: 25, width: 25 }} />
+                    </View>
+                    <Text style={styles.badgeText}>{item.attribute_value}</Text>
+                  </ImageBackground>
+                )
+              }}
+              keyExtractor={item => item.id}
+            />
 
             <View style={{ width: 100, height: 100 }} />
           </ScrollView>
-
         </View>
       </Modal>
       {loading ? <Loader /> : null}
