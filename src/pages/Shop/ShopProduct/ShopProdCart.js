@@ -138,7 +138,7 @@ const ShopProduct = (props) => {
   const [selectedAddress, setselectedAddress] = useState('');
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
-  const [ordertype, setordertype] = useState('delivery')
+  const [ordertype, setordertype] = useState('takeaway')
   const [promocode, setpromocode] = useState('')
   const [rescopun, setrescopun] = useState([{ "coupon_code": "KINENGO3", "coupon_name": "Dummy Coupon", "coupon_type": "flat", "discount_id": 9, "discount_value": "3.00", "expred_on": "2023-10-31", "image": "http://54.153.75.225/images/app-icons/offer2.jpg", "min_order_value": 10 }])
   const [discount_id, setdiscount_id] = useState(null)
@@ -329,9 +329,9 @@ const ShopProduct = (props) => {
         settotal('0')
         setreloades(!reloades)
       } else {
-        if (responseJson.body.items[0].serviceType == 'Take Away') {
-          setordertype('take-away')
-        }
+        // if (responseJson.body.items[0].serviceType == 'Take Away') {
+        //   setordertype('take-away')
+        // }
         setres(responseJson.body)
         var myCartItem = []
         for (let i = 1; i <= responseJson.body.items.length; i++) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView,Linking, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, TouchableWithoutFeedback } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -24,6 +24,7 @@ import moment from 'moment';
 import Toast from 'react-native-toast-message';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 function newAddMinutes(time, minsToAdd) {
   function D(J) { return (J < 10 ? '0' : '') + J; };
@@ -965,27 +966,41 @@ const FoodDetails = (props) => {
   const design1 = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
     return (
       <View style={{
-        alignItems: 'center', width: '38%', borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
+        alignItems: 'center', width: dimensions.SCREEN_WIDTH*30/100, borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
         shadowOffset: {
           width: 0,
           height: 3
         },
         shadowRadius: 1,
         shadowOpacity: 0.8,
-        elevation: 5, paddingTop: 10, marginHorizontal: 4
+        elevation: 5, paddingTop: 10, marginHorizontal: 4,marginVertical:5
       }}>
         <TouchableOpacity onPress={press ? press : () => { }}
-          style={{ width: 80, height: 70, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
+          style={{ width: '100%', height: 70, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
           <Image resizeMode='stretch' source={img} style={{ width: imgw, height: imgh, overflow: 'hidden', alignSelf: 'center' }}></Image>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', }}>
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#455A64' }}>{ti}</Text>
-
         </View>
-
       </View>
 
     )
+  }
+  const dialCall = (num) => {
+    console.log('numbers',num);
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:' + num ;
+    }
+    else {
+      phoneNumber = 'telprompt:${' + num + '}';
+    }
+    Linking.openURL(phoneNumber);
+  };
+  const sendEmail = (myMail) => {
+    console.log('sendEmail email', myMail);
+    Linking.openURL(`mailto:${myMail}`) 
   }
 
   return (
@@ -1046,8 +1061,9 @@ const FoodDetails = (props) => {
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => setmodlevisual5(true)} style={{ position: 'absolute', right: 15, top: 15 }}>
-              <Text style={{ color: '#FD001F', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text>
+            <TouchableOpacity onPress={() => setmodlevisual5(true)} style={{ position: 'absolute', right: 22, top: 22 }}>
+            <AntDesign name="infocirlce" color={'#FD001F'} size={24} />
+              {/* <Text style={{ color: '#FD001F', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text> */}
             </TouchableOpacity>
             <View>
               <TouchableOpacity style={{
@@ -1060,101 +1076,14 @@ const FoodDetails = (props) => {
                 shadowRadius: 1,
                 shadowOpacity: 0.3,
                 justifyContent: 'center',
-                elevation: 5, marginTop: 25
+                elevation: 5, top: 25
               }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
                 <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
               </TouchableOpacity>
             </View>
           </View>
 
-          {/* <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'center', backgroundColor: '#fff', borderRadius: 9, paddingHorizontal: 22, paddingVertical: 15, top: -30 }}>
-            <View>
-              <Text style={{ color: Mycolors.Black, fontSize: 22, fontWeight: 'bold' }}>{resData.name}</Text>
-              <Text style={{ color: Mycolors.GrayColor, fontSize: 13, fontWeight: '500', marginVertical: 4 }}>Restaurant</Text>
-              <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                <Image source={require('../../../assets/Star.png')} style={{ width: 18, height: 18 }}></Image>
-                <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating?resData.rating:'0.0'}</Text>
-              </View>
-            </View>
-            <View>
-              <TouchableOpacity style={{
-                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 3
-                },
-                shadowRadius: 1,
-                shadowOpacity: 0.3,
-                justifyContent: 'center',
-                elevation: 5,
-              }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
-                <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
-              </TouchableOpacity>
-            </View>
-
-          </View> */}
-
-          <View style={{ width: '92%', alignSelf: 'center', top: -30, backgroundColor: '#F5F5F5', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
-            <FlatList
-              data={resData.services}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              // numColumns={2}
-              renderItem={({ item, index }) => {
-                return (
-                  <>
-                    {item.attribute_value == 'yes' ?
-                      <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
-                        <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
-                          press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
-                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab == item.attribute_label ? ['#fd001f', '#b10027'] : ['transparent', 'transparent']} backgroundColor={'transparent'} />
-                      </View>
-                      :
-                      <>
-                      </>
-                    }
-                  </>
-                )
-              }}
-              keyExtractor={item => item.id}
-            />
-          </View>
-
-
-          {selectedTab == 'Take Away' || selectedTab == 'Delivery' ?
-            <View>
-              {/* <View style={{ width: '95%', alignSelf: 'center', top: -5 }}>
-                
-                <Text style={{fontSize: 11, color: Mycolors.TEXT_COLOR}}>{viewmore ? resData.business_info ? resData.business_info.substring(0,150) : resData.business_info : resData.business_info}</Text>
-                {resData.business_info ?
-                <Text onPress={()=>{setviewmore(!viewmore)}} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ?  'View more': 'View less'}</Text>
-                : null}
-              </View> */}
-
-              <View style={{ width: '100%', alignSelf: 'center', }}>
-                {resData.features ?
-                  resData.features.map((item, index) => {
-                    return (
-                      <View style={{ alignSelf: 'center', width: '95%' }}>
-                        {design(item.attribute_image, item.attribute_value, item.attribute_detail, '45%', 25, 28, 'transparent', 40)}
-                      </View>
-                    )
-                  })
-                  : null}
-              </View>
-
-
-
-            </View>
-
-            :
-            null
-          }
-          {selectedTab != 'Book A Table' ?
-            <>
-
-              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25 }}
+          <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25, top: -30, }}
                 onPress={() => {
                   menuList(null);
                   setmodlevisual1(true)
@@ -1180,7 +1109,37 @@ const FoodDetails = (props) => {
 
 
               </TouchableOpacity>
-              <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 4 }}>
+
+          <View style={{ width: '96%', alignSelf: 'center', backgroundColor: '#F5F5F5', marginHorizontal: 20, borderRadius: 10, justifyContent: "center", top: -25, }}>
+            <FlatList
+              data={resData.services}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              // numColumns={2}
+              renderItem={({ item, index }) => {
+                return (
+                  <>
+                    {item.attribute_value == 'yes' ?
+                      <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 8, padding: 5 }}>
+                        <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
+                          press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
+                          titlecolor={selectedTab == item.attribute_label ? Mycolors.BG_COLOR : Mycolors.Black} marginVertical={0} hLinearColor={selectedTab == item.attribute_label ? ['#fd001f', '#b10027'] : ['transparent', 'transparent']} backgroundColor={'transparent'} />
+                      </View>
+                      :
+                      <>
+                      </>
+                    }
+                  </>
+                )
+              }}
+              keyExtractor={item => item.id}
+            />
+          </View>
+
+          
+          {selectedTab != 'Book A Table' ?
+            <>
+              <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 1, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, }}>
                 <View style={{ width: '98%', height: 40, zIndex: 999 }}>
 
 
@@ -2111,31 +2070,20 @@ const FoodDetails = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
                 </View>
               </View>
-              <View style={{ flexDirection: 'row', position: 'absolute', right: 0, top: 0 }}>
-                <MyButtons title2="Call Restaurant" height={40} width={40} borderRadius={5} press={() => {
-                  dialCall('1234567899')
-                }}
-                  img={require('../../../assets/call.png')} imgheight={40} imgwidth={40}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} />
-                <MyButtons title2="Send Message" height={40} width={40} borderRadius={5} press={() => { }}
-                  img={require('../../../assets/Envelope.png')} imgheight={40} imgwidth={40}
-                  titlecolor={Mycolors.BG_COLOR} backgroundColor={'transparent'} fontWeight={'500'} fontSize={13} />
+              <View style={{ flexDirection: 'row',top:9 }}>
+              <TouchableOpacity onPress={()=>{
+                 dialCall(resData.phone)
+              }} style={{height:40,width:40}}>
+              <Image source={require('../../../assets/call.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
+              </TouchableOpacity>
+                  
+              <TouchableOpacity onPress={()=>{
+                 sendEmail(resData.emailid)
+              }} style={{height:40,width:40}}>
+              <Image source={require('../../../assets/Envelope.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
+              </TouchableOpacity>
+                  
               </View>
-              {/* <View>
-                <TouchableOpacity style={{
-                  width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 3
-                  },
-                  shadowOpacity: 0.3,
-                  justifyContent: 'center',
-                  elevation: 5
-                }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
-                  <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
-                </TouchableOpacity>
-              </View> */}
             </View>
             <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
               <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
@@ -2152,18 +2100,18 @@ const FoodDetails = (props) => {
                 }}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                  latitude: curentCord.latitude,
-                  longitude: curentCord.longitude,
+                  latitude: resData.latitude,
+                  longitude: resData.longitude,
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
                 customMapStyle={mapStyle}
                 showsUserLocation={true}
                 userLocationCalloutEnabled={true}
-                showsMyLocationButton={true}
+                // showsMyLocationButton={true}
                 mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
                 showsScale={true}
-                showsCompass={true}
+                // showsCompass={true} 
                 rotateEnabled={true}
                 // onRegionChange={data=>console.log('the resion change',data)}
                 // onPress={(data)=>onMapPress(data)}
@@ -2177,38 +2125,70 @@ const FoodDetails = (props) => {
                 showsIndoors={true}
                 showsIndoorLevelPicker={true}
               >
+                <Marker
+                coordinate={{ latitude: resData.latitude, longitude: resData.longitude}}
+                    >
+                <Image
+                source={require('../../../assets/shape_33.png')}
+                style={{width: 26, height: 28,
+                  }}
+                resizeMode="contain"
+               /> 
+               </Marker>
+
               </MapView>
-              {/* <Image source={require('../../assets/Maskgroup.png')} style={{width:'100%',height:400,}}></Image> */}
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', borderColor: '#B2B7B9', borderWidth: 1, height: 70, width: '96%', marginHorizontal: 7, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, top: -6, borderTopColor: 'transparent', paddingLeft: 12 }}>
               <EvilIcons name="location" color={'#FFD037'} size={24} />
               <View style={{ width: '85%', marginLeft: 8 }}>
-                <Text numberOfLines={2} style={{ fontSize: 13, fontWeight: '400', color: '#B2B7B9' }} >{resData.address}</Text>
+                <Text numberOfLines={2} style={{ fontSize: 13, fontWeight: '400', color: '#000' }} >{resData.address}</Text>
               </View>
-
             </View>
             <View style={{ marginTop: 20, marginLeft: 7 }}>
-              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Services Offerings</Text>
+              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Service Offerings</Text>
             </View>
 
-
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: "80%", marginTop: 20, justifyContent: 'space-between', }}>
-
-              {design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '25%', 42, 40, '', 20)}
-              {design1(require('../../../assets/dining_icon.png'), 'Dining', '', '25%', 42, 47, '', 20, () => { props.navigation.navigate('') })}
-              {design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '25%', 42, 45, '', 20)}
-
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: "80%", marginTop: 20 }}>
-              {design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '25%', 42, 42, '', 20, () => { })}
+            <View style={{ width: '100%', alignSelf: 'center', }}>
+              <FlatList
+                data={resData.services}
+                 horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                // numColumns={3}
+                renderItem={({ item, index }) => { 
+                  return (    
+                    <>
+                      {item.attribute_value == 'yes' ?
+                      item.attribute_label=='Delivery' ?
+                      design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '23%', 42, 45, '', 20,() => {})
+                      :
+                      item.attribute_label=='Take Away' ?
+                      design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '23%', 42, 40, '', 20,() => {})
+                      :
+                      item.attribute_label=='Dining' ?
+                     design1(require('../../../assets/dining_icon.png'), 'Dining', '', '23%', 42, 47, '', 20, () => {})
+                      :
+                      item.attribute_label=='Book A Table' ?
+                     design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '23%', 42, 42, '', 20, () => { })
+                      :
+                      null
+                      :
+                      null
+                      }
+                    </>
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
             </View>
 
             <View style={{ marginTop: 40, marginLeft: 7, marginBottom: 20 }}>
               <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Badges</Text>
             </View>
 
+
+
             <FlatList
-              data={badgesData}
+              data={resData.features}
               horizontal={true}
               style={{ marginBottom: 20, }}
               showsHorizontalScrollIndicator={false}
@@ -2217,13 +2197,13 @@ const FoodDetails = (props) => {
                 return (
                   <ImageBackground source={require('../../../assets/badges_background.png')} style={styles.badgeContainer}>
                     <View style={styles.badgeView}>
-                      <Image source={item.img} />
+                      <Image source={{ uri: item.attribute_image }} style={{ height: 25, width: 25 }} />
                     </View>
-                    <Text style={styles.badgeText}>{item.text}</Text>
+                    <Text style={styles.badgeText}>{item.attribute_value}</Text>
                   </ImageBackground>
                 )
               }}
-            keyExtractor={item => item.id}
+              keyExtractor={item => item.id}
             />
 
             <View style={{ width: 100, height: 100 }} />
@@ -2239,7 +2219,6 @@ const FoodDetails = (props) => {
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   input: {
     paddingLeft: 15,
@@ -2276,7 +2255,7 @@ const styles = StyleSheet.create({
   },
   badgeContainer: {
     // flexDirection:'row',
-    justifyContent:'center',
+    justifyContent: 'center',
     // alignItems:'center',
     // width: '80%',
     width: 173,
@@ -2286,7 +2265,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD037',
     borderRadius: 17,
     padding: 15,
-    marginRight:10
+    marginRight: 10
   },
   badgeView: {
     justifyContent: 'center',
@@ -2302,7 +2281,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#fff',
-    marginTop:10
+    marginTop: 10
   },
   badgeTextView: {
     flexDirection: 'row',
