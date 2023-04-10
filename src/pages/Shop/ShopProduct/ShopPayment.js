@@ -67,14 +67,14 @@ const ShopPayment = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(()=>{
-    setcheckitem({
-      id: '',
-      card_no: 'Cash Payment',
-      exp_month:'Default method',
-      exp_year:'',
-      time:'Default method',
-      img:require('../../../assets/images/cashondelivery.png'),
-    })
+    // setcheckitem({
+    //   id: '',
+    //   card_no: 'Cash Payment',
+    //   exp_month:'Default method',
+    //   exp_year:'',
+    //   time:'Default method',
+    //   img:require('../../../assets/images/cashondelivery.png'),
+    // })
     getpaymentList()
  },[])
 
@@ -168,16 +168,21 @@ setRefreshing(false)
   setLoading(false)
   console.log('the res user_payment_method==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    var arr=[{
-      id: '',
-      card_no: 'Cash Payment',
-      exp_month:'Default method',
-      exp_year:'',
-      time:'Default method',
-      img:require('../../../assets/images/cashondelivery.png'),
-    }]
+    // var arr=[{
+    //   id: '',
+    //   card_no: 'Cash Payment',
+    //   exp_month:'Default method',
+    //   exp_year:'',
+    //   time:'Default method',
+    //   img:require('../../../assets/images/cashondelivery.png'),
+    // }]
+    var arr=[]
     for(let i=1;i<=responseJson.body.length;i++){
       arr.push(responseJson.body[i-1])
+    }
+    console.log('all cards', arr);
+    if(arr?.length > 0){
+      setcheckitem(arr[0])
     }
    setallCardList(arr)
   } else {
@@ -267,10 +272,10 @@ setRefreshing(false)
             : null
           }
           {
-      allCardList.map((item,index)=> {
+      allCardList.filter(el=>el?.card_id !== checkitem?.card_id).map((item,index)=> {
         return(
             <>
-        { checkitem != item ?
+        { true ?
           <TouchableOpacity style={{width:'100%',borderColor:Mycolors.GrayColor,borderWidth:0.02,flexDirection:'row',alignItems:'center',paddingVertical:17,paddingHorizontal:17, borderRadius:7,backgroundColor:'#fff',marginTop:15}}
           onPress={()=>{setcheckitem(item)}}>
             <View style={{width:51,height:40}}>
@@ -278,6 +283,7 @@ setRefreshing(false)
             </View>
             <View style={{marginLeft:15}}>
             <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>**** **** **** {item.card_no}</Text>
+            {/* <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>{item.card_id}</Text> */}
             <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:11,top:2}}>{item.id==''? '' :'Expires'} {item.exp_month}{item.id==''? '' :'/'}{item.exp_year}</Text>         
             </View>
             </TouchableOpacity>
@@ -288,7 +294,7 @@ setRefreshing(false)
         )
       }
       )
-    }
+      }
 
 <Text style={{color:Mycolors.GrayColor,fontWeight:'300',fontSize:12,marginVertical:20}}>CURRENT METHOD</Text>
 <View style={{width:'100%',borderColor:Mycolors.RED,borderWidth:0.2,flexDirection:'row',alignItems:'center',paddingVertical:17,paddingHorizontal:17, borderRadius:7,backgroundColor:'#fff'}}>
@@ -297,6 +303,7 @@ setRefreshing(false)
 </View>
 <View style={{marginLeft:15}}>
 <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>**** **** **** {checkitem.card_no}</Text>
+{/* <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>{checkitem.card_id}</Text> */}
 <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,top:2}}>{checkitem.id==''? '' :'Expires'} {checkitem.exp_month}{checkitem.id==''? '' :'/'}{checkitem.exp_year}</Text>         
 </View>
 <View style={{width:24,height:24,backgroundColor:'#835E23',borderRadius:5,position:'absolute',right:20,justifyContent:'center'}}>

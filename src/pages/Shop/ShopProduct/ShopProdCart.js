@@ -237,7 +237,7 @@ const ShopProduct = (props) => {
     Array.from(Array(slotsWithGap).keys()).map((el, index) => {
       newTime = newAddMinutes(start, slotDuration)
       const slotDate = createDate(newTime)
-      console.log('slotDate', slotDate);
+      // console.log('slotDate', slotDate);
       moment(slotDate).isBetween()
       // console.log('moment(newTime)', moment(newTime).format('HH'));
       let endHours = newTime.split(':')[0]
@@ -252,7 +252,7 @@ const ShopProduct = (props) => {
       } else if (moment(slotDate).isBetween(createDate('22:00'), createDate('05:00'))) {
         timeOfDay = 'night'
       }
-      console.log('timeOfDay', timeOfDay);
+      // console.log('timeOfDay', timeOfDay);
       // if(endHours > 5  && endHours <= 12){
       //   timeOfDay = 'day'
       // }else if(endHours > 12 && endHours <= 18){
@@ -264,7 +264,7 @@ const ShopProduct = (props) => {
       // } 
       allSlots.push({ id: String(index), start: start, end: newTime, timeOfDay })
       // allSlots.push({id: String(index), start: start, end: newTime })
-      console.log('{start: start, end: newTime}', { start: start, end: newTime });
+      // console.log('{start: start, end: newTime}', { start: start, end: newTime });
       start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
     })
     if (isAdditionalSlot) {
