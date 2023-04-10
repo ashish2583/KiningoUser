@@ -662,8 +662,10 @@ const ShopProduct = (props) => {
                   {/* <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>{selectedAddress.location_name}</Text>
                   <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
                   <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text> */}
+                  {/* {console.log('takeAwayDate--', takeAwayDate)} */}
                   {selectedTime2 !== '' ?
-                    <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    // <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
                     :
                     <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
                   }
@@ -804,11 +806,11 @@ const ShopProduct = (props) => {
                     //     return
                     //   }
                     // }
-                    if (setTakeAwayDate === '') {
-                      Toast.show({ text1: 'Please select pickup date' })
+                    if (takeAwayDate === '') {
+                      Toast.show({ text1: 'Please select PickUp Date' })
                       return
                     } else if (Object.keys(selectedSlot)?.length === 0) {
-                      Toast.show({ text1: 'Please select pickup time' })
+                      Toast.show({ text1: 'Please select PickUp Time' })
                       return
                     }
                     props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, selectedSlot, takeAwayDate })
@@ -1054,6 +1056,13 @@ const ShopProduct = (props) => {
           </View>
           <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 50 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+              if (takeAwayDate === '') {
+                Toast.show({ text1: 'Please select PickUp Date' })
+                return
+              } else if (Object.keys(selectedSlot)?.length === 0) {
+                Toast.show({ text1: 'Please select PickUp Time' })
+                return
+              }
               setShowTimeModal(false)
             }} marginHorizontal={20} fontSize={11}
               titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />

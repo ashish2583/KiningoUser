@@ -10,19 +10,52 @@ import {Provider} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import { NotificationManagerAndroid } from './NotificationManagerAndroid';
 import { NotificationManagerIOS } from './NotificationManagerIOS';
-import Toast from 'react-native-toast-message';
-const App = () => {
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+
+const App = (props) => {
   LogBox.ignoreAllLogs()
-  //UI
+  const toastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: '#ADC430',borderColor:'#ADC430',borderWidth:1,height:55,width:'90%' }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 12,
+          fontWeight: '400'
+          
+        }}
+        // text2Style={{
+        //   fontSize: 15,
+        //   fontWeight: '400'
+          
+        // }}
+      />
+    ),
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 12
+        }}
+        text2Style={{
+          fontSize: 12
+        }}
+      />
+    ),
+  };
+
   React.useEffect(() => {
+
     // dynamicLinks()
-    // .getInitialLink()
+    // .getInitialLink() 
     // .then(link => {
     //   console.log('My url is in App js ==>>',link)
     //   // if (link.url === 'https://invertase.io/offer') {
     //   //   // ...set initial route as offers screen
     //   // }
     // });
+
     // Orientation.lockToPortrait();
         NotificationManagerAndroid.createChannel();
         NotificationManagerAndroid.configure();
@@ -40,8 +73,9 @@ const App = () => {
         const { messageId } = remoteMessage;
         const data = remoteMessage.notification
         if (Platform.OS === 'android') {
+          
           NotificationManagerAndroid.showNotification(data.title, data.body, data.subText, messageId, data);
-        }
+        } 
         else {
            NotificationManagerIOS.showNotification(2, data.title, data.body, data, {})
         }
@@ -55,30 +89,37 @@ const App = () => {
       const { Title, notificationText, subText } = data;
       if (Platform.OS === 'android') {
         NotificationManagerAndroid.showNotification(Title, notificationText, subText, messageId);
-      }
+      } 
       else {
         NotificationManagerIOS.showNotification(messageId, Title, notificationText, data, {})
+
         // PushNotification.getApplicationIconBadgeNumber(badgeNumber => {
         //   PushNotificationIOS.setApplicationIconBadgeNumber(badgeNumber + 1)
         // })
+       
       }
     });
+   
   }, []);
+
   async function requestUserPermission() {
     const authorizationStatus = await messaging().requestPermission({
       sound: false,
       announcement: true,
     });
   }
+
   async function requestUserPermissionIos() {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
     }
+
   return (
     <StripeProvider
     publishableKey="pk_test_4sjCZIFhfIeMDj3bpJsFapZf"
@@ -88,7 +129,7 @@ const App = () => {
     <Provider store={store}>
     <NavigationContainer theme={DefaultTheme}>
     <MainNav/>
-    <Toast />
+    <Toast config={toastConfig}/>
    </NavigationContainer>
   </Provider>
   </StripeProvider>

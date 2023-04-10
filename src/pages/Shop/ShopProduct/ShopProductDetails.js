@@ -1091,7 +1091,7 @@ const FoodDetails = (props) => {
 
               </TouchableOpacity>    
 
-          <View style={{ width: '92%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
+          <View style={{ width: '95%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
             <FlatList
               data={resData.services}
               horizontal={true}
