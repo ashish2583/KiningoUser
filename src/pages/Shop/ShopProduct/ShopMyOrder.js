@@ -385,7 +385,7 @@ const ShopMyOrder = (props) => {
 
           {orderData != null ?
             orderData.map((item, index) => {
-
+              console.log('orderData item.order_type', item.order_type);
               return (
 
                 <>

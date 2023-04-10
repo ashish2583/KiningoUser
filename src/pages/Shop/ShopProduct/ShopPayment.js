@@ -127,6 +127,7 @@ setRefreshing(false)
   };
 
   const placeOrder = async () => {
+    console.log('checkitem', checkitem);
    if(checkitem==''){
     Toast.show({text1: 'Please select payment method'})
    }else{
