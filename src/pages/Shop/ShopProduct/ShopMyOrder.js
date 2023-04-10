@@ -191,7 +191,7 @@ const ShopMyOrder = (props) => {
 
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
+    console.log('the res shop_product_orders ==>>', responseJson.body)
     if (responseJson.headers.success == 1) {
       setorderData(responseJson.body)
 
@@ -202,7 +202,7 @@ const ShopMyOrder = (props) => {
 
   }
   const orderList = async (filters = false, closeModal = false) => {
-    let endPoint = shop_eat_orders
+    let endPoint = shop_product_orders
     if (filters && orderTypeValue !== '' || timeDurationValue !== '' || orderDate !== '' || keyword !== '' || statusValue !== '') {
       const data = {}
       if (orderTypeValue !== '') {

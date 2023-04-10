@@ -136,7 +136,8 @@ setRefreshing(false)
         "card_id": checkitem.card_id,
         "billing_address_id": null,
         "shipping_address_id": null,
-        "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
+        // "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
+        "payment_type": 'stripe',  // stripe/cod/cheque
         "order_type" : props.route.params.orderType, //delivery/take-away 
         "schedule_date" : moment(props.route.params.takeAwayDate).format('YYYY-MM-DD'),
         "schedule_time_from": props.route.params.selectedSlot.start,

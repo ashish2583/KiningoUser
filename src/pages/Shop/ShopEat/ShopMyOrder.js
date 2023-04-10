@@ -226,7 +226,7 @@ const ShopMyOrder = (props) => {
 
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
+    console.log('the res shop_eat_orders ==>>', responseJson.body)
     if (responseJson.headers.success == 1) {
       setorderData(responseJson.body)
 
