@@ -390,11 +390,10 @@ const ShopMyOrder = (props) => {
 
           {orderData != null ?
             orderData.map((item, index) => {
-              console.log('orderData item.order_type', item.order_type);
               return (
 
                 <>
-                  {item.order_type == 'takeaway' || item.order_type == 'delivery' ?
+                  {item.order_type == 'takeaway' ?
                     <View style={{
                       marginVertical: 15, backgroundColor: '#ffff', borderRadius: 10, paddingVertical: 10, paddingHorizontal: 15, shadowColor: 'black',
                       shadowOffset: {
@@ -474,7 +473,7 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {/* {item.order_type == 'takeaway' && item.business_rating == null ?
+                        {item.order_type == 'takeaway' && item.business_rating == null ?
                           <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             if (item.business_rating == null) {
                               props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
@@ -482,18 +481,8 @@ const ShopMyOrder = (props) => {
                           }} fontSize={12}
                             titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           : null
-                        } */}
- 
-                        {item.order_type == 'delivery' && item.status == 12 && item.business_rating == null ?
-                            <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                              if (item.business_rating == null) {
-                                props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                              }
-                            }} fontSize={12}
-                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
-                            : null
-
                         }
+ 
 
                       </View>
                       <View style={{ flexDirection: item.business_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
