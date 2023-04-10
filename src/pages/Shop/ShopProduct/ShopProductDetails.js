@@ -26,6 +26,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, AnimatedRegion, Animated } from 'react-native-maps';
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import ProductSearchInput from './components/ProductSearchInput';
 
 
 function newAddMinutes(time, minsToAdd) {
@@ -1555,7 +1556,7 @@ const FoodDetails = (props) => {
         <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
             <View style={{ paddingHorizontal: 4 }}>
-              <SearchInput2 marginTop={10} placeholder={'Search Cuisine,Dishes'}
+              {/* <SearchInput2 marginTop={10} placeholder={'Search Cuisine,Dishes'}
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   setsearchValue(e)
@@ -1563,7 +1564,16 @@ const FoodDetails = (props) => {
                 }}
                 // press={() => { Alert.alert('Hi') }}
                 presssearch={() => { searchmenuList(searchValue.text) }}
-                paddingLeft={9} />
+                paddingLeft={9} /> */}
+                <ProductSearchInput marginTop={10} placeholder={'Search Products'}
+                  serchValue={searchValue}
+                  onChangeText={(e) => {
+                    setsearchValue(e)
+                    searchmenuList(e.text)
+                  }}
+                  // press={() => { Alert.alert('Hi') }}
+                  presssearch={() => { searchmenuList(searchValue.text) }}
+                  paddingLeft={9} />
             </View>
 
             {/* <Text style={{ fontWeight: 'bold', fontSize: 16, marginTop: 15, left: 5, color: '#cbcbcb' }}></Text> */}

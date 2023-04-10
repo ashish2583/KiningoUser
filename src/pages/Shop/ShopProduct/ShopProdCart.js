@@ -125,12 +125,12 @@ const ShopProduct = (props) => {
   const [loading2, setLoading2] = useState(false)
   const [res, setres] = useState('')
   const [resData, setresData] = useState(null)
-  const [selectedTime,setselectedTime]=useState('1')
-  const [selectedTime2,setselectedTime2]=useState('')
-  const [selectedSlot,setSelectedSlot]=useState({})
-  
-  const [takeAwayDate,setTakeAwayDate]=useState('')
-  const [dayData, setDayData]=useState([{dayPart:'Day', id: 1},{dayPart:'Afternoon', id: 2},{dayPart:'Evening', id: 3}])
+  const [selectedTime, setselectedTime] = useState('1')
+  const [selectedTime2, setselectedTime2] = useState('')
+  const [selectedSlot, setSelectedSlot] = useState({})
+
+  const [takeAwayDate, setTakeAwayDate] = useState('')
+  const [dayData, setDayData] = useState([{ dayPart: 'Day', id: 1 }, { dayPart: 'Afternoon', id: 2 }, { dayPart: 'Evening', id: 3 }])
   const [showda, setshowda] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
   const [pincode, setpincode] = useState('');
@@ -171,19 +171,19 @@ const ShopProduct = (props) => {
   const [showTimeModal, setShowTimeModal] = useState(false)
   const [timeData, setTimeData] = useState([
     {
-      id:'1',
+      id: '1',
       time: '10:00 am',
     },
     {
-      id:'2',
+      id: '2',
       time: '11:00 am',
     },
     {
-      id:'3',
+      id: '3',
       time: '12:00 pm',
     },
     {
-      id:'4',
+      id: '4',
       time: '01:00 pm',
     },
   ])
@@ -243,13 +243,13 @@ const ShopProduct = (props) => {
       let endHours = newTime.split(':')[0]
       let timeOfDay = ''
       // console.log('isbetween', moment(slotDate).isBetween(createDate('05:00'), createDate('12:00')));
-      if(moment(slotDate).isBetween(createDate('05:00'), createDate('12:00'))){
+      if (moment(slotDate).isBetween(createDate('05:00'), createDate('12:00'))) {
         timeOfDay = 'day'
-      }else if(moment(slotDate).isBetween(createDate('12:00'), createDate('18:00'))){
+      } else if (moment(slotDate).isBetween(createDate('12:00'), createDate('18:00'))) {
         timeOfDay = 'afternoon'
-      }else if(moment(slotDate).isBetween(createDate('18:00'), createDate('22:00'))){
+      } else if (moment(slotDate).isBetween(createDate('18:00'), createDate('22:00'))) {
         timeOfDay = 'evening'
-      }else if(moment(slotDate).isBetween(createDate('22:00'), createDate('05:00'))){
+      } else if (moment(slotDate).isBetween(createDate('22:00'), createDate('05:00'))) {
         timeOfDay = 'night'
       }
       console.log('timeOfDay', timeOfDay);
@@ -262,13 +262,13 @@ const ShopProduct = (props) => {
       // }else if(endHours > 22 || endHours <= 5){
       //   timeOfDay = 'night'
       // } 
-      allSlots.push({id: String(index), start: start, end: newTime, timeOfDay })
+      allSlots.push({ id: String(index), start: start, end: newTime, timeOfDay })
       // allSlots.push({id: String(index), start: start, end: newTime })
       console.log('{start: start, end: newTime}', { start: start, end: newTime });
       start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
     })
     if (isAdditionalSlot) {
-      allSlots.push({id: String(slotsWithGap?.length), start: start, end: newAddMinutes(start, slotDuration) })
+      allSlots.push({ id: String(slotsWithGap?.length), start: start, end: newAddMinutes(start, slotDuration) })
     }
     console.log('setSlots', allSlots);
     setSlots(allSlots)
@@ -385,7 +385,7 @@ const ShopProduct = (props) => {
     }
 
   }
-  
+
   const removeCoupan = async () => {
     setLoading(true)
     var data = {
@@ -412,7 +412,7 @@ const ShopProduct = (props) => {
 
 
   }
-  
+
   const applyCoupan = async () => {
     if (discount_id == null) {
       Toast.show({ text1: 'Please select any coupon' })
@@ -564,7 +564,7 @@ const ShopProduct = (props) => {
               <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 50, height: 50, marginHorizontal: 10 }} />
             </View>
             <View>
-              <Text style={{ fontSize: 16, color: '#263238', width:'55%' }}>{item.name}</Text>
+              <Text style={{ fontSize: 16, color: '#263238', width: '55%' }}>{item.name}</Text>
               <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.item_total.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
@@ -655,7 +655,7 @@ const ShopProduct = (props) => {
                 borderWidth: 1,
                 elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
               }}
-              onPress={() => { setShowTimeModal(true) }}
+                onPress={() => { setShowTimeModal(true) }}
               >
 
                 <View style={{ width: '80%' }}>
@@ -663,10 +663,10 @@ const ShopProduct = (props) => {
                   <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{selectedAddress.address_line1} , {selectedAddress.city} , {selectedAddress.state}</Text>
                   <Text style={{ fontSize: 13, color: '#000' }}>{selectedAddress.address_line2}</Text> */}
                   {selectedTime2 !== '' ?
-                  <Text style={{fontSize:11,color:Mycolors.GrayColor,fontWeight:'bold'}}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
-                   :
-                   <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
-                   }
+                    <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    :
+                    <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                  }
                 </View>
 
                 <TouchableOpacity style={{ width: 25, height: 25, alignSelf: 'center' }} onPress={() => { setShowTimeModal(true) }}>
@@ -804,10 +804,10 @@ const ShopProduct = (props) => {
                     //     return
                     //   }
                     // }
-                    if(setTakeAwayDate === ''){
+                    if (setTakeAwayDate === '') {
                       Toast.show({ text1: 'Please select pickup date' })
                       return
-                    }else if(Object.keys(selectedSlot)?.length === 0){
+                    } else if (Object.keys(selectedSlot)?.length === 0) {
                       Toast.show({ text1: 'Please select pickup time' })
                       return
                     }
@@ -910,7 +910,7 @@ const ShopProduct = (props) => {
         {/* <View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}> */}
         <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 60 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
 
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, paddingHorizontal:10 }}>
             {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
                                           style={{ position: "absolute", width: 30,  borderRadius: 35, height: 30, right: 10, top: 10 }}>
                                           <Image
@@ -928,34 +928,82 @@ const ShopProduct = (props) => {
               style={{
                 justifyContent: "center",
                 alignItems: "flex-start",
-                
+
                 marginHorizontal: 10,
                 marginTop: 10,
-                marginBottom: 200
+                marginBottom: 200,
+
               }}>
 
-
-{
-                showda ?
-                  <View>
-                    <DateTimePicker
-                      value={new Date()}
-                      mode='calendar'
-                      // is24Hour={false}
-                      display="spinner"
-                      onChange={(event, sTime) => {
-                        setshowda(false)
-                        console.log(sTime.toDateString());
-                        setTakeAwayDate(sTime)
-                        console.log(event);
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>PickUp Date</Text>
+              <View style={{
+                width: '100%', alignSelf: 'center',
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between',
+                //  borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2,
+                borderColor: '#E0E0E0', borderWidth: 1
+              }}>
+                <View style={{}}>
+                  {Platform.OS == 'ios' ?
+                    <DatePicker
+                      customStyles={{
+                        dateInput: { borderColor: 'transparent', },
+                        dateText: { color: Mycolors.GrayColor },
+                        dateIcon: styles.dateIcon,
+                        dateplaceholder: {
+                          alignContent: 'flex-start',
+                        },
+                        placeholderText: {
+                          fontSize: 10,
+                          color: Mycolors.GrayColor,
+                          //marginLeft: '1%',
+                          left: -5
+                        },
+                        zIndex: 99999
+                      }}
+                      showIcon={false}
+                      androidMode={'spinner'}
+                      readOnly={true}
+                      style={[styles.datePickerSelectInput, { fontSize: 11, color: Mycolors.GrayColor, left: 15 }]}
+                      date={takeAwayDate}
+                      mode="date"
+                      placeholder={'Pick a Date'}
+                      maximumDate={new Date()}
+                      format='YYYY-MM-DD'
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      //iconSource={require ('../../../assets/shape_38.png')}
+                      onDateChange={date => {
+                        setTakeAwayDate(date)
                       }}
                     />
-                  </View>
-                  :
-                  <TouchableOpacity style={{ width: '100%', height: 50, justifyContent: 'center', backgroundColor: Mycolors.HEADERCOLOR, borderColor: 'transparent', zIndex: -999, borderRadius: 5 }}>
-                    <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{takeAwayDate ? takeAwayDate.toString().substring(0, 16) : 'Select Date'}</Text>
-                  </TouchableOpacity>
-              }
+                    :
+                    showda ?
+                      <View>
+                        <DateTimePicker
+                          value={new Date()}
+                          mode='calendar'
+                          // is24Hour={false}
+                          display="spinner"
+                          onChange={(event, sTime) => {
+                            setshowda(false)
+                            console.log(sTime.toDateString());
+                            setTakeAwayDate(sTime)
+                            console.log(event);
+                          }}
+                        />
+                      </View>
+                      :
+                      <TouchableOpacity style={{ width: '100%', height: 50, justifyContent: 'center', backgroundColor: Mycolors.HEADERCOLOR, borderColor: 'transparent', zIndex: -999, borderRadius: 5 }}>
+                        <Text style={{ fontSize: 15, color: '#000', left: 10 }} onPress={() => { setshowda(true) }}>{takeAwayDate ? takeAwayDate.toString().substring(0, 16) : 'Select Date'}</Text>
+                      </TouchableOpacity>
+                  }
+                </View>
+                <TouchableOpacity onPress={() => { setshowda(true) }} style={{ justifyContent: 'center', marginRight: 9 }}>
+                  <Image source={require('../../../assets/calendarB.png')} style={{ width: 24, height: 24, alignSelf: 'center' }}></Image>
+                </TouchableOpacity>
+
+              </View>
               {/* <FlatList
                 data={dayData}
                 horizontal={true}
@@ -977,45 +1025,45 @@ const ShopProduct = (props) => {
                 keyExtractor={item => item.id}
               /> */}
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}> */}
-                <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 13, marginTop:10, marginBottom:10 }}>Select Time Slot</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Select Time Slot</Text>
               {/* </View> */}
 
               {/* <View style={{ width: '97%', marginTop: 10, backgroundColor:'yellow' }}> */}
-                <FlatList
-                  data={slots}
-                  horizontal={true}
-                  style={{}}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({item,index})=>{
-                    return(
-                      <View style={{width:90,marginRight:5}}>
-          <TouchableOpacity style={{width:90,height:40,justifyContent:'center',borderWidth:0.5,borderRadius:5,borderColor:selectedTime2==item.id ? '#835E23' : Mycolors.GrayColor, backgroundColor: selectedTime2==item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent'}}
-          onPress={()=>{setselectedTime2(item.id); setSelectedSlot(item)}}>
-  
-          <Text style={{fontSize:11,color:selectedTime2==item.id ? '#835E23' : Mycolors.GrayColor,textAlign:'center',fontWeight:'bold'}}>{item.start}-{item.end}</Text>
-          </TouchableOpacity>
-          </View>
-                    )
-                  }}
-                  keyExtractor={item => item.id}
-                />
+              <FlatList
+                data={slots}
+                horizontal={true}
+                style={{}}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => {
+                  return (
+                    <View style={{ width: 90, marginRight: 5 }}>
+                      <TouchableOpacity style={{ width: 90, height: 40, justifyContent: 'center', borderWidth: 0.5, borderRadius: 5, borderColor: selectedTime2 == item.id ? '#835E23' : Mycolors.GrayColor, backgroundColor: selectedTime2 == item.id ? 'rgba(255, 196, 12, 0.05)' : 'transparent' }}
+                        onPress={() => { setselectedTime2(item.id); setSelectedSlot(item) }}>
 
-            {/* </View> */}
+                        <Text style={{ fontSize: 11, color: selectedTime2 == item.id ? '#835E23' : Mycolors.GrayColor, textAlign: 'center', fontWeight: 'bold' }}>{item.start}-{item.end}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
+
+              {/* </View> */}
             </View>
 
           </View>
-          <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 100 }}>
+          <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 50 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
               setShowTimeModal(false)
             }} marginHorizontal={20} fontSize={11}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />
           </View>
 
         </View>
         {/* </View> */}
       </Modal>
 
-     
+
     </SafeAreaView>
   );
 }
