@@ -276,9 +276,9 @@ const ShopMyOrder = (props) => {
   const design = (img, ti, tit, w, imgh, imgw, bg, redious) => {
     return (
       <View style={{ flexDirection: 'row', width: w, marginTop: 10, backgroundColor: Mycolors.TimingColor, paddingVertical: 20, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10 }}>
-        <View style={{ width: 40, height: 40, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
-          <Image source={img} style={{ width: imgw, height: imgh, overflow: 'hidden', alignSelf: 'center' }}></Image>
-        </View>
+        {/* <View style={{ width: 40, height: 40, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}> */}
+          <Image source={img} style={{ width: imgw, height: imgh, alignSelf: 'center' }}></Image>
+        {/* </View> */}
         <View style={{ marginLeft: 15, width: '80%' }}>
           <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black }}>{ti}</Text>
           <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{tit}</Text>
@@ -464,7 +464,7 @@ const ShopMyOrder = (props) => {
                       }
                       <View style={{ borderColor: Mycolors.GrayColor, borderWidth: 1, borderStyle: 'dashed', marginTop: 8 }} />
 
-                      {design(require('../../../assets/product_order_status.png'), 'Order Status', item.status_label, '100%', 25, 28, 'red', 20)}
+                      {design(require('../../../assets/product_order_status.png'), 'Order Status', item.status_label, '100%', 42, 42, 'red', 20)}
 
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
