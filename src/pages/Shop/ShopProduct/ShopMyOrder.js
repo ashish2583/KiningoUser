@@ -69,7 +69,7 @@ const ShopMyOrder = (props) => {
     // {label: 'Dining', value: 'dining'},
     { label: 'Delivery', value: 'delivery' },
     // {label: 'Table Booking', value: 'booked-table'},
-    // { label: 'Take Away', value: 'take-away' },
+    // { label: 'Take Away', value: 'takeaway' },
   ]);
   const [timeDurationValue, setTimeDurationValue] = useState('');
   const [timeDurationData, setTimeDurationData] = useState([
@@ -394,7 +394,7 @@ const ShopMyOrder = (props) => {
               return (
 
                 <>
-                  {item.order_type == 'take-away' || item.order_type == 'delivery' ?
+                  {item.order_type == 'takeaway' || item.order_type == 'delivery' ?
                     <View style={{
                       marginVertical: 15, backgroundColor: '#ffff', borderRadius: 10, paddingVertical: 10, paddingHorizontal: 15, shadowColor: 'black',
                       shadowOffset: {
@@ -411,7 +411,7 @@ const ShopMyOrder = (props) => {
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
 
                         <View style={{ paddingHorizontal: 10, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2 }}>
-                          <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{item.order_type_label}</Text>
+                          <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{'Take Away'}</Text>
                         </View>
                       </View>
                       <View style={{flexDirection:'row'}}>
@@ -474,7 +474,7 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {/* {item.order_type == 'take-away' && item.business_rating == null ?
+                        {/* {item.order_type == 'takeaway' && item.business_rating == null ?
                           <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             if (item.business_rating == null) {
                               props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
