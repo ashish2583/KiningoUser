@@ -443,11 +443,11 @@ const ShopMyOrder = (props) => {
                             <View style={{ width: 110, height: 110, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
-                            <View style={{ marginLeft: 15 }}>
+                            <View style={{ marginLeft: 15, width: '55%' }}>
                               {
                                 item.items.map((sitem, index) => {
                                   return (
-                                    <View style={{ flexDirection: 'row', top: -6, marginTop: 4, width: '80%', }}>
+                                    <View style={{ flexDirection: 'row', top: -6, marginTop: 4, }}>
                                       <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
                                       <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} > X {sitem.product_name} </Text>
                                     </View>
