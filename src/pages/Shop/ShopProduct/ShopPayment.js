@@ -210,7 +210,7 @@ setRefreshing(false)
 
          <View style={{width:'100%',flexDirection:'row',justifyContent:'space-between',alignSelf:'center',marginVertical:15}}>
           <Text style={{color:Mycolors.GrayColor,fontWeight:'500',fontSize:12}}>CHOOSE PAYMENT OPTION</Text>
-          <Text style={{color:'#FFC40C',fontWeight:'500',textDecorationLine:'underline',fontSize:13}} onPress={()=>{setaddpayment(true)}}>Add New Card</Text>
+          <Text style={{color:'#835E23',fontWeight:'500',textDecorationLine:'underline',fontSize:13}} onPress={()=>{setaddpayment(true)}}>Add New Card</Text>
           </View>   
 
           {addpayment ?
@@ -259,7 +259,7 @@ setRefreshing(false)
 
             <View style={{width:'100%',marginTop:-10}}>
             <MyButtons title="Add" height={53} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{handlePayClick()}} marginHorizontal={20} fontSize={14}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor='#FFC40C' />
+              titlecolor={Mycolors.BG_COLOR} backgroundColor='#835E23' />
             </View>
 
 
@@ -299,7 +299,7 @@ setRefreshing(false)
 <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>**** **** **** {checkitem.card_no}</Text>
 <Text style={{color:Mycolors.GrayColor,fontWeight:'400',fontSize:10,top:2}}>{checkitem.id==''? '' :'Expires'} {checkitem.exp_month}{checkitem.id==''? '' :'/'}{checkitem.exp_year}</Text>         
 </View>
-<View style={{width:24,height:24,backgroundColor:'#FFC40C',borderRadius:5,position:'absolute',right:20,justifyContent:'center'}}>
+<View style={{width:24,height:24,backgroundColor:'#835E23',borderRadius:5,position:'absolute',right:20,justifyContent:'center'}}>
 <Image source={require('../../../assets/tickw.png')}  style={{width:15,height:15,alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
 </View>
 </View>
@@ -307,7 +307,7 @@ setRefreshing(false)
 
  <View style={{width:'100%',marginTop:30}}>
  <MyButtons title="Confirm and Place Order" height={53} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{placeOrder()}}
-backgroundColor={'#FFC40C'} marginHorizontal={20} fontSize={14}
+backgroundColor={'#835E23'} marginHorizontal={20} fontSize={14}
    titlecolor={Mycolors.BG_COLOR} />
  </View>
 
