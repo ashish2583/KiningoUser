@@ -145,7 +145,7 @@ const ShopMyOrderDetails = (props) => {
 </View>
    <View style={{flexDirection:'row'}}>
    <Text style={{ color: 'Gray', fontWeight: '600', fontSize: 12 }}>Status :</Text>
-   <Text style={{ color:  'red', fontWeight: '600', fontSize: 12 }}> {data.status_label}</Text>
+   <Text style={{ color: '#835E23', fontWeight: '600', fontSize: 12 }}> {data.status_label}</Text>
    </View>
        
          <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12 }}>Order Date & Time : {data.created_date}</Text>
