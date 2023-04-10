@@ -331,7 +331,7 @@ const ShopMyOrder = (props) => {
           {
           orderData != null ?
             <TouchableOpacity onPress={() => { setShowFiltersModal(true) }} style={{
-              width: '90%', flexDirection: 'row', alignItems: 'center',
+              width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between',
               marginVertical: 10, backgroundColor: '#fff', padding: 5, borderRadius: 10,
               shadowColor: 'black',
               shadowOffset: {
@@ -343,14 +343,14 @@ const ShopMyOrder = (props) => {
               overflow: 'hidden',
               elevation: 5, marginHorizontal: 18
             }}>
-              <View
+              {/* <View
                 // onPress={() => { setShowFiltersModal(true) }} 
                 style={styles.iconView}>
                 <AntDesign name="filter" color={'#fff'} size={24} />
-              </View>
+              </View> */}
               {
                 orderTypeValue != '' || orderDate != '' ?
-                  (<>
+                  (<View style={{flexDirection:'row', alignItems:'center'}}>
                     {
                       orderTypeValue != '' ?
                         <View style={{ paddingHorizontal: 15, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2, height: 30, marginLeft: 15 }}>
@@ -367,12 +367,17 @@ const ShopMyOrder = (props) => {
                         :
                         null
                     }
-                  </>
+                  </View>
 
                   )
                   :
                   <Text style={{ color: 'gray', fontSize: 14, left: 12 }}>Select Filter</Text>
               }
+              <View
+                // onPress={() => { setShowFiltersModal(true) }} 
+                style={styles.iconView}>
+                <AntDesign name="filter" color={'#fff'} size={24} />
+              </View>
 
 
             </TouchableOpacity>
@@ -451,7 +456,7 @@ const ShopMyOrder = (props) => {
                               <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.paid_amount}</Text>
 
                               <View style={{ width: 120, marginTop: 4 }}>
-                                <MyButtons title="Call Restaurant" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
+                                <MyButtons title="Call Vendor" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
                                   titlecolor={'#835E23'} backgroundColor={'transparent'} marginVertical={0} borderColor={'#835E23'} borderWidth={0.4} />
                               </View>
 
@@ -644,7 +649,7 @@ const ShopMyOrder = (props) => {
               <Text style={{ color: Mycolors.Black, fontWeight: '500', }}></Text>
               <Text style={{ color: Mycolors.Black, fontWeight: '500',fontSize:22 }}>Filter</Text>
               <TouchableOpacity onPress={() => { setShowFiltersModal(false) }}>
-              <Image source={require('../../../assets/crossed.png')} style={{ width: 24, height: 24, alignSelf: 'center',top: -8  }}></Image>
+              <Image source={require('../../../assets/product_X.png')} style={{ width: 24, height: 24, alignSelf: 'center',top: -8  }}></Image>
               </TouchableOpacity>
              
             </View>
