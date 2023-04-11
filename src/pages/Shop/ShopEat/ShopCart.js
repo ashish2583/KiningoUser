@@ -98,10 +98,15 @@ const ShopCart = (props) => {
   // const [currentLatLng, setCurrentLatLng] = useState({});
   const [chooseAddressModeModal, setChooseAddressModeModal] = useState(false);
   const [openGoogleAddressModal, setOpenGoogleAddressModal] = useState(false);
+  const [openEnterCompleteAddressModal, setOpenEnterCompleteAddressModal] = useState(false);
   const [addressMode, setAddressMode] = useState(null);
+  const [currentAddressData, setCurrentAddressData] = useState({});
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
   const [promoEdit, setpromoEdit] = useState(true)
+  const [remainingCompleteAddress, setRemainingCompleteAddress] = useState('')
+  const [remainingFloor, setRemainingFloor] = useState('')
+  const [remainingLandmark, setRemainingLandmark] = useState('')
 
   useEffect(() => {
     console.log('hello ji ==>>', User);
@@ -533,7 +538,8 @@ const ShopCart = (props) => {
       } else if (i == 2) {
         addressData.city = partOfString?.trim()
       } else if (i == 3) {
-        addressData.address_line1 = addressValue?.trim()
+        // addressData.address_line1 = addressValue?.trim()
+        addressData.address_line1 = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
       }
       console.log('addressData', addressData);
       // if(i == 3){
@@ -576,6 +582,121 @@ const ShopCart = (props) => {
 
 
   }
+  const AddAddressUsingCurrentLoation1 = async (latLng, currentAddress) => {
+
+    let matches = getMatches(currentAddress)
+    console.log('matches', matches);
+    const addressData = {
+      country: '',
+      state: '',
+      city: '',
+      address_line2: '',
+    }
+    let addressValue = currentAddress
+    console.log('currentAddress', currentAddress);
+    let lastindex = null
+    let partOfString = null
+    if (matches > 3) {
+      matches = 3
+    }
+    for (let i = 0; i < matches + 1; i++) {
+      lastindex = getLastIndex(addressValue)
+      if (i !== 3) {
+        partOfString = addressValue.substring(lastindex + 1)
+        addressValue = addressValue.substring(0, lastindex)
+      }
+      // console.log('lastindex', lastindex);
+      // console.log('partOfString', partOfString);
+      // console.log('addressValue', addressValue);
+      if (i == 0) {
+        addressData.country = partOfString?.trim()
+      } else if (i == 1) {
+        addressData.state = partOfString?.trim()
+      } else if (i == 2) {
+        addressData.city = partOfString?.trim()
+      } else if (i == 3) {
+        // addressData.address_line1 = addressValue?.trim()
+        addressData.address_line2 = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
+      }
+      console.log('addressData', addressData);
+      // if(i == 3){
+      //   break
+      // }
+    }
+    // setLoading(true)
+    var data = {
+      "location_name": '',
+      "location_type": '1',
+      "latitude": latLng.lat,
+      "longitude": latLng.lng,
+      // "address_line1": house_no,
+      "address_line1": '',
+      // "city": city,
+      // "state": state,
+      "country_id": 1,
+      "is_default": 1,
+      ...addressData
+    }
+    setCurrentAddressData(data)
+    setOpenEnterCompleteAddressModal(true)
+    // // console.log('addressData', addressData);
+    // console.log('current address data===>>', data);
+    // const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
+    // setLoading(false)
+
+    // console.log('the res current user_address set==>>', responseJson)
+    // if (responseJson.headers.success == 1) {
+    //   getAddress()
+    //   setfull_name('')
+    //   setaddress_type('')
+    //   sethouse_no('')
+    //   setarea_village('')
+    //   setCity('')
+    //   setstate('')
+    //   setShippingAddressPopUp(false)
+    // } else {
+    //   // setalert_sms(err)
+    //   // setMy_Alert(true)
+    // }
+
+
+  }
+  const AddAddressUsingCurrentLoation2 = async () => {
+    const line = [remainingCompleteAddress, remainingFloor, remainingLandmark].join(', ')
+    // setLoading(true)
+    const data = {...currentAddressData}
+    data.address_line1 = line
+    console.log('current address data===>>', data);
+    // var data = {
+    //   "location_name": '',
+    //   "location_type": '1',
+    //   "latitude": latLng.lat,
+    //   "longitude": latLng.lng,
+    //   // "address_line1": house_no,
+    //   "address_line2": '',
+    //   // "city": city,
+    //   // "state": state,
+    //   "country_id": 1,
+    //   "is_default": 1,
+    //   ...currentAddressData
+    // }
+    // console.log('addressData', addressData);
+    // console.log('current address data===>>', data);
+    const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
+    setLoading(false)
+
+    console.log('current address res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      getAddress()
+      setRemainingCompleteAddress('')
+      setRemainingFloor('')
+      setRemainingLandmark('')
+      setOpenEnterCompleteAddressModal(false)
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
   const myposition = () => {
     Geolocation.getCurrentPosition(
       position => {
@@ -585,7 +706,9 @@ const ShopCart = (props) => {
           .then(json => {
             var addressComponent = json.results[0].formatted_address;
             console.log('The address is', json.results[0].formatted_address);
-            AddAddressUsingCurrentLoation({ lat: position.coords.latitude, lng: position.coords.longitude }, json.results[0].formatted_address)
+            setLoading(false)
+            // AddAddressUsingCurrentLoation({ lat: position.coords.latitude, lng: position.coords.longitude }, json.results[0].formatted_address)
+            AddAddressUsingCurrentLoation1({ lat: position.coords.latitude, lng: position.coords.longitude }, json.results[0].formatted_address)
           })
           .catch(error => {
             setLoading(false)
@@ -1184,6 +1307,192 @@ const ShopCart = (props) => {
             <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
               <MyButtons title={edit ? "Update" : "Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
                 edit ? UpdateAddress() : AddAddress()
+              }}
+                // marginHorizontal={20} 
+                fontSize={14}
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+            </View>
+
+            <View style={{ width: '100%', height: 200 }}></View>
+
+            {loading ? <Loader /> : null}
+          </KeyboardAwareScrollView>
+
+
+        </View>
+
+
+        {/* </View> */}
+      </Modal>
+      <Modal
+        isVisible={openEnterCompleteAddressModal}
+        swipeDirection="down"
+        onBackdropPress={() => setOpenEnterCompleteAddressModal(false)}
+        onSwipeComplete={(e) => {
+          setOpenEnterCompleteAddressModal(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+
+        {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
+
+        <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 80 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+          <KeyboardAwareScrollView>
+
+
+
+            <View style={{ marginTop: 15, height: 30, justifyContent: "center", alignItems: 'center' }}>
+              {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
+              <TouchableOpacity
+                onPress={() => setOpenEnterCompleteAddressModal(false)}
+                // style={{
+                //   width: '20%',
+                //   borderWidth: 2,
+                //   borderColor: 'grey',
+                //   marginBottom:5,
+                //   // ...style
+                // }}
+                style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5 }}
+              />
+              <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500' }}>Add Address</Text>
+
+
+            </View>
+            {/* <TouchableOpacity onPress={() => { setShippingAddressPopUp(false) }}
+                style={{ position: "absolute", width: 30, borderRadius: 35, height: 30, right: 10, top: 10 }}>
+                <Image
+                  source={require('../../../assets/crossed.png')}
+                  style={{
+                    width: 35,
+                    height: 35, alignSelf: 'center'
+                  }}
+
+                />
+              </TouchableOpacity> */}
+            <TextInput style={styles.textInput}
+              placeholder='Complete Address'
+              placeholderTextColor="#8F93A0"
+              label="complete address"
+              value={remainingCompleteAddress}
+              onChangeText={e => setRemainingCompleteAddress(e)}
+            />
+            <TextInput style={styles.textInput}
+              placeholder='Floor (Optional)'
+              placeholderTextColor="#8F93A0"
+              label="floor"
+              value={remainingFloor}
+              onChangeText={e => setRemainingFloor(e)}
+            />
+            <TextInput style={styles.textInput}
+              placeholder='Landmark (Optional)'
+              placeholderTextColor="#8F93A0"
+              label="landmark"
+              value={remainingLandmark}
+              onChangeText={e => setRemainingLandmark(e)}
+            />
+
+            <View style={{ height: 45, width: "98%", marginTop: 14, alignItems: 'flex-start', justifyContent: "flex-start", marginLeft: 10 }}>
+
+              <Text style={{ color: 'black', textAlign: "left", fontSize: 16, fontWeight: "400", marginLeft: 10 }}>Address Type</Text>
+
+              <View style={{ height: 45, width: "90%", marginTop: 5, alignItems: 'center', justifyContent: "flex-start", flexDirection: "row" }}>
+
+                <View
+                  style={{
+                    marginLeft: 10,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    height: 40,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setaddress_type('1')
+                    }}>
+
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}>
+                      <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                        <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '1' ? '#000' : 'transparent' }} />
+                      </View>
+                      <Text
+                        style={{
+                          fontWeight: "500",
+                          textAlign: 'left',
+                          fontSize: 11,
+                          color: "black",
+                          marginLeft: 3
+                        }}>
+                        Home
+                      </Text>
+                    </View>
+
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    marginLeft: 30,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    height: 40,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setaddress_type('2')
+                    }}>
+
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}>
+                      <View style={{ width: 17, height: 17, borderRadius: 15, borderColor: '#000', borderWidth: 0.5, justifyContent: 'center' }}>
+                        <View style={{ width: 12, height: 12, borderRadius: 15, justifyContent: 'center', alignSelf: 'center', backgroundColor: address_type == '2' ? '#000' : 'transparent' }} />
+                      </View>
+
+                      <Text
+                        style={{
+                          fontWeight: "500",
+                          textAlign: 'left',
+                          fontSize: 11,
+                          color: "black",
+                          marginLeft: 4
+                        }}>
+                        Work
+                      </Text>
+                    </View>
+
+                  </TouchableOpacity>
+                </View>
+
+              </View>
+            </View>
+            {/* <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 0, flexDirection: 'row', height: 34, marginHorizontal: 20, marginTop: 60 }}>
+                                          <TouchableOpacity
+                                              onPress={() => {AddAddress()}} >
+                                              <View style={{ justifyContent: 'center', width: 200, flex: 1, backgroundColor: '#ffcc00', borderRadius: 50 }}>
+                                                  <Text style={{textAlign:'center'}}>Save</Text>
+                                              </View>
+                                          </TouchableOpacity>
+                                      </View> */}
+            <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
+              <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+                if(!remainingCompleteAddress){
+                  Toast.show({ text1: 'Enter Complete Adress' })
+                  return                  
+                }
+                AddAddressUsingCurrentLoation2()
               }}
                 // marginHorizontal={20} 
                 fontSize={14}
