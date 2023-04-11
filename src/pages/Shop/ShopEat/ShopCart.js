@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, FlatList, Alert, TouchableOpacity, Pressable, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, FlatList, Alert, TouchableOpacity, Pressable, ScrollView, ImageBackground, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
@@ -24,6 +24,7 @@ import { GoogleApiKey } from '../../../WebApi/GoogleApiKey'
 import Geocoder from "react-native-geocoding";
 import Toast from 'react-native-toast-message';
 import { log } from 'react-native-reanimated';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 var WIDTH = Dimensions.get('window').width;
 var HEIGHT = Dimensions.get('window').height;
@@ -109,6 +110,7 @@ const ShopCart = (props) => {
   const [remainingCompleteAddress, setRemainingCompleteAddress] = useState('')
   const [remainingFloor, setRemainingFloor] = useState('')
   const [remainingLandmark, setRemainingLandmark] = useState('')
+  const [toolTipVisible, setToolTipVisible] = useState(false)
 
   useEffect(() => {
     console.log('hello ji ==>>', User);
@@ -474,31 +476,31 @@ const ShopCart = (props) => {
     console.log('googleAddress.terms', googleAddress.terms);
     // incomplete address was searched (contained 4 terms)
     // if(needRemainingAddress){
-    if(false){
+    if (false) {
       let remaining = ''
       remaining += remainingCompleteAddress
-      if(remainingFloor){
+      if (remainingFloor) {
         remaining += ', ' + remainingFloor
       }
-      if(remainingLandmark){
+      if (remainingLandmark) {
         remaining += ', ' + remainingLandmark
       }
       line = [remaining, googleAddress.terms[mylast - 4].value].join(', ')
-    }else{
+    } else {
       let remaining = ''
       remaining += remainingCompleteAddress
-      if(remainingFloor){
+      if (remainingFloor) {
         remaining += ', ' + remainingFloor
       }
-      if(remainingLandmark){
+      if (remainingLandmark) {
         remaining += ', ' + remainingLandmark
       }
       // complete address was searched (contained more than 4 terms)
       // 4 to length of googleAddress.terms
-      for(let i = googleAddress.terms?.length; i >= 4; i--){
-        if(i !== googleAddress.terms?.length){
-          if(!googleAddress.terms[mylast - i].value.startsWith(', '))
-          line += ', '
+      for (let i = googleAddress.terms?.length; i >= 4; i--) {
+        if (i !== googleAddress.terms?.length) {
+          if (!googleAddress.terms[mylast - i].value.startsWith(', '))
+            line += ', '
         }
         line += googleAddress.terms[mylast - i].value
       }
@@ -701,7 +703,7 @@ const ShopCart = (props) => {
   const AddAddressUsingCurrentLoation2 = async () => {
     const line = [remainingCompleteAddress, remainingFloor, remainingLandmark, currentAddressData.area_name].join(', ')
     // setLoading(true)
-    const addressDataCopy = {...currentAddressData}
+    const addressDataCopy = { ...currentAddressData }
     addressDataCopy.address_line1 = line
     console.log('current address data===>>', addressDataCopy);
     var data = {
@@ -773,7 +775,7 @@ const ShopCart = (props) => {
     if (responseJson != null) {
       if (responseJson.headers.success == 1) {
         setaddressListData(responseJson.body)
-        setselectedAddress(responseJson.body.find(el=> el.is_default == '1'))
+        setselectedAddress(responseJson.body.find(el => el.is_default == '1'))
 
         //  setselectedAddress(responseJson.body[responseJson.body.length-1])
       } else {
@@ -1038,7 +1040,24 @@ const ShopCart = (props) => {
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
-                  <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
+                  <Tooltip
+                    isVisible={toolTipVisible}
+                    showChildInTooltip={false}
+                    content={
+                      <View style={{}}>
+                        <Text style={{ color: Mycolors.Black, fontSize: 13, }}> Delivery fees is calculated on the basis of the distance covered by driver in miles
+At present delivery fees has been set to $1 per mile so the total distance is delivery_charge and total delivery fees is delivery_charge</Text>
+                      </View>
+                    }
+                    onClose={() => setToolTipVisible(false)}
+                    placement="bottom"
+                    // below is for the status bar of react navigation bar
+                    topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+                  >
+                    <TouchableOpacity onPress={() => { setToolTipVisible(true) }}>
+                      <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
+                    </TouchableOpacity>
+                  </Tooltip>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
@@ -1527,9 +1546,9 @@ const ShopCart = (props) => {
                                       </View> */}
             <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
               <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
-                if(!remainingCompleteAddress){
+                if (!remainingCompleteAddress) {
                   Toast.show({ text1: 'Enter Complete Adress' })
-                  return                  
+                  return
                 }
                 AddAddressUsingCurrentLoation2()
               }}
@@ -1780,7 +1799,7 @@ const ShopCart = (props) => {
           setOpenGoogleAddressModal(false)
         }}
         // onModalWillShow={()=>{setNeedRemainingAddress(false); setIsExactAddress(false)}}
-        onModalWillShow={()=>{setIsExactAddress(false)}}
+        onModalWillShow={() => { setIsExactAddress(false) }}
         scrollTo={() => { }}
         scrollOffset={1}
         propagateSwipe={true}
@@ -1875,10 +1894,10 @@ const ShopCart = (props) => {
                 setGoogleAddress(data);
                 console.log('data.terms', data.terms);
                 console.log('data.description', data.description);
-                if(data.terms?.length < 3){
+                if (data.terms?.length < 3) {
                   Toast.show({ text1: 'this is not an exact location' })
                   setIsExactAddress(false)
-                }else{
+                } else {
                   setIsExactAddress(true)
                 }
               }}
@@ -1898,45 +1917,45 @@ const ShopCart = (props) => {
             <View style={{ height: 10, }} />
 
 
-            {true ? 
-            // {needRemainingAddress ? 
-            <View style={{width:'100%'}} >
-            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
-              placeholder='Complete Address'
-              placeholderTextColor="#8F93A0"
-              label="complete address"
-              value={remainingCompleteAddress}
-              onChangeText={e => setRemainingCompleteAddress(e)}
-            />
-            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
-              placeholder='Floor (Optional)'
-              placeholderTextColor="#8F93A0"
-              label="floor"
-              value={remainingFloor}
-              onChangeText={e => setRemainingFloor(e)}
-            />
-            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
-              placeholder='Landmark (Optional)'
-              placeholderTextColor="#8F93A0"
-              label="landmark"
-              value={remainingLandmark}
-              onChangeText={e => setRemainingLandmark(e)}
-            />
-            </View>
-            :null}
+            {true ?
+              // {needRemainingAddress ? 
+              <View style={{ width: '100%' }} >
+                <TextInput style={[styles.textInput, { marginHorizontal: 0 }]}
+                  placeholder='Complete Address'
+                  placeholderTextColor="#8F93A0"
+                  label="complete address"
+                  value={remainingCompleteAddress}
+                  onChangeText={e => setRemainingCompleteAddress(e)}
+                />
+                <TextInput style={[styles.textInput, { marginHorizontal: 0 }]}
+                  placeholder='Floor (Optional)'
+                  placeholderTextColor="#8F93A0"
+                  label="floor"
+                  value={remainingFloor}
+                  onChangeText={e => setRemainingFloor(e)}
+                />
+                <TextInput style={[styles.textInput, { marginHorizontal: 0 }]}
+                  placeholder='Landmark (Optional)'
+                  placeholderTextColor="#8F93A0"
+                  label="landmark"
+                  value={remainingLandmark}
+                  onChangeText={e => setRemainingLandmark(e)}
+                />
+              </View>
+              : null}
           </KeyboardAwareScrollView>
           <View style={{ marginBottom: 20 }}>
-            {isExactAddress ? 
-            <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => { 
-              // if(needRemainingAddress && !remainingCompleteAddress){
-              if(!remainingCompleteAddress){
-                Toast.show({ text1: 'Enter Complete Adress' })
-                return                  
-              }
-              AddAddressUsingGoogleSearch()
-             }} marginHorizontal={20} fontSize={11}
-              titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
-            :null}
+            {isExactAddress ?
+              <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
+                // if(needRemainingAddress && !remainingCompleteAddress){
+                if (!remainingCompleteAddress) {
+                  Toast.show({ text1: 'Enter Complete Adress' })
+                  return
+                }
+                AddAddressUsingGoogleSearch()
+              }} marginHorizontal={20} fontSize={11}
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+              : null}
           </View>
 
         </View>
