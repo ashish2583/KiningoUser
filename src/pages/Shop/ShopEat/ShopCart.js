@@ -473,7 +473,8 @@ const ShopCart = (props) => {
     let line = ''
     console.log('googleAddress.terms', googleAddress.terms);
     // incomplete address was searched (contained 4 terms)
-    if(needRemainingAddress){
+    // if(needRemainingAddress){
+    if(false){
       let remaining = ''
       remaining += remainingCompleteAddress
       if(remainingFloor){
@@ -484,14 +485,24 @@ const ShopCart = (props) => {
       }
       line = [remaining, googleAddress.terms[mylast - 4].value].join(', ')
     }else{
+      let remaining = ''
+      remaining += remainingCompleteAddress
+      if(remainingFloor){
+        remaining += ', ' + remainingFloor
+      }
+      if(remainingLandmark){
+        remaining += ', ' + remainingLandmark
+      }
       // complete address was searched (contained more than 4 terms)
       // 4 to length of googleAddress.terms
       for(let i = googleAddress.terms?.length; i >= 4; i--){
         if(i !== googleAddress.terms?.length){
+          if(!googleAddress.terms[mylast - i].value.startsWith(', '))
           line += ', '
         }
         line += googleAddress.terms[mylast - i].value
       }
+      line = remaining + ', ' + line
     }
 
     console.log('imp line', line);
@@ -516,12 +527,9 @@ const ShopCart = (props) => {
     console.log('the res google user_address set==>>', responseJson)
     if (responseJson.headers.success == 1) {
       getAddress()
-      setfull_name('')
-      setaddress_type('')
-      sethouse_no('')
-      setarea_village('')
-      setCity('')
-      setstate('')
+      setRemainingCompleteAddress('')
+      setRemainingFloor('')
+      setRemainingLandmark('')
       setGoogleLatLng({})
       setGoogleAddress('')
       setShippingAddressPopUp(false)
@@ -760,10 +768,12 @@ const ShopCart = (props) => {
     setLoading(true)
     const { responseJson, err } = await requestGetApi(user_address, '', 'GET', User.token)
     setLoading(false)
+    console.log('getAddress response', responseJson.body);
     console.log('the res get user_address get==>>body', responseJson.body.length)
     if (responseJson != null) {
       if (responseJson.headers.success == 1) {
         setaddressListData(responseJson.body)
+        setselectedAddress(responseJson.body.find(el=> el.is_default == '1'))
 
         //  setselectedAddress(responseJson.body[responseJson.body.length-1])
       } else {
@@ -1769,7 +1779,8 @@ const ShopCart = (props) => {
         onSwipeComplete={(e) => {
           setOpenGoogleAddressModal(false)
         }}
-        onModalWillShow={()=>{setNeedRemainingAddress(false); setIsExactAddress(false)}}
+        // onModalWillShow={()=>{setNeedRemainingAddress(false); setIsExactAddress(false)}}
+        onModalWillShow={()=>{setIsExactAddress(false)}}
         scrollTo={() => { }}
         scrollOffset={1}
         propagateSwipe={true}
@@ -1870,11 +1881,6 @@ const ShopCart = (props) => {
                 }else{
                   setIsExactAddress(true)
                 }
-                if(data?.terms?.length > 3 && data?.terms?.length < 5){
-                  setNeedRemainingAddress(true)
-                }else{
-                  setNeedRemainingAddress(false)
-                }
               }}
               GooglePlacesDetailsQuery={{
                 fields: 'geometry',
@@ -1892,7 +1898,8 @@ const ShopCart = (props) => {
             <View style={{ height: 10, }} />
 
 
-            {needRemainingAddress ? 
+            {true ? 
+            // {needRemainingAddress ? 
             <View style={{width:'100%'}} >
             <TextInput style={[styles.textInput, {marginHorizontal:0}]}
               placeholder='Complete Address'
@@ -1921,7 +1928,8 @@ const ShopCart = (props) => {
           <View style={{ marginBottom: 20 }}>
             {isExactAddress ? 
             <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => { 
-              if(needRemainingAddress && !remainingCompleteAddress){
+              // if(needRemainingAddress && !remainingCompleteAddress){
+              if(!remainingCompleteAddress){
                 Toast.show({ text1: 'Enter Complete Adress' })
                 return                  
               }
