@@ -47,6 +47,8 @@ const ShopCart = (props) => {
   const [subTotal, setsubTotal] = useState('0.0')
   const [dilivery, setdilivery] = useState('0.0')
   const [vendorCharges, setVendorCharges] = useState('0.0')
+  const [isExactAddress, setIsExactAddress] = useState(true)
+  const [needRemainingAddress, setNeedRemainingAddress] = useState(true)
   const [addressMethodData, setAddressMethodData] = useState([
     {
       id: '1',
@@ -462,27 +464,52 @@ const ShopCart = (props) => {
     return str.lastIndexOf(",")
   }
   const AddAddressUsingGoogleSearch = async () => {
-    console.log('googleAddress', googleAddress.terms);
+    console.log('googleAddress.terms', googleAddress.terms);
     if (googleAddress === '') {
       Toast.show({ text1: 'Please Add Address' })
       return
     }
     var mylast = googleAddress.terms.length
+    let line = ''
+    console.log('googleAddress.terms', googleAddress.terms);
+    // incomplete address was searched (contained 4 terms)
+    if(needRemainingAddress){
+      let remaining = ''
+      remaining += remainingCompleteAddress
+      if(remainingFloor){
+        remaining += ', ' + remainingFloor
+      }
+      if(remainingLandmark){
+        remaining += ', ' + remainingLandmark
+      }
+      line = [remaining, googleAddress.terms[mylast - 4].value].join(', ')
+    }else{
+      // complete address was searched (contained more than 4 terms)
+      // 4 to length of googleAddress.terms
+      for(let i = googleAddress.terms?.length; i >= 4; i--){
+        if(i !== googleAddress.terms?.length){
+          line += ', '
+        }
+        line += googleAddress.terms[mylast - i].value
+      }
+    }
 
+    console.log('imp line', line);
     setLoading(true)
     var data = {
       "location_name": '',
       "location_type": '1',
       "latitude": googleLatLng.lat,
       "longitude": googleLatLng.lng,
-      "address_line1": googleAddress.description,
+      // "address_line1": googleAddress.description,
+      "address_line1": line,
       "address_line2": '',
       "city": googleAddress.terms[mylast - 3].value,
       "state": googleAddress.terms[mylast - 2].value,
       "country_id": 1,
       "is_default": 1,
     }
-
+    console.log('google address', data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
     setOpenGoogleAddressModal(false)
@@ -1361,7 +1388,7 @@ const ShopCart = (props) => {
                 // }}
                 style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5 }}
               />
-              <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500' }}>Enter Complete Address</Text>
+              <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500', }}>Enter Complete Address</Text>
 
 
             </View>
@@ -1742,6 +1769,7 @@ const ShopCart = (props) => {
         onSwipeComplete={(e) => {
           setOpenGoogleAddressModal(false)
         }}
+        onModalWillShow={()=>{setNeedRemainingAddress(false); setIsExactAddress(false)}}
         scrollTo={() => { }}
         scrollOffset={1}
         propagateSwipe={true}
@@ -1749,9 +1777,9 @@ const ShopCart = (props) => {
         backdropColor='transparent'
         style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal: 20 }}>
+        <View style={{ width: '100%', height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingHorizontal: 20 }}>
           <Text style={{ fontSize: 18, fontWeight: '700', color: '#455A64', textAlign: 'center', marginBottom: 20, marginTop: 30 }}>Search Address</Text>
-          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled" >
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled" >
 
             <GooglePlacesAutocomplete
               placeholder="Add Location"
@@ -1834,6 +1862,19 @@ const ShopCart = (props) => {
                 console.log('helloji Ashish==>>', details.geometry.location)
                 //setGoogleAddress(data?.description);
                 setGoogleAddress(data);
+                console.log('data.terms', data.terms);
+                console.log('data.description', data.description);
+                if(data.terms?.length < 3){
+                  Toast.show({ text1: 'this is not an exact location' })
+                  setIsExactAddress(false)
+                }else{
+                  setIsExactAddress(true)
+                }
+                if(data?.terms?.length > 3 && data?.terms?.length < 5){
+                  setNeedRemainingAddress(true)
+                }else{
+                  setNeedRemainingAddress(false)
+                }
               }}
               GooglePlacesDetailsQuery={{
                 fields: 'geometry',
@@ -1848,13 +1889,46 @@ const ShopCart = (props) => {
             />
 
 
-            <View style={{ height: 20, }} />
+            <View style={{ height: 10, }} />
 
 
-          </ScrollView>
+            {needRemainingAddress ? 
+            <View style={{width:'100%'}} >
+            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
+              placeholder='Complete Address'
+              placeholderTextColor="#8F93A0"
+              label="complete address"
+              value={remainingCompleteAddress}
+              onChangeText={e => setRemainingCompleteAddress(e)}
+            />
+            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
+              placeholder='Floor (Optional)'
+              placeholderTextColor="#8F93A0"
+              label="floor"
+              value={remainingFloor}
+              onChangeText={e => setRemainingFloor(e)}
+            />
+            <TextInput style={[styles.textInput, {marginHorizontal:0}]}
+              placeholder='Landmark (Optional)'
+              placeholderTextColor="#8F93A0"
+              label="landmark"
+              value={remainingLandmark}
+              onChangeText={e => setRemainingLandmark(e)}
+            />
+            </View>
+            :null}
+          </KeyboardAwareScrollView>
           <View style={{ marginBottom: 20 }}>
-            <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => { AddAddressUsingGoogleSearch() }} marginHorizontal={20} fontSize={11}
+            {isExactAddress ? 
+            <MyButtons title={"Save"} height={40} width={'100%'} borderRadius={5} alignSelf="center" press={() => { 
+              if(needRemainingAddress && !remainingCompleteAddress){
+                Toast.show({ text1: 'Enter Complete Adress' })
+                return                  
+              }
+              AddAddressUsingGoogleSearch()
+             }} marginHorizontal={20} fontSize={11}
               titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
+            :null}
           </View>
 
         </View>
