@@ -591,6 +591,7 @@ const ShopCart = (props) => {
       state: '',
       city: '',
       address_line2: '',
+      area_name: '',
     }
     let addressValue = currentAddress
     console.log('currentAddress', currentAddress);
@@ -616,7 +617,7 @@ const ShopCart = (props) => {
         addressData.city = partOfString?.trim()
       } else if (i == 3) {
         // addressData.address_line1 = addressValue?.trim()
-        addressData.address_line2 = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
+        addressData.area_name = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
       }
       console.log('addressData', addressData);
       // if(i == 3){
@@ -631,6 +632,7 @@ const ShopCart = (props) => {
       "longitude": latLng.lng,
       // "address_line1": house_no,
       "address_line1": '',
+      "address_line2": '',
       // "city": city,
       // "state": state,
       "country_id": 1,
@@ -662,25 +664,25 @@ const ShopCart = (props) => {
 
   }
   const AddAddressUsingCurrentLoation2 = async () => {
-    const line = [remainingCompleteAddress, remainingFloor, remainingLandmark].join(', ')
+    const line = [remainingCompleteAddress, remainingFloor, remainingLandmark, currentAddressData.area_name].join(', ')
     // setLoading(true)
-    const data = {...currentAddressData}
-    data.address_line1 = line
-    console.log('current address data===>>', data);
-    // var data = {
-    //   "location_name": '',
-    //   "location_type": '1',
-    //   "latitude": latLng.lat,
-    //   "longitude": latLng.lng,
-    //   // "address_line1": house_no,
-    //   "address_line2": '',
-    //   // "city": city,
-    //   // "state": state,
-    //   "country_id": 1,
-    //   "is_default": 1,
-    //   ...currentAddressData
-    // }
-    // console.log('addressData', addressData);
+    const addressDataCopy = {...currentAddressData}
+    addressDataCopy.address_line1 = line
+    console.log('current address data===>>', addressDataCopy);
+    var data = {
+      "location_name": '',
+      "location_type": '1',
+      // "latitude": latLng.lat,
+      // "longitude": latLng.lng,
+      // "address_line1": house_no,
+      "address_line2": '',
+      // "city": city,
+      // "state": state,
+      "country_id": 1,
+      "is_default": 1,
+      ...addressDataCopy
+    }
+    console.log('updated address data', data);
     // console.log('current address data===>>', data);
     const { responseJson, err } = await requestPostApi(user_address, data, 'POST', User.token)
     setLoading(false)
