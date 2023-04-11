@@ -788,7 +788,7 @@ const ShopProduct = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Discount</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${parseFloat(Number(discountPrice).toFixed(2))}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ADC430', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, marginTop: 5, fontWeight: '600' }} >${parseFloat(Number(totla).toFixed(2))}</Text>
                 </View>
