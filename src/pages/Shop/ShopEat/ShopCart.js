@@ -1044,18 +1044,21 @@ const ShopCart = (props) => {
                     isVisible={toolTipVisible}
                     showChildInTooltip={false}
                     content={
-                      <View style={{}}>
+                      <View style={{height:80}}>
                         <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
-At present delivery fees has been set to $1 per mile so the total distance is delivery_charge and total delivery fees is delivery_charge</Text>
+                          At present delivery fees has been set to $1 per mile so the total distance is <Text style={{fontWeight: "bold"}}>{parseFloat(Number(res.delivery_charge).toFixed(2))} miles</Text> and total delivery fees is <Text style={{fontWeight: "bold"}}>${parseFloat(Number(res.delivery_charge).toFixed(2))}</Text></Text>
                       </View>
                     }
                     onClose={() => setToolTipVisible(false)}
-                    placement="bottom"
+                    placement="top"
                     // below is for the status bar of react navigation bar
                     topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
                   >
-                    <TouchableOpacity onPress={() => { setToolTipVisible(true) }}>
+                    <TouchableOpacity onPress={() => { setToolTipVisible(true) }} style={{ flexDirection: 'row' }} >
                       <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
+                      <View style={{ width: 15, height: 15, borderRadius: 20, backgroundColor: Mycolors.BTN_LINEAR_END_COLOR, justifyContent: 'center', left: 5 }}>
+                        <Image source={require('../../../assets/info.png')} style={{ width: 10, height: 10, alignSelf: 'center' }}></Image>
+                      </View>
                     </TouchableOpacity>
                   </Tooltip>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
