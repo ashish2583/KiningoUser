@@ -542,7 +542,7 @@ const ShopProduct = (props) => {
       }
     }
     return (
-      <View style={{ width: '100%', height: 200, alignSelf: 'center' }}>
+      <View style={{ width: '100%', height: 170, alignSelf: 'center' }}>
         <Swipeable
           renderRightActions={(progress, dragX) =>
             renderRightActions(progress, dragX, onClick)
@@ -645,9 +645,9 @@ const ShopProduct = (props) => {
 
           {resData?.length > 0 ?
             <View>
-              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5, width: '100%' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25, marginBottom: 5,width: '100%' }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
-              </View> */}
+              </View>
 
               <TouchableOpacity style={{
                 width: '100%', marginVertical: 5, padding: 20, backgroundColor: '#fff',
@@ -665,9 +665,9 @@ const ShopProduct = (props) => {
                   {/* {console.log('takeAwayDate--', takeAwayDate)} */}
                   {selectedTime2 !== '' ?
                     // <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
-                    <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    <Text style={{ fontSize: 11, color: Mycolors.Black, fontWeight: 'bold' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
                     :
-                    <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                    <Text style={{ color: '#bbbbbb', fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
                   }
                 </View>
 
@@ -704,7 +704,7 @@ const ShopProduct = (props) => {
 
 </View> */}
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', marginTop:20 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Coupons</Text>
                 <Text style={{ color: '#835E23', fontSize: 13, }} onPress={() => { setmodlevisual(true) }}>View All</Text>
               </View>
