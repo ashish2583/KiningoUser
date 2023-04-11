@@ -182,14 +182,14 @@ const ShopMyOrderDetails = (props) => {
               </View>
 
             </View>
-            <View style={{ marginLeft: 19, top:-6 }}>
+            {/* <View style={{ marginLeft: 19, top:-6 }}>
               <View style={{ backgroundColor: '#9B9B9B', height: 4, width: 4, justifyContent: "center", alignItems: "center", marginHorizontal: 9, borderRadius: 4 / 2, marginTop: 7 }} />
               <View style={{ backgroundColor: '#9B9B9B', height: 4, width: 4, justifyContent: "center", alignItems: "center", marginHorizontal: 9, borderRadius: 4 / 2, marginTop: 7 }} />
               <View style={{ backgroundColor: '#9B9B9B', height: 4, width: 4, justifyContent: "center", alignItems: "center", marginHorizontal: 9, borderRadius: 4 / 2, marginTop: 7 }} />
-            </View>
+            </View> */}
 
 
-            <View style={{ flexDirection: 'row', width: '100%', marginTop: 2, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
+            {/* <View style={{ flexDirection: 'row', width: '100%', marginTop: 2, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
               <View style={{ width: 40, height: 40, justifyContent: 'center', borderRadius: 10 }}>
                 <Image source={require('../../../assets/shape_41.png')} style={{ width: 22, height: 22, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
@@ -197,34 +197,21 @@ const ShopMyOrderDetails = (props) => {
                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Destination Address</Text>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address},{data.destination_city},{data.destination_state}</Text>
               </View>
-            </View>
+            </View> */}
            
 
-            {data.delivered_date!=null && data.status!= 11 && data.status!=13 && data.status!=15 ?
+            {data.status!= 11 && data.status!=13 && data.status!=15 ?
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
-              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order Delivered on </Text>
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order has been picked on </Text>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
             </View>
-            <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
+            {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
-            </View>
+            </View> */}
   </View>
-            : 
-            data.status!= 0 ?
-            <View>
-             <View style={{width:'100%',height:0.5,backgroundColor:'gray',marginVertical:5}}></View>
-            <View style={{ flexDirection: 'row', width: '100%', marginTop: 10, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
-              <View style={{ width: 40, height: 40, justifyContent: 'center', borderRadius: 10 }}>
-                <Image source={require('../../../assets/noRide.png')} style={{ width: 30, height: 30, overflow: 'hidden', alignSelf: 'center' }}></Image>
-              </View>
-              <View style={{ marginLeft: 10, width: '80%' }}>
-                <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>{data.driver_name} has been assigned to your order</Text>
-              </View>
-            </View>
-
-            </View>
+            
             : null
              }
 
