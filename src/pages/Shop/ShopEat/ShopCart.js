@@ -1045,7 +1045,7 @@ const ShopCart = (props) => {
                     showChildInTooltip={false}
                     content={
                       <View style={{}}>
-                        <Text style={{ color: Mycolors.Black, fontSize: 13, }}> Delivery fees is calculated on the basis of the distance covered by driver in miles
+                        <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
 At present delivery fees has been set to $1 per mile so the total distance is delivery_charge and total delivery fees is delivery_charge</Text>
                       </View>
                     }
