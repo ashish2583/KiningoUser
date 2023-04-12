@@ -228,7 +228,7 @@ const ShopMyOrderDetails = (props) => {
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, paddingRight: 20,marginBottom:15 }}>
               
               <View style={{ width: 22, height: 30, justifyContent: 'center', borderRadius: 10 }}>
-                <Image source={require('../../../assets/restaurant.png')} style={{ width: 22, height: 22, overflow: 'hidden', alignSelf: 'center' }}></Image>
+                <Image source={require('../../../assets/product_item_icon.png')} style={{ width: 22, height: 23.9, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{el.product_name} x {el.quantity}</Text>
