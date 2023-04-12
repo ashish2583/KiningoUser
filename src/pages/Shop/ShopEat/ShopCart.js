@@ -97,7 +97,7 @@ const ShopCart = (props) => {
   const [cookingIns, setcookingIns] = useState('')
   const [googleAddress, setGoogleAddress] = useState('');
   const [googleLatLng, setGoogleLatLng] = useState({});
-  // const [currentAddress, setCurrentAddress] = useState('');
+  const [currentAddress, setCurrentAddress] = useState('');
   // const [currentLatLng, setCurrentLatLng] = useState({});
   const [chooseAddressModeModal, setChooseAddressModeModal] = useState(false);
   const [openGoogleAddressModal, setOpenGoogleAddressModal] = useState(false);
@@ -620,7 +620,7 @@ const ShopCart = (props) => {
 
   }
   const AddAddressUsingCurrentLoation1 = async (latLng, currentAddress) => {
-
+    console.log('AddAddressUsingCurrentLoation1 inside');
     let matches = getMatches(currentAddress)
     console.log('matches', matches);
     const addressData = {
@@ -631,7 +631,7 @@ const ShopCart = (props) => {
       area_name: '',
     }
     let addressValue = currentAddress
-    console.log('currentAddress', currentAddress);
+    console.log('AddAddressUsingCurrentLoation1 currentAddress', currentAddress);
     let lastindex = null
     let partOfString = null
     if (matches > 3) {
@@ -654,9 +654,10 @@ const ShopCart = (props) => {
         addressData.city = partOfString?.trim()
       } else if (i == 3) {
         // addressData.address_line1 = addressValue?.trim()
-        addressData.area_name = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
+        // addressData.area_name = addressValue?.trim()?.replace(/[0-9]/g, '')?.trim()
+        addressData.area_name = addressValue?.trim()
       }
-      console.log('addressData', addressData);
+      console.log('AddAddressUsingCurrentLoation1 addressData', addressData);
       // if(i == 3){
       //   break
       // }
@@ -676,7 +677,7 @@ const ShopCart = (props) => {
       "is_default": 1,
       ...addressData
     }
-    setCurrentAddressData(data)
+    setCurrentAddressData({parts: data, full: currentAddress})
     setOpenEnterCompleteAddressModal(true)
     // // console.log('addressData', addressData);
     // console.log('current address data===>>', data);
@@ -701,9 +702,20 @@ const ShopCart = (props) => {
 
   }
   const AddAddressUsingCurrentLoation2 = async () => {
-    const line = [remainingCompleteAddress, remainingFloor, remainingLandmark, currentAddressData.area_name].join(', ')
+    let line = ''
+      line += remainingCompleteAddress
+      if (remainingFloor) {
+        line += ', ' + remainingFloor
+      }
+      if (remainingLandmark) {
+        line += ', ' + remainingLandmark
+      }
+      if (currentAddressData.parts.area_name) {
+        line += ', ' + currentAddressData.parts.area_name
+      }
+    // const line = [remainingCompleteAddress, remainingFloor, remainingLandmark, currentAddressData.parts.area_name].join(', ')
     // setLoading(true)
-    const addressDataCopy = { ...currentAddressData }
+    const addressDataCopy = { ...currentAddressData.parts }
     addressDataCopy.address_line1 = line
     console.log('current address data===>>', addressDataCopy);
     var data = {
@@ -751,12 +763,13 @@ const ShopCart = (props) => {
           })
           .catch(error => {
             setLoading(false)
+            Toast.show({ text1: 'Something went wrong while fetching current address' })
             console.warn(error)
           });
       },
       error => {
         setLoading(false)
-        Alert.alert(error.message.toString());
+        Toast.show({text1: error.message.toString()});
       },
       {
         showLocationDialog: true,
@@ -1039,12 +1052,13 @@ const ShopCart = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
                 </View>
+                {ordertype != 'take-away' ?
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                   <Tooltip
                     isVisible={toolTipVisible}
                     showChildInTooltip={false}
                     content={
-                      <View style={{height:80}}>
+                      <View style={{height:100}}>
                         <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
                           At present delivery fees has been set to $1 per mile so the total distance is <Text style={{fontWeight: "bold"}}>{parseFloat(Number(res.delivery_charge).toFixed(2))} miles</Text> and total delivery fees is <Text style={{fontWeight: "bold"}}>${parseFloat(Number(res.delivery_charge).toFixed(2))}</Text></Text>
                       </View>
@@ -1063,6 +1077,7 @@ const ShopCart = (props) => {
                   </Tooltip>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
                 </View>
+                :null}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
@@ -1402,12 +1417,12 @@ const ShopCart = (props) => {
 
         {/* <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
 
-        <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 60 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
+        <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 70 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
           <KeyboardAwareScrollView>
 
 
 
-            <View style={{ marginTop: 15, height: 30, justifyContent: "center", alignItems: 'center' }}>
+            <View style={{ marginTop: 15, height: 90, justifyContent: "center", alignItems: 'center' }}>
               {/* <View onPress={()=>{}} style={{borderBottomWidth:1, alignSelf:'center', borderColor: '#000000', marginVertical:5}} /> */}
               <TouchableOpacity
                 onPress={() => setOpenEnterCompleteAddressModal(false)}
@@ -1420,7 +1435,8 @@ const ShopCart = (props) => {
                 // }}
                 style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5 }}
               />
-              <Text style={{ marginTop: 2, textAlign: 'center', fontSize: 22, color: '#000000', fontWeight: '500', }}>Enter Complete Address</Text>
+              <Text style={{ color: Mycolors.RED, textAlign: "center", fontSize: 13, marginHorizontal:20,marginTop:10 }}><Text style={{color:'#000'}}>Current Address:</Text> {currentAddressData.full}</Text>
+              <Text style={{ marginTop: 10, textAlign: 'center', fontSize: 18, color: '#000000', fontWeight: '500', }}>Enter Complete Address</Text>
 
 
             </View>
@@ -1550,7 +1566,7 @@ const ShopCart = (props) => {
             <View style={{ width: '95%', alignSelf: 'center', marginTop: 55 }}>
               <MyButtons title={"Save"} height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
                 if (!remainingCompleteAddress) {
-                  Toast.show({ text1: 'Enter Complete Adress' })
+                  Toast.show({ text1: 'Enter Complete Address' })
                   return
                 }
                 AddAddressUsingCurrentLoation2()
