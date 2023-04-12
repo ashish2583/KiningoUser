@@ -266,7 +266,11 @@ const ShopMyOrderDetails = (props) => {
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>
               </View> */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
-                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
+                {data.coupon_code ? 
+                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >({data.coupon_code})</Text></Text>
+                :
+                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied</Text>
+                }
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${data.discount_amount}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
