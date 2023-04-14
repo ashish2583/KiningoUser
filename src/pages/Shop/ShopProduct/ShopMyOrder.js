@@ -67,9 +67,9 @@ const ShopMyOrder = (props) => {
   const [orderTypeValue, setOrderTypeValue] = useState('');
   const [orderTypeData, setOrderTypeData] = useState([
     // {label: 'Dining', value: 'dining'},
-    { label: 'Delivery', value: 'delivery' },
+    // { label: 'Delivery', value: 'delivery' },
     // {label: 'Table Booking', value: 'booked-table'},
-    // { label: 'Take Away', value: 'takeaway' },
+    { label: 'Take Away', value: 'takeaway' },
   ]);
   const [timeDurationValue, setTimeDurationValue] = useState('');
   const [timeDurationData, setTimeDurationData] = useState([
@@ -265,12 +265,13 @@ const ShopMyOrder = (props) => {
   }
   const resetFilter = () => {
     setKeyword('')
-    setOrderTypeValue('')
+    // setOrderTypeValue('')
     setTimeDurationValue('')
     setOrderDate('')
     setStatusValue('')
     // orderList(false, true)
     myorderList()
+    setShowFiltersModal(false)
   }
 
   const design = (img, ti, tit, w, imgh, imgw, bg, redious) => {
@@ -733,7 +734,7 @@ const ShopMyOrder = (props) => {
               </View>
 
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Type</Text>
+              {/* <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Type</Text>
               <FlatList
                 data={orderTypeData}
                 
@@ -749,7 +750,7 @@ const ShopMyOrder = (props) => {
                     </TouchableWithoutFeedback>
                   );
                 }}
-              />
+              /> */}
 
               {/* <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black, marginTop:10, marginBottom:5  }}>Time Duration</Text>
   <FlatList

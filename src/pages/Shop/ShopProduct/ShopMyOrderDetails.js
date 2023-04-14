@@ -204,7 +204,7 @@ const ShopMyOrderDetails = (props) => {
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
-              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order has been picked on </Text>
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order has been picked up </Text>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
             </View>
             {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
@@ -228,7 +228,7 @@ const ShopMyOrderDetails = (props) => {
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, paddingRight: 20,marginBottom:15 }}>
               
               <View style={{ width: 22, height: 30, justifyContent: 'center', borderRadius: 10 }}>
-                <Image source={require('../../../assets/restaurant.png')} style={{ width: 22, height: 22, overflow: 'hidden', alignSelf: 'center' }}></Image>
+                <Image source={require('../../../assets/product_item_icon.png')} style={{ width: 22, height: 23.9, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{el.product_name} x {el.quantity}</Text>
@@ -261,12 +261,16 @@ const ShopMyOrderDetails = (props) => {
                 <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.amount).toFixed(2))}</Text>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>
-              </View>
+              </View> */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
-                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
+                {data.coupon_code ? 
+                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >({data.coupon_code})</Text></Text>
+                :
+                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied</Text>
+                }
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${data.discount_amount}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>

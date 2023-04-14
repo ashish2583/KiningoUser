@@ -16,12 +16,13 @@ import { baseUrl, login, shop_eat_business, requestPostApi, requestGetApi, shop_
 import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
 import { useSelector, useDispatch } from 'react-redux';
-import { saveUserResult, saveUserToken, setUserType } from '../../../redux/actions/user_action';
+import { saveUserResult, saveUserToken, setUserType, onLogoutUser } from '../../../redux/actions/user_action';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 import { setRestorentLocation } from '../../../redux/actions/latLongAction';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
@@ -93,6 +94,8 @@ const ShopProduct = (props) => {
   // const [isLatlong, setIsLatlong] = useState(true)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
+  const [My_Alert2, setMy_Alert2] = useState(false)
+  const [alert_sms2, setalert_sms2] = useState('')
   const [refreshing, setRefreshing] = useState(false);
   const [addre, setaddre] = useState(' ');
 
@@ -209,6 +212,10 @@ const ShopProduct = (props) => {
       
     );
   }
+  const logoutDriver=async()=>{
+    AsyncStorage.clear(); 
+    dispatch(onLogoutUser())
+  }
 
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
@@ -222,9 +229,18 @@ const ShopProduct = (props) => {
         keyboardShouldPersistTaps="handled"
       >
         <HomeHeader height={60} paddingHorizontal={15}
-          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
-          press2={() => { }} title2={'Shop'} fontWeight={'500'} img2height={20}
-          press3={() => { }} img3width={25} img3height={25} />
+          press1={() => { props.navigation.goBack() }} 
+          // img1={require('../../../assets/arrow.png')} 
+          img1width={18} img1height={15}
+          press2={() => { }} title2={'Product'} fontWeight={'500'} img2height={20}
+          // press3={() => { }} img3width={25} img3height={25} />
+          press3={() => {
+            // props.navigation.navigate('ShopEatNotificationList') 
+            setalert_sms2('Are you sure want to logout?')
+            setMy_Alert2(true)
+          //   AsyncStorage.clear(); 
+          // dispatch(onLogoutUser())
+            }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
         {/* <View style={{width:'95%',alignSelf:'center',backgroundColor:'rgba(0,0,0,0.025)',borderRadius:10,borderBottomColor:'rgba(0,0,0,0.5)',borderBottomWidth:0.2}}>
   <HomeHeader height={40}  paddingHorizontal={15}
    press1={()=>{}} img1={require('../../../assets/images/product_location_icon.png')} img1width={11} img1height={15} 
@@ -787,6 +803,7 @@ paddingLeft={50}/> */}
       </View>
       {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
+      {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={()=>{ logoutDriver() }} canclePress={()=>{setMy_Alert2(false)}}/> : null }
     </SafeAreaView>
   );
 }

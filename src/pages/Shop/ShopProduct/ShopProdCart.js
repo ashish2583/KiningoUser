@@ -665,7 +665,10 @@ const ShopProduct = (props) => {
                   {/* {console.log('takeAwayDate--', takeAwayDate)} */}
                   {selectedTime2 !== '' ?
                     // <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
-                    <Text style={{ fontSize: 11, color: Mycolors.Black, fontWeight: 'bold' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    <>
+                      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>Selected Time and Date</Text>
+                      <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
+                    </>
                     :
                     <Text style={{ color: '#bbbbbb', fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
                   }

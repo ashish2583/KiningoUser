@@ -162,7 +162,7 @@ paddingLeft={9}/>
         //   </TouchableOpacity>
                     )
                   }}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item.category_code}
                 />
 :null}
 
