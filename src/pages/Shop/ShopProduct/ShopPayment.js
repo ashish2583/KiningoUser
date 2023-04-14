@@ -149,7 +149,7 @@ setRefreshing(false)
       setLoading(false)
       console.log('the res shop_product_cart_place_order==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        // Toast.show({text1: responseJson.headers.message})
+        Toast.show({text1: responseJson.headers.message})
         props.navigation.navigate('ShopProduct')
       } else {
       // Toast.show({text1: err})
