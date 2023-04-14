@@ -203,8 +203,10 @@ const ShopProductSearch = (props) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={{ width: '100%', height: 180, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center' }}
                       onPress={() => {
-                        props.navigation.navigate('FoodDetails', { data: item })
-                        dispatch(setVenderDetail(item))
+                        // props.navigation.navigate('FoodDetails', { data: item })
+                        // dispatch(setVenderDetail(item))
+                        console.log('moving to 1', item.userid, item.user_id);
+                        props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, businessid:item.business_id })
                       }}>
                       <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderTopLeftRadius: 5, borderTopRightRadius: 5, resizeMode: 'stretch' }} resizeMode={'stretch'}></Image>
 
