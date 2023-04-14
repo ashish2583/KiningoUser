@@ -27,7 +27,7 @@ const ShopProductSearch = (props) => {
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
-  const mapdata  = useSelector(state => state.maplocation)
+  const mapdata = useSelector(state => state.maplocation)
   const User = useSelector(state => state.user.user_details)
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const ShopProductSearch = (props) => {
     console.log('hohohohoho', props.route.params.datas);
     setresData(props.route.params.datas)
     if (props.route.params.from != 'search') {
-      
+
       if (props.route.params.from == 'CatClick') {
         // console.log('props.route.params.datas',props.route.params.datas);
         catSerch(props.route.params.datas[0].category_name)
@@ -97,7 +97,7 @@ const ShopProductSearch = (props) => {
 
   const homePageSearch = async (text) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business + '?name=' + text + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
@@ -114,7 +114,7 @@ const ShopProductSearch = (props) => {
   const AllVenders = async () => {
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business+'?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(shop_product_business + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -165,7 +165,7 @@ const ShopProductSearch = (props) => {
 
             }}
             paddingLeft={9} />
-            
+
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
             {/* {console.log('resData resData', resData)} */}
@@ -203,8 +203,8 @@ const ShopProductSearch = (props) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={{ width: '100%', height: 180, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center' }}
                       onPress={() => {
-                        props.navigation.navigate('FoodDetails', { data: item })
-                        dispatch(setVenderDetail(item))
+                        console.log('moving to 1', item.userid, item.user_id);
+                        props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, businessid: item.business_id })
                       }}>
                       <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderTopLeftRadius: 5, borderTopRightRadius: 5, resizeMode: 'stretch' }} resizeMode={'stretch'}></Image>
 
@@ -219,7 +219,7 @@ const ShopProductSearch = (props) => {
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, textAlign: 'left', fontWeight: '200', left: 7, fontStyle: 'italic' }}>Food Preparation Time : {item.tentative_time}</Text>
 
                       </View>
-                      <View style={{ padding: 5, alignItems: 'flex-end',right:9 }}>
+                      <View style={{ padding: 5, alignItems: 'flex-end', right: 9 }}>
 
 
                         <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders : ''}+ orders served.</Text>
