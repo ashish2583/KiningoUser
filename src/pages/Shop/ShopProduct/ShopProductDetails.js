@@ -1007,6 +1007,11 @@ const FoodDetails = (props) => {
     Linking.openURL(`mailto:${myMail}`)
   }
 
+  const removeCategoryFilter = () => {
+    setSelectedCategory({})
+    // getDropdownData()
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: Mycolors.BG_COLOR }}>
       <View style={{}}>
@@ -1313,6 +1318,10 @@ const FoodDetails = (props) => {
                   <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#835E23' }} >View All</Text>
                 </TouchableOpacity>
               </View>
+              <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
+                <Image source={require('../../../assets/product_refresh.png')} ></Image>
+                <Text style={{ color: '#fff', fontSize:12 ,fontWeight: '400', marginLeft:10 }} >Clear</Text>
+              </TouchableOpacity>
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
@@ -2070,6 +2079,16 @@ const styles = StyleSheet.create({
     borderWidth:2,
     borderColor: '#835E23',
     borderRadius:10
+  },
+  refreshView:{
+    flexDirection:'row',
+    alignItems:'center',
+    width:'25%',
+    marginTop:10,
+    backgroundColor:'#835E23',
+    paddingVertical:10,
+    paddingHorizontal:20,
+    borderRadius:50
   }
 });
 export default FoodDetails
