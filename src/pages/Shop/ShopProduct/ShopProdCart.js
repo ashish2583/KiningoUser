@@ -371,12 +371,11 @@ const ShopProduct = (props) => {
   }
   const getCopun = async (businessId) => {
     // console.log('getCopun endpoint', shop_product_coupons_userid+ProductVenderDetails.userid); 
-    console.log('getCopun endpoint 2', shop_product_coupons_userid + businessId);
+    console.log('getCopun endpoint 2', shop_product_coupons_userid + props.route.params.vendorId);
     setLoading(true)
 
-    // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
-    const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + businessId, '', 'GET', userdetaile.token)
-    // const { responseJson, err } = await requestGetApi(shop_eat_coupons_userid + '19', '', 'GET', userdetaile.token)
+    // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + businessId, '', 'GET', userdetaile.token)
+    const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + props.route.params.vendorId, '', 'GET', userdetaile.token)
     setLoading(false)
     console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
     if (responseJson.headers.success == 1) {
