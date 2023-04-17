@@ -9,7 +9,7 @@ import MyButtons from '../../../component/MyButtons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Loader from '../../../WebApi/Loader';
 // import Loader2 from '../../../WebApi/Loader2';
-import { baseUrl, login, shop_eat_business, requestPostApi, requestGetApi, shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon, user_selected_address } from '../../../WebApi/Service'
+import { baseUrl, login, shop_eat_business, requestPostApi, requestGetApi, shop_product_cart, shop_product_delete_cart_item, user_address, delete_Update_Address, shop_product_cart_apply_coupon, shop_product_coupons_userid, shop_product_remove_coupon, user_selected_address, shop_eat_coupons_userid } from '../../../WebApi/Service'
 import MyAlert from '../../../component/MyAlert'
 import { useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -208,6 +208,7 @@ const ShopProduct = (props) => {
   const [googleLatLng, setGoogleLatLng] = useState({});
   const [loaderText, setLoaderText] = useState('');
   const [slots, setSlots] = useState([]);
+  const [promoEdit, setpromoEdit] = useState(true)
 
   const createDate = (timeParam) => {
     let d = new Date();
@@ -375,6 +376,7 @@ const ShopProduct = (props) => {
 
     // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid+ProductVenderDetails.userid, '', 'GET',  User.token)
     const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + businessId, '', 'GET', userdetaile.token)
+    // const { responseJson, err } = await requestGetApi(shop_eat_coupons_userid + '19', '', 'GET', userdetaile.token)
     setLoading(false)
     console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
     if (responseJson.headers.success == 1) {
@@ -405,6 +407,7 @@ const ShopProduct = (props) => {
       settotal(responseJson.body.total)
       setapplyedCoupen('')
       setpromocode('')
+      setpromoEdit(true)
     } else {
       // setalert_sms(err)
       // setMy_Alert(true)
@@ -414,13 +417,12 @@ const ShopProduct = (props) => {
   }
 
   const applyCoupan = async () => {
-    if (discount_id == null) {
-      Toast.show({ text1: 'Please select any coupon' })
-      // Alert.alert('Please select any coupon')
+    if (promocode == null || promocode == '') {
+      Toast.show({ text1: 'Please select coupon to avail discount' })
     } else {
       setLoading(true)
       var data = {
-        discount_id: discount_id,
+        discount_id: promocode,
       }
       const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
       setLoading(false)
@@ -434,6 +436,7 @@ const ShopProduct = (props) => {
         setdilivery(responseJson.body.delivery_charge)
         settotal(responseJson.body.total)
         setapplyedCoupen(responseJson.body.coupon)
+        setpromoEdit(false)
       } else {
         Toast.show({ text1: responseJson.headers.message })
         // setalert_sms(err)
@@ -645,7 +648,7 @@ const ShopProduct = (props) => {
 
           {resData?.length > 0 ?
             <View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25, marginBottom: 5,width: '100%' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25, marginBottom: 5, width: '100%' }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
               </View>
 
@@ -707,7 +710,7 @@ const ShopProduct = (props) => {
 
 </View> */}
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', marginTop:20 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', marginTop: 20 }}>
                 <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Coupons</Text>
                 <Text style={{ color: '#835E23', fontSize: 13, }} onPress={() => { setmodlevisual(true) }}>View All</Text>
               </View>
@@ -720,6 +723,7 @@ const ShopProduct = (props) => {
                     setpromocode(text)
                   }}
                   placeholder="Promo Code"
+                  editable={promoEdit}
                   placeholderTextColor={Mycolors.placeholdercolor}
                   style={[styles.input, { paddingRight: 70 }]}
                 />
@@ -849,7 +853,7 @@ const ShopProduct = (props) => {
       {/* {loading2 ? <Loader2 text={loaderText} /> : null} */}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
 
-      {modlevisual ?
+      {/* {modlevisual ?
         <View style={{ width: dimensions.SCREEN_WIDTH, height: dimensions.SCREEN_HEIGHT, backgroundColor: 'rgba(0,0,0,0.4)', position: 'absolute', left: 0, top: 0, justifyContent: 'center' }}>
           <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '95%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10 }}>
 
@@ -894,9 +898,59 @@ const ShopProduct = (props) => {
 
         </View>
         : null
-      }
+      } */}
 
+      <Modal
+        isVisible={modlevisual}
+        swipeDirection="down"
+        onBackdropPress={() => setmodlevisual(false)}
+        onSwipeComplete={(e) => {
+          setmodlevisual(false)
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ width: '95%', height: dimensions.SCREEN_HEIGHT * 40 / 100, alignSelf:'center', borderRadius: 30, backgroundColor: '#fff' }}>
+        <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '100%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10 }}>
+          {
+            rescopun.map((item, index) => {
+              return (
+                <View style={{
+                  width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
+                  borderColor: '#dee4ec', borderWidth: 1, elevation: 5, borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
+                }}
+                >
+                  <View style={{ width: 25, height: 25, alignSelf: 'center', borderRadius: 2, borderWidth: 0.5, borderColor: '#dee4ec' }}>
+                    <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 2, resizeMode: 'stretch' }} ></Image>
+                  </View>
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13 }} >{item.coupon_name}</Text>
+                    <Text style={{ color: Mycolors.GREEN, fontSize: 11, marginTop: 5 }} >Save ${parseFloat(Number(item.discount_value).toFixed(2))} with this code</Text>
+                  </View>
+                  <View style={{ position: 'absolute', right: 10, top: 10 }}>
+                    <View style={{ width: 80, }}>
+                      <MyButtons title={item.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={() => {
+                        setpromocode(item.coupon_code)
+                        setdiscount_id(item.discount_id)
+                        setmodlevisual(false)
+                      }} marginHorizontal={20} fontSize={12}
+                        titlecolor={'#835E23'} borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
+                    </View>
+                  </View>
+                </View>
+              )
+            }
+            )
+          }
+        </View>
 
+        </View>
+        {/* </View> */}
+      </Modal>
 
       <Modal
         isVisible={showTimeModal}
@@ -915,7 +969,7 @@ const ShopProduct = (props) => {
         {/* <View style={{width:dimensions.SCREEN_WIDTH,height:dimensions.SCREEN_HEIGHT,position:'absolute',top:0,bottom:0,left:0,right: 0,backgroundColor:'rgba(0,0,0,0.5)'}}> */}
         <View style={{ width: '100%', height: dimensions.SCREEN_HEIGHT * 60 / 100, position: 'absolute', bottom: 0, borderTopRightRadius: 20, borderTopLeftRadius: 20, backgroundColor: '#fff' }}>
 
-          <View style={{ flex: 1, paddingHorizontal:10 }}>
+          <View style={{ flex: 1, paddingHorizontal: 10 }}>
             {/* <TouchableOpacity onPress={() => { setaddressList(false) }}
                                           style={{ position: "absolute", width: 30,  borderRadius: 35, height: 30, right: 10, top: 10 }}>
                                           <Image

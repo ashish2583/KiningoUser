@@ -16,7 +16,7 @@ import GetLocation from 'react-native-get-location'
 import MyAlert from '../../../component/MyAlert'
 import { useSelector, useDispatch } from 'react-redux';
 
-const isEmulator = true
+const isEmulator = false
 
 const ShopProduct = (props) => {
   const [searchValue,setsearchValue]=useState('')

@@ -26,7 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
-const isEmulator = true
+const isEmulator = false
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
