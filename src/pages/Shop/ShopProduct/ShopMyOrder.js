@@ -93,6 +93,7 @@ const ShopMyOrder = (props) => {
   const [showda, setshowda] = useState(false)
   const [keyword, setKeyword] = useState('');
   const [relode, setrelode] = useState(false)
+  const [ordersFound, setOrdersFound] = useState(true)
   useEffect(() => {
     const unsubscribe = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     myorderList()
@@ -194,8 +195,14 @@ const ShopMyOrder = (props) => {
     console.log('the res shop_product_orders ==>>', responseJson.body)
     if (responseJson.headers.success == 1) {
       setorderData(responseJson.body)
-
+      console.log('responseJson.body?.length == 0', responseJson.body?.length == 0);
+      if (responseJson.body?.length == 0) {
+        setOrdersFound(false)
+      } else {
+        setOrdersFound(true)
+      }
     } else {
+      setOrdersFound(false)
       setorderData(null)
       setrelode(!relode)
     }
@@ -246,7 +253,8 @@ const ShopMyOrder = (props) => {
         setorderData(responseJson.body)
         setShowFiltersModal(false)
       } else {
-         setorderData(null)
+        setorderData(null)
+        setShowFiltersModal(false)
         // setShowFiltersModal(false)
         Toast.show({ text1: responseJson.headers.message })
         //  setalert_sms(err) 
@@ -278,7 +286,7 @@ const ShopMyOrder = (props) => {
     return (
       <View style={{ flexDirection: 'row', width: w, marginTop: 10, backgroundColor: Mycolors.TimingColor, paddingVertical: 20, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10 }}>
         {/* <View style={{ width: 40, height: 40, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}> */}
-          <Image source={img} style={{ width: imgw, height: imgh, alignSelf: 'center' }}></Image>
+        <Image source={img} style={{ width: imgw, height: imgh, alignSelf: 'center' }}></Image>
         {/* </View> */}
         <View style={{ marginLeft: 15, width: '80%' }}>
           <Text style={{ fontSize: 13, fontWeight: 'bold', color: Mycolors.Black }}>{ti}</Text>
@@ -329,10 +337,10 @@ const ShopMyOrder = (props) => {
             :
             null
         } */}
-          {
+        {
           orderData != null ?
             <TouchableOpacity onPress={() => { setShowFiltersModal(true) }} style={{
-              width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between',
+              width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
               marginVertical: 10, backgroundColor: '#fff', padding: 5, borderRadius: 10,
               shadowColor: 'black',
               shadowOffset: {
@@ -351,7 +359,7 @@ const ShopMyOrder = (props) => {
               </View> */}
               {
                 orderTypeValue != '' || orderDate != '' ?
-                  (<View style={{flexDirection:'row', alignItems:'center'}}>
+                  (<View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {
                       orderTypeValue != '' ?
                         <View style={{ paddingHorizontal: 15, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2, height: 30, marginLeft: 15 }}>
@@ -386,7 +394,7 @@ const ShopMyOrder = (props) => {
             :
             null
         }
-      
+
         <View style={{ width: '90%', alignSelf: 'center' }}>
 
           {orderData != null ?
@@ -414,9 +422,9 @@ const ShopMyOrder = (props) => {
                           <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{'Take Away'}</Text>
                         </View>
                       </View>
-                      <View style={{flexDirection:'row'}}>
-                      <Text style={{ color: '#835E23', fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
-                      <Text style={{ color: Mycolors.GrayColor, fontWeight: '400', fontSize: 12, marginTop: 5,left:10 }}>Placed At : {item.created_date}</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ color: '#835E23', fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
+                        <Text style={{ color: Mycolors.GrayColor, fontWeight: '400', fontSize: 12, marginTop: 5, left: 10 }}>Placed At : {item.created_date}</Text>
                       </View>
                       {item.order_type != 'booked-table' ?
                         <>
@@ -472,8 +480,8 @@ const ShopMyOrder = (props) => {
                       {design(require('../../../assets/product_order_status.png'), 'Order Status', item.status_label, '100%', 42, 42, 'red', 20)}
 
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
-                       
-                         
+
+
                         {item.order_type == 'takeaway' && item.business_rating == null ?
                           <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                             if (item.business_rating == null) {
@@ -483,7 +491,7 @@ const ShopMyOrder = (props) => {
                             titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           : null
                         }
- 
+
 
                       </View>
                       <View style={{ flexDirection: item.business_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
@@ -514,24 +522,28 @@ const ShopMyOrder = (props) => {
             }
             )
             :
-            
-              <View style={{ width: '100%', justifyContent: 'center', height: '100%', marginHorizontal: 'auto' }}>
+
+            <View style={{ width: '100%', justifyContent: 'center', height: '100%', marginHorizontal: 'auto' }}>
               <View style={{ width: 220, height: 220, alignSelf: 'center', }}>
                 <Image source={require('../../../assets/Shop-eat-empty-cat-image.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
               </View>
-              <View style={{ width: '100%', marginTop: 25,  }}>
+              <View style={{ width: '100%', marginTop: 25, }}>
 
-                <Text style={{ color: '#ADC430', textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>No Order Found</Text>
-                <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}>Looks you like you have no order in the selected time or type. </Text>
-                
-                <View style={{ width: '40%', alignSelf: 'center',marginTop: 10 }}>
-              <MyButtons title="View all orders" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { resetFilter()  }} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
-            </View>
+                <Text style={{ color: '#ADC430', textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>No Orders Found</Text>
+                {ordersFound ?
+                  <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}>Looks like you have no orders in the selected time. </Text>
+                  : null}
+
+                {ordersFound ?
+                  <View style={{ width: '40%', alignSelf: 'center', marginTop: 10 }}>
+                    <MyButtons title="View all orders" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { resetFilter() }} marginHorizontal={20} fontSize={14}
+                      titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />
+                  </View>
+                  : null}
               </View>
 
             </View>
-            
+
           }
 
 
@@ -637,11 +649,11 @@ const ShopMyOrder = (props) => {
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, marginTop: 5 }}>
               <Text style={{ color: Mycolors.Black, fontWeight: '500', }}></Text>
-              <Text style={{ color: Mycolors.Black, fontWeight: '500',fontSize:22 }}>Filter</Text>
+              <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 22 }}>Filter</Text>
               <TouchableOpacity onPress={() => { setShowFiltersModal(false) }}>
-              <Image source={require('../../../assets/product_X.png')} style={{ width: 24, height: 24, alignSelf: 'center',top: -8  }}></Image>
+                <Image source={require('../../../assets/product_X.png')} style={{ width: 24, height: 24, alignSelf: 'center', top: -8 }}></Image>
               </TouchableOpacity>
-             
+
             </View>
 
             <KeyboardAvoidingView
@@ -665,11 +677,13 @@ const ShopMyOrder = (props) => {
               {/* </View> */}
 
               <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Date</Text>
-              <View style={{ width: '100%', alignSelf: 'center', 
-               backgroundColor: '#FFFFFF', 
-               borderRadius: 10, flexDirection:'row',justifyContent:'space-between',
-              //  borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2,
-              borderColor: '#E0E0E0', borderWidth: 1 }}>
+              <View style={{
+                width: '100%', alignSelf: 'center',
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between',
+                //  borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 0.2,
+                borderColor: '#E0E0E0', borderWidth: 1
+              }}>
                 <View style={{}}>
                   {Platform.OS == 'ios' ?
                     <DatePicker
@@ -727,10 +741,10 @@ const ShopMyOrder = (props) => {
                       </TouchableOpacity>
                   }
                 </View>
-                <View style={{justifyContent: 'center',marginRight:9  }}>
-                <Image source={require('../../../assets/calendarB.png')} style={{ width: 24, height: 24, alignSelf: 'center' }}></Image>
+                <View style={{ justifyContent: 'center', marginRight: 9 }}>
+                  <Image source={require('../../../assets/calendarB.png')} style={{ width: 24, height: 24, alignSelf: 'center' }}></Image>
                 </View>
-                
+
               </View>
 
 
@@ -791,10 +805,10 @@ const ShopMyOrder = (props) => {
               <View style={{ height: 20, }} />
 
               <MyButtons title="Submit" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={() => { orderList(true) }} marginHorizontal={20} fontSize={14}
-                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN}  />
+                titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.GREEN} />
               <MyButtons title="Reset" height={45} width={'100%'} borderRadius={10} alignSelf="center" press={resetFilter} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} />
-                <View style={{ height: 20,  }} />
+              <View style={{ height: 20, }} />
             </KeyboardAvoidingView>
           </ScrollView>
 
@@ -848,7 +862,7 @@ const styles = StyleSheet.create({
   radioButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical:5
+    marginVertical: 5
   }
 });
 export default ShopMyOrder
