@@ -529,6 +529,7 @@ const ShopProduct = (props) => {
       console.log('the res==>>shop update cart', responseJson)
       if (responseJson.headers.success == 1) {
         console.log('the res==>>Home.body.update cart', responseJson.body)
+        Toast.show({ text1: responseJson.headers.message })
         getcart(false)
       } else {
         Toast.show({ text1: err })
@@ -550,6 +551,7 @@ const ShopProduct = (props) => {
       console.log('the res==>>shop update cart', responseJson)
       if (responseJson.headers.success == 1) {
         console.log('the res==>>Home.body.update cart', responseJson.body)
+        Toast.show({ text1: responseJson.headers.message })
         getcart(false)
       } else {
         Toast.show({ text1: err })
