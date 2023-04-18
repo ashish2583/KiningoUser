@@ -832,7 +832,7 @@ const ShopProduct = (props) => {
               <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 20, color: '#000' }}>Your cart is empty.</Text>
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#000' }}> Please add </Text>
-                <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#835E23', textDecorationLine: 'underline' }} onPress={() => { props.navigation.navigate('ShopEat') }}>items </Text>
+                <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#835E23', textDecorationLine: 'underline' }} onPress={() => { props.navigation.navigate('ShopProduct') }}>items </Text>
                 <Text style={{ textAlign: 'center', fontSize: 14, marginTop: 4, color: '#000', }}>to order.</Text>
 
               </View>
