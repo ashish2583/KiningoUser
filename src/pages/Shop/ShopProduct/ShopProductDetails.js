@@ -1910,10 +1910,12 @@ const FoodDetails = (props) => {
                   
               </View>
             </View>
+            {resData.business_info ?
             <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
               <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
               <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
             </View>
+             :null}
 
             <View style={{ alignItems: 'center', width: '96%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
               <MapView

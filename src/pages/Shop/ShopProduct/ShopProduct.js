@@ -193,7 +193,7 @@ const ShopProduct = (props) => {
     const address = rowData.structured_formatting.secondary_text;
     // console.log('renderDescription', address);
     return (
-      <View style={{minHeight:200}}>
+      <View style={{ minHeight: 200 }}>
         <Text style={styles.rowTitle}>
           {title}
         </Text>
@@ -201,11 +201,11 @@ const ShopProduct = (props) => {
           {address}
         </Text>
       </View>
-      
+
     );
   }
-  const logoutDriver=async()=>{
-    AsyncStorage.clear(); 
+  const logoutDriver = async () => {
+    AsyncStorage.clear();
     dispatch(onLogoutUser())
   }
 
@@ -221,7 +221,7 @@ const ShopProduct = (props) => {
         keyboardShouldPersistTaps="handled"
       >
         <HomeHeader height={60} paddingHorizontal={15}
-          press1={() => { props.navigation.goBack() }} 
+          press1={() => { props.navigation.goBack() }}
           // img1={require('../../../assets/arrow.png')} 
           img1width={18} img1height={15}
           press2={() => { }} title2={'Product'} fontWeight={'500'} img2height={20}
@@ -230,9 +230,9 @@ const ShopProduct = (props) => {
             // props.navigation.navigate('ShopEatNotificationList') 
             setalert_sms2('Are you sure want to logout?')
             setMy_Alert2(true)
-          //   AsyncStorage.clear(); 
-          // dispatch(onLogoutUser())
-            }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
+            //   AsyncStorage.clear(); 
+            // dispatch(onLogoutUser())
+          }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
         {/* <View style={{width:'95%',alignSelf:'center',backgroundColor:'rgba(0,0,0,0.025)',borderRadius:10,borderBottomColor:'rgba(0,0,0,0.5)',borderBottomWidth:0.2}}>
   <HomeHeader height={40}  paddingHorizontal={15}
    press1={()=>{}} img1={require('../../../assets/images/product_location_icon.png')} img1width={11} img1height={15} 
@@ -305,11 +305,11 @@ const ShopProduct = (props) => {
                 powered: {},
                 listView: {
                   // color:'#000'
-                  borderWidth:0.5,
-                  borderColor:'#000',
+                  borderWidth: 0.5,
+                  borderColor: '#000',
                   // borderRadius:10,
-                  overflow:'hidden',
-                  paddingBottom:10,
+                  overflow: 'hidden',
+                  paddingBottom: 10,
                 },
                 row: {
                   // backgroundColor: '#FFFFFF',
@@ -321,7 +321,7 @@ const ShopProduct = (props) => {
                   height: 0.5,
                   backgroundColor: '#C8C7CC',
                   color: '#000',
-                  marginTop:10
+                  marginTop: 10
                 },
                 textInput: {
                   backgroundColor: 'transparent',
@@ -410,29 +410,28 @@ paddingLeft={50}/> */}
           <TouchableOpacity style={{ width: '98%', height: 50, borderRadius: 10, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginTop: 10, justifyContent: "space-between" }}
             // onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}
             onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}
-            >
+          >
 
             <View style={{ padding: 5 }}>
               <Text style={{ color: 'gray', fontSize: 12, left: 9 }}>Search by Vendors, Categories</Text>
             </View>
-            <TouchableOpacity style={{
-                    width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
-                      width: 0,
-                      height: 3
-                    },
-                    shadowColor: '#F5F5F5',
-                    shadowRadius: 1,
-                    shadowOpacity: 0.3,
-                    justifyContent: 'center',
-                    alignItems:'center',
-                    borderRadius:10,
-                    elevation: 5,
-                    padding:5,
-                  }}
-                    onPress={() => { setmodlevisual1(true) }}>
-                      <AntDesign name="search1" color={'#FFF'} size={24} />
-                    {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
-                  </TouchableOpacity>
+            <View style={{
+              width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
+                width: 0,
+                height: 3
+              },
+              shadowColor: '#F5F5F5',
+              shadowRadius: 1,
+              shadowOpacity: 0.3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              elevation: 5,
+              padding: 5,
+            }}>
+              <AntDesign name="search1" color={'#FFF'} size={24} />
+              {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
+            </View>
           </TouchableOpacity>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 15 }}>
@@ -455,8 +454,8 @@ paddingLeft={50}/> */}
                 keyExtractor={item => item.id}
               />
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Coupons Found</Text> 
-              }
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Coupons Found</Text>
+            }
           </View>
 
           {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
@@ -477,9 +476,9 @@ paddingLeft={50}/> */}
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22 }}>Explore Nearby</Text>
             {resData?.vendors?.length > 0 ?
-            <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
-              onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
-             :null}
+              <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
+                onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
+              : null}
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, }}>
@@ -537,7 +536,7 @@ paddingLeft={50}/> */}
                     }}>
                       <TouchableOpacity style={{ width: "100%", height: 130, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', padding: 1 }}
                         onPress={() => {
-                          props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, vendorName: item.name, businessid:item.business_id })
+                          props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, vendorName: item.name, businessid: item.business_id })
                           // dispatch(setProductVenderDetail(item))
                         }}>
                         <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 8, resizeMode: 'stretch' }}></Image>
@@ -573,17 +572,17 @@ paddingLeft={50}/> */}
               />
 
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Vendors Found</Text> 
-              }
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Vendors Found</Text>
+            }
           </View>
 
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22, width: '70%', }}>Buy what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 22, width: '70%', }}> HAPPY!</Text></Text>
-            {resData?.categories?.length > 0 ? 
-            <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
-              onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
-            :null}
+            {resData?.categories?.length > 0 ?
+              <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
+                onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
+              : null}
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
@@ -634,8 +633,8 @@ paddingLeft={50}/> */}
                 keyExtractor={item => item.id}
               />
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Categories Found</Text> 
-              }
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Categories Found</Text>
+            }
 
           </View>
 
@@ -799,7 +798,7 @@ paddingLeft={50}/> */}
       </View>
       {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
-      {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={()=>{ logoutDriver() }} canclePress={()=>{setMy_Alert2(false)}}/> : null }
+      {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={() => { logoutDriver() }} canclePress={() => { setMy_Alert2(false) }} /> : null}
     </SafeAreaView>
   );
 }
