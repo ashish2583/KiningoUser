@@ -934,9 +934,9 @@ const FoodDetails = (props) => {
   }
   const getDropdownData = () => {
     let data = ''
-    if(!selectedCategory?.category_code){
+    if (!selectedCategory?.category_code) {
       data = menuresData
-    }else{
+    } else {
       // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
       data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_code?.toLowerCase())
       // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
@@ -968,14 +968,14 @@ const FoodDetails = (props) => {
   const design1 = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
     return (
       <View style={{
-        alignItems: 'center', width: dimensions.SCREEN_WIDTH*30/100, borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
+        alignItems: 'center', width: dimensions.SCREEN_WIDTH * 30 / 100, borderRadius: 15, height: 60, paddingHorizontal: 10, backgroundColor: '#FFFFFF', height: 114, borderRadius: 30, shadowColor: '#455A64',
         shadowOffset: {
           width: 0,
           height: 3
         },
         shadowRadius: 1,
         shadowOpacity: 0.8,
-        elevation: 5, paddingTop: 10, marginHorizontal: 4,marginVertical:5
+        elevation: 5, paddingTop: 10, marginHorizontal: 4, marginVertical: 5
       }}>
         <TouchableOpacity onPress={press ? press : () => { }}
           style={{ width: '100%', height: 70, backgroundColor: bg, justifyContent: 'center', borderRadius: redious }}>
@@ -1019,7 +1019,7 @@ const FoodDetails = (props) => {
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')}
           img1width={30} img1height={30} img1backgroundColor={'#fff'} img1padding={5} img1borderRadius={4}
           press2={() => { }} title2={resData.name} fontWeight={'bold'} img2height={20} color={Mycolors.TEXT_COLOR}
-          press3={() => { props.navigation.navigate('ShopProdCart', {vendorId: props.route.params.vendorId}) }} img3width={45} img3height={45}
+          press3={() => { props.navigation.navigate('ShopProdCart', { vendorId: props.route.params.vendorId }) }} img3width={45} img3height={45}
           img3={selectedTab != 'Book A Table' && selectedTab != 'Dining' ? require('../../../assets/Cart.png') : ''}
           img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
         {cartCount != '0' && selectedTab != 'Book A Table' && selectedTab != 'Dining' ?
@@ -1071,13 +1071,13 @@ const FoodDetails = (props) => {
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => setmodlevisual6(true)} style={{ position: 'absolute', right: 22, top: 15, marginVertical: 4,  }}>
-            <AntDesign name="infocirlce" color={'#835E23'} size={24} />
+            <TouchableOpacity onPress={() => setmodlevisual6(true)} style={{ position: 'absolute', right: 22, top: 15, marginVertical: 4, }}>
+              <AntDesign name="infocirlce" color={'#835E23'} size={24} />
               {/* <Text style={{ color: '#fd001f', fontSize: 13, fontWeight: '500', marginVertical: 4, textDecorationLine: "underline", }}>View Details</Text> */}
             </TouchableOpacity>
             <View>
               <TouchableOpacity style={{
-                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff', marginTop:10,
+                width: 25, height: 25, borderRadius: 5, backgroundColor: '#fff', marginTop: 10,
                 shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
@@ -1088,37 +1088,37 @@ const FoodDetails = (props) => {
                 justifyContent: 'center',
                 elevation: 5,
               }} onPress={() => { goToMap(resData.latitude, resData.longitude) }}>
-              <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
+                <Image source={require('../../../assets/layer_9.png')} style={{ width: 10, height: 15, alignSelf: 'center' }}></Image>
               </TouchableOpacity>
             </View>
 
           </View>
 
-              <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: -10 }}
+          <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: -10 }}
+            onPress={() => { setmodlevisual1(true) }}>
+            <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Products</Text>
+            <View style={{ height: 40, flexDirection: 'row' }}>
+              <TouchableOpacity style={{
+                width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
+                  width: 0,
+                  height: 3
+                },
+                shadowColor: '#F5F5F5',
+                shadowRadius: 1,
+                shadowOpacity: 0.3,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 10,
+                elevation: 5,
+              }}
                 onPress={() => { setmodlevisual1(true) }}>
-                <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Products</Text>
-                <View style={{ height: 40, flexDirection: 'row' }}>
-                  <TouchableOpacity style={{
-                    width: 40, height: 40, backgroundColor: '#835E23', justifyContent: 'center', shadowOffset: {
-                      width: 0,
-                      height: 3
-                    },
-                    shadowColor: '#F5F5F5',
-                    shadowRadius: 1,
-                    shadowOpacity: 0.3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10,
-                    elevation: 5,
-                  }}
-                    onPress={() => { setmodlevisual1(true) }}>
-                    <AntDesign name="search1" color={'#FFF'} size={24} />
-                  </TouchableOpacity>
+                <AntDesign name="search1" color={'#FFF'} size={24} />
+              </TouchableOpacity>
 
-                </View>
+            </View>
 
 
-              </TouchableOpacity>    
+          </TouchableOpacity>
 
           <View style={{ width: '95%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
             <FlatList
@@ -1320,7 +1320,7 @@ const FoodDetails = (props) => {
               </View>
               <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
                 <Image source={require('../../../assets/product_refresh.png')} ></Image>
-                <Text style={{ color: '#fff', fontSize:12 ,fontWeight: '400', marginLeft:10 }} >Clear</Text>
+                <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
               </TouchableOpacity>
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
@@ -1331,7 +1331,7 @@ const FoodDetails = (props) => {
                   // numColumns={2}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={[{ width: 100, minHeight:110,marginHorizontal: 5, overflow:'hidden', height:100 }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
+                      <View style={[{ width: 100, minHeight: 110, marginHorizontal: 5, overflow: 'hidden', height: 100 }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
                         <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                           onPress={() => { setSelectedCategory(item) }}>
                           <Image source={{ uri: item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
@@ -1598,15 +1598,15 @@ const FoodDetails = (props) => {
                 // press={() => { Alert.alert('Hi') }}
                 presssearch={() => { searchmenuList(searchValue.text) }}
                 paddingLeft={9} /> */}
-                <ProductSearchInput marginTop={10} placeholder={'Search Products'}
-                  serchValue={searchValue}
-                  onChangeText={(e) => {
-                    setsearchValue(e)
-                    searchmenuList(e.text)
-                  }}
-                  // press={() => { Alert.alert('Hi') }}
-                  presssearch={() => { searchmenuList(searchValue.text) }}
-                  paddingLeft={9} />
+              <ProductSearchInput marginTop={10} placeholder={'Search Products'}
+                serchValue={searchValue}
+                onChangeText={(e) => {
+                  setsearchValue(e)
+                  searchmenuList(e.text)
+                }}
+                // press={() => { Alert.alert('Hi') }}
+                presssearch={() => { searchmenuList(searchValue.text) }}
+                paddingLeft={9} />
             </View>
 
             {/* <Text style={{ fontWeight: 'bold', fontSize: 16, marginTop: 15, left: 5, color: '#cbcbcb' }}></Text> */}
@@ -1895,27 +1895,27 @@ const FoodDetails = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{resData.rating ? resData.rating : '0.0'}</Text>
                 </View>
               </View>
-              <View style={{ flexDirection: 'row',top:9 }}>
-              <TouchableOpacity onPress={()=>{
-                 dialCall(resData.phone)
-              }} style={{height:40,width:40}}>
-              <Image source={require('../../../assets/call.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
-              </TouchableOpacity>
-                  
-              <TouchableOpacity onPress={()=>{
-                 sendEmail(resData.emailid)
-              }} style={{height:40,width:40}}>
-              <Image source={require('../../../assets/Envelope.png')} style={{height:40,width:40,resizeMode:'stretch'}}></Image>
-              </TouchableOpacity>
-                  
+              <View style={{ flexDirection: 'row', top: 9 }}>
+                <TouchableOpacity onPress={() => {
+                  dialCall(resData.phone)
+                }} style={{ height: 40, width: 40 }}>
+                  <Image source={require('../../../assets/call.png')} style={{ height: 40, width: 40, resizeMode: 'stretch' }}></Image>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                  sendEmail(resData.emailid)
+                }} style={{ height: 40, width: 40 }}>
+                  <Image source={require('../../../assets/Envelope.png')} style={{ height: 40, width: 40, resizeMode: 'stretch' }}></Image>
+                </TouchableOpacity>
+
               </View>
             </View>
             {resData.business_info ?
-            <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
-              <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
-              <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
-            </View>
-             :null}
+              <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
+                <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+              </View>
+              : null}
 
             <View style={{ alignItems: 'center', width: '96%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
               <MapView
@@ -1953,15 +1953,16 @@ const FoodDetails = (props) => {
                 showsIndoorLevelPicker={true}
               >
                 <Marker
-                coordinate={{ latitude: resData.latitude, longitude: resData.longitude}}
-                    >
-                <Image
-                source={require('../../../assets/shape_33.png')}
-                style={{width: 26, height: 28,
-                  }}
-                resizeMode="contain"
-               /> 
-               </Marker>
+                  coordinate={{ latitude: resData.latitude, longitude: resData.longitude }}
+                >
+                  <Image
+                    source={require('../../../assets/shape_33.png')}
+                    style={{
+                      width: 26, height: 28,
+                    }}
+                    resizeMode="contain"
+                  />
+                </Marker>
 
               </MapView>
             </View>
@@ -1978,28 +1979,28 @@ const FoodDetails = (props) => {
             <View style={{ width: '100%', alignSelf: 'center', }}>
               <FlatList
                 data={resData?.services}
-                 horizontal={true}
+                horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 // numColumns={3}
-                renderItem={({ item, index }) => { 
-                  return (    
+                renderItem={({ item, index }) => {
+                  return (
                     <>
                       {item.attribute_value == 'yes' ?
-                      item.attribute_label=='Delivery' ?
-                      design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '23%', 42, 45, '', 20,() => {})
-                      :
-                      item.attribute_label=='Take Away' ?
-                      design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '23%', 42, 40, '', 20,() => {})
-                      :
-                      item.attribute_label=='Dining' ?
-                     design1(require('../../../assets/dining_icon.png'), 'Dining', '', '23%', 42, 47, '', 20, () => {})
-                      :
-                      item.attribute_label=='Book A Table' ?
-                     design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '23%', 42, 42, '', 20, () => { })
-                      :
-                      null
-                      :
-                      null
+                        item.attribute_label == 'Delivery' ?
+                          design1(require('../../../assets/Delivery_icon1.png'), 'Delivery', '', '23%', 42, 45, '', 20, () => { })
+                          :
+                          item.attribute_label == 'Take Away' ?
+                            design1(require('../../../assets/Take_away_icon.png'), 'Take Away', '', '23%', 42, 40, '', 20, () => { })
+                            :
+                            item.attribute_label == 'Dining' ?
+                              design1(require('../../../assets/dining_icon.png'), 'Dining', '', '23%', 42, 47, '', 20, () => { })
+                              :
+                              item.attribute_label == 'Book A Table' ?
+                                design1(require('../../../assets/Booked_table_icon.png'), 'Booked Table', '', '23%', 42, 42, '', 20, () => { })
+                                :
+                                null
+                        :
+                        null
                       }
                     </>
                   )
@@ -2008,30 +2009,35 @@ const FoodDetails = (props) => {
               />
             </View>
 
-            <View style={{ marginTop: 40, marginLeft: 7, marginBottom: 20 }}>
-              <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Badges</Text>
-            </View>
+            {resData?.features?.length > 0 ?
+              <>
+
+                <View style={{ marginTop: 40, marginLeft: 7, marginBottom: 20 }}>
+                  <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: '500', color: '#455A64', lineHeight: 16 }} >Badges</Text>
+                </View>
 
 
 
-            <FlatList
-              data={resData?.features}
-              horizontal={true}
-              style={{ marginBottom: 20, }}
-              showsHorizontalScrollIndicator={false}
-              // numColumns={2}
-              renderItem={({ item, index }) => {
-                return (
-                  <ImageBackground source={require('../../../assets/badges_background.png')} style={styles.badgeContainer}>
-                    <View style={styles.badgeView}>
-                      <Image source={{ uri: item.attribute_image }} style={{ height: 25, width: 25 }} />
-                    </View>
-                    <Text style={styles.badgeText}>{item.attribute_value}</Text>
-                  </ImageBackground>
-                )
-              }}
-              keyExtractor={item => item.id}
-            />
+                <FlatList
+                  data={resData?.features}
+                  horizontal={true}
+                  style={{ marginBottom: 20, }}
+                  showsHorizontalScrollIndicator={false}
+                  // numColumns={2}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <ImageBackground source={require('../../../assets/badges_background.png')} style={styles.badgeContainer}>
+                        <View style={styles.badgeView}>
+                          <Image source={{ uri: item.attribute_image }} style={{ height: 25, width: 25 }} />
+                        </View>
+                        <Text style={styles.badgeText}>{item.attribute_value}</Text>
+                      </ImageBackground>
+                    )
+                  }}
+                  keyExtractor={item => item.id}
+                />
+              </>
+              : null}
 
             <View style={{ width: 100, height: 100 }} />
           </ScrollView>
@@ -2077,20 +2083,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 5
   },
-  categorySelectedStyle:{
-    borderWidth:2,
+  categorySelectedStyle: {
+    borderWidth: 2,
     borderColor: '#835E23',
-    borderRadius:10
+    borderRadius: 10
   },
-  refreshView:{
-    flexDirection:'row',
-    alignItems:'center',
-    width:'25%',
-    marginTop:10,
-    backgroundColor:'#835E23',
-    paddingVertical:10,
-    paddingHorizontal:20,
-    borderRadius:50
+  refreshView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '25%',
+    marginTop: 10,
+    backgroundColor: '#835E23',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50
   }
 });
 export default FoodDetails
