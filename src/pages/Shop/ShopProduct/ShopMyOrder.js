@@ -326,7 +326,9 @@ const ShopMyOrder = (props) => {
         }
       >
         <HomeHeader height={60} paddingHorizontal={15}// backgroundColor={'#fff'}
-          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
+          // press1={() => { props.navigation.goBack() }}
+          press1={() => { props.navigation.navigate('ShopProduct') }}
+          img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
           press2={() => { }} title2={'My Orders'} fontWeight={'500'} img2height={20}
           press3={() => { }} img3width={25} img3height={25} />
         {/* {
