@@ -98,7 +98,13 @@ setRefreshing(false)
 }, []);
 
   const handlePayClick = async () => {
-   
+    if (card === 0) {
+      Toast.show({text1: 'Please enter card details'});
+      return;
+    } else if (!card?.complete) {
+      Toast.show({text1: 'Please complete card details'});
+      return;
+    }
     setLoading(true);
   
       console.log('card', card);
