@@ -436,7 +436,7 @@ paddingLeft={50}/> */}
           </TouchableOpacity>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 15 }}>
-            {resData != null ?
+            {resData?.coupons?.length > 0 ?
               <FlatList
                 data={resData.coupons}
                 horizontal={true}
@@ -454,7 +454,9 @@ paddingLeft={50}/> */}
                 }}
                 keyExtractor={item => item.id}
               />
-              : null}
+              :
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Coupons Found</Text> 
+              }
           </View>
 
           {/* <View style={{height:140,borderRadius:10,overflow:'hidden',marginVertical:10,width:'98%',alignSelf:'center'}}>
@@ -585,7 +587,7 @@ paddingLeft={50}/> */}
           </View>
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
-            {resData != null ?
+            {resData?.categories?.length > 0 ?
               <FlatList
                 data={resData.categories}
                 horizontal={true}
@@ -631,7 +633,9 @@ paddingLeft={50}/> */}
                 }}
                 keyExtractor={item => item.id}
               />
-              : null}
+              :
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Categories Found</Text> 
+              }
 
           </View>
 
