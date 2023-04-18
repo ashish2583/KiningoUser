@@ -60,6 +60,7 @@ const FoodDetails = (props) => {
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState([])
   const [menuresData, setmenuresData] = useState([])
+  const [menuresData2, setmenuresData2] = useState([])
   const [similarProducts, setSimilarProducts] = useState([])
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
@@ -713,10 +714,10 @@ const FoodDetails = (props) => {
       setLoading(false)
       console.log('the res search shop_eat_menu_userid ==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        setmenuresData(responseJson.body)
+        setmenuresData2(responseJson.body)
         // setsearchValue('')
       } else {
-        setmenuresData([])
+        setmenuresData2([])
         // Toast.show({text1: responseJson.headers.message})
         // setalert_sms(err)
         // setMy_Alert(true) 
@@ -1586,7 +1587,7 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => setmodlevisual1(false)}
-        onModalWillShow={()=>{menuList()}}
+        onModalWillShow={()=>{setmenuresData2([...menuresData])}}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
@@ -1618,8 +1619,8 @@ const FoodDetails = (props) => {
             {/* <Text style={{ fontWeight: 'bold', fontSize: 16, marginTop: 15, left: 5, color: '#cbcbcb' }}></Text> */}
 
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
-              {menuresData.length > 0 ?
-                (menuresData.map((item, index) => {
+              {menuresData2.length > 0 ?
+                (menuresData2.map((item, index) => {
                   return (
                     <View>
                       {
