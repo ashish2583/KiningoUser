@@ -930,8 +930,8 @@ const ShopProduct = (props) => {
         style={{margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
         <View style={{ width: '95%', height: dimensions.SCREEN_HEIGHT * 40 / 100, alignSelf:'center', borderRadius: 30, backgroundColor: '#fff' }}>
-        <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '100%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10 }}>
-          {
+        <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '100%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10, ...styles.extraStyle }}>
+          {rescopun?.length > 0 ?
             rescopun.map((item, index) => {
               return (
                 <View style={{
@@ -960,6 +960,10 @@ const ShopProduct = (props) => {
               )
             }
             )
+            :
+            <View style={{alignSelf:'center'}} >
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Coupons Available</Text>
+            </View>
           }
         </View>
 
@@ -1242,5 +1246,9 @@ const styles = StyleSheet.create({
       // top: 23,
     },
   },
+  extraStyle:{
+    justifyContent:'center',
+    alignItems:'center'
+  }
 });
 export default ShopProduct 
