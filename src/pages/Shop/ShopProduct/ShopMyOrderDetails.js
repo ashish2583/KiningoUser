@@ -12,6 +12,9 @@ import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_orders, shop_eat_
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../../WebApi/Loader';
 
+function formatNumber(num) {
+  return Number(num).toFixed(2)
+}
 
 const ShopMyOrderDetails = (props) => {
   const {data} = props.route.params
@@ -258,8 +261,12 @@ const ShopMyOrderDetails = (props) => {
 
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
-                <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.amount).toFixed(2))}</Text>
+                <Text style={{ color: "white", fontSize: 13,  }} >Sub Total</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${formatNumber(data.amount)}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, marginTop: 5 }}>
+                <Text style={{ color: "white", fontSize: 13,  }} >Vendor Charges</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${formatNumber(data.vendor_charges)}</Text>
               </View>
               {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
@@ -271,11 +278,11 @@ const ShopMyOrderDetails = (props) => {
                 :
                 <Text style={{ color: 'white', fontSize: 13, }} >Discount applied</Text>
                 }
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${data.discount_amount}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${formatNumber(data.discount_amount)}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.taxes).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${formatNumber(data.taxes)}</Text>
               </View>
               {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Delivery Charges</Text>
@@ -288,7 +295,7 @@ const ShopMyOrderDetails = (props) => {
                </View>
                 <View style={{flexDirection:"column"}}>
                 <Text style={{ color: Mycolors.GrayColor, fontSize: 12, fontWeight: '600', textAlign: 'left' }} >Bill Total</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${formatNumber(data.paid_amount)}</Text>
                 </View>
                 
               </View>

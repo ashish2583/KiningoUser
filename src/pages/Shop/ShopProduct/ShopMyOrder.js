@@ -210,11 +210,8 @@ const ShopMyOrder = (props) => {
   }
   const orderList = async (filters = false, closeModal = false) => {
     let endPoint = shop_product_orders
-    if (filters && orderTypeValue !== '' || timeDurationValue !== '' || orderDate !== '' || keyword !== '' || statusValue !== '') {
+    if (filters && timeDurationValue !== '' || orderDate !== '' || keyword !== '' || statusValue !== '') {
       const data = {}
-      if (orderTypeValue !== '') {
-        data['order_type'] = orderTypeData.find(el => el.label === orderTypeValue).value
-      }
       if (timeDurationValue !== '') {
         data['from_date'] = timeDurationData.find(el => el.label === timeDurationValue).value
       }
@@ -711,7 +708,7 @@ const ShopMyOrder = (props) => {
                       date={orderDate}
                       mode="date"
                       placeholder={'Pick a Date'}
-                      maximumDate={new Date()}
+                      // maximumDate={new Date()}
                       format='YYYY-MM-DD'
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
@@ -728,7 +725,7 @@ const ShopMyOrder = (props) => {
                           mode='calendar'
                           // is24Hour={false}
                           display="spinner"
-                          maximumDate={new Date()}
+                          // maximumDate={new Date()}
                           onChange={(event, sTime) => {
                             setshowda(false)
                             console.log(sTime.toDateString());
