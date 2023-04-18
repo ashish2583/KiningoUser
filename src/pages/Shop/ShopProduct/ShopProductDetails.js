@@ -1586,6 +1586,7 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => setmodlevisual1(false)}
+        onModalWillShow={()=>{menuList()}}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
