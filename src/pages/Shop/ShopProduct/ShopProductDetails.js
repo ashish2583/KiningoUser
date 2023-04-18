@@ -1323,7 +1323,10 @@ const FoodDetails = (props) => {
                   <Image source={require('../../../assets/product_refresh.png')} ></Image>
                   <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
                 </TouchableOpacity>
-                : null}
+                :
+                // <View style={{height:50}} />
+                null 
+                }
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
