@@ -30,6 +30,20 @@ Geolocation.setRNConfiguration(GoogleApiKey);
 Geocoder.init(GoogleApiKey);
 
 
+function formatNumber(num) {
+  return Number(num).toFixed(2)
+  // console.log('typeof num', typeof num, num);
+  // if(Number.isInteger(num)){
+  //   return `${num}.00`
+  // }else{
+  //   const afterParsing = parseFloat(Number(num).toFixed(2))
+  //   if(Number.isInteger((afterParsing))){
+  //     return `${afterParsing}.00`
+  //   }else{
+  //     return afterParsing
+  //   }
+  // }
+}
 function newAddMinutes(time, minsToAdd) {
   function D(J) { return (J < 10 ? '0' : '') + J; };
   var piece = time.split(':');
@@ -784,19 +798,19 @@ const ShopProduct = (props) => {
                 </View> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${formatNumber(vendorCharges)}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(taxes).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${formatNumber(taxes)}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Discount</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${parseFloat(Number(discountPrice).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${formatNumber(discountPrice)}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ADC430', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, marginTop: 5, fontWeight: '600' }} >${parseFloat(Number(totla).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, marginTop: 5, fontWeight: '600' }} >${formatNumber(totla)}</Text>
                 </View>
               </View>
 
