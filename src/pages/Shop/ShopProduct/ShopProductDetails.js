@@ -1318,10 +1318,12 @@ const FoodDetails = (props) => {
                   <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#835E23' }} >View All</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
-                <Image source={require('../../../assets/product_refresh.png')} ></Image>
-                <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
-              </TouchableOpacity>
+              {Object.keys(selectedCategory)?.length > 0 ?
+                <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
+                  <Image source={require('../../../assets/product_refresh.png')} ></Image>
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
+                </TouchableOpacity>
+                : null}
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
