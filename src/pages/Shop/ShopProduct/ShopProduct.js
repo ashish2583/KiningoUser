@@ -551,9 +551,9 @@ paddingLeft={50}/> */}
                         <View style={{ flexDirection: 'row', }}>
                           <Image source={require('../../../assets/Star.png')} style={{ width: 13, height: 13 }}></Image>
                           <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{parseFloat(Number(item.rating).toFixed(5))}</Text>
-                          <View style={{ backgroundColor: '#9B9B9B', height: 4, width: 4, justifyContent: "center", alignItems: "center", marginHorizontal: 9, borderRadius: 4 / 2, marginTop: 7 }} />
+                          {/* <View style={{ backgroundColor: '#9B9B9B', height: 4, width: 4, justifyContent: "center", alignItems: "center", marginHorizontal: 9, borderRadius: 4 / 2, marginTop: 7 }} />
                           <Image source={require('../../../assets/Clock.png')} style={{ width: 13, height: 13, marginLeft: -1, top: 1 }}></Image>
-                          <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{item.tentative_time}</Text>
+                          <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{item.tentative_time}</Text> */}
                         </View>
                         {/* <TouchableOpacity style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
       shadowOffset: {
