@@ -152,7 +152,6 @@ const ShopMyOrderDetails = (props) => {
                 </View>
 
                 <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12 }}>Order Date & Time : {data.created_date}</Text>
-                <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12 }}>Takeaway Date & Time : {data.schedule_date} {data.schedule_time_from}</Text>
 
               </View>
               <View style={{ flexDirection: 'row', left: -10, top: -10 }}>
@@ -204,20 +203,15 @@ const ShopMyOrderDetails = (props) => {
             </View> */}
 
 
-            {data.status != 11 && data.status != 13 && data.status != 15 ?
-              <View>
-                <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
-                  <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
-                  <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >{data.status_label}</Text>
-                  <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
-                </View>
-                {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
+            <View>
+              <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
+                {/* <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image> */}
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Takeaway Date & Time : {data.schedule_date} {data.schedule_time_from}</Text>
+              </View>
+              {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
             </View> */}
-              </View>
-
-              : null
-            }
+            </View>
 
           </View>
 
