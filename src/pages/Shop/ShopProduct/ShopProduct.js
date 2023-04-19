@@ -196,10 +196,10 @@ const ShopProduct = (props) => {
     // console.log('renderDescription', address);
     return (
       <View style={{ minHeight: 200 }}>
-        <Text style={styles.rowTitle}>
+        <Text style={{color:'gray'}}>
           {title}
         </Text>
-        <Text style={[styles.rowAddress]}>
+        <Text style={{color:'gray'}}>
           {address}
         </Text>
       </View>
@@ -316,7 +316,7 @@ const ShopProduct = (props) => {
                 row: {
                   // backgroundColor: '#FFFFFF',
                   paddingVertical: 10,
-                  height: 46,
+                  height: 50,
                   flexDirection: 'row',
                 },
                 separator: {
