@@ -208,7 +208,7 @@ const ShopMyOrderDetails = (props) => {
               <View>
                 <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
                   <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
-                  <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order has been picked up </Text>
+                  <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >{data.status_label}</Text>
                   <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
                 </View>
                 {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>

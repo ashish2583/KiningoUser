@@ -96,10 +96,15 @@ const ShopMyOrder = (props) => {
   const [ordersFound, setOrdersFound] = useState(true)
   useEffect(() => {
     const unsubscribe = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-    myorderList()
     return () =>
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
   }, [])
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      myorderList()
+    })
+    return unsubscribe;
+  }, [props.navigation])
 
   const handleBackButton = () => {
     // Toast.show({text1: 'Back button is pressed'});
