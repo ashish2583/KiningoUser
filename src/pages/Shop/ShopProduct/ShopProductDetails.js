@@ -995,11 +995,12 @@ const FoodDetails = (props) => {
     let phoneNumber = '';
 
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${' + num + '}';
+      phoneNumber = `tel:${num}`;
     }
     else {
-      phoneNumber = 'telprompt:${' + num + '}';
+      phoneNumber = `telprompt:${num}`;
     }
+    console.log('phoneNumber', phoneNumber);
     Linking.openURL(phoneNumber);
   };
 
