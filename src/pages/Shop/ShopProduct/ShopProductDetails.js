@@ -1940,7 +1940,7 @@ const FoodDetails = (props) => {
                   longitudeDelta: 0.0421,
                 }}
                 customMapStyle={mapStyle}
-                showsUserLocation={true}
+                showsUserLocation={false}
                 userLocationCalloutEnabled={true}
                 // showsMyLocationButton={true}
                 mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
