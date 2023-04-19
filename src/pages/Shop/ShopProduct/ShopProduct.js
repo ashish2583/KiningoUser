@@ -98,6 +98,8 @@ const ShopProduct = (props) => {
   const [alert_sms2, setalert_sms2] = useState('')
   const [refreshing, setRefreshing] = useState(false);
   const [addre, setaddre] = useState(' ');
+  const [googleAddress, setGoogleAddress] = useState('');
+  const [googleLatLng, setGoogleLatLng] = useState({});
 
   useEffect(() => {
     GetLocation.getCurrentPosition({
