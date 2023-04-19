@@ -81,6 +81,7 @@ const ShopMyOrder = (props) => {
     { label: 'Last 3 Years', value: 'Last 3 Years' },
   ]);
   const [orderDate, setOrderDate] = useState('')
+  const [showOrderDate, setShowOrderDate] = useState(false)
   const [statusValue, setStatusValue] = useState('');
   const [statusData, setStatusData] = useState([
     { label: 'Pending', value: '0' },
@@ -105,6 +106,10 @@ const ShopMyOrder = (props) => {
     })
     return unsubscribe;
   }, [props.navigation])
+
+  useEffect(()=>{
+    console.log('showOrderDate changed', showOrderDate);
+  },[showOrderDate])
 
   const handleBackButton = () => {
     // Toast.show({text1: 'Back button is pressed'});
@@ -214,6 +219,7 @@ const ShopMyOrder = (props) => {
 
   }
   const orderList = async (filters = false, closeModal = false) => {
+    setShowOrderDate(true)
     let endPoint = shop_product_orders
     if (filters && timeDurationValue !== '' || orderDate !== '' || keyword !== '' || statusValue !== '') {
       const data = {}
@@ -278,6 +284,7 @@ const ShopMyOrder = (props) => {
     // setOrderTypeValue('')
     setTimeDurationValue('')
     setOrderDate('')
+    setShowOrderDate(false)
     setStatusValue('')
     // orderList(false, true)
     myorderList()
@@ -362,7 +369,7 @@ const ShopMyOrder = (props) => {
                 <AntDesign name="filter" color={'#fff'} size={24} />
               </View> */}
               {
-                orderTypeValue != '' || orderDate != '' ?
+                orderTypeValue != '' || showOrderDate != '' ?
                   (<View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {
                       orderTypeValue != '' ?
@@ -372,10 +379,9 @@ const ShopMyOrder = (props) => {
                         </View> : null
                     }
                     {
-                      orderDate != '' ?
+                      showOrderDate != '' ?
                         <View style={{ paddingHorizontal: 15, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2, height: 30, marginLeft: 15 }}>
-
-                          <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{orderDate ? orderDate.toString().substring(0, 16) : 'Select Date'}</Text>
+                          <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{orderDate && showOrderDate ? orderDate.toString().substring(0, 16) : 'Select Date'}</Text>
                         </View>
                         :
                         null
@@ -640,6 +646,11 @@ const ShopMyOrder = (props) => {
         onBackdropPress={() => setShowFiltersModal(false)}
         onSwipeComplete={(e) => {
           setShowFiltersModal(false)
+        }}
+        onModalWillShow={()=>{
+          if(!showOrderDate){
+            setOrderDate('')
+          }
         }}
         scrollTo={() => { }}
         scrollOffset={1}
