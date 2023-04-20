@@ -22,6 +22,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import DatePicker from 'react-native-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
@@ -581,8 +582,8 @@ const ShopProduct = (props) => {
             <View style={{ borderWidth: 5, borderRadius: 5, borderColor: 'rgba(255, 196, 12, 0.2)', marginRight: 20, justifyContent: 'center', borderRadius: 20, height: 100 }}>
               <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 50, height: 50, marginHorizontal: 10 }} />
             </View>
-            <View>
-              <Text style={{ fontSize: 16, color: '#263238', width: '55%' }}>{item.name}</Text>
+            <View style={{width: '70%'}}>
+              <Text style={{ fontSize: 16, color: '#263238', }}>{item.name}</Text>
               <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.item_total.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
