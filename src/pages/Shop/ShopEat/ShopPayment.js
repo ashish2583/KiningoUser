@@ -33,14 +33,14 @@ const ShopPayment = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(()=>{
-    setcheckitem({
-      id: '',
-      card_no: 'Cash Payment',
-      exp_month:'Default method',
-      exp_year:'',
-      time:'Default method',
-      img:require('../../../assets/images/cashondelivery.png'),
-    })
+    // setcheckitem({
+    //   id: '',
+    //   card_no: 'Cash Payment',
+    //   exp_month:'Default method',
+    //   exp_year:'',
+    //   time:'Default method',
+    //   img:require('../../../assets/images/cashondelivery.png'),
+    // })
     getpaymentList()
  },[])
 
@@ -67,7 +67,7 @@ setRefreshing(false)
    if(card==0){
     Toast.show({text1:'Please Add card details'})
    }else if (!card.complete){
-    Toast.show({text1:'Please enter complete card details'})
+    Toast.show({text1:'Please enter correct card details'})
    }else{
     
     setLoading(true);
@@ -135,18 +135,21 @@ setRefreshing(false)
   setLoading(false)
   console.log('the res user_payment_method==>>', responseJson)
   if (responseJson.headers.success == 1) {
-    var arr=[{
-      id: '',
-      card_no: 'Cash Payment',
-      exp_month:'Default method',
-      exp_year:'',
-      time:'Default method',
-      img:require('../../../assets/images/cashondelivery.png'),
-    }]
+    var arr=[
+    //   {
+    //   id: '',
+    //   card_no: 'Cash Payment',
+    //   exp_month:'Default method',
+    //   exp_year:'',
+    //   time:'Default method',
+    //   img:require('../../../assets/images/cashondelivery.png'),
+    // }
+  ]
     for(let i=1;i<=responseJson.body.length;i++){
       arr.push(responseJson.body[i-1])
     }
    setallCardList(arr)
+   setcheckitem(responseJson.body[0])
   } else {
     console.log('kokokok');
     //  setalert_sms(err)
@@ -240,8 +243,8 @@ setRefreshing(false)
         { checkitem != item ?
           <TouchableOpacity style={{width:'100%',borderColor:Mycolors.GrayColor,borderWidth:0.02,flexDirection:'row',alignItems:'center',paddingVertical:17,paddingHorizontal:17, borderRadius:7,backgroundColor:'#fff',marginTop:15}}
           onPress={()=>{setcheckitem(item)}}>
-            <View style={{width:51,height:40}}>
-            {/* <Image source={item.img}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image> */}
+            <View style={{width:51,height:20}}>
+            <Image source={require('../../../assets/visa.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
             </View>
             <View style={{marginLeft:15}}>
             <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>**** **** **** {item.card_no}</Text>
@@ -260,7 +263,9 @@ setRefreshing(false)
 <Text style={{color:Mycolors.GrayColor,fontWeight:'300',fontSize:12,marginVertical:20}}>CURRENT METHOD</Text>
 <View style={{width:'100%',borderColor:Mycolors.RED,borderWidth:0.2,flexDirection:'row',alignItems:'center',paddingVertical:17,paddingHorizontal:17, borderRadius:7,backgroundColor:'#fff'}}>
 <View style={{width:51,height:40}}>
-<Image source={checkitem.img}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
+<Image source={require('../../../assets/visa.png')
+  // checkitem.img
+  }  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
 </View>
 <View style={{marginLeft:15}}>
 <Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'500',fontSize:13}}>**** **** **** {checkitem.card_no}</Text>

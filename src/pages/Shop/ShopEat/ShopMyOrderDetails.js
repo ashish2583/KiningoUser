@@ -8,15 +8,14 @@ import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import MyButtons from '../../../component/MyButtons';
 import Modal from 'react-native-modal';
 import DatePicker from 'react-native-datepicker';
-import { baseUrl, shop_eat_cart, user_payment_method, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
+import { baseUrl, shop_eat_cart,shop_eat_order_id, user_payment_method, shop_eat_orders, shop_eat_cart_book_dining, shop_eat_cart_book_table, shop_eat_cart_id, shop_eat_business_id, shop_eat_menu_userid, requestPostApi, requestGetApi, shop_eat } from '../../../WebApi/Service'
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../../WebApi/Loader';
 
-
 const ShopMyOrderDetails = (props) => {
-  const {data} = props.route.params
+  //const {data} = props.route.params
   // console.log('ShopMyOrderDetails data', data);
-  const [searchValue, setsearchValue] = useState('')
+  const [data, setdata] = useState('')
   const [modlevisual1, setmodlevisual1] = useState(false)
   const [checkitem, setcheckitem] = useState('')
   const [reson, setreson] = useState('')
@@ -29,15 +28,15 @@ const ShopMyOrderDetails = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    console.log('ShopMyOrderDetails data', data)
+//setdata(props.route.params.data)
     let localItemTotal = 0
-    data.items.map(el=>{
+    var ddd=props.route.params.data
+    ddd.items.map(el=>{
       localItemTotal += el.quantity * el.amount  
     })
     setItemTotal(localItemTotal)
-    // orderList()
+    ordersDetatls(ddd.id)
   }, [])
-
 
   const checkcon = () => {
     orderList()
@@ -55,6 +54,20 @@ const ShopMyOrderDetails = (props) => {
     });
   }, []);
 
+
+const ordersDetatls=async (id)=>{
+  setLoading(true)
+  const { responseJson, err } = await requestGetApi(shop_eat_order_id + id, '', 'GET', User.token)
+  setLoading(false)
+  console.log('the res==>>', responseJson)
+  if (responseJson.headers.success == 1) {
+   console.log('=============>>>>>',responseJson);
+   setdata(responseJson.body)
+  } else {
+    // setalert_sms(err)
+    // setMy_Alert(true)
+  }
+}
 
 
 
@@ -126,16 +139,7 @@ const ShopMyOrderDetails = (props) => {
           <View style={{
             width: '95%', marginHorizontal: 10,
             marginVertical: 10, backgroundColor: '#e6edc0', padding: 15, borderColor: '#F2F5DE', borderWidth: 1,borderTopLeftRadius:10,borderTopRightRadius:10
-            // shadowColor: 'black',
-            // shadowOffset: {
-            //   width: 0,
-            //   height: 10
-            // },
-            // shadowRadius: 10,
-            // shadowOpacity: 0.9,
-            // overflow: 'hidden',
-            // elevation: 5,
-
+           
           }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <View style={{ flexDirection: 'column' }}>
@@ -144,8 +148,8 @@ const ShopMyOrderDetails = (props) => {
  {/* <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12,marginLeft:5 }}>Order Date & Time : {data.created_date}</Text> */}
 </View>
    <View style={{flexDirection:'row'}}>
-   <Text style={{ color: 'Gray', fontWeight: '600', fontSize: 12 }}>Status :</Text>
-   <Text style={{ color:  'red', fontWeight: '600', fontSize: 12 }}> {data.status_label}</Text>
+   <Text style={{ color: '#000', fontWeight: '600', fontSize: 12 }}>Status :</Text>
+   <Text style={{ color: data.status_label=='Pending' ? 'red' :data.status_label=='Delivered' ? 'green' : '#000', fontWeight: '600', fontSize: 12 }}> {data.status_label}</Text>
    </View>
        
          <Text style={{ color: '#C1C1C1', fontWeight: '400', fontSize: 12 }}>Order Date & Time : {data.created_date}</Text>
@@ -157,19 +161,10 @@ const ShopMyOrderDetails = (props) => {
               </View>
             </View>
           </View>
-
+{data.order_type!= "take-away" ?
           <View style={{
             top: -20,
             marginVertical: 10, backgroundColor: '#FAF9FB', padding: 15, borderRadius: 10,
-            // shadowColor: 'black',
-            // shadowOffset: {
-            //   width: 0,
-            //   height: 10
-            // },
-            // shadowRadius: 10,
-            // shadowOpacity: 0.9,
-            // overflow: 'hidden',
-            // elevation: 5,
             borderColor: '#D8E9FA', borderWidth: 1,
           }}>
             <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10 }}>
@@ -199,7 +194,6 @@ const ShopMyOrderDetails = (props) => {
               </View>
             </View>
            
-
             {data.delivered_date!=null && data.status!= 11 && data.status!=13 && data.status!=15 ?
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
@@ -212,7 +206,7 @@ const ShopMyOrderDetails = (props) => {
             </View>
   </View>
             : 
-            data.status!= 0 ?
+            data.status!= 0 && data.driver_name && data.status!= 11 ?
             <View>
              <View style={{width:'100%',height:0.5,backgroundColor:'gray',marginVertical:5}}></View>
             <View style={{ flexDirection: 'row', width: '100%', marginTop: 10, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
@@ -220,16 +214,55 @@ const ShopMyOrderDetails = (props) => {
                 <Image source={require('../../../assets/noRide.png')} style={{ width: 30, height: 30, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
-                <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>{data.driver_name} has been assigned to your order</Text>
+                <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>{data.driver_name ? data.driver_name +' has been assigned to your order' : ''} </Text>
               </View>
             </View>
 
             </View>
-            : null
+            : 
+            data.driver_name && data.status== 11 ?
+            <View style={{ marginLeft: 10, width: '80%' }}>
+                <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>Cancelled Reason : {data.driver_notes ? data.driver_notes :'No reason'}</Text>
+              </View>
+              : null
              }
 
           </View>
-         
+  : null}        
+ {data.status!=0 ? 
+          <View style={{
+            top: -10,
+            marginBottom: 10, backgroundColor: '#FAF9FB', padding: 15, borderRadius: 10,
+             
+            borderColor: '#D8E9FA', borderWidth: 1,
+          }}>
+          
+            <View style={{ flexDirection: 'row', width: '100%', borderRadius: 10, alignSelf: 'center', paddingHorizontal: 5, paddingRight: 20,marginBottom:15, }}>
+              <View style={{ flexDirection: 'row'}}>
+                <View style={{ width: 35, height: 50, justifyContent: 'center', borderRadius: 10 }}>
+                <Image source={require('../../../assets/noRide.png')} style={{ width: 40, height: 38, overflow: 'hidden', alignSelf: 'center' }}></Image>
+              </View>
+              <View style={{ marginLeft: 15, width: '75%' }}>
+                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{data.driver_name}</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>100+ Five-star</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>deliveries</Text>
+              </View>
+              </View>
+              
+             
+              <View style={{ flexDirection: 'row', top:0,right:24 }}>
+                <TouchableOpacity style={{marginRight:5,width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff'}}>
+                <Image source={require('../../../assets/ChatCircle-news.png')} style={{ width: 25, height: 25, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', }} ></Image>
+                </TouchableOpacity>
+                <TouchableOpacity style={{width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff'}}>
+                <Image source={require('../../../assets/layer_9.png')} style={{ width: 17, height: 22, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', top: 1 }} ></Image>
+                </TouchableOpacity>
+              </View>
+              
+            </View>
+          </View>
+  : null}
+
          
           <View style={{
             top: 0,
@@ -278,10 +311,12 @@ const ShopMyOrderDetails = (props) => {
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>
               </View>
+              {data.coupon_code !=null ?
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
-                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >(COUPON)</Text></Text>
+                <Text style={{ color: 'white', fontSize: 13, }} >Discount applied <Text style={{ color: 'white', fontSize: 13,fontWeight: 'bold' }} >({data.coupon_code})</Text></Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >-${data.discount_amount}</Text>
               </View>
+              : null }
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.taxes).toFixed(2))}</Text>
@@ -297,9 +332,8 @@ const ShopMyOrderDetails = (props) => {
                </View>
                 <View style={{flexDirection:"column"}}>
                 <Text style={{ color: Mycolors.GrayColor, fontSize: 12, fontWeight: '600', textAlign: 'left' }} >Bill Total</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(2))}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(3))}</Text>
                 </View>
-                
               </View>
             </View>
           </View>

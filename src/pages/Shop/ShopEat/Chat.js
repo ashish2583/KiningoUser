@@ -86,18 +86,17 @@ const getAllMessages = async ()=>{
 
 }
 const senNoti= async()=>{
-    console.log('hiihiiii==>',mapdata.notificationdata) 
       let notidata={
         'data': {},
-        'title':'Message from fling',
+        'title':'Message from '+user_details.first_name,
         'body': 'new message',
-       'token':mapdata.notificationdata.driver_device_id
+        'token':props.route.params.data.driver_device_id
       }
       let result= await sendNotification.sendNotification(notidata)
        // console.log('result')
 }
 const onSend = (messageArray) => {
-  // senNoti()
+   senNoti()
   const msg=messageArray[0]
   const mymsg={
     ...msg,
@@ -220,9 +219,9 @@ const deletuser=()=>{
 <Image source={require('../../../assets/arrow.png')} style={{ width: 24, height: 16,alignSelf:'center'}}></Image>
 </TouchableOpacity>
 <View style={{width:25,height:25,borderRadius:15,marginHorizontal:10,borderRadius:15}}>
-{/* <Image source={{ uri: mapdata.notificationdata.driver_image }} style={{ width: 25, height: 25, alignSelf: 'center',borderRadius:15 }}></Image> */}
+<Image source={require('../../../assets/images/people-sender-image.png')} style={{ width: 25, height: 25, alignSelf: 'center',borderRadius:15 }}></Image>
 </View>
-<Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'bold',}}>Ashish</Text>
+<Text style={{color:Mycolors.TEXT_COLOR,fontWeight:'bold',}}>{props.route.params.data.driver_name}</Text>
 </View>
 
 
@@ -371,7 +370,7 @@ const deletuser=()=>{
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor:'#FF8C00',
+            backgroundColor:Mycolors.BTN_LINEAR_END_COLOR,
              right:8
           },
           left:{
@@ -394,7 +393,7 @@ const deletuser=()=>{
            <>
            <View style={{width:'100%',height:70,alignSelf:'center',backgroundColor:'#fff',justifyContent:'center',flexDirection:'row'}}>
 
-            <View style={{width:'80%',height:45,borderRadius:28,marginTop:10}}>
+            <View style={{width:'92%',height:45,borderRadius:28,marginTop:10}}>
                <InputToolbar {...props}
                 containerStyle={styles.input} 
                 textInputStyle={{ color: "black" }}
@@ -409,13 +408,12 @@ const deletuser=()=>{
           <Send
               {...props}
           >
-              <View style={{width: 40, height: 40,marginTop:10,borderRadius:20,backgroundColor:Mycolors.ORANGE,justifyContent:'center',left:15}}>
+              <View style={{width: 40, height: 40,marginTop:10,borderRadius:20,backgroundColor:Mycolors.BTN_LINEAR_END_COLOR,justifyContent:'center',left:15}}>
                   <Image source={require('../../../assets/send.png')} resizeMode={'center'}style={{ width: 19, height: 19, alignSelf: 'center' }}/>
               </View>
           </Send>
       );
      }}
-
 
     />
      <View style={{width:10,height:30}} />
@@ -428,7 +426,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,  
-    backgroundColor:Mycolors.DrawerBGcolor
+    backgroundColor:'#fff'
   },
   input: {
     paddingHorizontal: 10,

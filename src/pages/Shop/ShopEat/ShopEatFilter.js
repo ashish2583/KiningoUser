@@ -59,7 +59,8 @@ const ShopEatFilter = (props) => {
   const [selected,setselected]=useState([])
   const [serviceOpen, setserviceOpen] = useState(false);
   const [servicevalue, setservicevalue] = useState([]);
- 
+  const mapdata  = useSelector(state => state.maplocation)
+
   const [servicedate, setservicedate] = useState([
     {label: 'Relevance', value: 'Relevance'}, 
     {label: 'Rating', value: 'Rating'}, 
@@ -69,12 +70,14 @@ const ShopEatFilter = (props) => {
 
   useEffect(()=>{
    console.log('hello ji ==>>',User);
-   getData()
+   var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+   getData(murl)
    myposition()
  },[])
 
  const checkcon=()=>{
-     getData()
+  var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+     getData(murl)
 }   
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -89,31 +92,15 @@ wait(2000).then(() => {
   
 });
 }, []);
-
-
 const myposition = () => {
-  Geolocation.getCurrentPosition(
-    position => {
-      let My_cord = { latitude: position.coords.latitude, longitude: position.coords.longitude }
-    
-      setlat(position.coords.latitude)
-      setlong(position.coords.longitude)
-    },
-    error => {
-      // Alert.alert(error.message.toString());
-    },
-    {
-      showLocationDialog: true,
-      enableHighAccuracy: true,
-      timeout: 20000,
-      maximumAge: 0
-    }
-  );
+  setlat(mapdata.restorentlocation.latitude)
+  setlong(mapdata.restorentlocation.longitude)
 }
 
  const getData = async (urls) => {
     setLoading(true)
     //'?name='+searchValue.text+'&lat='+lat+'&long='+long
+    // + '&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
     var fUrl = shop_eat_business
     if (urls!=undefined){
       fUrl=fUrl+urls
@@ -145,28 +132,34 @@ if(val=='Rating'){
 
  
   const myselected=(item)=>{
-    var myarr=selected
-    console.log(myarr);
-    if(myarr.length>0){
-      var found=0
-      for(let i=0;i<myarr.length;i++){
-        if(myarr[i]==item){ 
-          // console.log('in',myarr.length);
-          myarr.splice(i, 1);
-          found=found+1
-        }
-    }
-    console.log(myarr);
-    if(!myarr.includes(item) && found==0){
-        myarr.push(item)
-      }
+   // var myarr=selected
+    
+    // console.log(myarr);
+    // if(myarr.length>0){
+    //   var found=0
+    //   for(let i=0;i<myarr.length;i++){
+    //     if(myarr[i]==item){ 
 
-    }else{ 
-      myarr=[item]
-    }
-   
+    //       myarr.splice(i, 1);
+    //       found=found+1
+    //     }
+    // }
+    // console.log(myarr);
+    // if(!myarr.includes(item) && found==0){
+    //     myarr.push(item)
+    //   }
+
+    // }else{ 
+    //   myarr=[item]
+    // }
+   // setselected(myarr)
+  if(selected.length>0 && selected[0]==item){
+    setselected([])
+  }else{
+     setselected([item])
+  }
   
-    setselected(myarr)
+   
     setrelod(!relod)
     }
 
@@ -194,10 +187,14 @@ if(val=='Rating'){
     <View>
 <SearchInput2 marginTop={10} placeholder={'Search...'} 
 serchValue={searchValue} 
-onChangeText={(e)=>{setsearchValue(e)}} 
+onChangeText={(e)=>{
+  setsearchValue(e)
+  var murl='?name='+e.text+'&lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+  getData(murl)
+  }} 
 press={()=>{Alert.alert('Hi')}}
 presssearch={()=>{
-  var murl='?name='+searchValue.text+'&lat='+lat+'&long='+long
+  var murl='?name='+searchValue.text+'&lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
   getData(murl)
 }}
 
@@ -210,54 +207,7 @@ paddingLeft={50}/>
     </View>
     {filterClick ? 
 <View style={{flexDirection:'row'}}>
-{/* <View style={{width:100,zIndex:999,backgroundColor:'red',borderRadius:5,marginTop:15,height:40}}> 
-   <DropDownPicker
-    open={serviceOpen}
-    value={servicevalue}
-    items={servicedate}
-   //multiple={true}
-    setOpen={()=>{setserviceOpen(!serviceOpen)}}
-    setValue={(v)=>{setservicevalue(v)}}
-    setItems={(i)=>{setservicedate(i)}}
-   //listMode="MODAL"
-    placeholder="Sort by"
-    onChangeValue={(value) => {
-      setservicevalue(value)
-      getData(makeUrl(value))
-    }} 
-    placeholderStyle={{
-      color: '#fff',
-      fontSize:14,
-      fontWeight: "600"
-    }}
-    textStyle={{
-      color: '#000',
-    //  fontSize:5
-    }}
-    style={{borderColor:'transparent',backgroundColor:'red',height:40}}
-    containerStyle={{
-      borderColor:'red',
-      height:40
-    }} 
-    disabledStyle={{
-      opacity: 0.5
-    }}
-    dropDownContainerStyle={{
-      backgroundColor: "#fff",
-      borderColor:'#000',
-      borderWidth:0.2,
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 0,
-        height: 3
-      },
-      shadowRadius: 5,
-      shadowOpacity: 1.0,
-      elevation: 5,
-      zIndex:999
-    }}
-  />
-</View> */}
+
 <View style={{width:'100%',alignSelf:'center',marginTop:15}}>
        
           <FlatList
@@ -270,9 +220,11 @@ paddingLeft={50}/>
                       <View style={{marginHorizontal:5,}}>
                           <TouchableOpacity style={{backgroundColor:selected.includes(item) ? '#FFC40C':'red',justifyContent:'center',padding:10,borderRadius:5}}
                           onPress={()=>{
+
                             if(selected.includes(item)){
                               if(selected.length==1){
-                               getData(undefined)
+                                var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+                               getData(murl)
                               }else{
                                 getData(makeUrl(item.title))
                               }

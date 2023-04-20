@@ -16,6 +16,7 @@ import { RefreshControl, View, Image, Text, Platform, Linking, BackHandler, Styl
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {Menu,MenuOptions,MenuOption,MenuTrigger,} from 'react-native-popup-menu';
 // 
 const ShopMyOrder = (props) => {
   const [drvReviewData, setdrvReviewData] = useState('')
@@ -226,7 +227,7 @@ const ShopMyOrder = (props) => {
 
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res shop_eat_orders ==>>', responseJson.body)
+    console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
     if (responseJson.headers.success == 1) {
       setorderData(responseJson.body)
 
@@ -438,17 +439,52 @@ const ShopMyOrder = (props) => {
                       elevation: 5,
                       // borderColor: 'rgba(0,0,0,0.2)', borderWidth: 0.5
                     }}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
 
-                        <View style={{ paddingHorizontal: 10, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2 }}>
+                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
+                        {/* <Menu>
+      <MenuTrigger>
+      <Image source={require('../../../assets/people-three-dots.png')} style={{height:30,width:20}}></Image>
+      </MenuTrigger> 
+      <MenuOptions>
+      {item.order_type == 'delivery' || item.order_type == 'take-away' && item.status == 12 && item.business_rating == null && item.status!= 3 ?
+
+        <MenuOption onSelect={() => {
+          if (item.business_rating == null) {
+                                props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                              }
+          }} text='Rate Vendor' />
+
+       : null }
+      {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
+        <MenuOption onSelect={() => {
+          setdrvReviewData(item)
+          setmodlevisual2(true)
+          }} text='Rate Driver' />
+        : null }
+        {item.order_type == 'delivery' && item.status != 5 && item.status != 12 && item.status != 0 && item.driver_id != null && item.status != 11 ?
+        <MenuOption onSelect={() =>{
+           props.navigation.navigate('Traking', { data: item })
+        }}  text='Track Driver' />
+     : null }
+     {item.driver_id!=null && item.status_label!='Delivered' ? 
+     <MenuOption onSelect={() =>{
+          props.navigation.navigate('Chat',{data:item})
+        }}  text='Message' />
+     : null }
+     
+      </MenuOptions>
+    </Menu> */}
+                      </View>
+                     
+                      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                      <Text style={{ color: Mycolors.RED, fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id} </Text>
+                      <View style={{ paddingHorizontal: 10, justifyContent: 'center', borderRadius: 10, backgroundColor: '#ADC430', borderColor: Mycolors.GrayColor, borderWidth: 0.2 ,width:80,marginTop:2}}>
                           <Text style={{ color: Mycolors.Black, fontSize: 11, textAlign: 'center', lineHeight: 22 }}>{item.order_type_label}</Text>
-                        </View>
-                      </View>
-                      <View style={{flexDirection:'row'}}>
-                      <Text style={{ color: Mycolors.RED, fontWeight: '400', fontSize: 12, marginTop: 5 }}>Order ID : #{item.id}</Text>
-                      <Text style={{ color: Mycolors.GrayColor, fontWeight: '400', fontSize: 12, marginTop: 5,left:10 }}>Placed At : {item.created_date}</Text>
-                      </View>
+                        </View>  
+                      </View> 
+                      <Text style={{ color: Mycolors.GrayColor, fontWeight: '400', fontSize: 12, marginTop: 5}}>Order Date & Time: {item.created_date}</Text>
+
                       {item.order_type != 'booked-table' ?
                         <>
 
@@ -505,13 +541,27 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {item.order_type == 'take-away' && item.business_rating == null ?
-                          <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                            if (item.business_rating == null) {
-                              props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                            }
-                          }} fontSize={12}
-                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                        {item.order_type == 'take-away' && item.status == 12 && item.business_rating == null ?
+                          // <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+                          //   if (item.business_rating == null) {
+                          //     props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                          //   }
+                          // }} fontSize={12}
+                          //   titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          <TouchableOpacity onPress={()=>{if (item.business_rating == null) {
+                                 props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                               }}} style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rate Vendor</Text>
+                          {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.business_name}</Text> */}
+                          <Rating
+                            type='custom'
+                            ratingCount={5}
+                            imageSize={16}
+                            startingValue={item.business_rating}
+                            // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                            readonly={true}
+                          />
+                        </TouchableOpacity>
                           : null
                         }
  
@@ -524,18 +574,32 @@ const ShopMyOrder = (props) => {
                             titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           :
                           item.order_type == 'delivery' && item.status == 12 && item.business_rating == null ?
-                            <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
-                              if (item.business_rating == null) {
-                                props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                              }
-                            }} fontSize={12}
-                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                            // <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+                            //   if (item.business_rating == null) {
+                            //     props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                            //   }
+                            // }} fontSize={12}
+                            //   titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                            <TouchableOpacity onPress={()=>{if (item.business_rating == null) {
+                                   props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                                 }}} style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rate Vendor</Text>
+                            {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.business_name}</Text> */}
+                            <Rating
+                              type='custom'
+                              ratingCount={5}
+                              imageSize={16}
+                              startingValue={item.business_rating}
+                              // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                              readonly={true}
+                            />
+                          </TouchableOpacity>
+                            
                             : null
-
                         }
 
                       </View> 
-                      {item.driver_id!=null ?
+                      {item.driver_id!=null && item.status_label!='Delivered' && item.status!=11 ?
                       <MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="flex-start" press={() => {
                         props.navigation.navigate('Chat',{data:item})
                         }} fontSize={12}
@@ -559,14 +623,29 @@ const ShopMyOrder = (props) => {
                           :
                           null
                         }
-                        {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
-                          <View style={{}}>
-                            <MyButtons title="Rate Driver" height={45} width={'100%'} paddingHorizontal={40} borderRadius={5} alignSelf="center" press={() => {
+                        
+                        {
+                          item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
+                          <TouchableOpacity onPress={()=>{ setdrvReviewData(item)
+                            setmodlevisual2(true)}} >
+                            <View style={{ marginVertical: 5, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
+                              <Text style={{ fontSize: 13, color: '#000', marginRight: 13 }}>Rate Driver</Text>
+                              {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.driver_name}</Text> */}
+                              <Rating
+                                type='custom'
+                                ratingCount={5}
+                                imageSize={16}
+                                startingValue={item.driver_rating}
+                                // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                                readonly={true}
+                              />
+                            </View>
+                            {/* <MyButtons title="Rate Driver" height={45} width={'100%'} paddingHorizontal={40} borderRadius={5} alignSelf="center" press={() => {
                               setdrvReviewData(item)
                               setmodlevisual2(true)
                             }} fontSize={12}
-                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
-                          </View>
+                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} /> */}
+                          </TouchableOpacity>
                           :
                           item.order_type == 'delivery' && item.status == 12 && item.driver_rating != null ?
                             <View style={{ marginVertical: 5, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>

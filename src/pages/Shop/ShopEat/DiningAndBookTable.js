@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, Platform, Linking, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { RefreshControl, View, Image, Text, Platform,BackHandler, Linking, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -82,9 +82,20 @@ const DiningAndBookTable = (props) => {
   const [showda, setshowda] = useState(false)
   const [keyword, setKeyword] = useState('');
   useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      orderList()
+       })
+    const unsubscribes = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     orderList()
+    return () =>{
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      unsubscribe
+    }
   }, [])
-
+  const handleBackButton = () => {
+    // Toast.show({text1: 'Back button is pressed'});
+    return true;
+  }
   const checkcon = () => {
     orderList()
     resetFilter()
@@ -257,7 +268,7 @@ const DiningAndBookTable = (props) => {
         }
       >
         <HomeHeader height={60} paddingHorizontal={15}// backgroundColor={'#fff'}
-          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
+          press1={() => { props.navigation.navigate('ShopEat') }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
           press2={() => { }} title2={'Dining & Booked Table'} fontWeight={'500'} img2height={20}
           press3={() => { }} img3width={25} img3height={25} />
         {

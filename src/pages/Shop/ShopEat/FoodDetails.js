@@ -385,18 +385,10 @@ const FoodDetails = (props) => {
         // setmodlevisual4(true)
         // setmodlevisual1(false)
         // setmodlevisual2(false)
-        setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
-        setMy_Alert(true)
-        // Alert.alert(
-        //   '',
-        //   'Booking request has been sent successfully you will receive a notification once your table is finalized.', // <- this part is optional, you can pass an empty string
-        //   [
-        //     {text: 'OK', onPress: () => props.navigation.navigate('DiningAndBookTable')},
-        //   ],
-        //   // {cancelable: false},
-        // );
-        // Alert.alert('Booking request has been sent successfully you will receive a notification once your table is finalized.')
-      } else {
+        props.navigation.navigate('DiningAndBookTable')
+        // setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
+        // setMy_Alert(true)
+             } else {
         setalert_sms(err)
         setMy_Alert(true)
       }
@@ -722,7 +714,8 @@ const FoodDetails = (props) => {
         // setMy_Alert(true) 
       }
     } else {
-      Toast.show({ text1: 'Please enter the item name in search.' })
+      menuList()
+     Toast.show({ text1: 'Please enter the item name in search.' })
     }
 
   }
@@ -869,7 +862,7 @@ const FoodDetails = (props) => {
               // onFinishRating={(d)=>{setvenderRating(d)}}
               readonly={true}
             />
-            <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.rating).toFixed(2))} Ratings</Text>
+            <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.total_ratings).toFixed(2))} Ratings</Text>
           </View>
           <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
           <View style={{ flexDirection: 'row' }}>
@@ -1153,7 +1146,7 @@ const FoodDetails = (props) => {
                     setValue={(v) => { setmenutypevalue(v) }}
                     setItems={(i) => { setmenutypedate(i) }}
                     // listMode="MODAL"
-                    placeholder="Select Item Type"
+                    placeholder="Select Category Food"
                     onChangeValue={(value) => {
                       setmenutypevalue(value)
                       console.log('hihiihi', value)
@@ -2087,7 +2080,9 @@ const FoodDetails = (props) => {
             </View>
             <View style={{ alignSelf: 'center', width: '99%', marginTop: 10, paddingHorizontal: 6 }}>
               <Text style={{ fontSize: 11, color: Mycolors.TEXT_COLOR }}>{viewmore ? resData.business_info ? resData.business_info.substring(0, 150) : resData.business_info : resData.business_info}</Text>
+            {resData.business_info ? 
               <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: 'red', textDecorationLine: "underline", fontSize: 12 }}>{viewmore ? 'View more' : 'View less'}</Text>
+           : null}
             </View>
 
             <View style={{ alignItems: 'center', width: '96%', alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginTop: 10, }}>
@@ -2106,8 +2101,8 @@ const FoodDetails = (props) => {
                   longitudeDelta: 0.0421,
                 }}
                 customMapStyle={mapStyle}
-                showsUserLocation={true}
-                userLocationCalloutEnabled={true}
+                // showsUserLocation={true}
+                // userLocationCalloutEnabled={true}
                 // showsMyLocationButton={true}
                 mapPadding={{ top: 30, right: 30, bottom: 30, left: 40 }}
                 showsScale={true}

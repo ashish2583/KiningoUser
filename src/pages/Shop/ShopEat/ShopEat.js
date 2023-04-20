@@ -19,6 +19,7 @@ import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import { log } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
@@ -97,16 +98,16 @@ const ShopEat = (props) => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
-    })
+    }) 
       .then(location => {
         console.log('locations latitude longitude', location);
         setlat(location.latitude)
-        setlan(location.longitude)
+        setlan(location.longitude) 
         let My_cord = { latitude: location.latitude, longitude: location.longitude }
         dispatch(setRestorentLocation(My_cord))
-         homePage(location.latitude,location.longitude)
+         homePage(location.latitude,location.longitude) 
         LatlongTo_address(My_cord)
-      })
+      })  
       .catch(error => {
         const { code, message } = error;
         console.warn(code, message);
@@ -114,6 +115,34 @@ const ShopEat = (props) => {
    
     // venderList()
   }, [])
+
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    const data = remoteMessage.data
+    console.log('Notification caused app to open from background state:',remoteMessage)
+    if(remoteMessage.notification.title=='Kinengo'){
+       
+    props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+      
+     }else if(remoteMessage.notification.body=='new message'){
+
+    }
+  });
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      console.log('====================================');
+      console.log(remoteMessage);
+      console.log('====================================');
+      if(remoteMessage.notification.title=='Kinengo'){
+       
+        props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+        
+       }else if(remoteMessage.notification.body=='new message'){
+       
+        }
+    });
+
+
 
   const LatlongTo_address = async (latlong) => {
     // var courentlocation = mapdata.curentPosition
@@ -150,7 +179,7 @@ const ShopEat = (props) => {
     console.log('the res==>>Home')
     setLoading(true)
 
-    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + '28.6176' + '&long=' + '77.422', '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_eat+ '?lat=' + l + '&long=' + lo, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson.headers.success == 1) {
@@ -195,6 +224,22 @@ const ShopEat = (props) => {
   const logoutDriver=async()=>{
     AsyncStorage.clear(); 
     dispatch(onLogoutUser())
+}
+
+function renderDescription(rowData) {
+  const title = rowData.structured_formatting.main_text;
+  const address = rowData.structured_formatting.secondary_text;
+  // console.log('renderDescription', address);
+  return (
+    <View style={{}}>
+      <Text style={{color:'gray'}}>
+        {title}
+      </Text>
+      <Text style={{color:'gray'}}>
+        {address}
+      </Text>
+    </View>
+  );
 }
 
   return (
@@ -262,15 +307,13 @@ const ShopEat = (props) => {
                 // onTouchStart: ()=>{downButtonHandler()}
                 height: 50,
                 color: '#000'
-                // shadowColor:  'gray',
-                //   shadowOffset: {
-                //     width:3,
-                //     height:3
-                //   },
-                //   shadowRadius: 5,
-                //   shadowOpacity: 1.0,
-                //   justifyContent: 'center',
-                //   elevation: 5
+              }}
+              renderRow={rowData => {
+                return (
+                  <View>
+                    {renderDescription(rowData)}
+                  </View>
+                )
               }}
               enablePoweredByContainer={false}
               listViewDisplayed={'auto'}
@@ -297,17 +340,24 @@ const ShopEat = (props) => {
                 powered: {},
                 listView: {
                   // color:'#000'
+                  borderWidth:0.5,
+                  borderColor:'gray',
+                  // borderRadius:10,
+                  overflow:'hidden',
+                  paddingBottom:10,
+                  padding:3
                 },
                 row: {
                   // backgroundColor: '#FFFFFF',
                   paddingVertical: 10,
-                  height: 44,
+                  height: 50,
                   flexDirection: 'row',
                 },
                 separator: {
                   height: 0.5,
                   backgroundColor: '#C8C7CC',
-                  color: '#000'
+                  color: '#000',
+                  marginTop:10
                 },
                 textInput: {
                   backgroundColor: 'transparent',
@@ -405,13 +455,15 @@ const ShopEat = (props) => {
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold',fontSize:22}}>Explore Nearby</Text>
+{resData?.vendors?.length>0 ?  
             <Text style={{ color: Mycolors.RED, fontWeight: '500', textDecorationLine: "underline",fontSize:14, }}
               onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}>View More</Text>
+: null}
           </View>
 
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
-            {resData != null ?
+          {resData?.vendors?.length>0 ?  
               <FlatList
                 data={resData.vendors}
                 horizontal={true}
@@ -431,7 +483,7 @@ const ShopEat = (props) => {
                       </TouchableOpacity>
                       <View style={{left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Cusine Name: Italian +2</Text>
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Cuisine Name: Italian +2</Text>
                       </View>
                       <View style={{ padding: 5,left: 5,top:-3 }}>
                         <View style={{ flexDirection: 'row', }}>
@@ -458,10 +510,10 @@ const ShopEat = (props) => {
                 }}
                 keyExtractor={item => item.id}
               />
-
-              : null}
+              : 
+              <Text style={{ color: Mycolors.RED, fontWeight: 'bold', fontSize: 18, textAlign:'center' }}>No Vendors Found</Text>
+              }
           </View>
-
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
             <Text style={{ color: Mycolors.Black, fontWeight: 'bold',fontSize:22, width: '70%', }}>Eat what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold',fontSize:22, width: '70%', }}> HAPPY!</Text></Text>
