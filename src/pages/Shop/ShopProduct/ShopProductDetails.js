@@ -821,11 +821,11 @@ const FoodDetails = (props) => {
         elevation: 5, borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
       }}
         onPress={allpress}>
-        <View style={{ width: 100, height: 100, alignSelf: 'center', borderRadius: 10, borderWidth: 3, borderColor: '#dee4ec' }}>
+        <View style={{ width: '28%', height: 100, alignSelf: 'center', borderRadius: 10, borderWidth: 3, borderColor: '#dee4ec' }}>
           <Image source={{ uri: img }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 10, resizeMode: 'stretch' }} ></Image>
         </View>
         <View style={{ marginLeft: 15 }}>
-          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9 }} >{ti}</Text>
+          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9, width:'60%' }} >{ti}</Text>
           <View style={{ marginTop: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
 
             <Rating
@@ -1327,8 +1327,8 @@ const FoodDetails = (props) => {
                 </TouchableOpacity>
                 :
                 // <View style={{height:50}} />
-                null 
-                }
+                null
+              }
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
@@ -1338,7 +1338,7 @@ const FoodDetails = (props) => {
                   // numColumns={2}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={[{ width: 100, minHeight: 110, marginHorizontal: 5, overflow: 'hidden', height: 100 }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
+                      <View style={[{ width: 100, marginHorizontal: 5, overflow: 'hidden', paddingBottom: 5 }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}>
                         <TouchableOpacity style={{ width: 100, height: 80, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                           onPress={() => { setSelectedCategory(item) }}>
                           <Image source={{ uri: item.category_image }} style={{ width: "100%", height: "100%", alignSelf: 'center', borderRadius: 7 }}></Image>
@@ -1588,7 +1588,7 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => setmodlevisual1(false)}
-        onModalWillShow={()=>{setmenuresData2([...menuresData])}}
+        onModalWillShow={() => { setmenuresData2([...menuresData]) }}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
