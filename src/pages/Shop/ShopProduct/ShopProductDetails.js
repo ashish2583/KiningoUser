@@ -824,8 +824,8 @@ const FoodDetails = (props) => {
         <View style={{ width: '28%', height: 100, alignSelf: 'center', borderRadius: 10, borderWidth: 3, borderColor: '#dee4ec' }}>
           <Image source={{ uri: img }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 10, resizeMode: 'stretch' }} ></Image>
         </View>
-        <View style={{ marginLeft: 15 }}>
-          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9, width:'60%' }} >{ti}</Text>
+        <View style={{ marginLeft: 15, width:'70%' }}>
+          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9,  }} >{ti}</Text>
           <View style={{ marginTop: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
 
             <Rating
