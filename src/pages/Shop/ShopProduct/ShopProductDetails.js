@@ -1611,6 +1611,9 @@ const FoodDetails = (props) => {
                 onChangeText={(e) => {
                   setsearchValue(e)
                   searchmenuList(e.text)
+                  if(e === ''){
+                    setmenuresData2([...menuresData])
+                  }
                 }}
                 // press={() => { Alert.alert('Hi') }}
                 presssearch={() => { searchmenuList(searchValue.text) }}
