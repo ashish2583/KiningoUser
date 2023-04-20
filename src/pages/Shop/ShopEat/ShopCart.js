@@ -405,13 +405,14 @@ const ShopCart = (props) => {
 
   }
   const AddAddress = async () => {
-    if (full_name == '') {
-      Toast.show({ text1: 'Please Enter Complete Address' })
+    // if (full_name == '') {
+    //   Toast.show({ text1: 'Please Enter Complete Address' })
 
-    } else if (pincode == '') {
-      Toast.show({ text1: 'Please Enter Zip code' })
+    // } else if (pincode == '') {
+    //   Toast.show({ text1: 'Please Enter Zip code' })
 
-    } else if (state == '') {
+    // } else 
+    if (state == '') {
       Toast.show({ text1: 'Please Enter State' })
 
     } else if (city == '') {
@@ -420,9 +421,12 @@ const ShopCart = (props) => {
     } else if (house_no == '') {
       Toast.show({ text1: 'Please Enter Address' })
 
-    } else if (landmark == '') {
-      Toast.show({ text1: 'Please Enter Landmark' })
-    } else {
+    } 
+    // else if (landmark == '') {
+    //   Toast.show({ text1: 'Please Enter Landmark' })
+    // }
+    // addres (house_no), colony (area_village), landmark (landmark) 
+    else {
       setLoading(true)
       var data = {
         "location_name": full_name,
@@ -431,6 +435,7 @@ const ShopCart = (props) => {
         "longitude": lan,
         "address_line1": house_no,
         "address_line2": area_village,
+        "landmark": landmark,
         "city": city,
         "state": state,
         "country_id": 1,
@@ -446,6 +451,7 @@ const ShopCart = (props) => {
         setaddress_type('')
         sethouse_no('')
         setarea_village('')
+        setlandmark('')
         setCity('')
         setstate('')
         setShippingAddressPopUp(false)
@@ -504,7 +510,12 @@ const ShopCart = (props) => {
         }
         line += googleAddress.terms[mylast - i].value
       }
-      line = remaining + ', ' + line
+      // line = remaining + ', ' + line
+      if (line) {
+        line = remaining + ', ' + line
+      } else {
+        line = remaining
+      }
     }
 
     console.log('imp line', line);
@@ -677,7 +688,7 @@ const ShopCart = (props) => {
       "is_default": 1,
       ...addressData
     }
-    setCurrentAddressData({parts: data, full: currentAddress})
+    setCurrentAddressData({ parts: data, full: currentAddress })
     setOpenEnterCompleteAddressModal(true)
     // // console.log('addressData', addressData);
     // console.log('current address data===>>', data);
@@ -703,16 +714,16 @@ const ShopCart = (props) => {
   }
   const AddAddressUsingCurrentLoation2 = async () => {
     let line = ''
-      line += remainingCompleteAddress
-      if (remainingFloor) {
-        line += ', ' + remainingFloor
-      }
-      if (remainingLandmark) {
-        line += ', ' + remainingLandmark
-      }
-      if (currentAddressData.parts.area_name) {
-        line += ', ' + currentAddressData.parts.area_name
-      }
+    line += remainingCompleteAddress
+    if (remainingFloor) {
+      line += ', ' + remainingFloor
+    }
+    if (remainingLandmark) {
+      line += ', ' + remainingLandmark
+    }
+    if (currentAddressData.parts.area_name) {
+      line += ', ' + currentAddressData.parts.area_name
+    }
     // const line = [remainingCompleteAddress, remainingFloor, remainingLandmark, currentAddressData.parts.area_name].join(', ')
     // setLoading(true)
     const addressDataCopy = { ...currentAddressData.parts }
@@ -769,7 +780,7 @@ const ShopCart = (props) => {
       },
       error => {
         setLoading(false)
-        Toast.show({text1: error.message.toString()});
+        Toast.show({ text1: error.message.toString() });
       },
       {
         showLocationDialog: true,
@@ -1053,31 +1064,31 @@ const ShopCart = (props) => {
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
                 </View>
                 {ordertype != 'take-away' ?
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
-                  <Tooltip
-                    isVisible={toolTipVisible}
-                    showChildInTooltip={false}
-                    content={
-                      <View style={{height:100}}>
-                        <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
-                          At present delivery fees has been set to $1 per mile so the total distance is <Text style={{fontWeight: "bold"}}>{parseFloat(Number(res.delivery_charge).toFixed(2))} miles</Text> and total delivery fees is <Text style={{fontWeight: "bold"}}>${parseFloat(Number(res.delivery_charge).toFixed(2))}</Text></Text>
-                      </View>
-                    }
-                    onClose={() => setToolTipVisible(false)}
-                    placement="top"
-                    // below is for the status bar of react navigation bar
-                    topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
-                  >
-                    <TouchableOpacity onPress={() => { setToolTipVisible(true) }} style={{ flexDirection: 'row' }} >
-                      <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
-                      <View style={{ width: 15, height: 15, borderRadius: 20, backgroundColor: Mycolors.BTN_LINEAR_END_COLOR, justifyContent: 'center', left: 5 }}>
-                        <Image source={require('../../../assets/info.png')} style={{ width: 10, height: 10, alignSelf: 'center' }}></Image>
-                      </View>
-                    </TouchableOpacity>
-                  </Tooltip>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
-                </View>
-                :null}
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
+                    <Tooltip
+                      isVisible={toolTipVisible}
+                      showChildInTooltip={false}
+                      content={
+                        <View style={{ height: 100 }}>
+                          <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
+                            At present delivery fees has been set to $1 per mile so the total distance is <Text style={{ fontWeight: "bold" }}>{parseFloat(Number(res.delivery_charge).toFixed(2))} miles</Text> and total delivery fees is <Text style={{ fontWeight: "bold" }}>${parseFloat(Number(res.delivery_charge).toFixed(2))}</Text></Text>
+                        </View>
+                      }
+                      onClose={() => setToolTipVisible(false)}
+                      placement="top"
+                      // below is for the status bar of react navigation bar
+                      topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+                    >
+                      <TouchableOpacity onPress={() => { setToolTipVisible(true) }} style={{ flexDirection: 'row' }} >
+                        <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
+                        <View style={{ width: 15, height: 15, borderRadius: 20, backgroundColor: Mycolors.BTN_LINEAR_END_COLOR, justifyContent: 'center', left: 5 }}>
+                          <Image source={require('../../../assets/info.png')} style={{ width: 10, height: 10, alignSelf: 'center' }}></Image>
+                        </View>
+                      </TouchableOpacity>
+                    </Tooltip>
+                    <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
+                  </View>
+                  : null}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${vendorCharges}</Text>
@@ -1231,13 +1242,13 @@ const ShopCart = (props) => {
 
                 />
               </TouchableOpacity> */}
-            <TextInput style={styles.textInput}
+            {/* <TextInput style={styles.textInput}
               placeholder='Complete Address'
               placeholderTextColor="#8F93A0"
               label="complete address"
               value={full_name}
               onChangeText={e => setfull_name(e)}
-            />
+            /> */}
             {/* <TextInput style={styles.textInput}
                                           placeholder='Phone number'
                                           placeholderTextColor="#8F93A0"
@@ -1246,15 +1257,6 @@ const ShopCart = (props) => {
                                           value={phone}
                                           onChangeText={e => setphone(e)}
                                       /> */}
-            <TextInput style={styles.textInput}
-              placeholder='Zip code'
-              placeholderTextColor="#8F93A0"
-              label="pincode"
-
-              maxLength={9}
-              value={pincode}
-              onChangeText={e => setpincode(e)}
-            />
             <TextInput style={styles.textInput}
               placeholder='State'
               placeholderTextColor="#8F93A0"
@@ -1270,13 +1272,23 @@ const ShopCart = (props) => {
               onChangeText={e => setCity(e)}
             />
             <TextInput style={styles.textInput}
-              placeholder='Address'
+              placeholder='Complete Address'
               placeholderTextColor="#8F93A0"
               value={house_no}
               onChangeText={e => sethouse_no(e)}
             />
+            {/* <TextInput style={styles.textInput}
+              placeholder='Zip code'
+              placeholderTextColor="#8F93A0"
+              label="pincode"
+
+              maxLength={9}
+              value={pincode}
+              onChangeText={e => setpincode(e)}
+            /> */}
             <TextInput style={styles.textInput}
-              placeholder='Area Colony'
+              // placeholder='Area Colony'
+              placeholder='Colony'
               placeholderTextColor="#8F93A0"
               label="area village"
               value={area_village}
@@ -1435,7 +1447,7 @@ const ShopCart = (props) => {
                 // }}
                 style={{ width: 50, height: 4, backgroundColor: Mycolors.GrayColor, borderRadius: 2, alignSelf: 'center', marginBottom: 5 }}
               />
-              <Text style={{ color: Mycolors.RED, textAlign: "center", fontSize: 13, marginHorizontal:20,marginTop:10 }}><Text style={{color:'#000'}}>Current Address:</Text> {currentAddressData.full}</Text>
+              <Text style={{ color: Mycolors.RED, textAlign: "center", fontSize: 13, marginHorizontal: 20, marginTop: 10 }}><Text style={{ color: '#000' }}>Current Address:</Text> {currentAddressData.full}</Text>
               <Text style={{ marginTop: 10, textAlign: 'center', fontSize: 18, color: '#000000', fontWeight: '500', }}>Enter Complete Address</Text>
 
 
@@ -1676,7 +1688,11 @@ const ShopCart = (props) => {
                         <View style={{ marginHorizontal: 10, marginLeft: 15, width: "80%", right: -9, height: 65, marginTop: 0, paddingTop: 4 }}>
                           <ScrollView>
                             <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400' }}>{item.address_line1},  {item.city}, {item.state},</Text>
-                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400', marginTop: 4 }}>{item.address_line2} </Text>
+                            {item.address_line2 ?
+                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400', marginTop: 4 }}>{item.address_line2}, {item.landmark}</Text>
+                            :
+                            <Text style={{ textAlign: 'left', fontSize: 13, color: 'black', fontWeight: '400', marginTop: 4 }}>{item.landmark}</Text>
+                            }
                           </ScrollView>
                         </View>
                       </View>
@@ -1696,6 +1712,7 @@ const ShopCart = (props) => {
                           sethouse_no(item.address_line1)
                           setarea_village(item.address_line2)
                           setCity(item.city)
+                          setlandmark(item.landmark)
                           setstate(item.state)
                           setAddressId(item.id)
                           setShippingAddressPopUp(true)
@@ -2078,7 +2095,6 @@ const styles = StyleSheet.create({
   },
 });
 export default ShopCart
-
 
 
 
