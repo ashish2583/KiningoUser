@@ -166,11 +166,12 @@ const ShopProduct = (props) => {
   const homePage = async (l, lo) => {
     // const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
     let endPoint = ''
-    if (isEmulator) {
-      endPoint = `${shop_product_home}?lat=${28.6176}&long=${77.422}`
-    } else {
-      endPoint = `${shop_product_home}?lat=${l}&long=${lo}`
-    }
+    // if (isEmulator) {
+    //   endPoint = `${shop_product_home}?lat=${28.6176}&long=${77.422}`
+    // } else {
+    //   endPoint = `${shop_product_home}?lat=${l}&long=${lo}`
+    // }
+    endPoint = `${shop_product_home}?lat=${l}&long=${lo}`
     console.log('homepage endPoint', endPoint);
     setLoading(true)
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
