@@ -584,7 +584,7 @@ const ShopProduct = (props) => {
             </View>
             <View style={{width: '70%'}}>
               <Text style={{ fontSize: 16, color: '#263238', }}>{item.name}</Text>
-              <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.item_total.toFixed(2)}</Text>
+              <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.price.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, marginRight: 10 }}>Quantity</Text>
