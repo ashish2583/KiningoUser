@@ -37,7 +37,7 @@ const CatSearch = (props) => {
     //    }
   }, [])
   const checkcon = () => {
-
+    AllVenders()
   }
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -59,9 +59,13 @@ const CatSearch = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_categories + '?category_name=' + ttt + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
-    if (responseJson.headers.success == 1) {
-      setresData(responseJson.body)
-      setrelode(!relode)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setresData(responseJson.body)
+        setrelode(!relode)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -76,13 +80,16 @@ const CatSearch = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_categories + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
-    if (responseJson.headers.success == 1) {
-      setresData(responseJson.body)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setresData(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
     } else {
       setalert_sms(err)
       setMy_Alert(true)
     }
-
   }
 
   return (
@@ -94,13 +101,13 @@ const CatSearch = (props) => {
         press3={() => { }} img3width={25} img3height={25} />
 
       <ScrollView
-      // refreshControl={
-      //   <RefreshControl
-      //     refreshing={refreshing}
-      //     onRefresh={onRefresh}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
 
-      //   />
-      // }
+        />
+      }
       >
         <View style={{ width: '96%', alignSelf: 'center' }}>
           {/* <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'}
@@ -116,7 +123,7 @@ const CatSearch = (props) => {
             presssearch={() => { homePageSearch(searchValue.text) }}
             paddingLeft={9} /> */}
 
-            <ProductSearchInput marginTop={10} placeholder={'Search Categories'}
+          <ProductSearchInput marginTop={10} placeholder={'Search Categories'}
             serchValue={searchValue}
             onChangeText={(e) => {
               setsearchValue(e)
@@ -193,6 +200,7 @@ const CatSearch = (props) => {
       </ScrollView>
 
       {loading ? <Loader /> : null}
+      {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
     </SafeAreaView>
   );
 }

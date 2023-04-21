@@ -177,13 +177,16 @@ const ShopProduct = (props) => {
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
-    if (responseJson.headers.success == 1) {
-      console.log('the res==>>Home.body.vendors', responseJson.body)
-      setresData(responseJson.body)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        console.log('the res==>>Home.body.vendors', responseJson.body)
+        setresData(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
     } else {
-      Toast.show({ text1: err })
-      //  setalert_sms(err)
-      //  setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
 
   }
@@ -197,10 +200,10 @@ const ShopProduct = (props) => {
     // console.log('renderDescription', address);
     return (
       <View style={{ minHeight: 200 }}>
-        <Text style={{color:'gray'}}>
+        <Text style={{ color: 'gray' }}>
           {title}
         </Text>
-        <Text style={{color:'gray'}}>
+        <Text style={{ color: 'gray' }}>
           {address}
         </Text>
       </View>

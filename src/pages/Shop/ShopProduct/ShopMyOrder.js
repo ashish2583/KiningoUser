@@ -16,8 +16,11 @@ import { RefreshControl, View, Image, Text, Platform, Linking, BackHandler, Styl
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import MyAlert from '../../../component/MyAlert';
 // 
 const ShopMyOrder = (props) => {
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
   const [drvReviewData, setdrvReviewData] = useState('')
   const [drv_Review, setdrv_Review] = useState('')
   const [searchValue, setsearchValue] = useState('')
@@ -107,9 +110,9 @@ const ShopMyOrder = (props) => {
     return unsubscribe;
   }, [props.navigation])
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log('showOrderDate changed', showOrderDate);
-  },[showOrderDate])
+  }, [showOrderDate])
 
   const handleBackButton = () => {
     // Toast.show({text1: 'Back button is pressed'});
@@ -156,13 +159,19 @@ const ShopMyOrder = (props) => {
     const { responseJson, err } = await requestPostApi(cancelOrders + '/' + cancleitem.id + '/cancel', data, 'POST', User.token)
     setLoading(false)
     console.log('the res shop_eat_orders cancle==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      myorderList()
-      Toast.show(responseJson.headers.message)
-      setmodlevisual1(false)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        myorderList()
+        Toast.show(responseJson.headers.message)
+        setmodlevisual1(false)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
   }
 
@@ -202,19 +211,25 @@ const ShopMyOrder = (props) => {
 
     const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
-    console.log('the res shop_product_orders ==>>', responseJson.body)
-    if (responseJson.headers.success == 1) {
-      setorderData(responseJson.body)
-      console.log('responseJson.body?.length == 0', responseJson.body?.length == 0);
-      if (responseJson.body?.length == 0) {
-        setOrdersFound(false)
+    console.log('the res shop_product_orders ==>>', responseJson)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setorderData(responseJson.body)
+        console.log('responseJson.body?.length == 0', responseJson.body?.length == 0);
+        if (responseJson.body?.length == 0) {
+          setOrdersFound(false)
+        } else {
+          setOrdersFound(true)
+        }
       } else {
-        setOrdersFound(true)
+        setOrdersFound(false)
+        setorderData(null)
+        setrelode(!relode)
+        Toast.show({ text1: responseJson.headers.message })
       }
     } else {
-      setOrdersFound(false)
-      setorderData(null)
-      setrelode(!relode)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
 
   }
@@ -257,16 +272,21 @@ const ShopMyOrder = (props) => {
       const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
       setLoading(false)
       // console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
-      if (responseJson.headers.success == 1) {
-        setorderData(responseJson.body)
-        setShowFiltersModal(false)
+      if (responseJson !== null) {
+        if (responseJson.headers.success == 1) {
+          setorderData(responseJson.body)
+          setShowFiltersModal(false)
+        } else {
+          setorderData(null)
+          setShowFiltersModal(false)
+          // setShowFiltersModal(false)
+          Toast.show({ text1: responseJson.headers.message })
+          //  setalert_sms(err) 
+          //  setMy_Alert(true)
+        }
       } else {
-        setorderData(null)
-        setShowFiltersModal(false)
-        // setShowFiltersModal(false)
-        Toast.show({ text1: responseJson.headers.message })
-        //  setalert_sms(err) 
-        //  setMy_Alert(true)
+        setalert_sms(err)
+        setMy_Alert(true)
       }
 
       // if (filters || closeModal) {
@@ -647,8 +667,8 @@ const ShopMyOrder = (props) => {
         onSwipeComplete={(e) => {
           setShowFiltersModal(false)
         }}
-        onModalWillShow={()=>{
-          if(!showOrderDate){
+        onModalWillShow={() => {
+          if (!showOrderDate) {
             setOrderDate('')
           }
         }}
@@ -832,7 +852,7 @@ const ShopMyOrder = (props) => {
       </Modal>
 
       {loading ? <Loader /> : null}
-
+      {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
     </SafeAreaView>
   );
 }

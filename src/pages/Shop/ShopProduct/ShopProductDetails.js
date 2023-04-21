@@ -439,15 +439,21 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item + item.cart_id, data, 'PUT', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      //  Toast.show(responseJson.headers.message)
-      // Alert.alert(responseJson.headers.message)
-      Toast.show({ text1: responseJson.headers.message });
-      menuList(menutypevalue)
-      setreloades(!reloades)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        //  Toast.show(responseJson.headers.message)
+        // Alert.alert(responseJson.headers.message)
+        Toast.show({ text1: responseJson.headers.message });
+        menuList(menutypevalue)
+        setreloades(!reloades)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
   }
 
@@ -458,15 +464,21 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item + item.cart_id, '', 'DELETE', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // Toast.show(responseJson.headers.message)
-      Toast.show({ text1: responseJson.headers.message });
-      menuList(menutypevalue)
-      setreloades(!reloades)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        // Toast.show(responseJson.headers.message)
+        Toast.show({ text1: responseJson.headers.message });
+        menuList(menutypevalue)
+        setreloades(!reloades)
+      } else {
+        menuList(menutypevalue)
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      menuList(menutypevalue)
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
   }
 
@@ -485,11 +497,17 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestPostApi(shop_product_cart, data, 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      //  Toast.show(responseJson.headers.message)
-      Toast.show({ text1: responseJson.headers.message });
-      menuList(menutypevalue)
-      //  props.navigation.navigate('ShopCart')
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        //  Toast.show(responseJson.headers.message)
+        Toast.show({ text1: responseJson.headers.message });
+        menuList(menutypevalue)
+        //  props.navigation.navigate('ShopCart')
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -558,63 +576,68 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestGetApi(shop_vendor_details + props.route.params.businessid, '', 'GET', User.token)
     setLoading(false)
     console.log('vendorDetail responseJson', responseJson);
-    if (responseJson.headers.success == 1) {
-      console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
-      // console.log('the res features ==>>', responseJson.body.features)
-      var updated = 0
-      for (let j = 1; j <= responseJson.body.services.length; j++) {
-        // if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
-        //   console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
-        //   console.log('verma===>>', responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00');
-        //   console.log('saurabh===>>', responseJson.body.services[j - 1].attribute_detail);
-        //   const slotDuration = 30
-        //   const breakDuration = 15
-        //   const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
-        //   const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
-        //   const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
-        //   const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
-        //   const minutesDifferent = endInMinutes - startInMinutes
-        //   const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
-        //   const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
-        //   console.log('minutesDifferent', minutesDifferent);
-        //   console.log('slotsWithGap', slotsWithGap);
-        //   console.log('isAdditionalSlot', isAdditionalSlot);
-        //   let allSlots = []
-        //   let start = startTime
-        //   let newTime = ''
-        //   Array.from(Array(slotsWithGap).keys()).map(el => {
-        //     newTime = newAddMinutes(start, slotDuration)
-        //     allSlots.push({ start: start, end: newTime })
-        //     console.log('{start: start, end: newTime}', { start: start, end: newTime });
-        //     start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
-        //   })
-        //   if (isAdditionalSlot) {
-        //     allSlots.push({ start: start, end: newAddMinutes(start, slotDuration) })
-        //   }
-        //   setSlots(allSlots)
-        //   console.log('all slots', allSlots);
-        //   // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
-        //   //  setfutureTimes(stimess)
-        //   settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
-        // }
-        if (responseJson.body.services[j - 1].attribute_value == 'yes' && updated == 0) {
-          console.log('setselectedTab', responseJson.body.services[j - 1].attribute_label);
-          updated = 1
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        console.log('the res shop_eat_business_id services ==>>', responseJson.body.services)
+        // console.log('the res features ==>>', responseJson.body.features)
+        var updated = 0
+        for (let j = 1; j <= responseJson.body.services.length; j++) {
+          // if (responseJson.body.services[j - 1].attribute_label == 'Book A Table' && responseJson.body.services[j - 1].attribute_value == 'yes') {
+          //   console.log('kumar===>>', responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00');
+          //   console.log('verma===>>', responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00');
+          //   console.log('saurabh===>>', responseJson.body.services[j - 1].attribute_detail);
+          //   const slotDuration = 30
+          //   const breakDuration = 15
+          //   const startTime = responseJson.body.services[j - 1].attribute_detail.substring(0, 5)
+          //   const endTime = responseJson.body.services[j - 1].attribute_detail.substring(6)
+          //   const startInMinutes = startTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+          //   const endInMinutes = endTime.split(':').reduce((a, b) => Number(a) * 60 + Number(b), 0)
+          //   const minutesDifferent = endInMinutes - startInMinutes
+          //   const isAdditionalSlot = (minutesDifferent % (slotDuration + breakDuration)) >= slotDuration
+          //   const slotsWithGap = Math.floor(minutesDifferent / (slotDuration + breakDuration))
+          //   console.log('minutesDifferent', minutesDifferent);
+          //   console.log('slotsWithGap', slotsWithGap);
+          //   console.log('isAdditionalSlot', isAdditionalSlot);
+          //   let allSlots = []
+          //   let start = startTime
+          //   let newTime = ''
+          //   Array.from(Array(slotsWithGap).keys()).map(el => {
+          //     newTime = newAddMinutes(start, slotDuration)
+          //     allSlots.push({ start: start, end: newTime })
+          //     console.log('{start: start, end: newTime}', { start: start, end: newTime });
+          //     start = newAddMinutes(newTime, Math.abs(slotDuration - breakDuration))
+          //   })
+          //   if (isAdditionalSlot) {
+          //     allSlots.push({ start: start, end: newAddMinutes(start, slotDuration) })
+          //   }
+          //   setSlots(allSlots)
+          //   console.log('all slots', allSlots);
+          //   // var stimess= myfun(responseJson.body.services[j-1].attribute_detail.substring(0,5)+':00',responseJson.body.services[j-1].attribute_detail.substring(10,15)+':00')
+          //   //  setfutureTimes(stimess)
+          //   settimimgs(responseJson.body.services[j - 1].attribute_detail.substring(0, 5) + ':00 - ' + responseJson.body.services[j - 1].attribute_detail.substring(10, 15) + ':00')
+          // }
+          if (responseJson.body.services[j - 1].attribute_value == 'yes' && updated == 0) {
+            console.log('setselectedTab', responseJson.body.services[j - 1].attribute_label);
+            updated = 1
+          }
         }
+        setbannerimg(responseJson.body.bannerImages[0].image)
+        var allimgs = [];
+        for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
+          allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
+        }
+        console.log('allimgs', allimgs);
+        setAllImg(allimgs)
+        setresData(responseJson.body)
+        //  A()
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
       }
-      setbannerimg(responseJson.body.bannerImages[0].image)
-      var allimgs = [];
-      for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
-        allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
-      }
-      console.log('allimgs', allimgs);
-      setAllImg(allimgs)
-      setresData(responseJson.body)
-      //  A()
     } else {
       setalert_sms(err)
       setMy_Alert(true)
     }
+
   }
 
   const getMenuTypeDate = async () => {
@@ -622,32 +645,46 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_categories, '', 'GET', User.token)
     setLoading(false)
     console.log('getMenuTypeDate', responseJson)
-    if (responseJson.headers.success == 1) {
-      setCategoryData(responseJson.body)
-      // setmenutypedate(responseJson.body)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setCategoryData(responseJson.body)
+        // setmenutypedate(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
+
   }
   const cart_Count = async () => {
     // const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.vendorId, '', 'GET', User.token)
     const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId, '', 'GET', User.token)
     setLoading(false)
     console.log('the res in_cart cart_Count ==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      var counts = 0
-      for (let i = 1; i <= responseJson.body.length; i++) {
-        if (responseJson.body[i - 1].in_cart == '1') {
-          counts = parseInt(counts) + parseInt('1')
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        var counts = 0
+        for (let i = 1; i <= responseJson.body.length; i++) {
+          if (responseJson.body[i - 1].in_cart == '1') {
+            counts = parseInt(counts) + parseInt('1')
+          }
         }
+        setcartCount(counts)
+        setreloades(!reloades)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
       }
-      setcartCount(counts)
-      setreloades(!reloades)
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
+
   }
 
   const menuList = async (dd) => {
@@ -667,19 +704,25 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestGetApi(urls, '', 'GET', User.token)
     setLoading(false)
     console.log('the res in_cart shop_eat_menu_userid ==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // var counts = 0
-      // for (let i = 1; i <= responseJson.body.length; i++) {
-      //   if (responseJson.body[i - 1].in_cart == '1') {
-      //     counts = parseInt(counts) + parseInt('1')
-      //   }
-      // }
-      // setcartCount(counts)
-      setmenuresData(responseJson.body)
-      setreloades(!reloades)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        // var counts = 0
+        // for (let i = 1; i <= responseJson.body.length; i++) {
+        //   if (responseJson.body[i - 1].in_cart == '1') {
+        //     counts = parseInt(counts) + parseInt('1')
+        //   }
+        // }
+        // setcartCount(counts)
+        setmenuresData(responseJson.body)
+        setreloades(!reloades)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
   }
   const getSimilarProducts = async (dd) => {
@@ -713,15 +756,22 @@ const FoodDetails = (props) => {
       const { responseJson, err } = await requestGetApi(shop_product_productlist + props.route.params.vendorId + '?name=' + tt, '', 'GET', User.token)
       setLoading(false)
       console.log('the res search shop_eat_menu_userid ==>>', responseJson)
-      if (responseJson.headers.success == 1) {
-        setmenuresData2(responseJson.body)
-        // setsearchValue('')
+      if (responseJson !== null) {
+        if (responseJson.headers.success == 1) {
+          setmenuresData2(responseJson.body)
+          // setsearchValue('')
+        } else {
+          setmenuresData2([])
+          Toast.show({ text1: responseJson.headers.message })
+          // Toast.show({text1: responseJson.headers.message})
+          // setalert_sms(err)
+          // setMy_Alert(true) 
+        }
       } else {
-        setmenuresData2([])
-        // Toast.show({text1: responseJson.headers.message})
-        // setalert_sms(err)
-        // setMy_Alert(true) 
+        setalert_sms(err)
+        setMy_Alert(true)
       }
+
     } else {
       Toast.show({ text1: 'Please enter the item name in search.' })
     }
@@ -824,8 +874,8 @@ const FoodDetails = (props) => {
         <View style={{ width: '28%', height: 100, alignSelf: 'center', borderRadius: 10, borderWidth: 3, borderColor: '#dee4ec' }}>
           <Image source={{ uri: img }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 10, resizeMode: 'stretch' }} ></Image>
         </View>
-        <View style={{ marginLeft: 15, width:'70%' }}>
-          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9,  }} >{ti}</Text>
+        <View style={{ marginLeft: 15, width: '70%' }}>
+          <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 9, }} >{ti}</Text>
           <View style={{ marginTop: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
 
             <Rating
@@ -1611,7 +1661,7 @@ const FoodDetails = (props) => {
                 onChangeText={(e) => {
                   setsearchValue(e)
                   searchmenuList(e.text)
-                  if(e === ''){
+                  if (e === '') {
                     setmenuresData2([...menuresData])
                   }
                 }}

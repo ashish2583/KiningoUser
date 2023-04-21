@@ -16,6 +16,8 @@ import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../
 import GetLocation from 'react-native-get-location'
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
+import Toast from 'react-native-toast-message'
+
 const ShopProductSearch = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const dispatch = useDispatch();
@@ -46,7 +48,9 @@ const ShopProductSearch = (props) => {
       })
     AllVenders()
     console.log('hohohohoho', props.route.params.datas);
-    setresData(props.route.params.datas)
+    if(props.route.params.from !== 'CatClick'){
+      setresData(props.route.params.datas)
+    }
     if (props.route.params.from != 'search') {
 
       if (props.route.params.from == 'CatClick') {
@@ -66,9 +70,13 @@ const ShopProductSearch = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>vendor_lists_subcat', responseJson)
-    if (responseJson.headers.success == 1) {
-      setresData(responseJson.body)
-      //  setRefreshing(!refreshing)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setresData(responseJson.body)
+        //  setRefreshing(!refreshing)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -101,10 +109,14 @@ const ShopProductSearch = (props) => {
     // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
-    if (responseJson.headers.success == 1) {
-      // setresData(responseJson.body.vendors)
-      setresData(responseJson.body)
-    } else {
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        // setresData(responseJson.body.vendors)
+        setresData(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
+    }else {
       setalert_sms(err)
       setMy_Alert(true)
     }
@@ -117,9 +129,13 @@ const ShopProductSearch = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_business + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
-    if (responseJson.headers.success == 1) {
-      setresData(responseJson.body)
-    } else {
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setresData(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+      }
+    }else {
       setalert_sms(err)
       setMy_Alert(true)
     }
@@ -244,6 +260,7 @@ const ShopProductSearch = (props) => {
       </ScrollView>
 
       {loading ? <Loader /> : null}
+      {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
     </SafeAreaView>
   );
 }

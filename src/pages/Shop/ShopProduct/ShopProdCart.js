@@ -333,9 +333,45 @@ const ShopProduct = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
     setLoading(false)
     // console.log('', responseJson.body.items.length)
-    console.log('the res get shop_product_cart ==>>', responseJson.body)
-    if (responseJson.headers.success == 1) {
-      if (responseJson.body.items.length == 0) {
+    console.log('the res get shop_product_cart ==>>', responseJson)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        if (responseJson.body.items.length == 0) {
+          setres([])
+          setresData([])
+          setsubTotal('')
+          setdilivery('')
+          setVendorCharges('')
+          setTaxes('')
+          settotal('0')
+          setreloades(!reloades)
+        } else {
+          // if (responseJson.body.items[0].serviceType == 'Take Away') {
+          //   setordertype('take-away')
+          // }
+          setres(responseJson.body)
+          var myCartItem = []
+          for (let i = 1; i <= responseJson.body.items.length; i++) {
+            if (responseJson.body.items[i - 1].product_type != null) {
+              myCartItem.push(responseJson.body.items[i - 1])
+            }
+          }
+          setresData(myCartItem)
+          // setresData(responseJson.body.items)
+          setsubTotal(responseJson.body.sub_total)
+          setdilivery(responseJson.body.delivery_charge)
+          setVendorCharges(responseJson.body.vendor_charges)
+          // console.log('nnn', responseJson.body);
+          console.log('nnn', responseJson.body.business_start_time, responseJson.body.business_end_time);
+          getTimeSlots(responseJson.body.business_start_time, responseJson.body.business_end_time)
+          setTaxes(responseJson.body.taxes)
+          settotal(responseJson.body.total)
+          setreloades(!reloades)
+          if (callGetCopunFun) {
+            await getCopun(responseJson.body.business_id)
+          }
+        }
+      } else {
         setres([])
         setresData([])
         setsubTotal('')
@@ -344,43 +380,13 @@ const ShopProduct = (props) => {
         setTaxes('')
         settotal('0')
         setreloades(!reloades)
-      } else {
-        // if (responseJson.body.items[0].serviceType == 'Take Away') {
-        //   setordertype('take-away')
-        // }
-        setres(responseJson.body)
-        var myCartItem = []
-        for (let i = 1; i <= responseJson.body.items.length; i++) {
-          if (responseJson.body.items[i - 1].product_type != null) {
-            myCartItem.push(responseJson.body.items[i - 1])
-          }
-        }
-        setresData(myCartItem)
-        // setresData(responseJson.body.items)
-        setsubTotal(responseJson.body.sub_total)
-        setdilivery(responseJson.body.delivery_charge)
-        setVendorCharges(responseJson.body.vendor_charges)
-        // console.log('nnn', responseJson.body);
-        console.log('nnn', responseJson.body.business_start_time, responseJson.body.business_end_time);
-        getTimeSlots(responseJson.body.business_start_time, responseJson.body.business_end_time)
-        setTaxes(responseJson.body.taxes)
-        settotal(responseJson.body.total)
-        setreloades(!reloades)
-        if (callGetCopunFun) {
-          await getCopun(responseJson.body.business_id)
-        }
+        Toast.show({ text1: responseJson.headers.message })
+        //  setalert_sms(err)
+        //  setMy_Alert(true)
       }
     } else {
-      setres([])
-      setresData([])
-      setsubTotal('')
-      setdilivery('')
-      setVendorCharges('')
-      setTaxes('')
-      settotal('0')
-      setreloades(!reloades)
-      //  setalert_sms(err)
-      //  setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
 
   }
@@ -393,8 +399,14 @@ const ShopProduct = (props) => {
     const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + props.route.params.vendorId, '', 'GET', userdetaile.token)
     setLoading(false)
     console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      setrescopun(responseJson.body)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setrescopun(responseJson.body)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
       setalert_sms(err)
       setMy_Alert(true)
@@ -411,20 +423,25 @@ const ShopProduct = (props) => {
     const { responseJson, err } = await requestPostApi(shop_product_remove_coupon, data, 'POST', userdetaile.token)
     setLoading(false)
     console.log('remove coupon response', responseJson)
-    console.log('remove coupon response body', responseJson.body)
-    if (responseJson.headers.success == 1) {
-      setdiscountPrice(responseJson.body.coupon_discount)
-      setsubTotal(responseJson.body.sub_total)
-      setdilivery(responseJson.body.delivery_charge)
-      setVendorCharges(responseJson.body.vendor_charges)
-      setTaxes(responseJson.body.taxes)
-      settotal(responseJson.body.total)
-      setapplyedCoupen('')
-      setpromocode('')
-      setpromoEdit(true)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        setdiscountPrice(responseJson.body.coupon_discount)
+        setsubTotal(responseJson.body.sub_total)
+        setdilivery(responseJson.body.delivery_charge)
+        setVendorCharges(responseJson.body.vendor_charges)
+        setTaxes(responseJson.body.taxes)
+        settotal(responseJson.body.total)
+        setapplyedCoupen('')
+        setpromocode('')
+        setpromoEdit(true)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // setalert_sms(err)
+        // setMy_Alert(true)
+      }
     } else {
-      // setalert_sms(err)
-      // setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
 
 
@@ -441,20 +458,25 @@ const ShopProduct = (props) => {
       const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
       setLoading(false)
       console.log('the res shop_product_cart_apply_coupon==>>', responseJson)
-      if (responseJson.headers.success == 1) {
-        Toast.show({ text1: responseJson.headers.message })
-        setdiscountPrice(responseJson.body.coupon_discount)
-        setsubTotal(responseJson.body.sub_total)
-        setVendorCharges(responseJson.body.vendor_charges)
-        setTaxes(responseJson.body.taxes)
-        setdilivery(responseJson.body.delivery_charge)
-        settotal(responseJson.body.total)
-        setapplyedCoupen(responseJson.body.coupon)
-        setpromoEdit(false)
+      if (responseJson !== null) {
+        if (responseJson.headers.success == 1) {
+          Toast.show({ text1: responseJson.headers.message })
+          setdiscountPrice(responseJson.body.coupon_discount)
+          setsubTotal(responseJson.body.sub_total)
+          setVendorCharges(responseJson.body.vendor_charges)
+          setTaxes(responseJson.body.taxes)
+          setdilivery(responseJson.body.delivery_charge)
+          settotal(responseJson.body.total)
+          setapplyedCoupen(responseJson.body.coupon)
+          setpromoEdit(false)
+        } else {
+          Toast.show({ text1: responseJson.headers.message })
+          // setalert_sms(err)
+          // setMy_Alert(true)
+        }
       } else {
-        Toast.show({ text1: responseJson.headers.message })
-        // setalert_sms(err)
-        // setMy_Alert(true)
+        setalert_sms(err)
+        setMy_Alert(true)
       }
     }
 
@@ -464,14 +486,21 @@ const ShopProduct = (props) => {
     const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item + id, '', 'DELETE', userdetaile.token)
     setLoading(false)
     console.log('the res==>>shop delete cart', responseJson)
-    if (responseJson.headers.success == 1) {
-      console.log('the res==>>Home.body.delete cart', responseJson.body)
-      getcart(false)
+    if (responseJson !== null) {
+      if (responseJson.headers.success == 1) {
+        console.log('the res==>>Home.body.delete cart', responseJson.body)
+        getcart(false)
+      } else {
+        Toast.show({ text1: responseJson.headers.message })
+        // Toast.show({ text1: err })
+        //  setalert_sms(err)
+        //  setMy_Alert(true)
+      }
     } else {
-      Toast.show({ text1: err })
-      //  setalert_sms(err)
-      //  setMy_Alert(true)
+      setalert_sms(err)
+      setMy_Alert(true)
     }
+
 
   }
   const deleteItem = ({ item, index }) => {
@@ -528,14 +557,20 @@ const ShopProduct = (props) => {
       const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item + selectedItem.id, data, 'PUT', userdetaile.token)
       setLoading(false)
       console.log('the res==>>shop update cart', responseJson)
-      if (responseJson.headers.success == 1) {
-        console.log('the res==>>Home.body.update cart', responseJson.body)
-        Toast.show({ text1: responseJson.headers.message })
-        getcart(false)
+      if (responseJson !== null) {
+        if (responseJson.headers.success == 1) {
+          console.log('the res==>>Home.body.update cart', responseJson.body)
+          Toast.show({ text1: responseJson.headers.message })
+          getcart(false)
+        } else {
+          Toast.show({ text1: responseJson.headers.message })
+          // Toast.show({ text1: err })
+          //  setalert_sms(err)
+          //  setMy_Alert(true)
+        }
       } else {
-        Toast.show({ text1: err })
-        //  setalert_sms(err)
-        //  setMy_Alert(true)
+        setalert_sms(err)
+        setMy_Alert(true)
       }
 
     }
@@ -550,14 +585,20 @@ const ShopProduct = (props) => {
       const { responseJson, err } = await requestPostApi(shop_product_delete_cart_item + selectedItem.id, data, 'PUT', userdetaile.token)
       setLoading(false)
       console.log('the res==>>shop update cart', responseJson)
-      if (responseJson.headers.success == 1) {
-        console.log('the res==>>Home.body.update cart', responseJson.body)
-        Toast.show({ text1: responseJson.headers.message })
-        getcart(false)
+      if (responseJson !== null) {
+        if (responseJson.headers.success == 1) {
+          console.log('the res==>>Home.body.update cart', responseJson.body)
+          Toast.show({ text1: responseJson.headers.message })
+          getcart(false)
+        } else {
+          Toast.show({ text1: responseJson.headers.message })
+          // Toast.show({ text1: err })
+          //  setalert_sms(err)
+          //  setMy_Alert(true)
+        }
       } else {
-        Toast.show({ text1: err })
-        //  setalert_sms(err)
-        //  setMy_Alert(true)
+        setalert_sms(err)
+        setMy_Alert(true)
       }
     }
     return (
@@ -582,7 +623,7 @@ const ShopProduct = (props) => {
             <View style={{ borderWidth: 5, borderRadius: 5, borderColor: 'rgba(255, 196, 12, 0.2)', marginRight: 20, justifyContent: 'center', borderRadius: 20, height: 100 }}>
               <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 50, height: 50, marginHorizontal: 10 }} />
             </View>
-            <View style={{width: '70%'}}>
+            <View style={{ width: '70%' }}>
               <Text style={{ fontSize: 16, color: '#263238', }}>{item.name}</Text>
               <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.price.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
@@ -928,45 +969,45 @@ const ShopProduct = (props) => {
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
-        style={{margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+        style={{ margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
       >
-        <View style={{ width: '95%', height: dimensions.SCREEN_HEIGHT * 40 / 100, alignSelf:'center', borderRadius: 30, backgroundColor: '#fff' }}>
-        <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '100%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10, ...styles.extraStyle }}>
-          {rescopun?.length > 0 ?
-            rescopun.map((item, index) => {
-              return (
-                <View style={{
-                  width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
-                  borderColor: '#dee4ec', borderWidth: 1, elevation: 5, borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
-                }}
-                >
-                  <View style={{ width: 25, height: 25, alignSelf: 'center', borderRadius: 2, borderWidth: 0.5, borderColor: '#dee4ec' }}>
-                    <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 2, resizeMode: 'stretch' }} ></Image>
-                  </View>
-                  <View style={{ marginLeft: 10 }}>
-                    <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13 }} >{item.coupon_name}</Text>
-                    <Text style={{ color: Mycolors.GREEN, fontSize: 11, marginTop: 5 }} >Save ${parseFloat(Number(item.discount_value).toFixed(2))} with this code</Text>
-                  </View>
-                  <View style={{ position: 'absolute', right: 10, top: 10 }}>
-                    <View style={{ width: 80, }}>
-                      <MyButtons title={item.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={() => {
-                        setpromocode(item.coupon_code)
-                        setdiscount_id(item.discount_id)
-                        setmodlevisual(false)
-                      }} marginHorizontal={20} fontSize={12}
-                        titlecolor={'#835E23'} borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
+        <View style={{ width: '95%', height: dimensions.SCREEN_HEIGHT * 40 / 100, alignSelf: 'center', borderRadius: 30, backgroundColor: '#fff' }}>
+          <View style={{ height: 300, backgroundColor: '#fff', borderRadius: 30, position: 'absolute', width: '100%', borderColor: '#fff', borderWidth: 0.3, alignSelf: 'center', padding: 10, ...styles.extraStyle }}>
+            {rescopun?.length > 0 ?
+              rescopun.map((item, index) => {
+                return (
+                  <View style={{
+                    width: '100%', marginHorizontal: 5, marginVertical: 5, padding: 10, backgroundColor: '#fff',
+                    borderColor: '#dee4ec', borderWidth: 1, elevation: 5, borderRadius: 7, alignSelf: 'center', flexDirection: 'row', alignItems: 'center'
+                  }}
+                  >
+                    <View style={{ width: 25, height: 25, alignSelf: 'center', borderRadius: 2, borderWidth: 0.5, borderColor: '#dee4ec' }}>
+                      <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 2, resizeMode: 'stretch' }} ></Image>
+                    </View>
+                    <View style={{ marginLeft: 10 }}>
+                      <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13 }} >{item.coupon_name}</Text>
+                      <Text style={{ color: Mycolors.GREEN, fontSize: 11, marginTop: 5 }} >Save ${parseFloat(Number(item.discount_value).toFixed(2))} with this code</Text>
+                    </View>
+                    <View style={{ position: 'absolute', right: 10, top: 10 }}>
+                      <View style={{ width: 80, }}>
+                        <MyButtons title={item.coupon_code} height={27} width={'100%'} borderRadius={15} alignSelf="center" press={() => {
+                          setpromocode(item.coupon_code)
+                          setdiscount_id(item.discount_id)
+                          setmodlevisual(false)
+                        }} marginHorizontal={20} fontSize={12}
+                          titlecolor={'#835E23'} borderColor={'#835E23'} borderWidth={0.5} backgroundColor={'transparent'} fontWeight={'300'} />
+                      </View>
                     </View>
                   </View>
-                </View>
+                )
+              }
               )
+              :
+              <View style={{ alignSelf: 'center' }} >
+                <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Coupons Available</Text>
+              </View>
             }
-            )
-            :
-            <View style={{alignSelf:'center'}} >
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Coupons Available</Text>
-            </View>
-          }
-        </View>
+          </View>
 
         </View>
         {/* </View> */}
@@ -1247,9 +1288,9 @@ const styles = StyleSheet.create({
       // top: 23,
     },
   },
-  extraStyle:{
-    justifyContent:'center',
-    alignItems:'center'
+  extraStyle: {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 export default ShopProduct 
