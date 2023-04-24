@@ -16,12 +16,6 @@ import { baseUrl, requestPostApi,notification_list, requestGetApi, shop_eat } fr
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
-import DropDownPicker from 'react-native-dropdown-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import openMap from 'react-native-open-maps';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import moment from 'moment';
-import Toast from 'react-native-toast-message';
 
 const ShopEatNotificationList = (props) => {
   const [notificationData, setNotificationData] = useState([]);

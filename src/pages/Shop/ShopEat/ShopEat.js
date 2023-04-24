@@ -127,6 +127,8 @@ const ShopEat = (props) => {
 
     }
   });
+  
+
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
@@ -287,7 +289,8 @@ function renderDescription(rowData) {
           // alignItems: 'center',
           backgroundColor: '#fff',
           width: '94%',
-          borderRadius: 10,
+          borderRadius: 10, 
+         
         }}>
           <TouchableOpacity style={{ justifyContent: 'center', position: 'absolute', height: 55, left: 15 }}>
             <Image source={require('../../../assets/shape_33.png')} style={{ width: 12, height: 15 }}></Image>

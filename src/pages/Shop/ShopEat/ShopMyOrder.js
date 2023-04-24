@@ -17,7 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Menu,MenuOptions,MenuOption,MenuTrigger,} from 'react-native-popup-menu';
-// 
+
 const ShopMyOrder = (props) => {
   const [drvReviewData, setdrvReviewData] = useState('')
   const [drv_Review, setdrv_Review] = useState('')
@@ -44,13 +44,6 @@ const ShopMyOrder = (props) => {
       time: '',
       img: require('../../../assets/images/images.png'),
     },
-    // {
-    //   id: '3',
-    //   title: 'Dining',
-    //   desc:'Restaurant manager behaviour was not good',
-    //   time:'',
-    //   img:require('../../../assets/images/images.png'),
-    // },
     {
       id: '4',
       title: 'Table',
@@ -356,14 +349,7 @@ const ShopMyOrder = (props) => {
           press1={() => { props.navigation.navigate('ShopEat') }} img1={require('../../../assets/arrow.png')} img1width={18} img1height={15}
           press2={() => { }} title2={'My Orders'} fontWeight={'500'} img2height={20}
           press3={() => { }} img3width={25} img3height={25} />
-        {/* {
-          orderData != null ?
-            <TouchableOpacity onPress={() => { setShowFiltersModal(true) }} style={[styles.iconView, {}]}>
-              <AntDesign name="filter" color={'#fff'} size={24} />
-            </TouchableOpacity>
-            :
-            null
-        } */}
+       
        
           {
           orderData != null ?
@@ -381,7 +367,6 @@ const ShopMyOrder = (props) => {
               elevation: 5, marginHorizontal: 18
             }}>
               <View
-                // onPress={() => { setShowFiltersModal(true) }} 
                 style={styles.iconView}>
                 <AntDesign name="filter" color={'#fff'} size={24} />
               </View>

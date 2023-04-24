@@ -18,7 +18,6 @@ import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import GetLocation from 'react-native-get-location'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Geolocation from "react-native-geolocation-service";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey'
 import Geocoder from "react-native-geocoding";
