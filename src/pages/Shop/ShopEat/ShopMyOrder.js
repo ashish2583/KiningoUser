@@ -526,7 +526,8 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {item.order_type == 'take-away' && item.status == 12 && item.business_rating == null ?
+                        {/* {item.order_type == 'take-away' && item.status == 12 && item.business_rating == null ? */}
+                        {true ?
                           // <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                           //   if (item.business_rating == null) {
                           //     props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })

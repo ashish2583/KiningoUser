@@ -85,6 +85,8 @@ const ShopEat = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [My_Alert2, setMy_Alert2] = useState(false)
   const [alert_sms2, setalert_sms2] = useState('')
+  const [My_Alert3, setMy_Alert3] = useState(false)
+  const [alert_sms3, setalert_sms3] = useState('')
   const [lat, setlat] = useState('28.6176')
   const [lan, setlan] = useState('77.422')
   const [refreshing, setRefreshing] = useState(false);
@@ -93,6 +95,7 @@ const ShopEat = (props) => {
   const mapdata = useSelector(state => state.maplocation) 
   const [googleAddress, setGoogleAddress] = useState('');
   const [googleLatLng, setGoogleLatLng] = useState({});
+  const [remoteMessageData, setRemoteMessageData] = useState('');
 
   useEffect(() => {
     GetLocation.getCurrentPosition({
@@ -116,6 +119,19 @@ const ShopEat = (props) => {
     // venderList()
   }, [])
 
+  const rateOrder = () => {
+    props.navigation.navigate('ShopReview',{ data: remoteMessageData })
+  }
+  
+  messaging().onMessage(remoteMessage => {
+    const data = remoteMessage.data
+    console.log('onMessage remoteMessage',remoteMessage)
+
+    setalert_sms3('Do you want to rate order?')
+    setMy_Alert3(true)
+    setRemoteMessageData(remoteMessage.data)
+
+  });
   messaging().onNotificationOpenedApp(remoteMessage => {
     const data = remoteMessage.data
     console.log('Notification caused app to open from background state:',remoteMessage)
@@ -123,9 +139,7 @@ const ShopEat = (props) => {
        
     props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
       
-     }else if(remoteMessage.notification.body=='new message'){
-
-    }
+     }
   });
   
 
@@ -594,6 +608,8 @@ function renderDescription(rowData) {
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
      
       {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={()=>{ logoutDriver() }} canclePress={()=>{setMy_Alert2(false)}}/> : null }
+      
+      {My_Alert3 ? <MyAlert sms={alert_sms3} okPress={rateOrder} canclePress={()=>{setMy_Alert3(false)}}/> : null }
 
     </SafeAreaView>
   );

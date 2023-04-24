@@ -11,9 +11,10 @@ import DatePicker from 'react-native-datepicker';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { CardField,CardFieldInput, useStripe,StripeContainer,} from '@stripe/stripe-react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { baseUrl,shop_eat_cart,user_payment_method, shop_eat_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat } from '../../../WebApi/Service'
+import { baseUrl,shop_eat_cart,user_payment_method, shop_eat_cart_place_order,vendor_reviews,shop_eat_business_id,shop_eat_menu_userid, requestPostApi,requestGetApi,shop_eat, driver_reviews } from '../../../WebApi/Service'
 import Toast from 'react-native-toast-message';
 import Loader from '../../../WebApi/Loader';
+import MyAlert from '../../../component/MyAlert';
 
 
 const ShopReview = (props) => {
@@ -64,9 +65,23 @@ const ShopReview = (props) => {
   const [venderRating,setvenderRating]=useState('0')
   const [subItemData,setsubItemData]=useState([])
   const [dumyValue,setdumyValue]=useState('')
+  const [drvRating, setdrvRating] = useState('0')
+  const [drv_Review, setdrv_Review] = useState('')
+  const [drvReviewData, setdrvReviewData] = useState('')
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
+  const [My_Alert2, setMy_Alert2] = useState(false)
+  const [alert_sms2, setalert_sms2] = useState('')
+  const [showDriverRating, setShowDriverRating] = useState(false)
   useEffect(()=>{
     setitemdata(props.route.params.data)
+    setdrvReviewData(props.route.params.data)
     console.log('testing===>>>',props.route.params.data);
+    if(props.route.params.data?.order_type_label === 'Delivery'){
+      setShowDriverRating(true)
+    }else{
+      setShowDriverRating(false)
+    }
     setsubData();
  },[])
  
@@ -108,6 +123,33 @@ const ShopReview = (props) => {
      // setMy_Alert(true)
      }
  };
+
+ const submitDriverRewiew = async () => {
+  console.log('drvReviewDatadrvReviewDatadrvReviewData', drvReviewData);
+  if (drvRating == 0) {
+    Toast.show({ text1: 'Please add ratings to submit the review.' })
+  } else {
+    setLoading(true);
+    var data = {
+      "object_id": drvReviewData.driver_id,
+      "object_type": "driver",
+      "star": drvRating,
+      "comments": drv_Review,
+      'order_id' :drvReviewData.id
+    }
+    console.log('the form data==>>', data)
+    const { responseJson, err } = await requestPostApi(driver_reviews, data, 'POST', User.token)
+    setLoading(false)
+    console.log('the res shop_eat_cart_place_order==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      myorderList()
+      Toast.show({ text1: responseJson.headers.message })
+    } else {
+      // setalert_sms(err)
+      // setMy_Alert(true)
+    }
+  }
+};
 
  const checkcon=()=>{
  
@@ -229,13 +271,99 @@ return(
    </View>
 : null }
 
+
+
+
+    {showDriverRating ?
+      <View>
+          <View style={{ width: '100%', height: 50, backgroundColor: Mycolors.TimingColor, borderTopLeftRadius: 30, borderTopRightRadius: 30, justifyContent: 'center', marginTop:20 }}>
+            <Text style={{ fontWeight: '600', fontSize: 14, marginTop: 5, color: Mycolors.Black, textAlign: 'center' }}>Submit {drvReviewData?.driver_name ? drvReviewData?.driver_name : 'Driver'} Review</Text>
+          </View>
+            {/* <Text style={{fontWeight:'500',fontSize:13,marginTop:20,color:Mycolors.Black,lineHeight:20}}>Please provide rating for the restaurant here.</Text> */}
+            <View style={{ marginTop: 20, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', alignSelf: 'center' }}>
+
+              <Rating
+                type='custom'
+                ratingCount={5}
+                imageSize={25}
+                startingValue={0}
+                // style={{alignSelf:'flex-start',backgroundColor:'red'}}
+                onSwipeRating={(d) => { setdrvRating(d) }}
+                onFinishRating={(d) => { setdrvRating(d) }}
+              //readonly={true}
+              />
+            </View>
+
+            <View style={{ width: '100%', alignSelf: 'center' }}>
+              <Text style={{ fontWeight: '500', fontSize: 13, marginTop: 20, color: Mycolors.Black, lineHeight: 20 }}>Write a review for driver</Text>
+              <View style={{ width: '100%', height: 50, borderRadius: 2, marginTop: 10, alignSelf: 'center' }}>
+                <TextInput
+                  value={drv_Review}
+                  onChangeText={(e) => setdrv_Review(e)}
+                  placeholder={'Type here.....'}
+                  placeholderTextColor="#bbbbbb"
+                  multiline={true}
+                  autoCapitalize='none'
+                  style={[{
+                    paddingLeft: 15,
+                    width: '100%',
+                    fontSize: 13,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    borderWidth: 0.5,
+                    // backgroundColor: '#34333a',
+                    color: '#fff',
+                    height: 60,
+                    borderRadius: 5,
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    color: Mycolors.Black,
+                  }]}
+                />
+
+              </View>
+            </View>
+
+            {/* <View style={{ width: '100%', marginTop: 20 }}>
+              <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => {
+                submitDriverRewiew()
+              }} marginHorizontal={20} fontSize={14}
+                titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
+            </View> */}
+            <View style={{ width: 10, height: 50 }}></View>
+        </View>
+         :null}
+
+
+
+
+
+
  <View style={{width:'100%',marginTop:20}}>
  <MyButtons title="Submit" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={()=>{
-  if(venderRating>0){
-     submitRewiew()
-  }else{
-    Toast.show({ text1: 'Please add ratings to submit the review.' })
+  if(!(venderRating>0)){
+    Toast.show({ text1: 'Please add restaurant ratings to submit the review.' })
+    return
   }
+  if(showDriverRating){
+    if(!(drvRating>0)){
+      setalert_sms2(`Are you sure you don't want to rate driver`)
+      setMy_Alert2(true)
+    }else{
+      submitRewiew()
+      submitDriverRewiew()
+    }
+  }else{
+    submitRewiew()
+  }
+  // if(venderRating>0){
+  //    submitRewiew()
+
+  //    if(drvRating>0){
+  //       submitDriverRewiew()
+  //    }
+  // }else{
+  //   Toast.show({ text1: 'Please add ratings to submit the review.' })
+  // }
 }} marginHorizontal={20} fontSize={14}
    titlecolor={Mycolors.BG_COLOR}  hLinearColor={venderRating>0 ? ['#b10027','#fd001f'] : ['gray','gray']}/>
  </View>
@@ -247,7 +375,8 @@ return(
 </ScrollView>
 
 {loading ? <Loader />  : null }
-
+{My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
+{My_Alert2 ? <MyAlert sms={alert_sms2} okPress={()=>{ submitRewiew() }} canclePress={()=>{setMy_Alert2(false)}}/> : null }
     </SafeAreaView>
      );
   }
