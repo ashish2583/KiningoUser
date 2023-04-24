@@ -1289,8 +1289,8 @@ const styles = StyleSheet.create({
     },
   },
   extraStyle: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    // justifyContent: 'center',
+    // alignItems: 'center'
   }
 });
 export default ShopProduct 

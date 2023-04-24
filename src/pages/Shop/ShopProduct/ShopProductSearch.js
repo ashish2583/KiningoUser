@@ -185,7 +185,7 @@ const ShopProductSearch = (props) => {
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
             {/* {console.log('resData resData', resData)} */}
-            {
+            {resData?.length > 0 ?
               resData.map((item, index) => {
                 return (
 
@@ -248,6 +248,8 @@ const ShopProductSearch = (props) => {
                 )
               })
 
+            :
+            <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Vendors Found</Text>
             }
 
           </View>

@@ -14,6 +14,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
 import Toast from 'react-native-toast-message';
 
+const checkIfEmpty = (data) => {
+  if(data === null || (Array.isArray(data) && data?.length === 0 )){
+    return true
+  }else{
+    return false
+  }
+}
+
 const CatSearch = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const dispatch = useDispatch();
@@ -138,7 +146,7 @@ const CatSearch = (props) => {
 
 
           <View style={{ width: '100%', marginTop: 25, alignSelf: 'center', }}>
-            {resData != null ?
+            {!checkIfEmpty(resData) ?
               <FlatList
                 data={resData}
                 //horizontal={true}
@@ -187,7 +195,9 @@ const CatSearch = (props) => {
                 }}
                 keyExtractor={item => item.category_code}
               />
-              : null}
+              :
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Categories Found</Text> 
+              }
 
           </View>
 
