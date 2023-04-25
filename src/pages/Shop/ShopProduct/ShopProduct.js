@@ -108,12 +108,12 @@ const ShopProduct = (props) => {
       enableHighAccuracy: true,
       timeout: 15000,
     })
-    .then(location => {
-        console.log('locations latitude longitude',location);
+      .then(location => {
+        console.log('locations latitude longitude', location);
         // setlat(location.latitude)
         // setlan(location.longitude)
         lat = location?.latitude
-        lan =location?.longitude
+        lan = location?.longitude
         let My_cord = ''
         My_cord = { latitude: location?.latitude, longitude: location?.longitude }
         dispatch(setRestorentLocation(My_cord))
@@ -123,7 +123,7 @@ const ShopProduct = (props) => {
       .catch(error => {
         const { code, message } = error;
         console.warn(code, message);
-        if(code === 'UNAVAILABLE'){
+        if (code === 'UNAVAILABLE') {
           // Toast.show({ text1: 'Please turn on your location to see results' })
           setalert_sms('To see results, either turn on your location or search any location')
           setMy_Alert(true)
@@ -133,7 +133,35 @@ const ShopProduct = (props) => {
 
   const checkcon = () => {
     console.log('locations latitude longitude2', lat, lan);
-    homePage(lat, lan)
+    if (lat !== null && lan !== null) {
+      homePage(lat, lan)
+    } else {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+        .then(location => {
+          console.log('locations latitude longitude', location);
+          // setlat(location.latitude)
+          // setlan(location.longitude)
+          lat = location?.latitude
+          lan = location?.longitude
+          let My_cord = ''
+          My_cord = { latitude: location?.latitude, longitude: location?.longitude }
+          dispatch(setRestorentLocation(My_cord))
+          homePage(location?.latitude, location?.longitude)
+          LatlongTo_address(My_cord)
+        })
+        .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+          if (code === 'UNAVAILABLE') {
+            // Toast.show({ text1: 'Please turn on your location to see results' })
+            setalert_sms('To see results, either turn on your location or search any location')
+            setMy_Alert(true)
+          }
+        })
+    }
   }
 
   const wait = (timeout) => {
@@ -174,7 +202,7 @@ const ShopProduct = (props) => {
   }
 
   const homePage = async (l, lo) => {
-    if(l == null && lo == null){
+    if (l == null && lo == null) {
       // Toast.show({ text1: 'Please turn on your location to see results' })
       setalert_sms('To see results, either turn on your location or search any location')
       setMy_Alert(true)
