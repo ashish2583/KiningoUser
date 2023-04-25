@@ -12,11 +12,15 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="AIzaSyDBeSqFBgF2V-IXmJdeTM3ZZUYG_5nKm-g"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
+        android:exported='true'
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

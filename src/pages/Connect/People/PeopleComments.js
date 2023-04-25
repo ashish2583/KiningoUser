@@ -156,7 +156,7 @@ const PeopleComments = (props) => {
     {!showRepliesModal ?
     <HomeHeaderRoundBottom height={80}  paddingHorizontal={15} backgroundColor='#fff'
    press1={()=>{props.navigation.goBack()}} img1={require('../../../assets/images/events_arrow.png')} img1width={25} img1height={20} 
-   press2={()=>{}} title2={'20 Comments'} fontWeight={'500'} img2height={20} color='#455A64'
+   press2={()=>{}} title2={'Comments (20)'} fontWeight={'500'} img2height={20} color='#455A64'
    press3={()=>{}} img3width={25} img3height={25} />
     :null}
       <ScrollView>

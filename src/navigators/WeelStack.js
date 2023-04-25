@@ -92,7 +92,8 @@ const WeelStack=(props)=>{
            <Stack.Navigator
             screenOptions={{ headerShown:false,}}
              >
-            <Stack.Screen component = {Weel} name="Weel" />
+                 <Stack.Screen component = {ConnectPeopleStack} name="ConnectPeopleStack" />
+            {/* <Stack.Screen component = {Weel} name="Weel" /> */}
 
             <Stack.Screen component = {Connect} name="Connect" />
             <Stack.Screen component = {Airplan} name="Airplan" />

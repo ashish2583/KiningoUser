@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text,TouchableOpacity,Image } from 'react-native'
-import { dimensions, Mycolors } from './utility/Mycolors';
+import { dimensions, Mycolors } from '../utility/Mycolors';
 
 
 const HomeHeaderRoundBottom = (props) => {

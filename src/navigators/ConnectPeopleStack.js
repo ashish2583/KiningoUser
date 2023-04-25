@@ -15,7 +15,7 @@ import FoodDetails from '../pages/Shop/ShopEat/FoodDetails';
 import ShopMyOrder from '../pages/Shop/ShopEat/ShopMyOrder';
 import ShopReview from '../pages/Shop/ShopEat/ShopReview';
 import ShopPayment from '../pages/Shop/ShopEat/ShopPayment';
-const ShopEatStack=(props)=>{
+const ConnectPeopleStack=(props)=>{
    
     const Stack = createNativeStackNavigator();
 
@@ -42,4 +42,4 @@ const ShopEatStack=(props)=>{
 
 
 
-export default ShopEatStack
+export default ConnectPeopleStack
