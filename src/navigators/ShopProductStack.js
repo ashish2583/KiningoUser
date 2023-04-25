@@ -32,7 +32,7 @@ const ShopProductStack=(props)=>{
             <Stack.Screen component = {ShopProductAll} name="ShopProductAll" />
             <Stack.Screen component = {ShopCategoryAll} name="ShopCategoryAll" />
             <Stack.Screen component = {ShopCategoryProducts} name="ShopCategoryProducts" />
-            <Stack.Screen component = {ShopMyOrder} name="ShopMyOrder" />
+            <Stack.Screen component = {ShopMyOrder} name="ShopMyOrder" options={{gestureEnabled: false}} />
             <Stack.Screen component = {ShopReview} name="ShopReview" />
             <Stack.Screen component = {ShopPayment} name="ShopPayment" />
             <Stack.Screen component = {ShopProdCart} name="ShopProdCart" />
