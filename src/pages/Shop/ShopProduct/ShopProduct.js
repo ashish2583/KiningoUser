@@ -27,6 +27,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
 const isEmulator = false
+let lat = null
+let lan = null
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
@@ -89,8 +91,8 @@ const ShopProduct = (props) => {
   const multiSliderValuesChange = (values) => { setMultiSliderValue(values) }
   const [loading, setLoading] = useState(false)
   const [resData, setresData] = useState(null)
-  const [lat, setlat] = useState('28.6176')
-  const [lan, setlan] = useState('77.422')
+  // const [lat, setlat] = useState(null)
+  // const [lan, setlan] = useState(null)
   // const [isLatlong, setIsLatlong] = useState(true)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
@@ -106,23 +108,29 @@ const ShopProduct = (props) => {
       enableHighAccuracy: true,
       timeout: 15000,
     })
-      .then(location => {
-        // console.log('locations latitude longitude',location);
-        setlat(location.latitude)
-        setlan(location.longitude)
+    .then(location => {
+        console.log('locations latitude longitude',location);
+        // setlat(location.latitude)
+        // setlan(location.longitude)
+        lat = location?.latitude
+        lan =location?.longitude
         let My_cord = ''
-        My_cord = { latitude: location.latitude, longitude: location.longitude }
+        My_cord = { latitude: location?.latitude, longitude: location?.longitude }
         dispatch(setRestorentLocation(My_cord))
-        homePage(location.latitude, location.longitude)
+        homePage(location?.latitude, location?.longitude)
         LatlongTo_address(My_cord)
       })
       .catch(error => {
         const { code, message } = error;
         console.warn(code, message);
+        if(code === 'UNAVAILABLE'){
+          Toast.show({ text1: 'Please turn on your location to see results' })
+        }
       })
   }, [])
 
   const checkcon = () => {
+    console.log('locations latitude longitude2', lat, lan);
     homePage(lat, lan)
   }
 
@@ -164,8 +172,13 @@ const ShopProduct = (props) => {
   }
 
   const homePage = async (l, lo) => {
+    if(l == null && lo == null){
+      Toast.show({ text1: 'Please turn on your location to see results' })
+      return
+    }
     // const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
     let endPoint = ''
+    console.log('l, lo', l, lo);
     // if (isEmulator) {
     //   endPoint = `${shop_product_home}?lat=${28.6176}&long=${77.422}`
     // } else {
