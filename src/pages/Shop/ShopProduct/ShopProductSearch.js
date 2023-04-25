@@ -66,8 +66,11 @@ const ShopProductSearch = (props) => {
   }, [])
 
   const catSerch = async (ddd) => {
+    const endPoint = shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    console.log('catSerch endPoint', endPoint);    
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
+    // const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>vendor_lists_subcat', responseJson)
     if (responseJson !== null) {
@@ -104,6 +107,8 @@ const ShopProductSearch = (props) => {
 
 
   const homePageSearch = async (text) => {
+    const endPoint = shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    console.log('search endPoint', endPoint);
     setLoading(true)
     const { responseJson, err } = await requestGetApi(shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
     // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
