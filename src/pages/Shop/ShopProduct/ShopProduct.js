@@ -124,7 +124,9 @@ const ShopProduct = (props) => {
         const { code, message } = error;
         console.warn(code, message);
         if(code === 'UNAVAILABLE'){
-          Toast.show({ text1: 'Please turn on your location to see results' })
+          // Toast.show({ text1: 'Please turn on your location to see results' })
+          setalert_sms('To see results, either turn on your location or search any location')
+          setMy_Alert(true)
         }
       })
   }, [])
@@ -173,7 +175,9 @@ const ShopProduct = (props) => {
 
   const homePage = async (l, lo) => {
     if(l == null && lo == null){
-      Toast.show({ text1: 'Please turn on your location to see results' })
+      // Toast.show({ text1: 'Please turn on your location to see results' })
+      setalert_sms('To see results, either turn on your location or search any location')
+      setMy_Alert(true)
       return
     }
     // const endPoint = isLatlong ? `${shop_product_business}?lat=${lat}&long=${lan}` : `${shop_product_business}?name=Nile`
@@ -276,9 +280,9 @@ const ShopProduct = (props) => {
           </TouchableOpacity>
           <View style={{ width: '86%', justifyContent: 'center', alignItems: 'center', }}>
             <GooglePlacesAutocomplete
-              placeholder={addre.substring(0, 45)}
+              placeholder={addre?.trim()?.length > 0 ? addre.substring(0, 45) : 'Search Address'}
               textInputProps={{
-                placeholderTextColor: '#000',
+                placeholderTextColor: addre?.trim()?.length > 0 ? '#000' : 'gray',
                 // width: '95%',
                 // placeholderTextColor: Colors.BLACK,
                 returnKeyType: 'search',
