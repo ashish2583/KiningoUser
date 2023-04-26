@@ -689,6 +689,10 @@ const FoodDetails = (props) => {
       // }
       // setcartCount(counts)
       setmenuresData(responseJson.body)
+      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Take Away"))
+      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Delivery"))
+      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Dining" && el.service_type_value !== "Delivery"))
+      // console.log('updated data', responseJson.body.filter(el=>el.service_type_value !== "Take Away"));
       setreloades(!reloades)
     } else {
       // setalert_sms(err)
@@ -1078,7 +1082,7 @@ const FoodDetails = (props) => {
 
           <TouchableOpacity style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderColor: 'gray', padding: 4, borderRadius: 5, marginTop: 25, top: -30, }}
                 onPress={() => {
-                  menuList(null);
+                  menutypevalue ? menuList(menutypevalue) : menuList(null);
                   setmodlevisual1(true)
                 }}>
                 <Text style={{ color: Mycolors.GrayColor, fontWeight: 'bold', left: 8, fontSize: 16 }}> Search Menu</Text>
@@ -1203,7 +1207,9 @@ const FoodDetails = (props) => {
                 <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
                   {selectedTab != 'Dining' ?
                     selectedTab == 'Take Away' ?
-
+                      menuresData?.filter(el=>el.service_type_value == 'Take Away')?.length === 0 ? 
+                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                      :
                       menuresData.map((item, index) => {
                         return (
                           <View>
@@ -1232,6 +1238,9 @@ const FoodDetails = (props) => {
 
                       )
                       :
+                      menuresData?.filter(el=>el.service_type_value == 'Delivery')?.length === 0 ? 
+                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                      :
                       menuresData.map((item, index) => {
                         return (
                           <View>
@@ -1258,6 +1267,9 @@ const FoodDetails = (props) => {
                       }
                       )
                     :
+                    menuresData.filter(el=>el.service_type_value == 'Dining')?.length === 0 ? 
+                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                      :
                     menuresData.map((item, index) => {
                       return (
                         <View>
@@ -1305,6 +1317,9 @@ const FoodDetails = (props) => {
                               itemqty(item),
                               () => { minus(item) }, 'green'
                             )
+                            :
+                            menuresData.filter(el=>el.menuType != menutypevalue && el.service_type_value == 'Dining')?.length === 0 ? 
+                            <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
                             :
                             item.menuType != menutypevalue && item.service_type_value == 'Dining' ?
                               DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
@@ -1355,7 +1370,8 @@ const FoodDetails = (props) => {
 
                 </View>
                 :
-                <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                // <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                null
               }
             </>
             :
@@ -1607,8 +1623,8 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => {
-          menuList(null);
-          setmenutypevalue(null)
+          menutypevalue ?  menuList(menutypevalue) : menuList(null);
+          // setmenutypevalue(null)
           setmodlevisual1(false)
         }}
         propagateSwipe={true}
