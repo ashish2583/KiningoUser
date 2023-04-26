@@ -1659,10 +1659,11 @@ const FoodDetails = (props) => {
               <ProductSearchInput marginTop={10} placeholder={'Search Products'}
                 serchValue={searchValue}
                 onChangeText={(e) => {
-                  setsearchValue(e)
-                  searchmenuList(e.text)
                   if (e === '') {
                     setmenuresData2([...menuresData])
+                  }else{
+                    setsearchValue(e)
+                    searchmenuList(e.text)
                   }
                 }}
                 // press={() => { Alert.alert('Hi') }}

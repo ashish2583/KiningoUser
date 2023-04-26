@@ -602,7 +602,8 @@ const ShopProduct = (props) => {
       }
     }
     return (
-      <View style={{ width: '100%', height: 170, alignSelf: 'center' }}>
+      // <View style={{ width: '100%', height: 170, alignSelf: 'center' }}>
+      <View style={{ width: '100%', alignSelf: 'center' }}>
         <Swipeable
           renderRightActions={(progress, dragX) =>
             renderRightActions(progress, dragX, onClick)
@@ -1088,7 +1089,8 @@ const ShopProduct = (props) => {
                       date={takeAwayDate}
                       mode="date"
                       placeholder={'Pick a Date'}
-                      minimumDate={new Date()}
+                      // minimumDate={new Date()}
+                      minDate={new Date()}
                       // maximumDate={new Date()}
                       format='YYYY-MM-DD'
                       confirmBtnText="Confirm"
