@@ -503,6 +503,16 @@ const ShopProduct = (props) => {
 
 
   }
+  const getSlotsBasedOnDate = () => {
+    // const isToday = moment().diff(moment(takeAwayDate), 'days') === 0
+    const isToday = new Date(takeAwayDate).setHours(0,0,0,0) == (new Date()).setHours(0,0,0,0)
+    console.log('isToday', isToday);
+    if(isToday){
+      return slots.filter(el=> moment().isBefore(moment(createDate(el.end)), 'minutes') ? true : false )
+    }else{
+      return slots
+    }
+  }
   const deleteItem = ({ item, index }) => {
     // console.log('deleteItem item', item);
     deleteCartItems(item.id)
@@ -1078,7 +1088,9 @@ const ShopProduct = (props) => {
                           fontSize: 10,
                           color: Mycolors.GrayColor,
                           //marginLeft: '1%',
-                          left: -5
+                          left: -5,
+                          color: '#bbbbbb', fontWeight: '600', fontSize: 14,
+
                         },
                         zIndex: 99999
                       }}
@@ -1111,7 +1123,9 @@ const ShopProduct = (props) => {
                           onChange={(event, sTime) => {
                             setshowda(false)
                             console.log(sTime.toDateString());
-                            setTakeAwayDate(sTime)
+                            if(event?.type == 'set'){
+                              setTakeAwayDate(sTime)
+                            }
                             console.log(event);
                           }}
                           minimumDate={new Date()}
@@ -1154,7 +1168,7 @@ const ShopProduct = (props) => {
 
               {/* <View style={{ width: '97%', marginTop: 10, backgroundColor:'yellow' }}> */}
               <FlatList
-                data={slots}
+                data={getSlotsBasedOnDate()}
                 horizontal={true}
                 style={{}}
                 showsHorizontalScrollIndicator={false}
