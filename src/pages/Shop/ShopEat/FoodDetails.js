@@ -688,8 +688,8 @@ const FoodDetails = (props) => {
       //   }
       // }
       // setcartCount(counts)
-      // setmenuresData(responseJson.body)
-      setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Take Away"))
+      setmenuresData(responseJson.body)
+      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Take Away"))
       // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Delivery"))
       // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Dining"))
       // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Dining" && el.service_type_value !== "Delivery"))
