@@ -67,41 +67,98 @@ const VideoUpload = (props) => {
 
     }, [])
 
-    const openLibrary = async () => {
-
-        let options = {
-            title: 'Select Image',
-            customButtons: [
-                {
-                    name: 'customOptionKey',
-                    title: 'Choose Photo from Custom Option'
-                },
-            ],
-            maxWidth: 500,
-            maxHeight: 500,
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-
-        launchImageLibrary(options, (image) => {
-            if (!image.didCancel) {
-                console.log('the ddd==', image.assets[0].uri)
-                var photo = {
-                    uri: image.assets[0].uri,
-                    type: "image/jpeg",
-                    name: image.assets[0].fileName
-                };
-                console.log("photo", photo);
-                setpick(photo)
-                setfilepath(image)
+    const requestCameraPermission = async () => {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: "App Camera Permission",
+              message: "App needs access to your camera ",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK"
             }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("Camera permission given");
+            opencamera()
+          } else {
+            console.log("Camera permission denied");
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+    
+      const opencamera = async () => {
+        setcammodlevisual(false)
+    
+        let options = {
+          title: 'Select Image',
+          customButtons: [
+            {
+              name: 'customOptionKey',
+              title: 'Choose Photo from Custom Option'
+            },
+          ],
+          maxWidth: 500,
+          maxHeight: 500,
+          storageOptions: {
+            skipBackup: true,
+            path: 'images',
+          },
+        };
+    
+        launchCamera(options, (image) => {
+          if (!image.didCancel) {
+            console.log('the ddd==', image)
+            var photo = {
+              uri: image.assets[0].uri,
+              type: "image/jpeg",
+              name: image.assets[0].fileName
+            };
+            setpick(photo)
+            setfilepath(image)
+            uplodeImg(photo)
+          }
         })
-
-
-    }
-
+      }
+    
+      const openLibrary = async () => {
+        setcammodlevisual(false)
+        let options = {
+          title: 'Select Image',
+          customButtons: [
+            {
+              name: 'customOptionKey',
+              title: 'Choose Photo from Custom Option'
+            },
+          ],
+          maxWidth: 500,
+          maxHeight: 500,
+          storageOptions: {
+            skipBackup: true,
+            path: 'images',
+          },
+        };
+    
+        launchImageLibrary(options, (image) => {
+          if (!image.didCancel) {
+            console.log('the ddd==', image.assets[0].uri)
+            var photo = {
+              uri: image.assets[0].uri,
+              type: "image/jpeg",
+              name: image.assets[0].fileName
+            };
+            setpick(photo)
+            setfilepath(image)
+            uplodeImg(photo)
+          }
+        })
+    
+    
+      }
+    
 
     return (
         <SafeAreaView style={{ backgroundColor: '#000', height: dimensions.SCREEN_HEIGHT * 100 / 100, width: '100%' }}>

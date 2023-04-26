@@ -43,7 +43,7 @@ const returnReplies = (itemid) => {
       <>
     <View style={{width:'90%', marginLeft:30, marginTop:10}}>
     <View style={{flexDirection:'row', alignItems:'center'}}>
-      <Image source={item.img}/>
+      <Image source={item.img} style={{height:40,width:40}}/>
       <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{item.name}</Text>
       <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{item.time}</Text>
     </View>
@@ -57,10 +57,10 @@ const returnReplies = (itemid) => {
         </TouchableOpacity>
         <Text style={{fontSize:14, fontWeight:'500', color:'#B4BBC6', marginLeft:10}}>Like</Text>
       </View>
-      <TouchableOpacity onPress={()=>{myTextInput.current.focus(); setUserMessage(`@${item.name}`); setReplyingTo(itemid)}} style={{flexDirection:'row', alignItems:'center'}}>
+      {/* <TouchableOpacity onPress={()=>{myTextInput.current.focus(); setUserMessage(`@${item.name}`); setReplyingTo(itemid)}} style={{flexDirection:'row', alignItems:'center'}}>
         <Image source={require('../../../../assets/images/people-reply-image.png')}/>
         <Text style={{fontSize:14, fontWeight:'500', color:'#B4BBC6', marginLeft:10}}>Reply</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   </View>
   </>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   },
   addCommentView:{
     position:'absolute', 
-    bottom:20,
+    // bottom:20,
     width:'100%', 
     backgroundColor:'#fff', 
     padding:15, 

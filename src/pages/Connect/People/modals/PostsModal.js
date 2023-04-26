@@ -16,11 +16,18 @@ import Modal from 'react-native-modal';
 import { dimensions, Mycolors } from '../../../../utility/Mycolors';
 import VideoPlayer from 'react-native-video-player'
 import { useNavigation } from '@react-navigation/native';
-import ReadMoreComponent from '../Components/ReadMoreComponent'
+import ReadMoreComponent from '../Components/ReadMoreComponent';
+import { connect_people_react_post,connect_people_save_post,requestGetApi,requestPostApi, } from '../../../../WebApi/Service';
+import Loader from '../../../../WebApi/Loader';
+ 
+import { useSelector, useDispatch } from 'react-redux';
 
 const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
+  const User = useSelector(state => state.user.user_details)
+  const [loading, setLoading] = useState(false);
     const navigation = useNavigation();  
-    const [initialIndex, setInitialIndex] = useState(null)
+    const [initialIndex, setInitialIndex] = useState(null);
+    const[isSaved, setIsSaved]=useState('false');
     // let flatListRef = useRef();
     // const scrollRef = useRef({ flatListRef: undefined });
     const ref = useRef(null)
@@ -31,7 +38,23 @@ const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
   useEffect(()=>{
     ref.current && ref.current.scrollToIndex({index: initialIndex})
   },[initialIndex])
+
+  const Savepost = async (items) => {
+    console.log("LIKE CLICK:::",isSaved);
+        const { responseJson, err } = await requestGetApi(connect_people_save_post+5, '', 'GET', User.token)
+        setLoading(false)
+        console.log('the res==>>', responseJson)
+        if (responseJson.headers.success == 1) {
+          // setIsLiked('true')
+          Toast.show({ text1: responseJson.headers.message });
+        } else {
+          
+          setalert_sms(err)
+          setMy_Alert(true)
+        }
+      }
   return (
+    <>
     <Modal
       isVisible={isVisible}
       swipeDirection="down"
@@ -75,7 +98,7 @@ const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
               color: '#455A64',
               fontWeight: '500',
               fontSize:14,
-              marginBottom: 30,
+              marginBottom: 20,
               marginLeft: 20,
             }}>
             Posts
@@ -113,9 +136,9 @@ const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
               <View style={[styles.rightButtonsView, {marginRight:10}]}>
                 <Image source={require('../../../../assets/images/people-three-dots.png')} style={{width:20, height:20}} resizeMode='contain'/>
               </View>
-              <View style={styles.rightButtonsView}>
+              {/* <View style={styles.rightButtonsView}>
                 <Image source={require('../../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/>
-              </View>
+              </View> */}
             </View>
                       
           </View>
@@ -162,7 +185,14 @@ const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
                   <Image source={require('../../../../assets/images/people-message.png')} style={{width:25, height:25}}/>
                 </TouchableOpacity>
               </View>
-              <Text style={styles.text1}>183K views</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                          <View style={{marginRight:10}}>
+                            <Text style={styles.text1}>183K views</Text>
+                          </View>
+                          <TouchableOpacity onPress={() => { Savepost(item.id),isSaved =='false'? setIsSaved('true') : setIsSaved('false') }} style={styles.rightButtonsView}>
+                          <Image source={require('../../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/>
+                          </TouchableOpacity>
+                        </View>
             </View>
 
             <View style={{flexDirection:'row', alignItems:'center', marginTop:10}}>
@@ -195,6 +225,10 @@ const PostsModal = ({isVisible, setIsVisible, data, startFromIndex = 0}) => {
         </ScrollView>
       </View>
     </Modal>
+    {loading ?
+        <Loader />
+        : null}
+    </>
   );
 };
 const styles = StyleSheet.create({

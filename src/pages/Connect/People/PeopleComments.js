@@ -129,7 +129,7 @@ const PeopleComments = (props) => {
     </TouchableOpacity>
     :null}
     <View style={{flexDirection:'row', alignItems:'center'}}>
-      <Image source={replies[0].img}/>
+      <Image style={{height:40,width:40}} source={replies[0].img }/>
       <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{replies[0].name}</Text>
       <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{replies[0].time}</Text>
     </View>
@@ -160,7 +160,7 @@ const PeopleComments = (props) => {
    press3={()=>{}} img3width={25} img3height={25} />
     :null}
       <ScrollView>
-<View style={{width:'90%',alignSelf:'center', marginTop:20}}>
+<View style={{width:'95%',alignSelf:'center', marginTop:20}}>
   
 
 <View style={{width:'100%',alignSelf:'center',}}>
@@ -245,7 +245,7 @@ const PeopleComments = (props) => {
 const styles = StyleSheet.create({
   addCommentView:{
     position:'absolute', 
-    bottom:100,
+    bottom:80,
     width:'100%', 
     backgroundColor:'#fff', 
     padding:15, 

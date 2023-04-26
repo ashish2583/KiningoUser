@@ -28,16 +28,16 @@ export const shop_eat_orders=`shop/eat/orders`;
 export const delete_Update_Address=`user/address/id/`; 
 export const cancelOrders=`orders`;
 export const vendor_reviews=`vendor/reviews`;
+export const connect_people_create_post=`connect/people/create-post`;
+export const connect_people_react_post=`connect/people/react-post`;
+export const connect_people_add_comment=`connect/people/add-comment`;  
+export const connect_people_save_post=`connect/people/save-post/`; 
+export const  connect_people_block_user=`connect/people/block-user`; 
 
 
 
 
 
-export const common_page_content=`common/page_content`;
-export const add_insurance=`driver/insurance`;
-export const driver_add_profile=`driver/add_profile`;  
-export const driver_update_corporate_profile=`driver/update_corporate_profile`; 
-export const  common_vehicle_info=`common/vehicle_info`; 
 export const  driver_get_drivers=`driver/get_drivers`;
 export const  driver_corporate_vehicle=`driver/corporate_vehicle`;
 export const  buy_subscription=`driver/buy_subscription`;
