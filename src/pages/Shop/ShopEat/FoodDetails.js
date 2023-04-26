@@ -385,6 +385,7 @@ const FoodDetails = (props) => {
         // setmodlevisual4(true)
         // setmodlevisual1(false)
         // setmodlevisual2(false)
+        Toast.show({ text1: `Order placed successfully` });
         props.navigation.navigate('DiningAndBookTable')
         // setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
         // setMy_Alert(true)
