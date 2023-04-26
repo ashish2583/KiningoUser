@@ -688,9 +688,10 @@ const FoodDetails = (props) => {
       //   }
       // }
       // setcartCount(counts)
-      setmenuresData(responseJson.body)
-      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Take Away"))
+      // setmenuresData(responseJson.body)
+      setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Take Away"))
       // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Delivery"))
+      // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Dining"))
       // setmenuresData(responseJson.body.filter(el=>el.service_type_value !== "Dining" && el.service_type_value !== "Delivery"))
       // console.log('updated data', responseJson.body.filter(el=>el.service_type_value !== "Take Away"));
       setreloades(!reloades)
@@ -1000,6 +1001,177 @@ const FoodDetails = (props) => {
     Linking.openURL(`mailto:${myMail}`) 
   }
 
+  const getTakeAwayData = () => {
+    return (
+    menuresData?.filter(el=>el.service_type_value == 'Take Away')?.length === 0 ? 
+    <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+    :
+      menuresData.map((item, index) => {
+        return (
+          <View>
+            {item.menuType == menutypevalue && item.service_type_value == 'Take Away' ?
+              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+                () => {
+                  setClickedItemData(item)
+                  setmodlevisual1(false)
+                },
+                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
+              )
+              :
+              item.menuType != menutypevalue && item.service_type_value == 'Take Away' ?
+                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                  setClickedItemData(item)
+                  setmodlevisual1(false)
+
+                },
+                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                )
+                : null
+            }
+          </View>
+        )
+      }
+
+      )
+      )
+  }
+  const getDeliveryData = () => {
+    return (
+      menuresData?.filter(el=>el.service_type_value == 'Delivery')?.length === 0 ? 
+        <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+        :
+        menuresData.map((item, index) => {
+          return (
+            <View>
+              {item.menuType == selectedValue && item.service_type_value == 'Delivery' ?
+                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+                  () => {
+                    setClickedItemData(item)
+                    setmodlevisual1(false)
+                  },
+                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
+                )
+                :
+                item.menuType != selectedValue && item.service_type_value == 'Delivery' ?
+                  flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                    setClickedItemData(item)
+                    setmodlevisual1(false)
+                  },
+                    item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
+                  )
+                  : null
+              }
+            </View>
+          )
+        }
+        )
+    )
+  }
+  const getDiningData = () => {
+    return (
+      menuresData.filter(el => el.service_type_value == 'Dining')?.length === 0 ?
+        <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+        :
+        menuresData.map((item, index) => {
+          return (
+            <View>
+  
+              {item.menuType == menutypevalue && item.service_type_value == 'Dining' ?
+                DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                  () => {
+                    // let arr=diningItens
+                    let arr1 = diningItens1
+                    if (itemloop(item)) {
+  
+                    } else {
+                      // arr.push(item)
+                      arr1.push({
+                        "cart_id": item.cart_id,
+                        "cart_quantity": 1,
+                        "category": item.category,
+                        "default_image": item.default_image,
+                        "id": item.id,
+                        "image": item.image,
+                        "in_cart": item.in_cart,
+                        "menuType": item.menuType,
+                        "name": item.name,
+                        "price": item.price,
+                        "product_desc": item.product_desc,
+                        "service_type_value": item.service_type_value,
+                        "status": item.status,
+                        "subcategory": item.subcategory,
+                        "tentative_time": item.tentative_time
+                      })
+                      setsubtotal(parseInt(subtotal) + parseInt(item.price))
+  
+                    }
+  
+                    //setdiningItens(arr)
+                    setdiningItens1(arr1)
+                    setreloades(!reloades)
+                  }, () => {
+                    setClickedItemData(item)
+                    // setmodlevisual1(false)
+                    // setmodlevisual2(true)
+                  },
+                  itemloop(item),
+                  () => { plushqty(item) },
+                  itemqty(item),
+                  () => { minus(item) }, 'green'
+                )
+                :
+                menuresData.filter(el => el.menuType != menutypevalue && el.service_type_value == 'Dining')?.length === 0 ?
+                  <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                  :
+                  item.menuType != menutypevalue && item.service_type_value == 'Dining' ?
+                    DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                      () => {
+                        let arr1 = diningItens1
+                        if (itemloop(item)) {
+  
+                        } else {
+                          arr1.push({
+                            "cart_id": item.cart_id,
+                            "cart_quantity": 1,
+                            "category": item.category,
+                            "default_image": item.default_image,
+                            "id": item.id,
+                            "image": item.image,
+                            "in_cart": item.in_cart,
+                            "menuType": item.menuType,
+                            "name": item.name,
+                            "price": item.price,
+                            "product_desc": item.product_desc,
+                            "service_type_value": item.service_type_value,
+                            "status": item.status,
+                            "subcategory": item.subcategory,
+                            "tentative_time": item.tentative_time
+                          })
+                          setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                        }
+  
+                        setdiningItens1(arr1)
+                        setreloades(!reloades)
+                      }, () => {
+                        setClickedItemData(item)
+                        // setmodlevisual1(false)
+                        // setmodlevisual2(true)
+                      },
+                      itemloop(item),
+                      () => { plushqty(item) },
+                      itemqty(item),
+                      () => { minus(item) }, 'red'
+                    )
+                    : null
+              }
+            </View>
+          )
+        }
+        )
+    )
+  }
+
+
   return (
     <SafeAreaView style={{ backgroundColor: Mycolors.BG_COLOR }}>
       <View style={{}}>
@@ -1207,165 +1379,11 @@ const FoodDetails = (props) => {
                 <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, zIndex: -888 }}>
                   {selectedTab != 'Dining' ?
                     selectedTab == 'Take Away' ?
-                      menuresData?.filter(el=>el.service_type_value == 'Take Away')?.length === 0 ? 
-                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
+                      getTakeAwayData()
                       :
-                      menuresData.map((item, index) => {
-                        return (
-                          <View>
-                            {item.menuType == menutypevalue && item.service_type_value == 'Take Away' ?
-                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
-                                () => {
-                                  setClickedItemData(item)
-                                  setmodlevisual1(false)
-                                },
-                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
-                              )
-                              :
-                              item.menuType != menutypevalue && item.service_type_value == 'Take Away' ?
-                                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
-                                  setClickedItemData(item)
-                                  setmodlevisual1(false)
-
-                                },
-                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
-                                )
-                                : null
-                            }
-                          </View>
-                        )
-                      }
-
-                      )
-                      :
-                      menuresData?.filter(el=>el.service_type_value == 'Delivery')?.length === 0 ? 
-                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
-                      :
-                      menuresData.map((item, index) => {
-                        return (
-                          <View>
-                            {item.menuType == selectedValue && item.service_type_value == 'Delivery' ?
-                              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
-                                () => {
-                                  setClickedItemData(item)
-                                  setmodlevisual1(false)
-                                },
-                                item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'green'
-                              )
-                              :
-                              item.menuType != selectedValue && item.service_type_value == 'Delivery' ?
-                                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
-                                  setClickedItemData(item)
-                                  setmodlevisual1(false)
-                                },
-                                  item, () => { putcart(item, '-') }, () => { putcart(item, '+') }, 'red'
-                                )
-                                : null
-                            }
-                          </View>
-                        )
-                      }
-                      )
+                      getDeliveryData()
                     :
-                    menuresData.filter(el=>el.service_type_value == 'Dining')?.length === 0 ? 
-                      <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
-                      :
-                    menuresData.map((item, index) => {
-                      return (
-                        <View>
-
-                          {item.menuType == menutypevalue && item.service_type_value == 'Dining' ?
-                            DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
-                              () => {
-                                // let arr=diningItens
-                                let arr1 = diningItens1
-                                if (itemloop(item)) {
-
-                                } else {
-                                  // arr.push(item)
-                                  arr1.push({
-                                    "cart_id": item.cart_id,
-                                    "cart_quantity": 1,
-                                    "category": item.category,
-                                    "default_image": item.default_image,
-                                    "id": item.id,
-                                    "image": item.image,
-                                    "in_cart": item.in_cart,
-                                    "menuType": item.menuType,
-                                    "name": item.name,
-                                    "price": item.price,
-                                    "product_desc": item.product_desc,
-                                    "service_type_value": item.service_type_value,
-                                    "status": item.status,
-                                    "subcategory": item.subcategory,
-                                    "tentative_time": item.tentative_time
-                                  })
-                                  setsubtotal(parseInt(subtotal) + parseInt(item.price))
-
-                                }
-
-                                //setdiningItens(arr)
-                                setdiningItens1(arr1)
-                                setreloades(!reloades)
-                              }, () => {
-                                setClickedItemData(item)
-                                // setmodlevisual1(false)
-                                // setmodlevisual2(true)
-                              },
-                              itemloop(item),
-                              () => { plushqty(item) },
-                              itemqty(item),
-                              () => { minus(item) }, 'green'
-                            )
-                            :
-                            menuresData.filter(el=>el.menuType != menutypevalue && el.service_type_value == 'Dining')?.length === 0 ? 
-                            <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
-                            :
-                            item.menuType != menutypevalue && item.service_type_value == 'Dining' ?
-                              DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
-                                () => {
-                                  let arr1 = diningItens1
-                                  if (itemloop(item)) {
-
-                                  } else {
-                                    arr1.push({
-                                      "cart_id": item.cart_id,
-                                      "cart_quantity": 1,
-                                      "category": item.category,
-                                      "default_image": item.default_image,
-                                      "id": item.id,
-                                      "image": item.image,
-                                      "in_cart": item.in_cart,
-                                      "menuType": item.menuType,
-                                      "name": item.name,
-                                      "price": item.price,
-                                      "product_desc": item.product_desc,
-                                      "service_type_value": item.service_type_value,
-                                      "status": item.status,
-                                      "subcategory": item.subcategory,
-                                      "tentative_time": item.tentative_time
-                                    })
-                                    setsubtotal(parseInt(subtotal) + parseInt(item.price))
-                                  }
-
-                                  setdiningItens1(arr1)
-                                  setreloades(!reloades)
-                                }, () => {
-                                  setClickedItemData(item)
-                                  // setmodlevisual1(false)
-                                  // setmodlevisual2(true)
-                                },
-                                itemloop(item),
-                                () => { plushqty(item) },
-                                itemqty(item),
-                                () => { minus(item) }, 'red'
-                              )
-                              : null
-                          }
-                        </View>
-                      )
-                    }
-                    )
+                    getDiningData()
                   }
 
                 </View>
