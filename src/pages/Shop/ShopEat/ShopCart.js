@@ -1754,14 +1754,14 @@ const ShopCart = (props) => {
             </View>
 
           </View>
-          <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 0 }}>
+          {/* <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 0 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
               // setShippingAddressPopUp(true) 
               setChooseAddressModeModal(true)
               setaddressList(false)
             }} marginHorizontal={20} fontSize={11}
               titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} marginVertical={0} hLinearColor={['#b10027', '#fd001f']} />
-          </View>
+          </View> */}
 
         </View>
         {/* </View> */}
