@@ -866,18 +866,8 @@ const styles = StyleSheet.create({
   arrowContainer: {
     // position: 'absolute',
     // bottom: -40 / 2,
-    marginTop:-40/2,
+    marginTop:-35/2,
     backgroundColor: '#F8F8F8',
-    // backgroundColor: 'red',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: 40,
-    borderRadius: 40 / 2,
-  },
-  arrowContainer2: {
-    backgroundColor: 'white',
     // backgroundColor: 'red',
     alignSelf: 'center',
     justifyContent: 'center',
@@ -886,10 +876,20 @@ const styles = StyleSheet.create({
     width: 35,
     borderRadius: 35 / 2,
   },
-  arrowView: {
+  arrowContainer2: {
+    backgroundColor: 'white',
+    // backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 30,
     width: 30,
     borderRadius: 30 / 2,
+  },
+  arrowView: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
     justifyContent: 'center',
     alignItems: 'center',
   }
