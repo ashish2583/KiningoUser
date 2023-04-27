@@ -866,7 +866,7 @@ const styles = StyleSheet.create({
   arrowContainer: {
     // position: 'absolute',
     // bottom: -40 / 2,
-    marginTop:-35/2,
+    marginTop:-48/2,
     backgroundColor: '#F8F8F8',
     // backgroundColor: 'red',
     alignSelf: 'center',
