@@ -23,6 +23,7 @@ import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 import { setRestorentLocation } from '../../../redux/actions/latLongAction';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Feather from 'react-native-vector-icons/Feather';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
@@ -494,7 +495,7 @@ paddingLeft={50}/> */}
                 // numColumns={2}
                 renderItem={({ item, index }) => {
                   return (
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow:'hidden' }}>
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow: 'hidden' }}>
                       <TouchableOpacity style={{ width: '100%', height: 120, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center', }}
                         onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: '' }) }}>
                         <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
@@ -583,7 +584,7 @@ paddingLeft={50}/> */}
                     <View style={{
                       width: 190, marginHorizontal: 6,
                       // borderColor:'#DEDEDE',borderWidth:1,
-                      borderRadius: 15, backgroundColor: '#FFFF', overflow:'hidden', borderColor:'red'
+                      borderRadius: 15, backgroundColor: '#FFFF', overflow: 'hidden', borderColor: 'red'
                     }}>
                       <TouchableOpacity style={{ width: "100%", height: 130, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', padding: 1 }}
                         onPress={() => {
@@ -594,7 +595,7 @@ paddingLeft={50}/> */}
                       </TouchableOpacity>
                       <View style={{ left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Caegory Name: Italian +2</Text>
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2, fontStyle: 'italic', }}>Caegory Name: Italian +2</Text>
                       </View>
                       <View style={{ padding: 5, left: 5, top: -3 }}>
                         <View style={{ flexDirection: 'row', }}>
@@ -636,7 +637,7 @@ paddingLeft={50}/> */}
               : null}
           </View>
 
-          <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+          <View style={{ width: '100%', alignSelf: 'center', marginTop: 10, }}>
             {resData?.categories?.length > 0 ?
               <FlatList
                 data={resData.categories}
@@ -647,9 +648,9 @@ paddingLeft={50}/> */}
                   return (
 
 
-
-                    <View style={{ width: 140, height: 200, marginHorizontal: 0, marginVertical: 5, }}>
-                      <ImageBackground source={require('../../../assets/Food-Cover-image.png')} style={{ width: '100%', height: '95%', borderRadius: 10, }} resizeMode='cover'>
+                    <View>
+                      <View style={{ width: dimensions.SCREEN_WIDTH * 0.35, marginHorizontal: 0, marginVertical: 5, backgroundColor: 'white', borderRadius: 10, paddingBottom: 20, marginRight: 15 }}>
+                        {/* <ImageBackground source={require('../../../assets/Food-Cover-image.png')} style={{ width: '100%', height: '95%', borderRadius: 10, }} resizeMode='cover'> */}
                         <TouchableOpacity style={{
                           paddingTop: 20
                           // width: 100, height: 120, padding: 10, backgroundColor: '#fff',
@@ -676,7 +677,15 @@ paddingLeft={50}/> */}
                           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
                           <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 5, }} >{item.total_vendors == 0 || item.total_vendors == undefined ? 'No Places NearBy' : item.total_vendors + ' Places NearBy'} </Text>
                         </TouchableOpacity>
-                      </ImageBackground>
+                        {/* </ImageBackground> */}
+                      </View>
+                      <View style={styles.arrowContainer}>
+                        <View style={styles.arrowContainer2}>
+                          <View style={styles.arrowView}>
+                            <Feather name="arrow-right-circle" color={'#0EA00E'} size={24} />
+                          </View>
+                        </View>
+                      </View>
                     </View>
 
                   )
@@ -854,6 +863,34 @@ paddingLeft={50}/> */}
   );
 }
 const styles = StyleSheet.create({
-
+  arrowContainer: {
+    position: 'absolute',
+    bottom: -40 / 2,
+    backgroundColor: '#F8F8F8',
+    // backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    width: 40,
+    borderRadius: 40 / 2,
+  },
+  arrowContainer2: {
+    backgroundColor: 'white',
+    // backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+    width: 35,
+    borderRadius: 35 / 2,
+  },
+  arrowView: {
+    height: 30,
+    width: 30,
+    borderRadius: 30 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 export default ShopProduct 
