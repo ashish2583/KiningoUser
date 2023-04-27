@@ -494,10 +494,10 @@ paddingLeft={50}/> */}
                 // numColumns={2}
                 renderItem={({ item, index }) => {
                   return (
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10 }}>
-                      <TouchableOpacity style={{ width: '100%', height: 120, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center' }}
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow:'hidden' }}>
+                      <TouchableOpacity style={{ width: '100%', height: 120, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center', }}
                         onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: '' }) }}>
-                        <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 10, }}></Image>
+                        <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
                       </TouchableOpacity>
                     </View>
                   )
@@ -505,7 +505,7 @@ paddingLeft={50}/> */}
                 keyExtractor={item => item.id}
               />
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Coupons Found</Text>
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>No Coupons Found</Text>
             }
           </View>
 
@@ -525,7 +525,7 @@ paddingLeft={50}/> */}
 />
    </View> */}
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22 }}>Explore Nearby</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 18 }}>Explore Nearby</Text>
             {resData?.vendors?.length > 0 ?
               <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, }}
                 onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: 'search' }) }}>View More</Text>
@@ -583,18 +583,18 @@ paddingLeft={50}/> */}
                     <View style={{
                       width: 190, marginHorizontal: 6,
                       // borderColor:'#DEDEDE',borderWidth:1,
-                      borderRadius: 15, backgroundColor: '#FFFF',
+                      borderRadius: 15, backgroundColor: '#FFFF', overflow:'hidden', borderColor:'red'
                     }}>
                       <TouchableOpacity style={{ width: "100%", height: 130, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', padding: 1 }}
                         onPress={() => {
                           props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, vendorName: item.name, businessid: item.business_id })
                           // dispatch(setProductVenderDetail(item))
                         }}>
-                        <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 8, resizeMode: 'stretch' }}></Image>
+                        <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image>
                       </TouchableOpacity>
                       <View style={{ left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        {/* <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Cusine Name: Italian +2</Text> */}
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2,fontStyle: 'italic',}}>Caegory Name: Italian +2</Text>
                       </View>
                       <View style={{ padding: 5, left: 5, top: -3 }}>
                         <View style={{ flexDirection: 'row', }}>
@@ -623,13 +623,13 @@ paddingLeft={50}/> */}
               />
 
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Vendors Found</Text>
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>No Vendors Found</Text>
             }
           </View>
 
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 22, width: '70%', }}>Buy what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 22, width: '70%', }}> HAPPY!</Text></Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 18, width: '70%', }}>Buy what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 18, width: '70%', }}> HAPPY!</Text></Text>
             {resData?.categories?.length > 0 ?
               <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
                 onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
@@ -674,7 +674,7 @@ paddingLeft={50}/> */}
                             <Image source={{ uri: item.category_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 50, overflow: 'hidden' }}></Image>
                           </View>
                           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
-                          <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >{item.total_vendors == 0 || item.total_vendors == undefined ? 'No Places NearBy' : item.total_vendors + ' Places NearBy'} </Text>
+                          <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 5, }} >{item.total_vendors == 0 || item.total_vendors == undefined ? 'No Places NearBy' : item.total_vendors + ' Places NearBy'} </Text>
                         </TouchableOpacity>
                       </ImageBackground>
                     </View>
@@ -684,7 +684,7 @@ paddingLeft={50}/> */}
                 keyExtractor={item => item.id}
               />
               :
-              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>No Categories Found</Text>
+              <Text style={{ color: '#835E23', fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>No Categories Found</Text>
             }
 
           </View>
