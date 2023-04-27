@@ -300,6 +300,9 @@ const ShopCart = (props) => {
       Toast.show({ text1: responseJson.headers.message })
       getAddress()
       setreloades(!reloades)
+      if(addressListData?.length === 1){
+        setaddressList(false)
+      }
     } else {
 
       // setalert_sms(err)
