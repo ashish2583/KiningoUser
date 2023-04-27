@@ -13,6 +13,7 @@ import MyAlert from '../../../component/MyAlert';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveUserResult, saveUserToken, setVenderDetail, setUserType } from '../../../redux/actions/user_action';
 import Toast from 'react-native-toast-message';
+import Feather from 'react-native-vector-icons/Feather';
 
 const checkIfEmpty = (data) => {
   if(data === null || (Array.isArray(data) && data?.length === 0 )){
@@ -154,8 +155,9 @@ const CatSearch = (props) => {
                 numColumns={2}
                 renderItem={({ item, index }) => {
                   return (
-                    <View style={{ width: '49%', height: 238, marginHorizontal: 2, marginVertical: -1, }}>
-                      <ImageBackground source={require('../../../assets/Food-Cover-image.png')} style={{ width: '100%', height: '100%', borderRadius: 10, }} resizeMode='stretch'>
+                    <View style={{width: '49%', marginBottom:20}}>
+                    <View style={{ width: '80%',alignSelf:'center', marginHorizontal: 2, marginVertical: -1, backgroundColor: 'white', borderRadius: 10, paddingBottom: 30,}}>
+                      {/* <ImageBackground source={require('../../../assets/Food-Cover-image.png')} style={{ width: '100%', height: '100%', borderRadius: 10, }} resizeMode='stretch'> */}
                         <TouchableOpacity style={{
                           paddingTop: 20
 
@@ -174,23 +176,16 @@ const CatSearch = (props) => {
                           <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, textAlign: 'center', marginTop: 9 }} >{item.category_name}</Text>
                           <Text style={{ color: '#0EA00E', fontWeight: '400', fontSize: 12, textAlign: 'center', marginTop: 9, }} >{item.total_vendors == 0 ? 'No Places NearBy' : item.total_vendors + ' Places NearBy'}</Text>
                         </TouchableOpacity>
-                      </ImageBackground>
+                      {/* </ImageBackground> */}
                     </View>
-                    //               <TouchableOpacity style={{width:'47%',height:160,marginHorizontal:5,marginVertical:5, padding:10,backgroundColor:'#fff',
-                    //               shadowOffset: {
-                    //               width: 0,
-                    //               height: 3
-                    //             },
-                    //             shadowRadius: 1,
-                    //             shadowOpacity: 0.3,
-                    //             alignSelf:'center',
-                    //            // justifyContent: 'center',
-                    //             elevation: 5,borderRadius:10}} onPress={()=>{props.navigation.navigate('ShopSearch',{datas:[],from:'CatClick'})}}>
-                    //   <View style={{width:100,height:100,alignSelf:'center',marginTop:5}}>
-                    //   <Image source={{uri:item.category_image}} style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:10,overflow:'hidden'}}></Image>
-                    //   </View>
-                    // <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,textAlign:'center',marginTop:9}} >{item.category_name}</Text>
-                    //   </TouchableOpacity>
+                    <View style={styles.arrowContainer}>
+                        <View style={styles.arrowContainer2}>
+                          <View style={styles.arrowView}>
+                            <Feather name="arrow-right-circle" color={'#0EA00E'} size={24} />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
                   )
                 }}
                 keyExtractor={item => item.category_code}
@@ -215,6 +210,35 @@ const CatSearch = (props) => {
   );
 }
 const styles = StyleSheet.create({
-
+  arrowContainer: {
+    // position: 'absolute',
+    // bottom: -40 / 2,
+    marginTop:-40/2,
+    backgroundColor: '#F8F8F8',
+    // backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+    width: 35,
+    borderRadius: 35 / 2,
+  },
+  arrowContainer2: {
+    backgroundColor: 'white',
+    // backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 30,
+    width: 30,
+    borderRadius: 30 / 2,
+  },
+  arrowView: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 export default CatSearch 
