@@ -864,8 +864,9 @@ paddingLeft={50}/> */}
 }
 const styles = StyleSheet.create({
   arrowContainer: {
-    position: 'absolute',
-    bottom: -40 / 2,
+    // position: 'absolute',
+    // bottom: -40 / 2,
+    marginTop:-40/2,
     backgroundColor: '#F8F8F8',
     // backgroundColor: 'red',
     alignSelf: 'center',
