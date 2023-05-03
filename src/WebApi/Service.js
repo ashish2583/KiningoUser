@@ -29,18 +29,19 @@ export const delete_Update_Address=`user/address/id/`;
 export const cancelOrders=`orders`;
 export const vendor_reviews=`vendor/reviews`;
 export const connect_people_create_post=`connect/people/create-post`;
-export const connect_people_react_post=`connect/people/react-post`;
+export const connect_people_like_post=`connect/people/Like-post`;
+export const connect_people_dislike_post=`connect/people/dislike-post`;
 export const connect_people_add_comment=`connect/people/add-comment`;  
 export const connect_people_save_post=`connect/people/save-post/`; 
-export const  connect_people_block_user=`connect/people/block-user`; 
+export const connect_people_block_user=`connect/people/block-user`; 
+export const connect_people_home_page=`connect/people/home-page`;
+export const connect_people_follow_user=`connect/people/follow-user/`;
+export const connect_people_unfollow_user=`connect/people/unfollow-user/:id`;
 
 
 
 
-
-export const  driver_get_drivers=`driver/get_drivers`;
-export const  driver_corporate_vehicle=`driver/corporate_vehicle`;
-export const  buy_subscription=`driver/buy_subscription`;
+export const  buy_subscription=`connect/people/unfollow-user/:id`;
 export const  buy_corporate_subscription=`driver/buy_corporate_subscription`; 
 export const  auth_resend_otp=`auth/resend_otp`;
 export const  driver_dashboard=`driver/dashboard`; 

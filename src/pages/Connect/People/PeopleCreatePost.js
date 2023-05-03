@@ -33,8 +33,10 @@ const PeopleCreatePost = (props) => {
   const [filepath, setfilepath] = useState(null)
   const [pick1, setpick1] = useState('')
   const [filepath1, setfilepath1] = useState(null)
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
   const [loading, setLoading] = useState(false);
-  const[descrbe,setdescrbe]=useState('');
+  const [descrbe, setdescrbe] = useState('');
   useEffect(() => {
 
   }, [])
@@ -63,11 +65,11 @@ const PeopleCreatePost = (props) => {
         console.log('the ddd==', image.assets[0].uri)
         var photo = {
           uri: image.assets[0].uri,
-          // type: "image/jpeg",
+          type: "image/jpeg",
           name: image.assets[0].fileName
         };
-        setpick1(photo)
-        setfilepath1(image)
+        setpick(photo)
+        setfilepath(image)
       }
     })
 
@@ -149,19 +151,21 @@ const PeopleCreatePost = (props) => {
   }
 
   const Createpost = async () => {
- 
-    setLoading(true)
-    var data = {
-      post_type: "text four",
-      post_description: descrbe,
-      status: 1,
-      shared_post_id: null
-    }
-    const { responseJson, err } = await requestPostApi(connect_people_create_post, data, 'POST', User.token)
+    
+    console.log("pick UPLOAD", pick.uri);
+    
+    let formdata = new FormData();
+    formdata.append('post_type', 'video');
+    formdata.append('post_description', descrbe);
+    formdata.append('status', '1');
+    formdata.append('file', pick);
+    setLoading(true);
+    console.log("data.......", formdata);
+    const { responseJson, err } = await requestPostApi(connect_people_create_post, formdata, 'POST', User.token)
     setLoading(false)
-    console.log('the res==>>', responseJson)
+    console.log('the Createpost==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      setdescrbe('')
+      // setdescrbe('')
       Toast.show({ text1: responseJson.headers.message });
     } else {
 
@@ -199,7 +203,7 @@ const PeopleCreatePost = (props) => {
             <View style={{ marginTop: 10, marginBottom: 20 }}>
               <TextInput
                 //  value={reson}
-                 onChangeText={(e) => setdescrbe(e)}
+                onChangeText={(e) => setdescrbe(e)}
                 placeholder={`What's on your mind`}
                 placeholderTextColor="#bbbbbb"
                 multiline={true}
@@ -248,13 +252,13 @@ const PeopleCreatePost = (props) => {
 
         </View>
         <View style={{ height: 100 }} />
-        <View style={{ width: '90%', height: 60, flexDirection: 'row', justifyContent: 'space-between',  bottom: 60, alignSelf: 'center', zIndex: 999 }}>
-                <MyButtons title="Post" height={50} width={'100%'} borderRadius={5} press={() => { Createpost()}} fontSize={13}
-                    titlecolor={Mycolors.BG_COLOR} marginVertical={0} backgroundColor={'#0089CF'} />
+        <View style={{ width: '90%', height: 60, flexDirection: 'row', justifyContent: 'space-between', bottom: 60, alignSelf: 'center', zIndex: 999 }}>
+          <MyButtons title="Post" height={50} width={'100%'} borderRadius={5} press={() => { Createpost() }} fontSize={13}
+            titlecolor={Mycolors.BG_COLOR} marginVertical={0} backgroundColor={'#0089CF'} />
 
-            </View>
+        </View>
       </ScrollView>
-      
+
       {loading ?
         <Loader />
         : null}

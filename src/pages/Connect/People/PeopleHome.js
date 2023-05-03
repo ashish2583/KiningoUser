@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMoreComponent from './Components/ReadMoreComponent';
-import { connect_people_react_post,connect_people_save_post,requestGetApi,requestPostApi, } from '../../../WebApi/Service';
+import { connect_people_dislike_post, connect_people_follow_user, connect_people_home_page, connect_people_like_post, connect_people_react_post, connect_people_save_post, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
 import { log } from 'react-native-reanimated';
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,9 +24,14 @@ const PeopleHome = (props) => {
   const [scrollEnabled, setScrollEnabled] = useState(false)
   const myTextInput = useRef()
   const [multiSliderValue, setMultiSliderValue] = useState([0, 100])
-  const [showChooseMilesModal, setShowChooseMilesModal] = useState(false)
-  const[isLiked,setIsLiked]=useState('false');
-  const[isSaved, setIsSaved]=useState('false');
+  const [showChooseMilesModal, setShowChooseMilesModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
+  const [homedata, setHomedata] = useState([])
+  const [isLiked, setIsLiked] = useState('false');
+  const [isSaved, setIsSaved] = useState('false');
+  const [threedotclickdata, setThreedotclickdata] = useState('')
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
   const [upData, setupData] = useState([
     {
       id: '1',
@@ -76,7 +81,7 @@ const PeopleHome = (props) => {
   ])
   const multiSliderValuesChange = (values) => { setMultiSliderValue(values) }
   useEffect(() => {
-
+    PeopleHome()
   }, [])
 
   const changeSaved = (id) => {
@@ -90,48 +95,111 @@ const PeopleHome = (props) => {
     setupData([...updatedData])
   }
   const Likepost = async (items) => {
-//  console.log("LIKE CLICK:::",isLiked);
- 
+    console.log("LIKE CLICK:::", isLiked);
+
     setLoading(true)
     var data = {
-      post_id : 5,
-      reaction_type: isLiked == "true" ? false : true
-  }
-  // console.log('====================================');
-  // console.log(data);
-  // console.log('====================================');
-    const { responseJson, err } = await requestPostApi(connect_people_react_post, data, 'POST', User.token)
+      post_id: items,
+      reaction_type: "like"
+    }
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+    const { responseJson, err } = await requestPostApi(connect_people_like_post, data, 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      // setIsLiked('true')
+      PeopleHome()
       Toast.show({ text1: responseJson.headers.message });
     } else {
-      
+
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+
+  const Dislikepost = async (items) => {
+    console.log("DISLIKE CLICK:::", isLiked);
+
+    setLoading(true)
+    var data = {
+      post_id: items,
+      reaction_type: "dislike"
+    }
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+    const { responseJson, err } = await requestPostApi(connect_people_dislike_post, data, 'POST', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      PeopleHome()
+      Toast.show({ text1: responseJson.headers.message });
+    } else {
+
       setalert_sms(err)
       setMy_Alert(true)
     }
   }
 
   const Savepost = async (items) => {
-    console.log("LIKE CLICK:::",isSaved);
-        const { responseJson, err } = await requestGetApi(connect_people_save_post+5, '', 'GET', User.token)
-        setLoading(false)
-        console.log('the res==>>', responseJson)
-        if (responseJson.headers.success == 1) {
-          // setIsLiked('true')
-          Toast.show({ text1: responseJson.headers.message });
-        } else {
-          
-          setalert_sms(err)
-          setMy_Alert(true)
-        }
-      }
+    console.log("LIKE CLICK:::", items);
+    const { responseJson, err } = await requestPostApi(connect_people_save_post + items, '', 'POST', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      PeopleHome()
+      Toast.show({ text1: responseJson.headers.message });
+    } else {
+
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+  const PeopleHome = async () => {
+    // console.log("LIKE CLICK:::",isSaved);
+    const { responseJson, err } = await requestGetApi(connect_people_home_page, '', 'GET', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      setHomedata(responseJson.body.posts)
+      // console.log("response hOME", responseJson.body.posts);
+      // Toast.show({ text1: responseJson.headers.message });
+    } else {
+
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+  const Followuser = async (items) => {
+    console.log("Followuser CLICK:::", threedotclickdata);
+
+    setLoading(true)
+    var data = {
+      module_id: 12,
+      connect_type: "follow",
+      status: 1
+    }
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+    const { responseJson, err } = await requestPostApi(connect_people_follow_user + threedotclickdata, data, 'POST', User.token)
+    setLoading(false)
+    console.log('the Followuserres==>>', responseJson)
+    // if (responseJson.headers.success == 1) {
+
+    //   Toast.show({ text1: responseJson.headers.message });
+    // } else {
+
+    //   setalert_sms(err)
+    //   setMy_Alert(true)
+    // }
+  }
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ backgroundColor: '#F8F8F8' }}>
       <ScrollView>
         <HomeHeaderRoundBottom height={80} paddingHorizontal={15} backgroundColor='#fff'
-          press1={() => {   }} 
+          press1={() => { }}
           // img1={require('../../../assets/images/events_arrow.png')} 
           img1width={25} img1height={20}
           press2={() => { }} title2={'People'} fontWeight={'500'} img2height={20} color='#455A64'
@@ -169,11 +237,12 @@ const PeopleHome = (props) => {
 
           <View style={{ marginTop: 10 }}>
             <FlatList
-              data={upData}
+              data={homedata}
               showsHorizontalScrollIndicator={false}
               numColumns={1}
               style={{ alignSelf: 'center' }}
               renderItem={({ item, index }) => {
+
                 return (
                   <View style={{ width: '100%', marginVertical: 10, borderRadius: 30 }}>
                     <View style={styles.flatlistMainView}>
@@ -184,16 +253,16 @@ const PeopleHome = (props) => {
                         </TouchableOpacity>
                         <View style={styles.followingView}>
                           <TouchableOpacity onPress={() => props.navigation.navigate('PeopleProfileScreen')}>
-                            <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>{item.name}</Text>
+                            <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>{item.first_name + ' ' + item.last_name}</Text>
                           </TouchableOpacity>
                           <Text style={{ fontSize: 13, fontWeight: '400', color: '#B2B7B9', marginTop: 2 }}>Following</Text>
                         </View>
                       </View>
 
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={[styles.rightButtonsView, { marginRight: 10 }]}>
+                        <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 10 }]}>
                           <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                        </View>
+                        </TouchableOpacity>
                         {/* <TouchableOpacity onPress={()=>{changeSaved(item.id)}} style={styles.rightButtonsView}>
                 <Image source={!item.isSaved ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{width:20, height:20}} resizeMode='contain'/>
               </TouchableOpacity> */}
@@ -203,16 +272,20 @@ const PeopleHome = (props) => {
                     <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH, height: 200, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                       // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
                       onPress={() => { props.navigation.navigate('ShopProductAll') }}>
-                      <Image source={item.img} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
+                      <Image resizeMode='contain' source={{ uri: `${item.media_name}` }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
                     </TouchableOpacity>
 
                     <View style={styles.flatlistMainBottomView}>
 
                       <View style={styles.flatlistBottomView}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <TouchableOpacity onPress={() => { Likepost(item.id),isLiked =='false'? setIsLiked('true') : setIsLiked('false') }} style={{ marginRight: 10 }}>
-                            <Image source={ isLiked == "true" ? require('../../../assets/images/people-sel-heart.png')  : require('../../../assets/images/people-like.png')} style={{ width: 25, height: 25 }} />
+
+
+                          <TouchableOpacity onPress={() => { item.is_liked ? Dislikepost(item.id) : Likepost(item.id) }} style={{ marginRight: 10 }}>
+                            <Image source={item.is_liked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-like.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
+
+
                           <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginRight: 10 }}>
                             <Image source={require('../../../assets/images/people-comment.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
@@ -223,31 +296,36 @@ const PeopleHome = (props) => {
 
 
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <View style={{marginRight:10}}>
+                          <View style={{ marginRight: 10 }}>
                             <Text style={styles.text1}>183K views</Text>
                           </View>
-                          <TouchableOpacity onPress={() => { Savepost(item.id),isSaved =='false'? setIsSaved('true') : setIsSaved('false') }} style={styles.rightButtonsView}>
-                            <Image source={isSaved == "true" ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                          <TouchableOpacity onPress={() => { Savepost(item.id) }} style={styles.rightButtonsView}>
+                            <Image source={item.is_saved ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                           </TouchableOpacity>
                         </View>
                       </View>
 
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                         <Image source={require('../../../assets/images/people-liked-by.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                        <Text style={[styles.text1, { marginLeft: 10 }]}>Liked by Jerry paul and 23.3 K others</Text>
+                        <Text style={[styles.text1, { marginLeft: 10 }]}>Liked by {item.last_liked_user} and {item.num_of_liked_users} others</Text>
                       </View>
+                      {
+                        item.post_description != null ?
+                          <View style={{ flex: 1 }}>
+                            {/* <Text style={styles.text1}>Amazing football shorts caption this<Text style={{color:'#B2B7B9'}}>…More</Text></Text> */}
+                            <ReadMoreComponent text={item.post_description} />
+                          </View>
+                          :
+                          null
+                      }
 
-                      <View style={{ flex: 1 }}>
-                        {/* <Text style={styles.text1}>Amazing football shorts caption this<Text style={{color:'#B2B7B9'}}>…More</Text></Text> */}
-                        <ReadMoreComponent text={`Amazing football shorts caption this Amazing football shorts caption this Amazing football shorts caption this Amazing football shorts caption this Amazing football shorts caption this Amazing football shorts caption this Amazing football shorts caption this `} />
-                      </View>
 
                       <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginTop: 5 }}>
                         <Text style={{ fontSize: 12, fontWeight: '400', color: '#0089CF' }}>View all 183 comments</Text>
                       </TouchableOpacity>
 
                       <View style={{ marginTop: 10 }}>
-                        <Text style={{ fontSize: 10, fontWeight: '400', color: '#B2B7B9' }}>23 min ago</Text>
+                        <Text style={{ fontSize: 10, fontWeight: '400', color: '#B2B7B9' }}>{item.created_date.slice(11, 16)}min ago</Text>
                       </View>
                     </View>
                   </View>
@@ -399,6 +477,62 @@ const PeopleHome = (props) => {
             {/* <View style={{width:100,height:100}} /> */}
           </ScrollView>
 
+        </View>
+      </Modal>
+
+      {/* three dot modal */}
+      <Modal
+        isVisible={showModal}
+        swipeDirection="down"
+        onBackdropPress={() => setShowModal(false)}
+        onSwipeComplete={e => {
+          setShowModal(false);
+        }}
+        scrollTo={() => { }}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor="transparent"
+        style={{
+          justifyContent: 'flex-end',
+          margin: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+        }}>
+        <View
+          style={{
+            height: '50%',
+            backgroundColor: '#FFF',
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            paddingVertical: 20,
+          }}>
+
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}>
+            <View style={{ width: '90%', alignSelf: 'center', marginTop: 20 }}>
+              <View style={{ backgroundColor: '#F8F8F8', paddingHorizontal: 10, paddingVertical: 20, borderRadius: 10 }}>
+                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => { Followuser() }}>
+                  {/* <Image source={require('../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/> */}
+
+                  <Text style={styles.link}>Follow</Text>
+                </TouchableOpacity>
+
+
+              </View>
+
+              <View style={{ backgroundColor: '#F8F8F8', paddingHorizontal: 10, paddingVertical: 20, borderRadius: 10, marginTop: 8 }}>
+
+
+                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => { }}>
+                  {/* <Image source={require('../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/> */}
+                  <Text style={styles.link}>UnFollow</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
         </View>
       </Modal>
       {loading ?

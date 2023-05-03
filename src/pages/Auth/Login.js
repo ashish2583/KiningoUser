@@ -49,7 +49,8 @@ const Login = (props) => {
       // formdata.append("user_group", 3);
       var data={
         email:email,
-        password:pass
+        password:pass,
+        user_type_id: '1'
       }
       const { responseJson, err } = await requestPostApi(login, data, 'POST', '')
       setLoading(false)

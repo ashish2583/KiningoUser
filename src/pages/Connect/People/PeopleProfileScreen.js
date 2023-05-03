@@ -15,7 +15,7 @@ import { createThumbnail } from "react-native-create-thumbnail";
 import Loader from '../../../WebApi/Loader';
 import PostsModal from './modals/PostsModal';
 import ProfileScreenMoreModal from './modals/ProfileScreenMoreModal';
-import { connect_people_react_post, connect_people_save_post, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
+import { connect_people_block_user, connect_people_react_post, connect_people_save_post, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import { useSelector, useDispatch } from 'react-redux';
 
 const PeopleProfileScreen = (props) => {
@@ -200,13 +200,13 @@ const PeopleProfileScreen = (props) => {
 
     setLoading(true)
     var data = {
-      post_id: 5,
-      reaction_type: isLiked == "true" ? false : true
+      blocked_id: "47",
+      blocked_type: 2
     }
     // console.log('====================================');
     // console.log(data);
     // console.log('====================================');
-    const { responseJson, err } = await requestPostApi(connect_people_react_post, data, 'POST', User.token)
+    const { responseJson, err } = await requestPostApi(connect_people_block_user, data, 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
