@@ -1066,7 +1066,7 @@ const ShopProduct = (props) => {
 
               }}>
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>PickUp Date</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 10 }}>PickUp Date</Text>
               <View style={{
                 width: '100%', alignSelf: 'center',
                 backgroundColor: '#FFFFFF',
@@ -1163,7 +1163,7 @@ const ShopProduct = (props) => {
                 keyExtractor={item => item.id}
               /> */}
               {/* <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}> */}
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Select Time Slot</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 20, marginBottom: 10 }}>Select Time Slot</Text>
               {/* </View> */}
 
               {/* <View style={{ width: '97%', marginTop: 10, backgroundColor:'yellow' }}> */}

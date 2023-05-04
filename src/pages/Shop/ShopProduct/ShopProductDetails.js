@@ -37,7 +37,8 @@ function newAddMinutes(time, minsToAdd) {
 }
 const dummyImages = true
 const dummyBannerImages = [{image: `https://prnt.sc/YPfomy0Rb5uX`},{image: `https://prnt.sc/e46Zigic_0Sy`}]
- 
+const takeAwayNonButton = true
+
 const FoodDetails = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [searchValue, setsearchValue] = useState('')
@@ -1180,16 +1181,23 @@ const FoodDetails = (props) => {
 
           </TouchableOpacity>
 
-          <View style={{ width: '95%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
+          {/* <View style={{ width: '95%', alignSelf: 'center', marginHorizontal: 20, borderRadius: 10, justifyContent: "center" }}>
             <FlatList
               data={resData.services}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              // numColumns={2}
               renderItem={({ item, index }) => {
                 return (
                   <>
                     {item.attribute_value == 'yes' ?
+                    takeAwayNonButton ?
+                      <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 0, paddingVertical: 5 }}>
+                        <View style={styles.taBox}>
+                          <View style={styles.brownDot} />
+                          <Text style={{ color: '#835E23', fontSize:15, fontWeight:'bold' }} >{item.attribute_label}</Text>
+                        </View>
+                      </View>
+                        :
                       <View style={{ width: dimensions.SCREEN_WIDTH * 40 / 100, marginHorizontal: 0, paddingVertical: 5 }}>
                         <MyButtons title={item.attribute_label} height={37} width={'100%'} borderRadius={5} alignSelf="center"
                           press={() => { setselectedTab(item.attribute_label) }} marginHorizontal={20} fontSize={15}
@@ -1204,7 +1212,7 @@ const FoodDetails = (props) => {
               }}
               keyExtractor={item => item.id}
             />
-          </View>
+          </View> */}
 
 
           {selectedTab == 'Take Away' || selectedTab == 'Delivery' ?
@@ -2167,6 +2175,22 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 50
+  },
+  taBox:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    borderColor:'#835E23',
+    borderWidth:1,
+    paddingHorizontal:25,
+    paddingVertical:5,
+    borderRadius:5
+  },
+  brownDot:{
+    backgroundColor:'#835E23',
+    height:15,
+    width:15,
+    borderRadius:15/2
   }
 });
 export default FoodDetails
