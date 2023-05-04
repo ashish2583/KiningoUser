@@ -98,6 +98,7 @@ const ShopEat = (props) => {
   const [remoteMessageData, setRemoteMessageData] = useState('');
 
   useEffect(() => {
+    homePage(28.5355, 77.3910)
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,

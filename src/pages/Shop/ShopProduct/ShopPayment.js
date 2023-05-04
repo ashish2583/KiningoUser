@@ -307,8 +307,8 @@ const ShopPayment = (props) => {
                     {true ?
                       <TouchableOpacity style={{ width: '100%', borderColor: Mycolors.GrayColor, borderWidth: 0.02, flexDirection: 'row', alignItems: 'center', paddingVertical: 17, paddingHorizontal: 17, borderRadius: 7, backgroundColor: '#fff', marginTop: 15 }}
                         onPress={() => { setcheckitem(item) }}>
-                        <View style={{ width: 51, height: 40 }}>
-                          {/* <Image source={item.img}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image> */}
+                        <View style={{ width: 51, height: 20 }}>
+                          <Image source={require('../../../assets/visa.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
                         </View>
                         <View style={{ marginLeft: 15 }}>
                           <Text style={{ color: Mycolors.TEXT_COLOR, fontWeight: '500', fontSize: 13 }}>**** **** **** {item.card_no}</Text>

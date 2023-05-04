@@ -36,7 +36,8 @@ function newAddMinutes(time, minsToAdd) {
   return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
 }
 const dummyImages = true
-const dummyBannerImages = [{image: `https://prnt.sc/YPfomy0Rb5uX`},{image: `https://prnt.sc/e46Zigic_0Sy`}]
+// const dummyBannerImages = [{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`},{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-sites-1.png`}]
+const dummyBannerImages = [{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`},{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`}]
 const takeAwayNonButton = true
 
 const FoodDetails = (props) => {
