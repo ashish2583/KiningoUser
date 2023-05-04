@@ -45,7 +45,14 @@ const PeopleCreatePost = (props) => {
   const openLibrary = async () => {
 
     let options = {
-      title: 'Select Image',
+      // title: 'Video Picker', 
+      mediaType: 'mixed', 
+      // storageOptions:{
+      //   skipBackup:true,
+      //   path:'images'
+      // }
+      durationLimit: 30,
+      title: 'Select Image/Video',
       customButtons: [
         {
           name: 'customOptionKey',
@@ -152,10 +159,10 @@ const PeopleCreatePost = (props) => {
 
   const Createpost = async () => {
     
-    console.log("pick UPLOAD", pick.uri);
+    console.log("pick UPLOAD", pick);
     
     let formdata = new FormData();
-    formdata.append('post_type', 'video');
+    formdata.append('post_type', pick.type);
     formdata.append('post_description', descrbe);
     formdata.append('status', '1');
     formdata.append('file', pick);
@@ -227,8 +234,9 @@ const PeopleCreatePost = (props) => {
               <TouchableOpacity onPress={() => { openLibrary() }}>
                 <Image source={require('../../../assets/images/people-right-arrow.png')} />
               </TouchableOpacity>
+              
             </LinearGradient>
-
+            <Image style={{height:80,width:80}} source={{uri:pick.uri}} />
             <LinearGradient
               colors={['rgba(255, 255, 255, 1)', 'rgba(249, 249, 249, 1)']}
               style={[styles.uploadImageView, { marginTop: 10 }]}>

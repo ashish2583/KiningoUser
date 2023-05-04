@@ -16,20 +16,55 @@ import {
 import Modal from 'react-native-modal';
 import { dimensions, Mycolors } from '../../../../utility/Mycolors';
 import VideoPlayer from 'react-native-video-player'
+import { connect_people_all_comments, connect_people_dislike_post, connect_people_like_post, requestPostApi, requestGetApi, connect_people_add_comment } from '../../../../WebApi/Service';
+import Loader from '../../../../WebApi/Loader';
+import { useSelector, useDispatch } from 'react-redux';
 
 const RepliesModal = ({isVisible, setIsVisible, data, setData, replyingTo, setReplyingTo, showAtUsername, likeChildComment}) => {
     const [initialIndex, setInitialIndex] = useState(null)
+
     // let flatListRef = useRef();
     // const scrollRef = useRef({ flatListRef: undefined });
     const ref = useRef(null)
     const myTextInput = useRef()
     const [userMessage, setUserMessage] = useState('')
+    const[replydata,setReplydata]=useState(data)
+const User = useSelector(state => state.user.user_details)
+  const [loading, setLoading] = useState(false);
+
+    const Sendcomment = async () => {
+      console.log("Sendcomment RepliesModal:::", replydata);
+  
+      setLoading(true)
+      var data = {
+        post_id: replydata.post_id,
+        parent_id: replydata.id != null ? replydata.id : null ,
+        comment_type: replydata.commenttype,
+        comment: userMessage
+      }
+      console.log('Sendcomment===================================');
+      console.log(data);
+      console.log('====================================Sendcomment');
+      const { responseJson, err } = await requestPostApi(connect_people_add_comment, data, 'POST', User.token)
+      setLoading(false)
+      console.log('the res==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        setUserMessage('')
+        GetComments()
+        Toast.show({ text1: responseJson.headers.message });
+      } else {
+  
+        setalert_sms(err)
+        setMy_Alert(true)
+      }
+    }
 //   let refFlatList = null;
-//   useEffect(()=>{
-//         refFlatList.current && refFlatList.current.scrollToIndex({animated: true, index:10 })
-//   },[])
+  useEffect(()=>{
+    console.log("......................",data);
+        // refFlatList.current && refFlatList.current.scrollToIndex({animated: true, index:10 })
+  },[])
 const returnReplies = (itemid) => {
-  const replies = data?.find(el=>el.id === itemid)?.replies
+  const replies = data?.find(el=>el.id === itemid)?.replyComments
   
   return (
     <FlatList
@@ -43,12 +78,12 @@ const returnReplies = (itemid) => {
       <>
     <View style={{width:'90%', marginLeft:30, marginTop:10}}>
     <View style={{flexDirection:'row', alignItems:'center'}}>
-      <Image source={item.img} style={{height:40,width:40}}/>
-      <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{item.name}</Text>
-      <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{item.time}</Text>
+      <Image source={require('../../../../assets/images/people-sender-image.png')} style={{height:40,width:40}}/>
+      <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{item.first_name + '' + item.last_name}</Text>
+      <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{item.created_date.slice(11, 16)}</Text>
     </View>
     <View style={{marginTop:10}}>
-      <Text style={{fontSize:14, fontWeight:'400', color:'#272727'}}>{item.message}</Text>
+      <Text style={{fontSize:14, fontWeight:'400', color:'#272727'}}>{item.comment}</Text>
     </View>
     <View style={{marginTop:15, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
       <View style={{flexDirection:'row', alignItems:'center'}}>
@@ -123,7 +158,7 @@ const sendMessage = () => {
       coverScreen={false}
       onModalWillShow={()=>{
         if(showAtUsername){
-          setUserMessage(`@${data?.find(el=>el.id === replyingTo)?.name}`)
+          setUserMessage(`@${data?.find(el=>el.id === replyingTo)?.first_name}`)
           myTextInput.current.focus()
         }
       }}
@@ -134,11 +169,15 @@ const sendMessage = () => {
     //     scrollRef.current?.flatListRef.scrollToIndex(10);
     //   }}
       backdropColor="transparent"
+      
       style={{
+        // backdropColor:'yellow',
         justifyContent: 'flex-end',
         margin: 0,
+       
         backgroundColor: 'rgba(0,0,0,0.5)',
       }}>
+       
       <View
         style={{
           height: '100%',
@@ -174,12 +213,12 @@ const sendMessage = () => {
           {data?.filter(el=>el.id === replyingTo)?.map((item, index)=> 
           <View>
             <View style={{flexDirection:'row', alignItems:'center'}}>
-              <Image source={item.img}/>
-              <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{item.name}</Text>
-              <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{item.time}</Text>
+              <Image source={require('../../../../assets/images/comment-person-image.png')}/>
+              <Text style={{fontSize:18, fontWeight:'500', color:'#000', marginLeft:10}}>{item.first_name + '' + item.last_name}</Text>
+              <Text style={{fontSize:12, fontWeight:'400', color:'#B4BBC6', marginLeft:20}}>{item.created_date.slice(11, 16)}</Text>
             </View>
             <View style={{marginTop:10}}>
-              <Text style={{fontSize:14, fontWeight:'400', color:'#272727'}}>{item.message}</Text>
+              <Text style={{fontSize:14, fontWeight:'400', color:'#272727'}}>{item.comment}</Text>
             </View>
             <View style={{marginTop:15, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
               <View style={{flexDirection:'row', alignItems:'center'}}>
@@ -188,10 +227,10 @@ const sendMessage = () => {
                 </TouchableOpacity>
                 <Text style={{fontSize:14, fontWeight:'500', color:'#B4BBC6', marginLeft:10}}>Like</Text>
               </View>
-              <TouchableOpacity onPress={()=>{myTextInput.current.focus(); setUserMessage(`@${item.name}`); setReplyingTo(item.id)}} style={{flexDirection:'row', alignItems:'center'}}>
+              {/* <TouchableOpacity onPress={()=>{myTextInput.current.focus(); setUserMessage(`@${item.name}`); setReplyingTo(item.id)}} style={{flexDirection:'row', alignItems:'center'}}>
                 <Image source={require('../../../../assets/images/people-reply-image.png')}/>
                 <Text style={{fontSize:14, fontWeight:'500', color:'#B4BBC6', marginLeft:10}}>Reply</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           )}
@@ -208,17 +247,18 @@ const sendMessage = () => {
         ref={myTextInput}
         value={userMessage}
         onChangeText={(text) => {
-          setUserMessage(text)
+          (text)
         }}
         placeholder="What's on your mind"
         placeholderTextColor={'#B2B7B9'}
         style={styles.input}
         multiline
       />
-      <TouchableOpacity onPress={sendMessage} style={styles.sendButtonView}>
+      <TouchableOpacity onPress={()=>{Sendcomment()}} style={styles.sendButtonView}>
         <Text style={{fontSize:14, fontWeight:'500', color:'#fff'}}>Send</Text>
       </TouchableOpacity>
       </View>
+     
     </Modal>
   );
 };
@@ -275,7 +315,7 @@ const styles = StyleSheet.create({
   },
   addCommentView:{
     position:'absolute', 
-    // bottom:20,
+    bottom:0,
     width:'100%', 
     backgroundColor:'#fff', 
     padding:15, 

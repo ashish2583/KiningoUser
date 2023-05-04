@@ -12,11 +12,11 @@ import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMoreComponent from './Components/ReadMoreComponent';
-import { connect_people_dislike_post, connect_people_follow_user, connect_people_home_page, connect_people_like_post, connect_people_react_post, connect_people_save_post, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
+import { connect_people_dislike_post, connect_people_follow_user, connect_people_home_page, connect_people_like_post, connect_people_react_post, connect_people_save_post, connect_people_unfollow_user, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
-import { log } from 'react-native-reanimated';
+ 
 import { useSelector, useDispatch } from 'react-redux';
-
+import Share from 'react-native-share';
 const PeopleHome = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,24 @@ const PeopleHome = (props) => {
   useEffect(() => {
     PeopleHome()
   }, [])
+  const MycustomonShare = async () => {
+    const shareOptions = {
+        title: 'KinenGo Contents',
+        icon: 'data:<data_type>/<file_extension>;base64,<base64_data>',
+        // type: 'data:image/png;base64,<imageInBase64>',
+        // message: "KinenGO App",
+        url: 'KinenGo',
+      }
+      try {
+        const shareResponse = await Share.open(shareOptions);
 
+        console.log(JSON.stringify(shareResponse));
+
+      }
+      catch (error) {
+        console.log('ERROR=>', error);
+      }
+};
   const changeSaved = (id) => {
     const updataCopy = [...upData]
     const updatedData = updataCopy?.map(el => el.id === id ? { ...el, isSaved: !el.isSaved } : el)
@@ -157,6 +174,7 @@ const PeopleHome = (props) => {
     }
   }
   const PeopleHome = async () => {
+    setLoading(true)
     // console.log("LIKE CLICK:::",isSaved);
     const { responseJson, err } = await requestGetApi(connect_people_home_page, '', 'GET', User.token)
     setLoading(false)
@@ -171,12 +189,12 @@ const PeopleHome = (props) => {
       setMy_Alert(true)
     }
   }
-  const Followuser = async (items) => {
+  const Followuser = async () => {
     console.log("Followuser CLICK:::", threedotclickdata);
 
     setLoading(true)
     var data = {
-      module_id: 12,
+      module_id: 47,
       connect_type: "follow",
       status: 1
     }
@@ -186,6 +204,32 @@ const PeopleHome = (props) => {
     const { responseJson, err } = await requestPostApi(connect_people_follow_user + threedotclickdata, data, 'POST', User.token)
     setLoading(false)
     console.log('the Followuserres==>>', responseJson)
+    setShowModal('false')
+    // if (responseJson.headers.success == 1) {
+
+    //   Toast.show({ text1: responseJson.headers.message });
+    // } else {
+
+    //   setalert_sms(err)
+    //   setMy_Alert(true)
+    // }
+  }
+  const UnFollowuser = async () => {
+    console.log("UNFollowuser CLICK:::", threedotclickdata);
+
+    setLoading(true)
+    var data = {
+      module_id: 47,
+      connect_type: "unfollow",
+      status: 1
+    }
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+    const { responseJson, err } = await requestPostApi(connect_people_unfollow_user + threedotclickdata, data, 'POST', User.token)
+    setLoading(false)
+    console.log('the Followuserres==>>', responseJson)
+    setShowModal('false')
     // if (responseJson.headers.success == 1) {
 
     //   Toast.show({ text1: responseJson.headers.message });
@@ -286,11 +330,13 @@ const PeopleHome = (props) => {
                           </TouchableOpacity>
 
 
-                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginRight: 10 }}>
+                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments',{data:item})} style={{ marginRight: 10 }}>
                             <Image source={require('../../../assets/images/people-comment.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
-                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleMessages')} style={{ marginRight: 10 }}>
-                            <Image source={require('../../../assets/images/people-message.png')} style={{ width: 25, height: 25 }} />
+                          <TouchableOpacity onPress={() => MycustomonShare()
+                            // props.navigation.navigate('PeopleMessages')
+                            } style={{ marginRight: 10 }}>
+                            <Image source={require('../../../assets/ShareNetwork-black.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
                         </View>
 
@@ -300,7 +346,7 @@ const PeopleHome = (props) => {
                             <Text style={styles.text1}>183K views</Text>
                           </View>
                           <TouchableOpacity onPress={() => { Savepost(item.id) }} style={styles.rightButtonsView}>
-                            <Image source={item.is_saved ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                            <Image source={!item.is_saved ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -325,7 +371,7 @@ const PeopleHome = (props) => {
                       </TouchableOpacity>
 
                       <View style={{ marginTop: 10 }}>
-                        <Text style={{ fontSize: 10, fontWeight: '400', color: '#B2B7B9' }}>{item.created_date.slice(11, 16)}min ago</Text>
+                        <Text style={{ fontSize: 10, fontWeight: '400', color: '#B2B7B9' }}>{item.created_date.slice(11, 16)} min ago</Text>
                       </View>
                     </View>
                   </View>
@@ -524,7 +570,7 @@ const PeopleHome = (props) => {
               <View style={{ backgroundColor: '#F8F8F8', paddingHorizontal: 10, paddingVertical: 20, borderRadius: 10, marginTop: 8 }}>
 
 
-                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => { }}>
+                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => {UnFollowuser()}}>
                   {/* <Image source={require('../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/> */}
                   <Text style={styles.link}>UnFollow</Text>
                 </TouchableOpacity>
