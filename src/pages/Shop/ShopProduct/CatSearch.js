@@ -22,7 +22,7 @@ const checkIfEmpty = (data) => {
     return false
   }
 }
-
+const dummyLocation = true
 const CatSearch = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const dispatch = useDispatch();
@@ -63,9 +63,14 @@ const CatSearch = (props) => {
 
   const homePageSearch = async (ttt) => {
     setresData([])
+    const endPoint = 
+      dummyLocation ? 
+        shop_product_categories + '?category_name=' + ttt + '&lat=' + '28.5355' + '&long=' + '77.3910'
+        :  
+        shop_product_categories + '?category_name=' + ttt + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude  
     setLoading(true)
     // const { responseJson, err } = await requestGetApi(menu_categorySearch_attribute_name+ttt+'&lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(shop_product_categories + '?category_name=' + ttt + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
     if (responseJson !== null) {
@@ -83,10 +88,15 @@ const CatSearch = (props) => {
 
   const AllVenders = async () => {
     console.log('the res==>>Homethe res==>>Homethe res==>>Home')
+    const endPoint = 
+      dummyLocation ? 
+        shop_product_categories + '?lat=' + '28.5355' + '&long=' + '77.3910'
+        :
+        shop_product_categories + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
 
     setLoading(true)
     //   const { responseJson, err } = await requestGetApi(menu_AllCategoryNames+'?lat=' +  mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(shop_product_categories + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson !== null) {

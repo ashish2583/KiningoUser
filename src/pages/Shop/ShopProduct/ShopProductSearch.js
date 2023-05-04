@@ -17,7 +17,7 @@ import GetLocation from 'react-native-get-location'
 import Geocoder from "react-native-geocoding";
 import { GoogleApiKey } from '../../../WebApi/GoogleApiKey';
 import Toast from 'react-native-toast-message'
-
+const dummyLocation = true
 const ShopProductSearch = (props) => {
   const [searchValue, setsearchValue] = useState('')
   const dispatch = useDispatch();
@@ -66,11 +66,15 @@ const ShopProductSearch = (props) => {
   }, [])
 
   const catSerch = async (ddd) => {
-    const endPoint = shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    const endPoint = 
+      dummyLocation ?
+        shop_product_business_bycategory + ddd + '&lat=' + '28.5355' + '&long=' + '77.3910'
+        :
+        shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
     console.log('catSerch endPoint', endPoint);    
     setLoading(true)
     // const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>vendor_lists_subcat', responseJson)
     if (responseJson !== null) {
@@ -107,10 +111,14 @@ const ShopProductSearch = (props) => {
 
 
   const homePageSearch = async (text) => {
-    const endPoint = shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    const endPoint = 
+      dummyLocation ?
+        shop_product_business + '?name=' + text + '&lat=' + '28.5355' + '&long=' + '77.3910'
+        :
+        shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
     console.log('search endPoint', endPoint);
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business + '?name=' + text + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     // const { responseJson, err } = await requestGetApi(`${shop_product_home}?lat=${mapdata.restorentlocation.latitude}&long=${mapdata.restorentlocation.longitude}`, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>Home', responseJson)
@@ -131,7 +139,12 @@ const ShopProductSearch = (props) => {
   const AllVenders = async () => {
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_business + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', User.token)
+    const endPoint = 
+      dummyLocation ?
+        shop_product_business + '?lat=' + '28.5355' + '&long=' + '77.3910'
+        :
+        shop_product_business + '?lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', User.token)
     setLoading(false)
     console.log('the res==>>Homethe res==>>Homethe res==>>Home', responseJson)
     if (responseJson !== null) {
@@ -219,7 +232,7 @@ const ShopProductSearch = (props) => {
                       elevation: 5, flexDirection: 'row', alignItems: 'center', right: 9, position: 'absolute', top: 9
                     }}>
 
-                      <Text style={{ fontSize: 16, textAlign: 'left', fontWeight: 'bold', marginHorizontal: 4, color: '#47154F', top: 0 }}>{item.rating ? parseInt(item.rating) : 0}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', fontWeight: 'bold', marginHorizontal: 4, color: '#47154F', top: 0 }}>{item.rating ? item.rating : 0}</Text>
                       <Image source={require('../../../assets/Star.png')} style={{ width: 13, height: 13, alignSelf: 'center', marginRight: 4 }}></Image>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ width: '100%', height: 180, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center' }}
@@ -237,13 +250,13 @@ const ShopProductSearch = (props) => {
                       <View style={{ left: 9, width: '60%', }}>
                         <Text numberOfLines={2} style={{ fontSize: 18, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold', left: 7 }}>{item.name}</Text>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: '300', left: 7 }}>{item.address_line}</Text>
-                        <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, textAlign: 'left', fontWeight: '200', left: 7, fontStyle: 'italic' }}>Food Preparation Time : {item.tentative_time}</Text>
+                        {/* <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, textAlign: 'left', fontWeight: '200', left: 7, fontStyle: 'italic' }}>Food Preparation Time : {item.tentative_time}</Text> */}
 
                       </View>
                       <View style={{ padding: 5, alignItems: 'flex-end', right: 9 }}>
 
 
-                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders : ''}+ orders served.</Text>
+                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders : '0'}+ products delivered</Text>
 
                       </View>
 

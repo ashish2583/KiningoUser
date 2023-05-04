@@ -46,7 +46,8 @@ const Login = (props) => {
       var data={
         email:email,
         password:pass,
-        device_id:mapdata.devicetoken
+        device_id:mapdata.devicetoken,
+        user_type_id:1
       }
       const { responseJson, err } = await requestPostApi(login, data, 'POST', '')
       setLoading(false)

@@ -35,7 +35,9 @@ function newAddMinutes(time, minsToAdd) {
   var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
   return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
 }
-
+const dummyImages = true
+const dummyBannerImages = [{image: `https://prnt.sc/YPfomy0Rb5uX`},{image: `https://prnt.sc/e46Zigic_0Sy`}]
+ 
 const FoodDetails = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [searchValue, setsearchValue] = useState('')
@@ -623,8 +625,14 @@ const FoodDetails = (props) => {
         }
         setbannerimg(responseJson.body.bannerImages[0].image)
         var allimgs = [];
-        for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
-          allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
+        if(dummyImages){
+          for (let i = 1; i <= dummyBannerImages.length; i++) {
+            allimgs.push({ img: dummyBannerImages[i - 1].image })
+          }
+        }else{
+          for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
+            allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
+          }
         }
         console.log('allimgs', allimgs);
         setAllImg(allimgs)

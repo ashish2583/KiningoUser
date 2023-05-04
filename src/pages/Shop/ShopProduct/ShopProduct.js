@@ -30,6 +30,8 @@ const GOOGLE_MAPS_APIKEY = GoogleApiKey;
 const isEmulator = false
 let lat = null
 let lan = null
+const dummyLocation = true
+const dummyCoupons = true
 console.log("ShopProductShopProductShopProduct......");
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
@@ -105,6 +107,11 @@ const ShopProduct = (props) => {
   const [googleLatLng, setGoogleLatLng] = useState({});
 
   useEffect(() => {
+
+    if(dummyLocation){
+      homePage(28.5355, 77.3910)
+    }
+    
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
@@ -260,6 +267,62 @@ const ShopProduct = (props) => {
     AsyncStorage.clear();
     dispatch(onLogoutUser())
   }
+
+  const getDummyCoupons = (data) => {
+     let coupons = []
+     const couponImages = [require('./ProductAssets/coupon-1.png'), require('./ProductAssets/coupon-2.png'), require('./ProductAssets/coupon-3.png')]
+     for(let i=0; i<3;i++){
+      // coupons[i] = {...data, image: couponImages[i]}
+      coupons[i] = 
+        {
+            "discount_id": 17,
+            "coupon_name": "20% Off",
+            "coupon_code": "KINENGO20",
+            "coupon_type": "percentage",
+            "discount_value": 20,
+            "min_order_value": 20,
+            "start_date": "2023-04-05",
+            "end_date": "2023-12-31 19:11:39",
+            "coupon_desc": "Get a 20% discount on min. order of $20.",
+            "image": couponImages[i],
+            "status": 1,
+            "business_id": 14,
+            "business_name": "Kinengo eCom",
+            "address_line": "Sector 57, Noida, India",
+            "latitude": "28.60860062",
+            "longitude": "77.35099792"
+        }
+     }
+     console.log('dummy coupons', coupons);
+     return coupons    
+  } 
+  const getDummyVendors = (data) => {
+     let vendors = []
+     const vendorImages = [require('./ProductAssets/vendor-1.jpg')]
+     for(let i=0; i<1;i++){
+      // vendors[i] = {...data, image: vendorImages[i]}
+      vendors[i] = 
+        {
+            "userid": 73,
+            "first_name": "eCom",
+            "last_name": "Product",
+            "emailid": "ecom@kinengo.com",
+            "phone": "1998877665",
+            "status": 1,
+            "business_id": 14,
+            "name": "Kinengo eCom",
+            "address_line": "Sector 57, Noida, India",
+            "latitude": "28.60860062",
+            "longitude": "77.35099792",
+            "distance": 5.603938871105555,
+            "banner_image": vendorImages[i],
+            "rating": "4.3",
+            "total_orders": 31
+        }
+     }
+     console.log('dummy vendors', vendors);
+     return vendors    
+  } 
 
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
@@ -489,16 +552,17 @@ paddingLeft={50}/> */}
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 15 }}>
             {resData?.coupons?.length > 0 ?
               <FlatList
-                data={resData.coupons}
+                data={dummyCoupons ? getDummyCoupons(resData.coupons) : resData.coupons}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 // numColumns={2}
                 renderItem={({ item, index }) => {
                   return (
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow: 'hidden' }}>
-                      <TouchableOpacity style={{ width: '100%', height: 120, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center', }}
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow: 'hidden', overflow:'hidden' }}>
+                      <TouchableOpacity style={{ width: '95%', height: 110, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center' }}
                         onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: '' }) }}>
-                        <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
+                        {/* <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image> */}
+                        <Image resizeMode='stretch' source={item.image} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
                       </TouchableOpacity>
                     </View>
                   )
@@ -575,7 +639,7 @@ paddingLeft={50}/> */}
             /> */}
             {resData?.vendors?.length > 0 ?
               <FlatList
-                data={resData.vendors}
+                data={dummyCoupons ? getDummyVendors(resData.vendors) : resData.vendors}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 // numColumns={2}
@@ -591,11 +655,12 @@ paddingLeft={50}/> */}
                           props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, vendorName: item.name, businessid: item.business_id })
                           // dispatch(setProductVenderDetail(item))
                         }}>
-                        <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image>
+                        {/* <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image> */}
+                        <Image source={item.banner_image} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image>
                       </TouchableOpacity>
                       <View style={{ left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2, fontStyle: 'italic', }}>Caegory Name: Italian +2</Text>
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2, fontStyle: 'italic', }}>Caegory Name: Electrical +2</Text>
                       </View>
                       <View style={{ padding: 5, left: 5, top: -3 }}>
                         <View style={{ flexDirection: 'row', }}>
@@ -630,7 +695,7 @@ paddingLeft={50}/> */}
 
 
           <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 30 }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 18, width: '70%', }}>Buy what makes you <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 18, width: '70%', }}> HAPPY!</Text></Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: 'bold', fontSize: 18, width: '70%', }}>Buy products based on <Text style={{ color: '#0EA00E', fontWeight: 'bold', fontSize: 18, width: '70%', }}> Categories!</Text></Text>
             {resData?.categories?.length > 0 ?
               <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", fontSize: 14, top: 10 }}
                 onPress={() => { props.navigation.navigate('CatSearch', { datas: resData.categories, from: '' }) }}>View More</Text>
