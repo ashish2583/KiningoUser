@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, RefreshControl, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import HomeHeaderRoundBottom from '../../../component/HomeHeaderRoundBottom';
 import SearchInput2 from '../../../component/SearchInput2';
 import SearchInputEnt from '../../../component/SearchInputEnt';
@@ -14,10 +14,13 @@ import ViewMoreText from 'react-native-view-more-text';
 import ReadMoreComponent from './Components/ReadMoreComponent';
 import { connect_people_dislike_post, connect_people_follow_user, connect_people_home_page, connect_people_like_post, connect_people_react_post, connect_people_save_post, connect_people_unfollow_user, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
- 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { saveUserResult, saveUserToken, setVenderDetail,onLogoutUser, setUserType } from '../../../redux/actions/user_action';
+
 import { useSelector, useDispatch } from 'react-redux';
 import Share from 'react-native-share';
 const PeopleHome = (props) => {
+  const dispatch =  useDispatch();
   const User = useSelector(state => state.user.user_details)
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState('')
@@ -83,24 +86,41 @@ const PeopleHome = (props) => {
   useEffect(() => {
     PeopleHome()
   }, [])
+  const [refreshing, setRefreshing] = React.useState(false);
+  const checkcon = () => {
+    PeopleHome()
+  }
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const onRefresh = React.useCallback(() => {
+    checkcon()
+    wait(2000).then(() => {
+
+      setRefreshing(false)
+
+    });
+  }, []);
+
   const MycustomonShare = async () => {
     const shareOptions = {
-        title: 'KinenGo Contents',
-        icon: 'data:<data_type>/<file_extension>;base64,<base64_data>',
-        // type: 'data:image/png;base64,<imageInBase64>',
-        // message: "KinenGO App",
-        url: 'KinenGo',
-      }
-      try {
-        const shareResponse = await Share.open(shareOptions);
+      title: 'KinenGo Contents',
+      icon: 'data:<data_type>/<file_extension>;base64,<base64_data>',
+      // type: 'data:image/png;base64,<imageInBase64>',
+      // message: "KinenGO App",
+      url: 'KinenGo',
+    }
+    try {
+      const shareResponse = await Share.open(shareOptions);
 
-        console.log(JSON.stringify(shareResponse));
+      console.log(JSON.stringify(shareResponse));
 
-      }
-      catch (error) {
-        console.log('ERROR=>', error);
-      }
-};
+    }
+    catch (error) {
+      console.log('ERROR=>', error);
+    }
+  };
   const changeSaved = (id) => {
     const updataCopy = [...upData]
     const updatedData = updataCopy?.map(el => el.id === id ? { ...el, isSaved: !el.isSaved } : el)
@@ -127,7 +147,7 @@ const PeopleHome = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       PeopleHome()
-      Toast.show({ text1: responseJson.headers.message });
+      // Toast.show({ text1: responseJson.headers.message });
     } else {
 
       setalert_sms(err)
@@ -151,7 +171,7 @@ const PeopleHome = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       PeopleHome()
-      Toast.show({ text1: responseJson.headers.message });
+      // Toast.show({ text1: responseJson.headers.message });
     } else {
 
       setalert_sms(err)
@@ -160,13 +180,14 @@ const PeopleHome = (props) => {
   }
 
   const Savepost = async (items) => {
+    setLoading(true)
     console.log("LIKE CLICK:::", items);
     const { responseJson, err } = await requestPostApi(connect_people_save_post + items, '', 'POST', User.token)
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       PeopleHome()
-      Toast.show({ text1: responseJson.headers.message });
+      // Toast.show({ text1: responseJson.headers.message });
     } else {
 
       setalert_sms(err)
@@ -241,13 +262,23 @@ const PeopleHome = (props) => {
   }
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ backgroundColor: '#F8F8F8' }}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+
+          />
+        }
+      >
         <HomeHeaderRoundBottom height={80} paddingHorizontal={15} backgroundColor='#fff'
           press1={() => { }}
           // img1={require('../../../assets/images/events_arrow.png')} 
           img1width={25} img1height={20}
           press2={() => { }} title2={'People'} fontWeight={'500'} img2height={20} color='#455A64'
-          press3={() => { }} img3width={25} img3height={25} borderBottomLeftRadius={25} borderBottomRightRadius={25} />
+          press3={() => { AsyncStorage.clear();
+            dispatch(onLogoutUser())}} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
+       
         <View style={{ width: '90%', alignSelf: 'center', marginTop: 20 }}>
 
           {/* <View style={{flexDirection:'row', alignItems:'center',marginTop:400, marginBottom:400, height:100, backgroundColor:'red'}}>
@@ -330,12 +361,12 @@ const PeopleHome = (props) => {
                           </TouchableOpacity>
 
 
-                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments',{data:item})} style={{ marginRight: 10 }}>
+                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments', { data: item })} style={{ marginRight: 10 }}>
                             <Image source={require('../../../assets/images/people-comment.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
                           <TouchableOpacity onPress={() => MycustomonShare()
                             // props.navigation.navigate('PeopleMessages')
-                            } style={{ marginRight: 10 }}>
+                          } style={{ marginRight: 10 }}>
                             <Image source={require('../../../assets/ShareNetwork-black.png')} style={{ width: 25, height: 25 }} />
                           </TouchableOpacity>
                         </View>
@@ -570,7 +601,7 @@ const PeopleHome = (props) => {
               <View style={{ backgroundColor: '#F8F8F8', paddingHorizontal: 10, paddingVertical: 20, borderRadius: 10, marginTop: 8 }}>
 
 
-                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => {UnFollowuser()}}>
+                <TouchableOpacity style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }} onPress={() => { UnFollowuser() }}>
                   {/* <Image source={require('../../../assets/images/people-bookmark.png')} style={{width:20, height:20}} resizeMode='contain'/> */}
                   <Text style={styles.link}>UnFollow</Text>
                 </TouchableOpacity>

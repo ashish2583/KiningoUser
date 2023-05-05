@@ -46,7 +46,7 @@ const Login = (props) => {
       let formdata = new FormData();
       formdata.append("email", email); 
       formdata.append("password", pass);
-      // formdata.append("user_group", 3);
+      // formdata.append("user_type_id", 1);
       var data={
         email:email,
         password:pass,
@@ -58,6 +58,7 @@ const Login = (props) => {
       if (responseJson.headers.success == 1) {
         Login_Pressed(responseJson.body)
       } else {
+        console.log('the err==>>', err)
          setalert_sms(err)
          setMy_Alert(true)
       }

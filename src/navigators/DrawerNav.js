@@ -7,12 +7,7 @@ import MyDrawer from '../component/MyDrawer';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { dimensions } from '../utility/Mycolors';
-
-
-
-
-
-
+import ConnectPeopleStack from './ConnectPeopleStack';
 
 
 const DrawerNav = (props) => {
@@ -25,7 +20,8 @@ const DrawerNav = (props) => {
       drawerWidth={dimensions.SCREEN_WIDTH}
       drawerContent={(props) => <MyDrawer {...props} />}
       >
-      <Drawer.Screen name="BottomNav" component={BottomNav} 
+      {/* <Drawer.Screen name="BottomNav" component={BottomNav}  */}
+       <Drawer.Screen name="ConnectPeopleStack" component={ConnectPeopleStack} 
       options={{
         drawerLabel: () => null,
         title: null,
