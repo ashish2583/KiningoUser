@@ -372,7 +372,8 @@ const ShopProduct = (props) => {
           </TouchableOpacity>
           <View style={{ width: '86%', justifyContent: 'center', alignItems: 'center', }}>
             <GooglePlacesAutocomplete
-              placeholder={addre?.trim()?.length > 0 ? addre.substring(0, 45) : 'Search Address'}
+              // placeholder={addre?.trim()?.length > 0 ? addre.substring(0, 45) : 'Search Address'}
+              placeholder={addre?.trim()?.length > 0 ? addre.substring(0, 45) : 'Noida. Uttar Pradesh, India'}
               textInputProps={{
                 placeholderTextColor: addre?.trim()?.length > 0 ? '#000' : 'gray',
                 // width: '95%',

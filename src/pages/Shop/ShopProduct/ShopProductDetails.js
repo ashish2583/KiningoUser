@@ -2010,8 +2010,8 @@ const FoodDetails = (props) => {
                 }}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                  latitude: resData?.latitude,
-                  longitude: resData?.longitude,
+                  latitude: Number(resData?.latitude),
+                  longitude: Number(resData?.longitude),
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
@@ -2036,7 +2036,7 @@ const FoodDetails = (props) => {
                 showsIndoorLevelPicker={true}
               >
                 <Marker
-                  coordinate={{ latitude: resData?.latitude, longitude: resData?.longitude }}
+                  coordinate={{ latitude: Number(resData?.latitude), longitude: Number(resData?.longitude) }}
                 >
                   <Image
                     source={require('../../../assets/shape_33.png')}
