@@ -508,7 +508,8 @@ const ShopProduct = (props) => {
     const isToday = new Date(takeAwayDate).setHours(0,0,0,0) == (new Date()).setHours(0,0,0,0)
     console.log('isToday', isToday);
     if(isToday){
-      return slots.filter(el=> moment().isBefore(moment(createDate(el.end)), 'minutes') ? true : false )
+      // return slots.filter(el=> moment().isBefore(moment(createDate(el.end)), 'minutes') ? true : false )
+      return slots.filter(el=> moment(createDate(el.start)).isAfter(moment(), 'minutes') ? true : false )
     }else{
       return slots
     }
@@ -613,7 +614,7 @@ const ShopProduct = (props) => {
     }
     return (
       // <View style={{ width: '100%', height: 170, alignSelf: 'center' }}>
-      <View style={{ width: '100%', alignSelf: 'center' }}>
+      <View style={{ width: '100%', alignSelf: 'center', marginBottom:10 }}>
         <Swipeable
           renderRightActions={(progress, dragX) =>
             renderRightActions(progress, dragX, onClick)
@@ -717,7 +718,7 @@ const ShopProduct = (props) => {
           {resData?.length > 0 ?
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25, marginBottom: 5, width: '100%' }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, }} >Select Pickup Date and Time</Text>
               </View>
 
               <TouchableOpacity style={{
@@ -737,11 +738,11 @@ const ShopProduct = (props) => {
                   {selectedTime2 !== '' ?
                     // <Text style={{ fontSize: 11, color: Mycolors.GrayColor, fontWeight: 'bold' }}>{selectedSlot?.start}-{selectedSlot?.end}</Text>
                     <>
-                      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>Selected Time and Date</Text>
+                      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#000' }}>Selected Date and Time</Text>
                       <Text style={{ fontSize: 13, marginVertical: 5, color: '#000' }}>{takeAwayDate !== '' ? moment(takeAwayDate).format('MMM DD, YYYY') : ''} {selectedSlot?.start}-{selectedSlot?.end}</Text>
                     </>
                     :
-                    <Text style={{ color: '#bbbbbb', fontWeight: '600', fontSize: 14, }} >Select PickUp Time and Date</Text>
+                    <Text style={{ color: '#bbbbbb', fontWeight: '600', fontSize: 14, }} >Select Pickup Date and Time</Text>
                   }
                 </View>
 
@@ -882,10 +883,10 @@ const ShopProduct = (props) => {
                     //   }
                     // }
                     if (takeAwayDate === '') {
-                      Toast.show({ text1: 'Please select PickUp Date' })
+                      Toast.show({ text1: 'Please select Pickup Date' })
                       return
                     } else if (Object.keys(selectedSlot)?.length === 0) {
-                      Toast.show({ text1: 'Please select PickUp Time' })
+                      Toast.show({ text1: 'Please select Pickup Time' })
                       return
                     }
                     props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, selectedSlot, takeAwayDate })
@@ -1054,7 +1055,7 @@ const ShopProduct = (props) => {
                                           />
                                       </TouchableOpacity> */}
             <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setShowTimeModal(false) }} />
-            <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25, }}>Select PickUp Time and Date</Text>
+            <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25, }}>Select Pickup Time and Date</Text>
             <View
               style={{
                 justifyContent: "center",
@@ -1066,7 +1067,7 @@ const ShopProduct = (props) => {
 
               }}>
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 10 }}>PickUp Date</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 10 }}>Pickup Date</Text>
               <View style={{
                 width: '100%', alignSelf: 'center',
                 backgroundColor: '#FFFFFF',
@@ -1193,10 +1194,10 @@ const ShopProduct = (props) => {
           <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 50 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {
               if (takeAwayDate === '') {
-                Toast.show({ text1: 'Please select PickUp Date' })
+                Toast.show({ text1: 'Please select Pickup Date' })
                 return
               } else if (Object.keys(selectedSlot)?.length === 0) {
-                Toast.show({ text1: 'Please select PickUp Time' })
+                Toast.show({ text1: 'Please select Pickup Time' })
                 return
               }
               setShowTimeModal(false)
