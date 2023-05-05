@@ -639,7 +639,8 @@ paddingLeft={50}/> */}
             /> */}
             {resData?.vendors?.length > 0 ?
               <FlatList
-                data={dummyCoupons ? getDummyVendors(resData.vendors) : resData.vendors}
+                // data={dummyCoupons ? getDummyVendors(resData.vendors) : resData.vendors}
+                data={resData.vendors}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 // numColumns={2}
@@ -655,8 +656,8 @@ paddingLeft={50}/> */}
                           props.navigation.navigate('ShopProductDetails', { vendorId: item.userid, vendorName: item.name, businessid: item.business_id })
                           // dispatch(setProductVenderDetail(item))
                         }}>
-                        {/* <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image> */}
-                        <Image source={item.banner_image} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image>
+                        <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image>
+                        {/* <Image source={item.banner_image} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }}></Image> */}
                       </TouchableOpacity>
                       <View style={{ left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>

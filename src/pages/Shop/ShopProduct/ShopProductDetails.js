@@ -724,6 +724,7 @@ const FoodDetails = (props) => {
         // }
         // setcartCount(counts)
         setmenuresData(responseJson.body)
+        setmenuresData2(responseJson.body)
         setreloades(!reloades)
       } else {
         Toast.show({ text1: responseJson.headers.message })
@@ -994,12 +995,15 @@ const FoodDetails = (props) => {
     });
   }
   const getDropdownData = () => {
+    // console.log('some data selectedTab', selectedTab);
+    // console.log('some data selectedCategory', selectedCategory, menuresData);
+    // console.log('some data menuresData', menuresData);
     let data = ''
     if (!selectedCategory?.category_code) {
       data = menuresData
     } else {
       // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
-      data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_code?.toLowerCase())
+      data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_name?.toLowerCase())
       // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     }
     // console.log('getDropdownData menuresData', menuresData, selectedTab);
@@ -1007,7 +1011,7 @@ const FoodDetails = (props) => {
       <>
         {data?.length > 0 ?
           data?.map(item =>
-            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+            flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) },
               () => {
                 setClickedItemData(item)
                 setmodlevisual1(false)

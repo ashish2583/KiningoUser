@@ -212,12 +212,12 @@ const ShopMyOrderDetails = (props) => {
               </View> */}
               <View style={{ marginTop: 10, backgroundColor: '#ADC430',borderRadius: 7, padding: 6, paddingLeft: 15, }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Scheduled product pick up date: </Text>
-                  <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, }} > {data?.schedule_date}</Text>
+                  <Text style={{ color: '#fff', fontWeight: '400', fontSize: 12, }} >Scheduled product pick up date: </Text>
+                  <Text style={{ color: '#fff', fontWeight: '600', fontSize: 12, }} > {data?.schedule_date}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, marginTop: 9 }} >Scheduled product slot time: </Text>
-                  <Text style={{ color: Mycolors.GrayColor, fontWeight: '600', fontSize: 12, marginTop: 9 }} > {data?.schedule_time_from +' to '+ data?.schedule_time_to }</Text>
+                  <Text style={{ color: '#fff', fontWeight: '400', fontSize: 12, marginTop: 9 }} >Scheduled product slot time: </Text>
+                  <Text style={{ color: '#fff', fontWeight: '600', fontSize: 12, marginTop: 9 }} > {data?.schedule_time_from +' to '+ data?.schedule_time_to }</Text>
                 </View>
               </View>
               {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
