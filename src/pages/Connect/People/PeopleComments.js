@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet, SafeAreaView, RefreshControl, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, ImageEditor, Keyboard } from 'react-native';
+import { View, Image, Text, StyleSheet, SafeAreaView, RefreshControl, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, ImageEditor, Keyboard, } from 'react-native';
 import HomeHeaderRoundBottom from '../../../component/HomeHeaderRoundBottom';
 import SearchInput2 from '../../../component/SearchInput2';
 import SearchInputEnt from '../../../component/SearchInputEnt';
@@ -11,11 +11,11 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import RepliesModal from './modals/RepliesModal';
-import { connect_people_all_comments, connect_people_dislike_post, connect_people_like_post, requestPostApi, requestGetApi, connect_people_add_comment } from '../../../WebApi/Service';
+import { connect_people_all_comments, connect_people_dislike_post, connect_people_like_post, requestPostApi, requestGetApi, connect_people_add_comment, connect_people_Delet_post } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
 import { useSelector, useDispatch } from 'react-redux';
 
-let replyingTo = ''
+// let replyingTo = ''
 
 const PeopleComments = (props) => {
   const User = useSelector(state => state.user.user_details)
@@ -26,13 +26,16 @@ const PeopleComments = (props) => {
   const [multiSliderValue, setMultiSliderValue] = useState([0, 100])
   const [showChooseMilesModal, setShowChooseMilesModal] = useState(false)
   const [userMessage, setUserMessage] = useState('')
-  // const [replyingTo, setReplyingTo] = useState('')
+  const [replyingTo, setReplyingTo] = useState('')
   const [showAtUsername, setShowAtUsername] = useState(false)
   const [showRepliesModal, setShowRepliesModal] = useState(false)
   const [Data, setData] = useState(props.route.params.data.id);
   const [commentdata, setCommentdata] = useState([])
   const [commenttype, setCommenttype] = useState('');
-  const [commentid, setCommentid] = useState('')
+  const [commentid, setCommentid] = useState('');
+  const [viewmore, setviewmore] = useState(true)
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
   const [upData, setupData] = useState([
     {
       id: '1',
@@ -85,6 +88,7 @@ const PeopleComments = (props) => {
 
   }, []);
 
+
   const [refreshing, setRefreshing] = React.useState(false);
   const checkcon = () => {
     GetComments()
@@ -111,10 +115,10 @@ const PeopleComments = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.success == 1) {
       setCommentdata(responseJson.data.comments);
-      setCommenttype(responseJson.data?.comments?.comment_type);
-      setCommentid(responseJson.data?.comments?.parent_id);
+      setCommenttype(responseJson.data?.comments.comment_type);
+      setCommentid(responseJson.data?.comments.parent_id);
 
-      // console.log("response hOME", responseJson.body.posts);
+      console.log("response Comment TYPE", responseJson.data?.comments.parent_id);
       // Toast.show({ text1: responseJson.headers.message });
     } else {
 
@@ -123,40 +127,46 @@ const PeopleComments = (props) => {
     }
   }
   const Sendcomment = async () => {
-    console.log("Sendcomment CLICK:::", replyingTo, commentid, commenttype);
-
-    setLoading(true)
-    var data = {
-      post_id: Data,
-      parent_id: commentid != null ? commentid : replyingTo,
-      comment_type: null,
-      comment: userMessage
-    }
-    console.log('Sendcomment===================================');
-    console.log(data);
-    console.log('====================================Sendcomment');
-    const { responseJson, err } = await requestPostApi(connect_people_add_comment, data, 'POST', User.token)
-    setLoading(false)
-    console.log('the res==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      setUserMessage('')
-      GetComments()
-      Keyboard.dismiss()
-      Toast.show({ text1: responseJson.headers.message });
+    console.log("Sendcomment CLICK:::", commentid, commenttype);
+    if (userMessage == '') {
+      Toast.show({ text1: 'Write something before Comment!' });
     } else {
+      setLoading(true)
+      var data = {
+        post_id: Data,
+        parent_id: commentid == undefined ? null : commentid,
+        comment_type: null,
+        comment: userMessage
+      }
+      console.log('Sendcomment===================================');
+      console.log(data);
+      console.log('====================================Sendcomment');
 
-      setalert_sms(err)
-      setMy_Alert(true)
+      const { responseJson, err } = await requestPostApi(connect_people_add_comment, data, 'POST', User.token)
+      setLoading(false)
+      console.log('the res==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        setUserMessage('')
+        // replyingTo == ''
+        setReplyingTo('')
+        GetComments()
+        Keyboard.dismiss()
+        // Toast.show({ text1: responseJson.headers.message });
+      } else {
+
+        setalert_sms(err)
+        setMy_Alert(true)
+      }
     }
-
   }
 
   const Likepost = async (items) => {
-    console.log("LIKE CLICK:::", isLiked);
+    console.log("LIKE CLICK:::", items.id, items.post_id);
 
     setLoading(true)
     var data = {
-      post_id: items,
+      post_id: items.post_id,
+      comment_id: items.id,
       reaction_type: "like"
     }
     console.log('====================================');
@@ -166,8 +176,8 @@ const PeopleComments = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      setData([...Data])
-      Toast.show({ text1: responseJson.headers.message });
+      GetComments()
+      // Toast.show({ text1: responseJson.headers.message });
     } else {
 
       setalert_sms(err)
@@ -176,11 +186,12 @@ const PeopleComments = (props) => {
   }
 
   const Dislikepost = async (items) => {
-    console.log("DISLIKE CLICK:::", isLiked);
+    console.log("DISLIKE CLICK:::", items.id, items.post_id);
 
     setLoading(true)
     var data = {
-      post_id: items,
+      post_id: items.post_id,
+      comment_id: items.id,
       reaction_type: "dislike"
     }
     console.log('====================================');
@@ -190,7 +201,35 @@ const PeopleComments = (props) => {
     setLoading(false)
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
-      setData([...Data])
+      GetComments()
+      // Toast.show({ text1: responseJson.headers.message });
+    } else {
+
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+
+  const handlerClick = (id) => {
+    console.log('handlerClick Pressed!', id)
+    Alert.alert('', 'Delete comment',
+      [
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+        { text: 'OK', onPress: () => { DeletePost(id) } },
+
+      ]
+    );
+  };
+
+  const DeletePost = async (id) => {
+    console.log('DeletePost Pressed!', id)
+
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi(connect_people_Delet_post + id, '', 'DELETE', User.token)
+    setLoading(false)
+    console.log('the DeletePost==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      GetComments()
       Toast.show({ text1: responseJson.headers.message });
     } else {
 
@@ -198,6 +237,7 @@ const PeopleComments = (props) => {
       setMy_Alert(true)
     }
   }
+
   // const sendMessage = () => {
   //   if (userMessage?.trim()?.length === 0) {
   //     return
@@ -284,13 +324,8 @@ const PeopleComments = (props) => {
   }
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ backgroundColor: 'transparent', flex: 1 }}>
-      {!showRepliesModal ?
-        <HomeHeaderRoundBottom height={80} paddingHorizontal={15} backgroundColor='#fff'
-          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/images/events_arrow.png')} img1width={25} img1height={20}
-          press2={() => { }} title2={'Comments'} fontWeight={'500'} img2height={20} color='#455A64'
-          press3={() => { }} img3width={25} img3height={25} />
-        : null}
-      <ScrollView style={{marginBottom:50}}
+
+      <ScrollView style={{ marginBottom: 20, flex: 1 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -299,9 +334,14 @@ const PeopleComments = (props) => {
           />
         }
       >
+        <HomeHeaderRoundBottom height={80} paddingHorizontal={15} backgroundColor='#fff'
+          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/images/events_arrow.png')} img1width={25} img1height={20}
+          press2={() => { }} title2={'Comments'} fontWeight={'500'} img2height={20} color='#455A64'
+          press3={() => { }} img3width={25} img3height={25} />
+
         {
           commentdata.length != 0 ?
-            <View style={{ width: '96%', alignSelf: 'center', marginTop: 10, height: dimensions.SCREEN_HEIGHT }}>
+            <View style={{ width: '96%', alignSelf: 'center', marginTop: 10, height: '100%', paddingBottom: 40 }}>
 
 
               <View style={{ width: '100%', alignSelf: 'center', }}>
@@ -312,21 +352,29 @@ const PeopleComments = (props) => {
                   keyExtractor={item => item.id}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={{ width: dimensions.SCREEN_WIDTH * 0.9, marginHorizontal: 5, marginBottom: 15, paddingHorizontal: 20 }}>
+                      <TouchableOpacity onLongPress={() => {  }} style={{ width: dimensions.SCREEN_WIDTH * 0.9, marginHorizontal: 5, marginBottom: 15, paddingHorizontal: 20 }}>
                         <>
                           <View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                               <Image source={require('../../../assets/images/comment-person-image.png')} />
-                              <Text style={{ fontSize: 18, fontWeight: '500', color: '#000', marginLeft: 10 }}>{item.first_name + '' + item.last_name}</Text>
+                              <Text style={{ fontSize: 18, fontWeight: '500', color: '#000', marginLeft: 10 }}>{item.first_name + ' ' + item.last_name}</Text>
                               <Text style={{ fontSize: 12, fontWeight: '400', color: '#B4BBC6', marginLeft: 20 }}>{item.created_date.slice(11, 16)}</Text>
+                              <View style={{ flexDirection: 'row',position:'absolute',right:-10  }}>
+                                <TouchableOpacity onPress={() => {DeletePost(item.id) }} style={[styles.rightButtonsView, { marginRight: 0 }]}>
+                                  <Image source={require('../../../assets/ent_delete_image.png')} style={{ width: 29, height: 29 }} />
+                                </TouchableOpacity>
+
+                              </View>
+
                             </View>
+
                             <View style={{ marginTop: 10 }}>
                               <Text style={{ fontSize: 14, fontWeight: '400', color: '#272727' }}>{item.comment}</Text>
                             </View>
                             <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => { item.is_liked ? Dislikepost(item.id) : Likepost(item.id) }} style={{ marginRight: 10 }}>
-                                  <Image source={item.is_liked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-like.png')} style={{ width: 25, height: 25 }} />
+                                <TouchableOpacity onPress={() => { item.isLiked ? Dislikepost(item) : Likepost(item) }} style={{ marginRight: 10 }}>
+                                  <Image source={item.isLiked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-like.png')} style={{ width: 25, height: 25 }} />
                                 </TouchableOpacity>
                                 {/* <TouchableOpacity onPress={() => { setupData(upData.map((el, elIndex) => index === elIndex ? { ...el, isLiked: !item.isLiked } : el)) }}>
                     <Image source={item.isLiked ? require('../../../assets/images/people-unsel-heart.png') : require('../../../assets/images/people-sel-heart.png')} style={{ width: 30, height: 30 }} />
@@ -338,7 +386,8 @@ const PeopleComments = (props) => {
                                 console.log("item.id", item.id);
                                 setUserMessage(`@${commentdata?.find(el => el.id === item.id)?.first_name}`)
                                 myTextInput.current.focus()
-                                replyingTo = item.id
+                                setCommentid(item.id)
+                                // replyingTo = item.id
                                 // setReplyingTo(item);
                                 // setShowRepliesModal(true); 
                               }} style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -353,35 +402,56 @@ const PeopleComments = (props) => {
                             </View>
                           </View>
                           <View style={{ borderBottomColor: '#E0E0E0', borderBottomWidth: 1, marginTop: 10 }} />
+
                           {item?.replyComments?.length > 0 ?
                             <>
+                              {/* <View style={{ alignItems: 'flex-end', right: -10 }}>
+                                <Text onPress={() => { setviewmore(!viewmore) }} style={{ color: '#835E23', textDecorationLine: "underline", fontSize: 12, }}>{viewmore ? 'View less' : 'View more'}</Text>
+                              </View> */}
                               {
                                 item?.replyComments?.map((item, index) => {
+
                                   return (
                                     <>
-                                      <View style={{ width: '90%', marginLeft: 30, marginTop: 10 }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                          <Image source={require('../../../assets/images/people-sender-image.png')} style={{ height: 40, width: 40 }} />
-                                          <Text style={{ fontSize: 18, fontWeight: '500', color: '#000', marginLeft: 10 }}>{item.first_name + '' + item.last_name}</Text>
-                                          <Text style={{ fontSize: 12, fontWeight: '400', color: '#B4BBC6', marginLeft: 20 }}>{item.created_date?.slice(11, 16)}</Text>
-                                        </View>
-                                        <View style={{ marginTop: 10 }}>
-                                          <Text style={{ fontSize: 14, fontWeight: '400', color: '#272727' }}>{item.comment}</Text>
-                                        </View>
-                                        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <TouchableOpacity onPress={() => { likeChildComment(id, index) }}>
-                                              <Image source={item.isLiked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-unsel-heart.png')} style={{ width: 30, height: 30 }} />
-                                            </TouchableOpacity>
-                                            <Text style={{ fontSize: 14, fontWeight: '500', color: '#B4BBC6', marginLeft: 10 }}>Like</Text>
-                                          </View>
-                                          <TouchableOpacity onPress={() => { }} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image source={require('../../../assets/images/people-reply-image.png')} />
-                                            <Text style={{ fontSize: 14, fontWeight: '500', color: '#B4BBC6', marginLeft: 10 }}>Reply</Text>
-                                          </TouchableOpacity>
-                                        </View>
-                                      </View>
-                                      <View style={{ borderBottomColor: '#E0E0E0', borderBottomWidth: 1, marginTop: 10 }} />
+                                      {
+                                        viewmore ?
+                                          (<>
+                                            <View style={{ width: '90%', marginLeft: 30, marginTop: 10 }}>
+                                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <Image source={require('../../../assets/images/people-sender-image.png')} style={{ height: 40, width: 40 }} />
+                                                <Text style={{ fontSize: 18, fontWeight: '500', color: '#000', marginLeft: 10 }}>{item.first_name + '' + item.last_name}</Text>
+                                                <Text style={{ fontSize: 12, fontWeight: '400', color: '#B4BBC6', marginLeft: 20 }}>{item.created_date?.slice(11, 16)}</Text>
+
+                                              </View>
+                                              <View style={{ marginTop: 10 }}>
+                                                <Text style={{ fontSize: 14, fontWeight: '400', color: '#272727' }}>{item.comment}</Text>
+                                              </View>
+                                              <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                  {/* <TouchableOpacity onPress={() => { likeChildComment(id, index) }}>
+                                                <Image source={item.isLiked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-unsel-heart.png')} style={{ width: 30, height: 30 }} />
+                                              </TouchableOpacity> */}
+                                                  <TouchableOpacity onPress={() => { item.isLiked ? Dislikepost(item) : Likepost(item) }} style={{ marginRight: 10 }}>
+                                                    <Image source={item.isLiked ? require('../../../assets/images/people-sel-heart.png') : require('../../../assets/images/people-like.png')} style={{ width: 25, height: 25 }} />
+                                                  </TouchableOpacity>
+                                                  <Text style={{ fontSize: 14, fontWeight: '500', color: '#B4BBC6', marginLeft: 10 }}>Like</Text>
+                                                </View>
+                                                {/* <TouchableOpacity onPress={() => {
+                                              console.log("replyComments.id", item.id);
+                                              setUserMessage(`@${ item.id != null ?item.first_name : item.first_name}`)
+                                              myTextInput.current.focus()
+                                              replyingTo = item.id
+                                            }} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                              <Image source={require('../../../assets/images/people-reply-image.png')} />
+                                              <Text style={{ fontSize: 14, fontWeight: '500', color: '#B4BBC6', marginLeft: 10 }}>Reply</Text>
+                                            </TouchableOpacity> */}
+                                              </View>
+                                            </View>
+                                            <View style={{ borderBottomColor: '#E0E0E0', borderBottomWidth: 1, marginTop: 10 }} />
+                                          </>)
+                                          :
+                                          null
+                                      }
                                     </>
                                   )
 
@@ -389,7 +459,7 @@ const PeopleComments = (props) => {
                             </>
                             : null}
                         </>
-                      </View>
+                      </TouchableOpacity>
                     )
                   }}
 
@@ -397,7 +467,7 @@ const PeopleComments = (props) => {
               </View>
 
 
-              
+
             </View>
 
             :

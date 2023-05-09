@@ -160,25 +160,29 @@ const PeopleCreatePost = (props) => {
   const Createpost = async () => {
     
     console.log("pick UPLOAD", pick);
-    
-    let formdata = new FormData();
-    formdata.append('post_type', pick.type);
-    formdata.append('post_description', descrbe);
-    formdata.append('status', '1');
-    formdata.append('file', pick);
-    setLoading(true);
-    console.log("data.......", formdata);
-    const { responseJson, err } = await requestPostApi(connect_people_create_post, formdata, 'POST', User.token)
-    setLoading(false)
-    console.log('the Createpost==>>', responseJson)
-    if (responseJson.headers.success == 1) {
-      // setdescrbe('')
-      Toast.show({ text1: responseJson.headers.message });
-    } else {
-
-      setalert_sms(err)
-      setMy_Alert(true)
+    if (pick == '' || descrbe == ''){
+      Alert.alert('please select required field')
+    }else{
+      let formdata = new FormData();
+      // formdata.append('post_type', "video");
+      formdata.append('post_description', descrbe);
+      // formdata.append('status', '1');
+      formdata.append('file', pick);
+      setLoading(true);
+      console.log("data.......", formdata);
+      const { responseJson, err } = await requestPostApi(connect_people_create_post, formdata, 'POST', User.token)
+      setLoading(false)
+      console.log('the Createpost==>>', responseJson)
+      if (responseJson.headers.success == 1) {
+        // setdescrbe('')
+        Toast.show({ text1: responseJson.headers.message });
+      } else {
+  
+        setalert_sms(err)
+        setMy_Alert(true)
+      }
     }
+    
   }
 
   return (

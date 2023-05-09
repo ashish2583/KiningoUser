@@ -310,16 +310,16 @@ const PeopleHome = (props) => {
 />
    </View> */}
 
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 10,justifyContent:'center',alignItems:'center', width: '100%', }}>
             <FlatList
               data={homedata}
               showsHorizontalScrollIndicator={false}
               numColumns={1}
-              style={{ alignSelf: 'center' }}
+              style={{  }}
               renderItem={({ item, index }) => {
 
                 return (
-                  <View style={{ width: '100%', marginVertical: 10, borderRadius: 30 }}>
+                  <View style={{ width: '95.5%', marginVertical: 10, borderRadius: 30 }}>
                     <View style={styles.flatlistMainView}>
 
                       <View style={styles.followingImageView}>
@@ -334,20 +334,18 @@ const PeopleHome = (props) => {
                         </View>
                       </View>
 
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 10 }]}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center',   }}>
+                        <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 4 }]}>
                           <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                         </TouchableOpacity>
-                        {/* <TouchableOpacity onPress={()=>{changeSaved(item.id)}} style={styles.rightButtonsView}>
-                <Image source={!item.isSaved ? require('../../../assets/images/people-bookmark.png') : require('../../../assets/images/people-bookmark-selected.png')} style={{width:20, height:20}} resizeMode='contain'/>
-              </TouchableOpacity> */}
+                         
                       </View>
 
                     </View>
                     <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH, height: 200, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                       // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
                       onPress={() => { props.navigation.navigate('ShopProductAll') }}>
-                      <Image resizeMode='contain' source={{ uri: `${item.media_name}` }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
+                      <Image resizeMode='contain' source={{ uri: `${item.image_url == '' ? item.image_url : item.video_url}` }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
                     </TouchableOpacity>
 
                     <View style={styles.flatlistMainBottomView}>
@@ -398,7 +396,7 @@ const PeopleHome = (props) => {
 
 
                       <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginTop: 5 }}>
-                        <Text style={{ fontSize: 12, fontWeight: '400', color: '#0089CF' }}>View all 183 comments</Text>
+                        <Text style={{ fontSize: 12, fontWeight: '400', color: '#0089CF' }}>View all {item.num_of_comments} comments</Text>
                       </TouchableOpacity>
 
                       <View style={{ marginTop: 10 }}>

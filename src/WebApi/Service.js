@@ -38,11 +38,11 @@ export const connect_people_home_page=`connect/people/home-page`;
 export const connect_people_follow_user=`connect/people/follow-user/`;
 export const connect_people_unfollow_user=`connect/people/unfollow-user/`;
 export const connect_people_all_comments=`connect/people/all-comments/`;
+export const  connect_people_Delet_post=`connect/people/delete-comment/`; 
 
 
 
 
-export const  buy_corporate_subscription=`driver/buy_corporate_subscription`; 
 export const  auth_resend_otp=`auth/resend_otp`;
 export const  driver_dashboard=`driver/dashboard`; 
 export const  driver_corporate_dashboard=`driver/corporate_dashboard`; 
