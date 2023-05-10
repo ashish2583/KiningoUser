@@ -678,8 +678,8 @@ const FoodDetails = (props) => {
     if (responseJson !== null) {
       if (responseJson.headers.success == 1) {
         var counts = 0
-        for (let i = 1; i <= responseJson.body.length; i++) {
-          if (responseJson.body[i - 1].in_cart == '1') {
+        for (let i = 1; i <= responseJson.body.products.length; i++) {
+          if (responseJson.body.products[i - 1].in_cart == '1') {
             counts = parseInt(counts) + parseInt('1')
           }
         }
