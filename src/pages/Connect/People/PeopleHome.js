@@ -12,15 +12,16 @@ import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMoreComponent from './Components/ReadMoreComponent';
+import VideoPlayer from 'react-native-video-player'
 import { connect_people_dislike_post, connect_people_follow_user, connect_people_home_page, connect_people_like_post, connect_people_react_post, connect_people_save_post, connect_people_unfollow_user, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { saveUserResult, saveUserToken, setVenderDetail,onLogoutUser, setUserType } from '../../../redux/actions/user_action';
+import { saveUserResult, saveUserToken, setVenderDetail, onLogoutUser, savepeoplemoduleuserdata} from '../../../redux/actions/user_action';
 
 import { useSelector, useDispatch } from 'react-redux';
 import Share from 'react-native-share';
 const PeopleHome = (props) => {
-  const dispatch =  useDispatch();
+  const dispatch = useDispatch();
   const User = useSelector(state => state.user.user_details)
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState('')
@@ -202,7 +203,8 @@ const PeopleHome = (props) => {
     console.log('the res==>>', responseJson)
     if (responseJson.headers.success == 1) {
       setHomedata(responseJson.body.posts)
-      // console.log("response hOME", responseJson.body.posts);
+      dispatch(savepeoplemoduleuserdata(responseJson.body.posts[0]))
+      console.log("response hOME", responseJson.body.posts[0]);
       // Toast.show({ text1: responseJson.headers.message });
     } else {
 
@@ -276,9 +278,11 @@ const PeopleHome = (props) => {
           // img1={require('../../../assets/images/events_arrow.png')} 
           img1width={25} img1height={20}
           press2={() => { }} title2={'People'} fontWeight={'500'} img2height={20} color='#455A64'
-          press3={() => { AsyncStorage.clear();
-            dispatch(onLogoutUser())}} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
-       
+          press3={() => {
+            AsyncStorage.clear();
+            dispatch(onLogoutUser())
+          }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
+
         <View style={{ width: '90%', alignSelf: 'center', marginTop: 20 }}>
 
           {/* <View style={{flexDirection:'row', alignItems:'center',marginTop:400, marginBottom:400, height:100, backgroundColor:'red'}}>
@@ -310,12 +314,12 @@ const PeopleHome = (props) => {
 />
    </View> */}
 
-          <View style={{ marginTop: 10,justifyContent:'center',alignItems:'center', width: '100%', }}>
+          <View style={{ marginTop: 10, justifyContent: 'center', alignItems: 'center', width: '100%', }}>
             <FlatList
               data={homedata}
               showsHorizontalScrollIndicator={false}
               numColumns={1}
-              style={{  }}
+              style={{}}
               renderItem={({ item, index }) => {
 
                 return (
@@ -334,19 +338,54 @@ const PeopleHome = (props) => {
                         </View>
                       </View>
 
-                      <View style={{ flexDirection: 'row', alignItems: 'center',   }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                         <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 4 }]}>
                           <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                         </TouchableOpacity>
-                         
+
                       </View>
 
                     </View>
-                    <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH, height: 200, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
+                    {/* <TouchableOpacity style={{ width: dimensions.SCREEN_WIDTH, height: 200, backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                       // onPress={()=>{props.navigation.navigate('FoodDetails')}}>
                       onPress={() => { props.navigation.navigate('ShopProductAll') }}>
-                      <Image resizeMode='contain' source={{ uri: `${item.image_url == '' ? item.image_url : item.video_url}` }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
-                    </TouchableOpacity>
+                      <Image resizeMode='contain' source={{ uri: `${item.image_url}` }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image>
+                    </TouchableOpacity> */}
+                
+
+                    {
+                      item.post_media === 'image' ?
+                        <TouchableOpacity style={styles.imageView}
+                          // onPress={()=>{navigation.navigate('FoodDetails')}}>
+                          onPress={() => { }}>
+                          <Image
+                            source={{ uri: `${item.image_url}` }}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              alignSelf: 'center',
+                            }}
+                            resizeMode="contain"></Image>
+                          {/* <Image source={item.source} style={{width:'100%',height:'100%',alignSelf:'center',}}></Image> */}
+                        </TouchableOpacity>
+                        :
+                        <VideoPlayer
+                        resizeMode="contain"
+                          video={{ uri: item.video_url }}
+                          videoWidth={dimensions.SCREEN_WIDTH * 0.9}
+                          videoHeight={200}
+                          autoplay={false}
+                          // thumbnail={{ uri: item.thumbnail }}
+                          endWithThumbnail
+                          disableControlsAutoHide
+                          customStyles={{
+                            // thumbnail: { width: dimensions.SCREEN_WIDTH * 0.9, height: 300 },
+                            // videoWrapper: {width: dimensions.SCREEN_WIDTH, height:300},
+                            wrapper: { width: dimensions.SCREEN_WIDTH * 0.9, },
+                          }}
+                        />
+                    }
+             
 
                     <View style={styles.flatlistMainBottomView}>
 
@@ -380,10 +419,16 @@ const PeopleHome = (props) => {
                         </View>
                       </View>
 
-                      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                        <Image source={require('../../../assets/images/people-liked-by.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
-                        <Text style={[styles.text1, { marginLeft: 10 }]}>Liked by {item.last_liked_user} and {item.num_of_liked_users} others</Text>
-                      </View>
+                      {
+                        item.num_of_liked_users > 0 ?
+                          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                            <Image source={require('../../../assets/images/people-liked-by.png')} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                            <Text style={[styles.text1, { marginLeft: 10 }]}>Liked by {item.last_liked_user} and {item.num_of_liked_users} others</Text>
+                          </View>
+                          :
+                          null
+                      }
+
                       {
                         item.post_description != null ?
                           <View style={{ flex: 1 }}>
@@ -394,10 +439,16 @@ const PeopleHome = (props) => {
                           null
                       }
 
+                      {
+                        item.num_of_comments > 0 ?
+                          <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginTop: 5 }}>
+                            <Text style={{ fontSize: 12, fontWeight: '400', color: '#0089CF' }}>View all {item.num_of_comments} comments</Text>
+                          </TouchableOpacity>
+                          :
+                          null
 
-                      <TouchableOpacity onPress={() => props.navigation.navigate('PeopleComments')} style={{ marginTop: 5 }}>
-                        <Text style={{ fontSize: 12, fontWeight: '400', color: '#0089CF' }}>View all {item.num_of_comments} comments</Text>
-                      </TouchableOpacity>
+                      }
+
 
                       <View style={{ marginTop: 10 }}>
                         <Text style={{ fontSize: 10, fontWeight: '400', color: '#B2B7B9' }}>{item.created_date.slice(11, 16)} min ago</Text>
@@ -659,7 +710,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 15,
     paddingVertical: 10,
-    width: '90%',
+    width: dimensions.SCREEN_WIDTH * 0.9,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -680,7 +731,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 20,
-    width: '90%',
+    width: dimensions.SCREEN_WIDTH * 0.9,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20
   },
@@ -693,6 +744,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     color: '#455A64'
-  }
+  },
+  imageView: {
+    width: dimensions.SCREEN_WIDTH,
+    height: 200,
+    backgroundColor: '#F8F8F8',
+    alignSelf: 'center'
+  },
 });
 export default PeopleHome 

@@ -4,11 +4,13 @@ export const RESPONSE_ERROR = "RESPONSE_ERROR";
 
 export const LOGOUT_USER = "LOGOUT_USER";
 
-export const SAVE_USER_RESULTS = "SAVE_USER_RESULTS";  
+export const SAVE_USER_RESULTS = "SAVE_USER_RESULTS";
+
+export const SAVE_PEOPLE_USER = "SAVE_PEOPLE_USER";
 
 export const SAVE_CORP_USER_RESULTS = "SAVE_CORP_USER_RESULTS";
 
-export const TOKEN = "TOKEN"; 
+export const TOKEN = "TOKEN";
 
 export const CURRENTADD = "CURRENTADD";
 

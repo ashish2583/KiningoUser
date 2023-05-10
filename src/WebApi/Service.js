@@ -38,13 +38,13 @@ export const connect_people_home_page=`connect/people/home-page`;
 export const connect_people_follow_user=`connect/people/follow-user/`;
 export const connect_people_unfollow_user=`connect/people/unfollow-user/`;
 export const connect_people_all_comments=`connect/people/all-comments/`;
-export const  connect_people_Delet_post=`connect/people/delete-comment/`; 
+export const  connect_people_Delete_comment=`connect/people/delete-comment/`; 
+export const  connect_people_Delete_post=`connect/people/delete-post/`;
+export const  connect_people_user_profile=`connect/people/user-profile/`;
 
 
 
-
-export const  auth_resend_otp=`auth/resend_otp`;
-export const  driver_dashboard=`driver/dashboard`; 
+export const  driver_dashboard=`connect/people/user-profile/29`; 
 export const  driver_corporate_dashboard=`driver/corporate_dashboard`; 
 export const  booking_complete_ride=`booking/complete_ride`; 
 export const  driver_rides=`driver/rides`; 

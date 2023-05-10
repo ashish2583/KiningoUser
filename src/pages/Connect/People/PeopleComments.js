@@ -11,7 +11,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import RepliesModal from './modals/RepliesModal';
-import { connect_people_all_comments, connect_people_dislike_post, connect_people_like_post, requestPostApi, requestGetApi, connect_people_add_comment, connect_people_Delet_post } from '../../../WebApi/Service';
+import { connect_people_all_comments, connect_people_dislike_post, connect_people_like_post, requestPostApi, requestGetApi, connect_people_add_comment, connect_people_Delete_comment } from '../../../WebApi/Service';
 import Loader from '../../../WebApi/Loader';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -225,7 +225,7 @@ const PeopleComments = (props) => {
     console.log('DeletePost Pressed!', id)
 
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(connect_people_Delet_post + id, '', 'DELETE', User.token)
+    const { responseJson, err } = await requestGetApi(connect_people_Delete_comment + id, '', 'DELETE', User.token)
     setLoading(false)
     console.log('the DeletePost==>>', responseJson)
     if (responseJson.headers.success == 1) {

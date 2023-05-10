@@ -90,6 +90,13 @@ export const saveUserResult = (user) => {
         user:user
     }
 }
+export const savepeoplemoduleuserdata = (user) => {
+
+    return {
+        type:types.SAVE_PEOPLE_USER,
+        user:user
+    }
+}
 export const saveCorporateUserResult = (data) => {
 
     return {

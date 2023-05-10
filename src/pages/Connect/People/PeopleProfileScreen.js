@@ -15,11 +15,12 @@ import { createThumbnail } from "react-native-create-thumbnail";
 import Loader from '../../../WebApi/Loader';
 import PostsModal from './modals/PostsModal';
 import ProfileScreenMoreModal from './modals/ProfileScreenMoreModal';
-import { connect_people_block_user, connect_people_react_post, connect_people_save_post, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
+import { connect_people_block_user, connect_people_react_post, connect_people_save_post, connect_people_user_profile, requestGetApi, requestPostApi, } from '../../../WebApi/Service';
 import { useSelector, useDispatch } from 'react-redux';
 
 const PeopleProfileScreen = (props) => {
-  const User = useSelector(state => state.user.user_details)
+  const User = useSelector(state => state.user.user_details);
+  const Userpeople = useSelector(state => state.user.people_user);
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState('')
   const [scrollEnabled, setScrollEnabled] = useState(false)
@@ -32,7 +33,9 @@ const PeopleProfileScreen = (props) => {
 
   const [originalData, setOriginalData] = useState([])
   const [filteredData, setFilteredData] = useState([])
-  const [isLiked, setIsLiked] = useState('false');
+  const [userdata, setUserdata] = useState('');
+  const [uploadedpost, setUploadpostdata] = useState([]);
+
   const [upData, setupData] = useState([
     {
       id: '1',
@@ -147,7 +150,9 @@ const PeopleProfileScreen = (props) => {
   ])
   const multiSliderValuesChange = (values) => { setMultiSliderValue(values) }
   useEffect(() => {
-    generateThumb()
+
+    Userprofile()
+    // generateThumb()
   }, [])
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('blur', () => {
@@ -156,31 +161,32 @@ const PeopleProfileScreen = (props) => {
     return unsubscribe;
   }, [props.navigation]);
 
-  const generateThumb = async () => {
-    setLoading(true)
-    try {
-      const resp = await createThumbnail({
-        url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
-        timeStamp: 10000,
-        // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-      })
-      const updatedData = upData.map(el => {
-        if (el.type === 'video') {
-          return { ...el, thumbnail: resp.path }
-        } else {
-          return el
-        }
-      })
-      setupData([...updatedData])
-      setOriginalData([...updatedData])
-      setFilteredData([...updatedData])
-    } catch (error) {
-      console.log('thumbnail creating error', error);
-    }
-    setLoading(false)
-  }
+  // const generateThumb = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const resp = await createThumbnail({
+  //       url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
+  //       timeStamp: 10000,
+  //       // cacheName: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+  //     })
+  //     const updatedData = upData.map(el => {
+  //       if (el.type === 'video') {
+  //         return { ...el, thumbnail: resp.path }
+  //       } else {
+  //         return el
+  //       }
+  //     })
+  //     setupData([...updatedData])
+  //     // setOriginalData([...updatedData])
+  //     setFilteredData([...updatedData])
+  //   } catch (error) {
+  //     console.log('thumbnail creating error', error);
+  //   }
+  //   setLoading(false)
+  // }
 
   const onChangeFilter = (newFilter) => {
+    console.log("originalDataoriginalData",originalData);
     if (newFilter === selectedFilter) {
       return
     }
@@ -189,9 +195,28 @@ const PeopleProfileScreen = (props) => {
     if (newFilter === 1) {
       setFilteredData([...originalData])
     } else if (newFilter === 2) {
-      setFilteredData(originalData?.filter(el => el?.type === 'image'))
+      setFilteredData(originalData?.filter(el => el?.post_type === 'image'))
     } else if (newFilter === 3) {
-      setFilteredData(originalData?.filter(el => el?.type === 'video'))
+      setFilteredData(originalData?.filter(el => el?.post_type === 'video'))
+    }
+  }
+  const Userprofile = async () => {
+    setLoading(true)
+    console.log("PeopleProfileScreen:::", Userpeople.userid);
+    const { responseJson, err } = await requestGetApi(connect_people_user_profile + Userpeople.userid, '', 'GET', User.token)
+    setLoading(false)
+    console.log('the res==>>', responseJson)
+    if (responseJson.success == 1) {
+      setUserdata(responseJson.data)
+      setOriginalData(responseJson.data.posts)
+      setFilteredData(responseJson.data.posts)
+      console.log("response hOME", responseJson.data);
+      console.log("response hOME post", responseJson.data.posts);
+      // Toast.show({ text1: responseJson.headers.message });
+    } else {
+
+      setalert_sms(err)
+      setMy_Alert(true)
     }
   }
 
@@ -240,12 +265,12 @@ const PeopleProfileScreen = (props) => {
                 <View style={styles.imageRowView}>
 
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>Aryav Nadkarni</Text>
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>{userdata?.first_name + ' ' + userdata?.last_name}</Text>
                   </View>
 
-                  <View style={styles.followingView}>
+                  {/* <View style={styles.followingView}>
                     <Text style={{ fontSize: 14, fontWeight: '400', color: '#455A64' }}>Following</Text>
-                  </View>
+                  </View> */}
 
                   <TouchableOpacity style={styles.threeDotsView} onPress={() => { setShowMoreModal(true) }}>
                     <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
@@ -259,7 +284,7 @@ const PeopleProfileScreen = (props) => {
                 colors={['rgba(255, 255, 255, 1)', 'rgba(249, 249, 249, 1)']}
                 style={[styles.numView, { marginRight: 10 }]}
               >
-                <Text style={styles.numValue}>09</Text>
+                <Text style={styles.numValue}>{userdata.postsCount}</Text>
                 <Text style={styles.numText}>Posts</Text>
               </LinearGradient>
               <LinearGradient
@@ -267,7 +292,7 @@ const PeopleProfileScreen = (props) => {
                 style={[styles.numView, { marginRight: 10 }]}
               >
                 <TouchableOpacity onPress={() => props.navigation.navigate('PeopleFollowers', { gotoFollowersTab: 'yes' })} style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={styles.numValue}>1.1M</Text>
+                  <Text style={styles.numValue}>{userdata.followersCount}</Text>
                   <Text style={styles.numText}>Followers</Text>
                 </TouchableOpacity>
               </LinearGradient>
@@ -276,7 +301,7 @@ const PeopleProfileScreen = (props) => {
                 style={styles.numView}
               >
                 <TouchableOpacity onPress={() => props.navigation.navigate('PeopleFollowers', { gotoFollowersTab: 'no' })} style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={styles.numValue}>369</Text>
+                  <Text style={styles.numValue}>{userdata.followingsCount}</Text>
                   <Text style={styles.numText}>Following</Text>
                 </TouchableOpacity>
               </LinearGradient>
@@ -286,15 +311,15 @@ const PeopleProfileScreen = (props) => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20, marginHorizontal: 30 }}>
               <TouchableOpacity style={styles.blueButtonSuperView} onPress={() => { props.navigation.navigate('PeopleChat') }}>
                 <View style={styles.blueButtonSubView}>
-                  <Image source={require('../../../assets/images/people-message2.png')} />
-                  <Text style={styles.blueButtonText}>Message</Text>
+                  {/* <Image source={require('../../../assets/images/people-message2.png')} /> */}
+                  <Text style={styles.blueButtonText}>Edit Profile</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.blueButtonSuperView}>
                 <View style={styles.blueButtonSubView}>
-                  <Image source={require('../../../assets/images/people-block.png')} />
-                  <Text style={styles.blueButtonText}>Block</Text>
+                  {/* <Image source={require('../../../assets/images/people-block.png')} /> */}
+                  <Text style={styles.blueButtonText}>Share</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -337,14 +362,17 @@ const PeopleProfileScreen = (props) => {
               numColumns={3}
               style={{ alignSelf: filteredData?.length < 3 ? 'flex-start' : 'center' }}
               renderItem={({ item, index }) => {
+                console.log("........::",item);
                 return (
                   <View style={{ width: 120, marginHorizontal: index % 3 == 1 ? 5 : 0, height: 120, marginBottom: 5 }}>
                     <TouchableOpacity style={{ width: '100%', height: 'auto', backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                       onPress={() => { setStartFromIndex(index); setShowPostsModal(true); }}>
-                      {item.type === 'image' ?
-                        <Image source={item.source} style={{ width: '100%', height: '100%', alignSelf: 'center', }} resizeMode='contain' ></Image>
+                      {item.post_type === 'image' ?
+                        <Image source={{uri:item.media}} style={{ width: '100%', height: '100%', alignSelf: 'center', }} resizeMode='contain' ></Image>
                         :
-                        <ImageBackground source={{ uri: item.thumbnail }} style={{ width: '100%', height: '100%', alignSelf: 'center', justifyContent: 'center' }} resizeMode='cover' >
+                        <ImageBackground 
+                        // source={{ uri: item.thumbnail }} 
+                        style={{ width: '100%', height: '100%', alignSelf: 'center', justifyContent: 'center',backgroundColor:'blue' }} resizeMode='cover' >
                           <Image source={require('../../../assets/images/people-play-button.png')} style={{ width: '30%', height: '30%', alignSelf: 'center', }} resizeMode='contain' ></Image>
                         </ImageBackground>
                       }
@@ -352,7 +380,7 @@ const PeopleProfileScreen = (props) => {
                   </View>
                 )
               }}
-              keyExtractor={item => item.id}
+              keyExtractor={(item,index)=>index.toString()}
             />
           </View>
 

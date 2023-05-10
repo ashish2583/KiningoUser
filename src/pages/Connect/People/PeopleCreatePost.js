@@ -46,7 +46,7 @@ const PeopleCreatePost = (props) => {
 
     let options = {
       // title: 'Video Picker', 
-      mediaType: 'mixed', 
+      mediaType: 'mixed',
       // storageOptions:{
       //   skipBackup:true,
       //   path:'images'
@@ -72,9 +72,10 @@ const PeopleCreatePost = (props) => {
         console.log('the ddd==', image.assets[0].uri)
         var photo = {
           uri: image.assets[0].uri,
-          type: "image/jpeg",
-          name: image.assets[0].fileName
+          type: image.assets[0].type,
+          name: image.assets[0].fileName 
         };
+        console.log("image", photo);
         setpick(photo)
         setfilepath(image)
       }
@@ -146,9 +147,10 @@ const PeopleCreatePost = (props) => {
         console.log('the ddd==', image)
         var photo = {
           uri: image.assets[0].uri,
-          type: "image/jpeg",
-          name: image.assets[0].fileName
+          type: image.assets[0].type,
+          name: image.assets[0].fileName 
         };
+        console.log("imageCamera", photo);
         setpick(photo)
         setfilepath(image)
       }
@@ -158,15 +160,13 @@ const PeopleCreatePost = (props) => {
   }
 
   const Createpost = async () => {
-    
+
     console.log("pick UPLOAD", pick);
-    if (pick == '' || descrbe == ''){
-      Alert.alert('please select required field')
-    }else{
+    if (pick == '' || descrbe == '') {
+      Alert.alert('please selected required field')
+    } else {
       let formdata = new FormData();
-      // formdata.append('post_type', "video");
       formdata.append('post_description', descrbe);
-      // formdata.append('status', '1');
       formdata.append('file', pick);
       setLoading(true);
       console.log("data.......", formdata);
@@ -174,15 +174,15 @@ const PeopleCreatePost = (props) => {
       setLoading(false)
       console.log('the Createpost==>>', responseJson)
       if (responseJson.headers.success == 1) {
-        // setdescrbe('')
+      props.navigation.goBack('')
         Toast.show({ text1: responseJson.headers.message });
       } else {
-  
+
         setalert_sms(err)
         setMy_Alert(true)
       }
     }
-    
+
   }
 
   return (
@@ -238,9 +238,9 @@ const PeopleCreatePost = (props) => {
               <TouchableOpacity onPress={() => { openLibrary() }}>
                 <Image source={require('../../../assets/images/people-right-arrow.png')} />
               </TouchableOpacity>
-              
+
             </LinearGradient>
-            <Image style={{height:80,width:80}} source={{uri:pick.uri}} />
+            <Image style={{ height: 80, width: 80 }} source={{ uri: pick.uri }} />
             <LinearGradient
               colors={['rgba(255, 255, 255, 1)', 'rgba(249, 249, 249, 1)']}
               style={[styles.uploadImageView, { marginTop: 10 }]}>
