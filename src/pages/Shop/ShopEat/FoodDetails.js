@@ -651,10 +651,12 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid, '', 'GET', User.token)
     setLoading(false)
     console.log('the res in_cart cart_Count ==>>', responseJson)
+    console.log('responseJson.body', responseJson.body);
     if (responseJson.headers.success == 1) {
       var counts = 0
-      for (let i = 1; i <= responseJson.body.length; i++) {
-        if (responseJson.body[i - 1].in_cart == '1') {
+      for (let i = 1; i <= responseJson.body.products.length; i++) {
+        console.log('responseJson.body.products[i - 1]', responseJson.body.products[i - 1]);
+        if (responseJson.body.products[i - 1].in_cart == '1') {
           counts = parseInt(counts) + parseInt('1')
         }
       }

@@ -417,7 +417,7 @@ const FoodDetails = (props) => {
 
 
   const putcart = async (item, add) => {
-
+    console.log('putcart item', item);
     setLoading(true)
     var data = ''
     if (add == '+') {
@@ -772,7 +772,7 @@ const FoodDetails = (props) => {
           setmenuresData2(responseJson.body)
           // setsearchValue('')
         } else {
-          setmenuresData2([])
+          setmenuresData2({})
           Toast.show({ text1: responseJson.headers.message })
           // Toast.show({text1: responseJson.headers.message})
           // setalert_sms(err)
@@ -995,15 +995,15 @@ const FoodDetails = (props) => {
     });
   }
   const getDropdownData = () => {
-    // console.log('some data selectedTab', selectedTab);
-    // console.log('some data selectedCategory', selectedCategory, menuresData);
-    // console.log('some data menuresData', menuresData);
+    console.log('some data selectedTab', selectedTab);
+    console.log('some data selectedCategory', selectedCategory, menuresData);
+    console.log('some data menuresData', menuresData);
     let data = ''
     if (!selectedCategory?.category_code) {
-      data = menuresData
+      data = menuresData?.products
     } else {
       // const data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
-      data = menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item.category?.toLowerCase() == selectedCategory?.category_name?.toLowerCase())
+      data = menuresData?.products?.filter(item => item?.product_type?.toLowerCase() === selectedTab?.replace(' ', '')?.toLowerCase() && item?.category?.toLowerCase() == selectedCategory?.category_name?.toLowerCase())
       // menuresData?.filter(item => item.product_type?.toLowerCase() === selectedTab?.toLowerCase() && item.category?.toLowerCase() == menutypevalue?.toLowerCase())
     }
     // console.log('getDropdownData menuresData', menuresData, selectedTab);
@@ -1659,7 +1659,7 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => setmodlevisual1(false)}
-        onModalWillShow={() => { setmenuresData2([...menuresData]) }}
+        onModalWillShow={() => { setmenuresData2({...menuresData}) }}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
@@ -1681,7 +1681,7 @@ const FoodDetails = (props) => {
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   if (e === '') {
-                    setmenuresData2([...menuresData])
+                    setmenuresData2({...menuresData})
                   }else{
                     setsearchValue(e)
                     searchmenuList(e.text)
@@ -1695,8 +1695,8 @@ const FoodDetails = (props) => {
             {/* <Text style={{ fontWeight: 'bold', fontSize: 16, marginTop: 15, left: 5, color: '#cbcbcb' }}></Text> */}
 
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
-              {menuresData2.length > 0 ?
-                (menuresData2.map((item, index) => {
+              {menuresData2?.products?.length > 0 ?
+                (menuresData2?.products?.map((item, index) => {
                   return (
                     <View>
                       {
