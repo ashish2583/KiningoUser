@@ -364,7 +364,7 @@ const PeopleProfileScreen = (props) => {
               renderItem={({ item, index }) => {
                 console.log("........::",item);
                 return (
-                  <View style={{ width: 120, marginHorizontal: index % 3 == 1 ? 5 : 0, height: 120, marginBottom: 5 }}>
+                  <View style={{ width: 115, marginHorizontal: index % 3 == 1 ? 5 : 0, height: 120, marginBottom: 5 }}>
                     <TouchableOpacity style={{ width: '100%', height: 'auto', backgroundColor: '#F8F8F8', alignSelf: 'center' }}
                       onPress={() => { setStartFromIndex(index); setShowPostsModal(true); }}>
                       {item.post_type === 'image' ?
@@ -372,7 +372,7 @@ const PeopleProfileScreen = (props) => {
                         :
                         <ImageBackground 
                         // source={{ uri: item.thumbnail }} 
-                        style={{ width: '100%', height: '100%', alignSelf: 'center', justifyContent: 'center',backgroundColor:'blue' }} resizeMode='cover' >
+                        style={{ width: '100%', height: '100%', alignSelf: 'center', justifyContent: 'center',backgroundColor:'gray' }} resizeMode='cover' >
                           <Image source={require('../../../assets/images/people-play-button.png')} style={{ width: '30%', height: '30%', alignSelf: 'center', }} resizeMode='contain' ></Image>
                         </ImageBackground>
                       }
