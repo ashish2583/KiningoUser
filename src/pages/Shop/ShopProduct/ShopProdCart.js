@@ -454,6 +454,7 @@ const ShopProduct = (props) => {
       setLoading(true)
       var data = {
         discount_id: promocode,
+        business_id: props.route.params.vendorId,
       }
       const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
       setLoading(false)
@@ -633,11 +634,11 @@ const ShopProduct = (props) => {
             }}
           >
             <View style={{ borderWidth: 5, borderRadius: 5, borderColor: 'rgba(255, 196, 12, 0.2)', marginRight: 20, justifyContent: 'center', borderRadius: 20, height: 100 }}>
-              <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 50, height: 50, marginHorizontal: 10 }} />
+              <Image source={{ uri: item.image }} resizeMode='contain' style={{ width: 65, height: 65, marginHorizontal: 10 }} />
             </View>
-            <View style={{ width: '70%' }}>
+            <View style={{ width: '65%' }}>
               <Text style={{ fontSize: 16, color: '#263238', }}>{item.name}</Text>
-              <Text style={{ fontSize: 16, color: '#263238', marginTop: 5 }}>${item.price.toFixed(2)}</Text>
+              <Text style={{ fontSize: 16, color: '#263238', fontWeight:'500',marginTop: 5 }}>${item.price.toFixed(2)}</Text>
               {/* <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}> */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                 <Text style={{ fontSize: 12, color: Mycolors.GrayColor, marginRight: 10 }}>Quantity</Text>
@@ -852,10 +853,10 @@ const ShopProduct = (props) => {
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Delivery Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
                 </View> */}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Vendor Charges</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${formatNumber(vendorCharges)}</Text>
-                </View>
+                </View> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
                   <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${formatNumber(taxes)}</Text>
