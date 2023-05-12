@@ -79,7 +79,6 @@ const AllVenders = async () => {
      setalert_sms(err)
      setMy_Alert(true)
   }
-
 }
 
   return(
@@ -100,7 +99,7 @@ const AllVenders = async () => {
         // }
       >
 <View style={{width:'96%',alignSelf:'center'}}>
-<SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'} 
+<SearchInput2 marginTop={10} placeholder={'Search by Categories'} 
 serchValue={searchValue} 
 onChangeText={(e)=>{
   setsearchValue(e)
@@ -113,7 +112,7 @@ press={()=>{Alert.alert('Hi')}}
 presssearch={()=>{homePageSearch(searchValue.text)}}
 paddingLeft={9}/>
  
-        
+ {resData.length > 0 ?   
 <View style={{width:'100%',marginTop:25,alignSelf:'center', }}>
 {resData!=null ?
           <FlatList
@@ -162,11 +161,17 @@ paddingLeft={9}/>
                   }}
                   keyExtractor={item => item.id}
                 />
-:null}
+:
+null
+}
 
          </View>
 
 
+:
+<Text style={{color:'#000',fontSize:16,textAlign:'center',marginTop:50,fontWeight:'bold'}}>No Categories Found</Text>
+}
+ 
 
 
  </View>

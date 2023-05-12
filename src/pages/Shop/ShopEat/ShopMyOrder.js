@@ -222,8 +222,7 @@ const ShopMyOrder = (props) => {
     setLoading(false)
     console.log('the res shop_eat_orders ==>>', responseJson.body[0].items)
     if (responseJson.headers.success == 1) {
-      setorderData(responseJson.body)
-
+       setorderData(responseJson.body)
     } else {
       setorderData(null)
       setrelode(!relode)
@@ -247,7 +246,12 @@ const ShopMyOrder = (props) => {
         console.log(m);
         console.log(d);
         console.log(y);
-        data['order_date'] = dateformates(m, d, y)
+        if(Platform.OS=='android'){
+          data['order_date'] = dateformates(m, d, y)
+        }else{
+          data['order_date'] = orderDate
+        }
+        
       }
       if (keyword !== '') {
         data['keyword'] = keyword
@@ -276,7 +280,7 @@ const ShopMyOrder = (props) => {
         setShowFiltersModal(false)
       } else {
          setorderData(null)
-        // setShowFiltersModal(false)
+         setShowFiltersModal(false)
         Toast.show({ text1: responseJson.headers.message })
         //  setalert_sms(err) 
         //  setMy_Alert(true)
@@ -422,44 +426,11 @@ const ShopMyOrder = (props) => {
                       shadowOpacity: 0.9,
                       overflow: 'hidden',
                       elevation: 5,
-                      // borderColor: 'rgba(0,0,0,0.2)', borderWidth: 0.5
                     }}>
 
                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
-                        {/* <Menu>
-      <MenuTrigger>
-      <Image source={require('../../../assets/people-three-dots.png')} style={{height:30,width:20}}></Image>
-      </MenuTrigger> 
-      <MenuOptions>
-      {item.order_type == 'delivery' || item.order_type == 'take-away' && item.status == 12 && item.business_rating == null && item.status!= 3 ?
-
-        <MenuOption onSelect={() => {
-          if (item.business_rating == null) {
-                                props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
-                              }
-          }} text='Rate Vendor' />
-
-       : null }
-      {item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
-        <MenuOption onSelect={() => {
-          setdrvReviewData(item)
-          setmodlevisual2(true)
-          }} text='Rate Driver' />
-        : null }
-        {item.order_type == 'delivery' && item.status != 5 && item.status != 12 && item.status != 0 && item.driver_id != null && item.status != 11 ?
-        <MenuOption onSelect={() =>{
-           props.navigation.navigate('Traking', { data: item })
-        }}  text='Track Driver' />
-     : null }
-     {item.driver_id!=null && item.status_label!='Delivered' ? 
-     <MenuOption onSelect={() =>{
-          props.navigation.navigate('Chat',{data:item})
-        }}  text='Message' />
-     : null }
-     
-      </MenuOptions>
-    </Menu> */}
+                     
                       </View>
                      
                       <View style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -526,8 +497,8 @@ const ShopMyOrder = (props) => {
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignSelf: 'center', marginTop: 15 }}>
                        
                          
-                        {item.order_type == 'take-away' && item.status == 12 && item.business_rating == null ?
-                        // {true ?
+                        {/* {item.order_type == 'take-away' && item.status == 12 && item.business_rating == null ? */}
+                        {/* {true ?
                           // <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
                           //   if (item.business_rating == null) {
                           //     props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
@@ -538,7 +509,6 @@ const ShopMyOrder = (props) => {
                                  props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
                                }}} style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
                           <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rate Vendor</Text>
-                          {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.business_name}</Text> */}
                           <Rating
                             type='custom'
                             ratingCount={5}
@@ -549,15 +519,17 @@ const ShopMyOrder = (props) => {
                           />
                         </TouchableOpacity>
                           : null
-                        }
+                        } */}
  
                         {item.order_type == 'delivery' && item.status != 5 && item.status != 12 && item.status != 0 && item.driver_id != null && item.status != 11 ?
-                          <MyButtons title="Track Driver" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
+                          // <MyButtons title="Track Driver" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
 
-                            props.navigation.navigate('Traking', { data: item })
+                          //   props.navigation.navigate('Traking', { data: item })
 
-                          }} fontSize={12}
-                            titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          // }} fontSize={12}
+                          //   titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
+                          // 
+                          null
                           :
                           item.order_type == 'delivery' && item.status == 12 && item.business_rating == null ?
                             // <MyButtons title="Rate Vendor" height={45} width={'47%'} borderRadius={5} alignSelf="center" press={() => {
@@ -569,8 +541,8 @@ const ShopMyOrder = (props) => {
                             <TouchableOpacity onPress={()=>{if (item.business_rating == null) {
                                    props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
                                  }}} style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
-                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rate Vendor</Text>
-                            {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.business_name}</Text> */}
+                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5 ,}}>Rate</Text>
+                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.business_name}</Text>
                             <Rating
                               type='custom'
                               ratingCount={5}
@@ -585,13 +557,13 @@ const ShopMyOrder = (props) => {
                         }
 
                       </View> 
-                      {item.driver_id!=null && item.status_label!='Delivered' && item.status!=11 ?
+                      {/* {item.driver_id!=null && item.status_label!='Delivered' && item.status!=11 ?
                       <MyButtons title="Message" height={45} width={'47%'} borderRadius={5} alignSelf="flex-start" press={() => {
                         props.navigation.navigate('Chat',{data:item})
                         }} fontSize={12}
                         titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} />
                           : null
-                          }
+                          } */}
                       <View style={{ flexDirection: item.business_rating == null && item.driver_rating == null ? 'row' : 'column', width: '100%', justifyContent: 'space-between' }}>
                         {item.business_rating != null ?
                           <View style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
@@ -613,25 +585,20 @@ const ShopMyOrder = (props) => {
                         {
                           item.order_type == 'delivery' && item.status == 12 && item.driver_rating == null ?
                           <TouchableOpacity onPress={()=>{ setdrvReviewData(item)
-                            setmodlevisual2(true)}} >
-                            <View style={{ marginVertical: 5, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
-                              <Text style={{ fontSize: 13, color: '#000', marginRight: 13 }}>Rate Driver</Text>
-                              {/* <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.driver_name}</Text> */}
-                              <Rating
+                            props.navigation.navigate('ShopReview', { data: item, from: 'myOrder' })
+                            setmodlevisual2(false)}} >
+                            <View style={{ paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5 }}>Rate</Text>
+                            <Text style={{ fontSize: 13, color: '#000', marginRight: 5, fontWeight: 'bold' }}> {item.driver_name}</Text>
+                           <Rating
                                 type='custom'
                                 ratingCount={5}
                                 imageSize={16}
                                 startingValue={item.driver_rating}
-                                // style={{alignSelf:'flex-start',backgroundColor:'red'}}
                                 readonly={true}
                               />
                             </View>
-                            {/* <MyButtons title="Rate Driver" height={45} width={'100%'} paddingHorizontal={40} borderRadius={5} alignSelf="center" press={() => {
-                              setdrvReviewData(item)
-                              setmodlevisual2(true)
-                            }} fontSize={12}
-                              titlecolor={Mycolors.Black} backgroundColor={'transparent'} marginVertical={0} borderColor={'#ADC430'} borderWidth={1} /> */}
-                          </TouchableOpacity>
+                                 </TouchableOpacity> 
                           :
                           item.order_type == 'delivery' && item.status == 12 && item.driver_rating != null ?
                             <View style={{ marginVertical: 5, paddingHorizontal: 5, backgroundColor: '#fff', alignItems: 'flex-start', flexDirection: 'row' }}>
@@ -647,7 +614,7 @@ const ShopMyOrder = (props) => {
                               />
                             </View>
                             : null
-                        }
+                         }
                       </View>
 
                     </View>
@@ -827,7 +794,6 @@ const ShopMyOrder = (props) => {
 
             <View style={{ width: '100%', marginTop: 20 }}>
               <MyButtons title="Submit" height={45} width={'70%'} borderRadius={5} alignSelf="center" press={() => {
-                // setmodlevisual2(false) 
                 submitDriverRewiew()
               }} marginHorizontal={20} fontSize={14}
                 titlecolor={Mycolors.BG_COLOR} hLinearColor={['#b10027', '#fd001f']} />
@@ -885,7 +851,7 @@ const ShopMyOrder = (props) => {
 
               {/* </View> */}
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Date</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 15, marginBottom: 10 }}>Order Date</Text>
               <View style={{ width: '100%', alignSelf: 'center', 
                backgroundColor: '#FFFFFF', 
                borderRadius: 10, flexDirection:'row',justifyContent:'space-between',
@@ -902,17 +868,18 @@ const ShopMyOrder = (props) => {
                           alignContent: 'flex-start',
                         },
                         placeholderText: {
-                          fontSize: 10,
+                          fontSize: 15,
                           color: Mycolors.GrayColor,
                           //marginLeft: '1%',
-                          left: -5
+                          left: Platform.OS=='ios' ? -30 : 5
+                          
                         },
                         zIndex: 99999
                       }}
                       showIcon={false}
                       androidMode={'spinner'}
                       readOnly={true}
-                      style={[styles.datePickerSelectInput, { fontSize: 11, color: Mycolors.GrayColor, left: 15 }]}
+                      style={[styles.datePickerSelectInput, { fontSize: 11, color: Mycolors.GrayColor, left: Platform.OS=='ios' ? 15 : 10 }]}
                       date={orderDate}
                       mode="date"
                       placeholder={'Pick a Date'}
@@ -922,6 +889,7 @@ const ShopMyOrder = (props) => {
                       cancelBtnText="Cancel"
                       //iconSource={require ('../../../assets/shape_38.png')}
                       onDateChange={date => {
+                        console.log('datae isss==>>',date);
                         setOrderDate(date)
                       }}
                     />
@@ -955,7 +923,7 @@ const ShopMyOrder = (props) => {
               </View>
 
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Type</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 15, marginBottom: 10 }}>Order Type</Text>
               <FlatList
                 data={orderTypeData}
                 

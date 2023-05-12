@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, StatusBar } from 'react-native';
+import { RefreshControl, View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, StatusBar, Platform } from 'react-native';
 import HomeHeader from '../../../component/HomeHeader';
 import SearchInput2 from '../../../component/SearchInput2';
 import SerchInput from '../../../component/SerchInput';
@@ -20,6 +20,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import { log } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
+import {setNotificationData,setMessageCount} from '../../../redux/actions/latLongAction';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
@@ -107,9 +108,12 @@ const ShopEat = (props) => {
         console.log('locations latitude longitude', location);
         setlat(location.latitude)
         setlan(location.longitude) 
-        let My_cord = { latitude: location.latitude, longitude: location.longitude }
+        let My_cord = { latitude: '28.5355', longitude: '77.3910' }
+       // let My_cord = { latitude: location.latitude, longitude: location.longitude }
         dispatch(setRestorentLocation(My_cord))
-         homePage(location.latitude,location.longitude) 
+        //  homePage(location.latitude,location.longitude) 
+        homePage('28.5355','77.3910') 
+         
         LatlongTo_address(My_cord)
       })  
       .catch(error => {
@@ -127,20 +131,33 @@ const ShopEat = (props) => {
   messaging().onMessage(remoteMessage => {
     const data = remoteMessage.data
     console.log('onMessage remoteMessage',remoteMessage)
-
+   if(remoteMessage.notification.body=='Order Delivered Successfully!') {
     setalert_sms3('Do you want to rate order?')
     setMy_Alert3(true)
     setRemoteMessageData(remoteMessage.data)
+   }else if(remoteMessage.notification.body=='new message'){
+       dispatch(setMessageCount(mapdata.messagecount+1))
+       props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
 
+   }
+   
   });
   messaging().onNotificationOpenedApp(remoteMessage => {
     const data = remoteMessage.data
     console.log('Notification caused app to open from background state:',remoteMessage)
     if(remoteMessage.notification.title=='Kinengo'){
-       
-    props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+      if(remoteMessage.notification.body=='Order Delivered Successfully!') {
+        setalert_sms3('Do you want to rate order?')
+        setMy_Alert3(true)
+        setRemoteMessageData(remoteMessage.data)
+       }else{
+        props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+       } 
       
-     }
+     }else if(remoteMessage.notification.body=='new message'){
+      props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+      dispatch(setMessageCount(mapdata.messagecount+1))
+    }
   });
   
 
@@ -151,12 +168,18 @@ const ShopEat = (props) => {
       console.log(remoteMessage);
       console.log('====================================');
       if(remoteMessage.notification.title=='Kinengo'){
-       
-        props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
-        
+        if(remoteMessage.notification.body=='Order Delivered Successfully!') {
+          setalert_sms3('Do you want to rate order?')
+          setMy_Alert3(true)
+          setRemoteMessageData(remoteMessage.data)
+         }else{
+          props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+         }         
        }else if(remoteMessage.notification.body=='new message'){
-       
-        }
+        dispatch(setMessageCount(mapdata.messagecount+1))
+        props.navigation.navigate('ShopMyOrderDetails',{ data: remoteMessage.data })
+
+      }
     });
 
 
@@ -278,18 +301,25 @@ function renderDescription(rowData) {
           press1={() => { props.navigation.goBack() }}  img1width={18} img1height={15}
           press2={() => { }} title2={'Food'} fontWeight={'500'} img2height={20}
           press3={() => {
-            // props.navigation.navigate('ShopEatNotificationList') 
-            setalert_sms2('Are you sure want to logout?')
-            setMy_Alert2(true)
+             props.navigation.navigate('ShopEatNotificationList') 
+           
           //   AsyncStorage.clear(); 
           // dispatch(onLogoutUser())
-            }} img3width={20} img3height={20} img3={require('../../../assets/dating-logout-image.png')} />
+            }} img3width={20} img3height={20} img3={require('../../../assets/Bell.png')} />
         {cartCount != '0' ?
           <View style={{ position: 'absolute', right: 8, top: 8, width: 20, height: 20, borderRadius: 20, backgroundColor: 'red', justifyContent: 'center', zIndex: 999 }}>
             <Text style={{ fontSize: 11, textAlign: 'center', color: '#fff' }}>{cartCount}</Text>
           </View>
           : null
         }
+        <View style={{position:'absolute',right:40,top:21}}>
+          <TouchableOpacity onPress={()=>{
+ setalert_sms2('Are you sure want to logout?')
+ setMy_Alert2(true)
+          }}>
+          <Image source={require('../../../assets/dating-logout-image.png')} style={{width:18,height:18}}></Image>
+          </TouchableOpacity>
+        </View>
       </View>
 
 
@@ -312,9 +342,11 @@ function renderDescription(rowData) {
           </TouchableOpacity>
           <View style={{ width: '86%', justifyContent: 'center', alignItems: 'center', }}>
             <GooglePlacesAutocomplete
-              placeholder={addre.substring(0, 45)}
+             // placeholder={addre.substring(0, 45)}
+              placeholder={'Noida, Uttar Pradesh, India'}
               textInputProps={{
                 placeholderTextColor: '#000',
+                top:Platform.OS=='ios' ? 15 : 0,
                 // width: '95%',
                 // placeholderTextColor: Colors.BLACK,
                 returnKeyType: 'search',
@@ -441,7 +473,7 @@ function renderDescription(rowData) {
             onPress={() => { props.navigation.navigate('ShopSearch', { datas: [], from: 'search' }) }}>
             
             <View style={{ padding: 5 }}>
-              <Text style={{ color: 'gray', fontSize: 12, left:9 }}>Search Cuisine,Dishes</Text>
+              <Text style={{ color: 'gray', fontSize: 12, left:9 }}>Search By Vendor Name</Text>
             </View>
             <View style={{ padding: 5, }}>
               <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 49 }}></Image>
@@ -505,13 +537,22 @@ function renderDescription(rowData) {
                       </View>
                       <View style={{ padding: 5,left: 5,top:-3 }}>
                         <View style={{ flexDirection: 'row', }}>
+{item.rating > 0 ? 
+                        <View style={{ flexDirection: 'row', }}>
                           <Image source={require('../../../assets/Star.png')} style={{ width: 13, height: 13 }}></Image>
-                          <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{parseFloat(Number(item.rating).toFixed(5))}</Text>
-                          <View style={{backgroundColor:'#9B9B9B',height:4,width:4,justifyContent:"center",alignItems:"center",marginHorizontal:9,borderRadius:4/2,marginTop:7}} />
+                          <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{Number(item.rating).toFixed(1)}</Text>
+                         </View>
+: 
+<Text style={{ fontSize: 11, color: Mycolors.Black, left: 2 }}>No Rating Yet</Text>
+}
+                          <View style={{backgroundColor:'transparent',height:4,width:4,justifyContent:"center",alignItems:"center",marginHorizontal:9,borderRadius:4/2,marginTop:7}} />
+                         {item.tentative_time ?
                           <Image source={require('../../../assets/Clock.png')} style={{ width: 13, height: 13, marginLeft: -1, top: 1 }}></Image>
+                        : null
+                        }
                           <Text style={{ fontSize: 12, color: Mycolors.Black, left: 2 }}>{item.tentative_time}</Text>
                         </View>
-                        {/* <TouchableOpacity style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
+                       {/* <TouchableOpacity style={{width:25,height:25,borderRadius:5,backgroundColor:'#fff',shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 3

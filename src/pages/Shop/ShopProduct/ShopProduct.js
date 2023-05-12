@@ -662,7 +662,7 @@ paddingLeft={50}/> */}
                       </TouchableOpacity>
                       <View style={{ left: 9 }}>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, fontWeight: 'bold', left: 2 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2, fontStyle: 'italic', }}>Caegory Name: Electrical +2</Text>
+                        <Text style={{ fontSize: 12, color: '#9B9B9B', marginTop: 2, fontWeight: '500', left: 2, fontStyle: 'italic', }}>Category Name: Electrical +2</Text>
                       </View>
                       <View style={{ padding: 5, left: 5, top: -3 }}>
                         <View style={{ flexDirection: 'row', }}>

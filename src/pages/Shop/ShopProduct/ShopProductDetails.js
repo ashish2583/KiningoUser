@@ -1386,20 +1386,21 @@ const FoodDetails = (props) => {
               </View> */}
 
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '500' }} >Pick from a wide range of categories</Text>
-                <TouchableOpacity onPress={() => { setmodlevisual5(true) }}>
-                  <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#835E23' }} >View All</Text>
-                </TouchableOpacity>
+                <Text style={{ color: Mycolors.Black, fontWeight: '500', width:'50%' }} >Pick from a wide range of categories</Text>
+                <View style={{flexDirection:'row', alignItems:'center'}}>
+                  {Object.keys(selectedCategory)?.length > 0 ?
+                    <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
+                      <Image source={require('../../../assets/product_refresh.png')} ></Image>
+                      <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
+                    </TouchableOpacity>
+                    :
+                    null
+                  }
+                  <TouchableOpacity onPress={() => { setmodlevisual5(true) }}>
+                    <Text style={{ color: '#835E23', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: '#835E23' }} >View All</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              {Object.keys(selectedCategory)?.length > 0 ?
-                <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
-                  <Image source={require('../../../assets/product_refresh.png')} ></Image>
-                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
-                </TouchableOpacity>
-                :
-                // <View style={{height:50}} />
-                null
-              }
               <View style={{ width: '100%', alignSelf: 'center', marginTop: 20, }}>
                 <FlatList
                   data={categoryData}
@@ -1912,7 +1913,7 @@ const FoodDetails = (props) => {
                 renderItem={({ item, index }) => {
                   return (
                     <TouchableOpacity
-                      style={{
+                      style={[{
                         width: '96%', marginHorizontal: 10, flexDirection: 'row', alignItems: 'center', borderRadius: 10, marginBottom: 20,
                         overflow: 'hidden',
                         // borderWidth:1, borderColor:'black'
@@ -1924,7 +1925,7 @@ const FoodDetails = (props) => {
                         shadowRadius: 5,
                         shadowOpacity: 0.6,
                         elevation: 3,
-                      }}
+                      }, selectedCategory?.category_code === item?.category_code ? styles.categorySelectedStyle : null]}
                       onPress={() => { setSelectedCategory(item); setmodlevisual5(false) }}
                     >
                       <Image source={{ uri: item.category_image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
@@ -2174,8 +2175,9 @@ const styles = StyleSheet.create({
   refreshView: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '25%',
-    marginTop: 10,
+    // width: '25%',
+    // marginTop: 10,
+    marginRight:10,
     backgroundColor: '#835E23',
     paddingVertical: 10,
     paddingHorizontal: 20,

@@ -16,7 +16,6 @@ import Toast from 'react-native-toast-message';
 import Loader from '../../../WebApi/Loader';
 import MyAlert from '../../../component/MyAlert';
 
-
 const ShopReview = (props) => {
   const [checkitem,setcheckitem]=useState('')
   const [reson,setreson]=useState('')
@@ -24,43 +23,6 @@ const ShopReview = (props) => {
   const User = useSelector(state => state.user.user_details)
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
-  const [upData,setupData]=useState([
-    {
-      id: '1',
-      title: 'Tasty Food',
-      desc:'Order placed by mistake',
-      time:'',
-    },
-    {
-      id: '2',
-      title: 'Extremely Yummy Food',
-      desc:'Food preparation time was to late',
-      time:'',
-     
-    },
-    {
-      id: '3',
-      title: 'Average',
-      desc:'Restaurant manager behaviour was not good',
-      time:'',
-     
-    },
-    {
-      id: '4',
-      title: 'Not Good',
-      desc:'Changed my mind',
-      time:'',
-      
-    },
-    {
-        id: '5',
-        title: 'Bad',
-        desc:'Changed my mind',
-        time:'',
-       
-      },
-    
-  ])
   const [itemdata,setitemdata]=useState('')
   const [venderRating,setvenderRating]=useState('0')
   const [subItemData,setsubItemData]=useState([])
@@ -77,7 +39,7 @@ const ShopReview = (props) => {
     setitemdata(props.route.params.data)
     setdrvReviewData(props.route.params.data)
     console.log('testing===>>>',props.route.params.data);
-    if(props.route.params.data?.order_type_label === 'Delivery'){
+    if(props.route.params.data?.order_type_label === 'Delivery' && props.route.params.data?.status == 12 && props.route.params.data?.driver_rating == null){
       setShowDriverRating(true)
     }else{
       setShowDriverRating(false)
@@ -270,6 +232,7 @@ return(
     })}
    </View>
 : null }
+
 
 
 

@@ -135,6 +135,7 @@ const ShopCart = (props) => {
     getcart()
     getCopun()
     getAddress()
+    getDefaultAddress()
   }
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -300,9 +301,6 @@ const ShopCart = (props) => {
       Toast.show({ text1: responseJson.headers.message })
       getAddress()
       setreloades(!reloades)
-      if(addressListData?.length === 1){
-        setaddressList(false)
-      }
     } else {
 
       // setalert_sms(err)
@@ -872,7 +870,7 @@ const ShopCart = (props) => {
 
           <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >{rs}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >${parseFloat(Number(item.price).toFixed(2))}</Text>
+            <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14, marginTop: 6 }} >${Number(item.price).toFixed(2)}</Text>
 
           </View>
 
@@ -1063,7 +1061,7 @@ const ShopCart = (props) => {
               >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(subTotal).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${Number(subTotal).toFixed(2)}</Text>
                 </View>
                 {ordertype != 'take-away' ?
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
@@ -1073,7 +1071,7 @@ const ShopCart = (props) => {
                       content={
                         <View style={{ height: 100 }}>
                           <Text style={{ color: Mycolors.Black, fontSize: 13, }}>Delivery fees is calculated on the basis of the distance covered by driver in miles {'\n'}
-                            At present delivery fees has been set to $1 per mile so the total distance is <Text style={{ fontWeight: "bold" }}>{parseFloat(Number(res.delivery_charge).toFixed(2))} miles</Text> and total delivery fees is <Text style={{ fontWeight: "bold" }}>${parseFloat(Number(res.delivery_charge).toFixed(2))}</Text></Text>
+                            At present delivery fees has been set to $1 per mile so the total distance is <Text style={{ fontWeight: "bold" }}>{Number(res.delivery_charge).toFixed(2)} miles</Text> and total delivery fees is <Text style={{ fontWeight: "bold" }}>${Number(res.delivery_charge).toFixed(2)}</Text></Text>
                         </View>
                       }
                       onClose={() => setToolTipVisible(false)}
@@ -1088,7 +1086,7 @@ const ShopCart = (props) => {
                         </View>
                       </TouchableOpacity>
                     </Tooltip>
-                    <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(dilivery).toFixed(2))}</Text>
+                    <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${Number(dilivery).toFixed(2)}</Text>
                   </View>
                   : null}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
@@ -1097,15 +1095,15 @@ const ShopCart = (props) => {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${parseFloat(Number(taxes).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${Number(taxes).toFixed(2)}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Discount</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${parseFloat(Number(discountPrice).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >-${Number(discountPrice).toFixed(2)}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ADC430', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                   <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
-                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, fontWeight: '600', textAlign: 'center' }} >${parseFloat(Number(totla).toFixed(2))}</Text>
+                  <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, fontWeight: '600', textAlign: 'center' }} >${Number(totla).toFixed(2)}</Text>
                 </View>
               </View>
 
@@ -1633,7 +1631,9 @@ const ShopCart = (props) => {
                                           />
                                       </TouchableOpacity> */}
             <TouchableOpacity style={{ width: 50, height: 4, backgroundColor: '#9B9B9B', borderRadius: 2, alignSelf: 'center', marginBottom: 30, marginTop: 10 }} onPress={() => { setaddressList(false) }} />
+          
             <Text style={{ fontSize: 22, fontWeight: '700', color: 'black', textAlign: 'center', marginBottom: 25, }}>Select Delivery Address</Text>
+         {addressListData.length>0 ? 
             <View
               style={{
                 justifyContent: "center",
@@ -1755,7 +1755,9 @@ const ShopCart = (props) => {
               />
 
             </View>
-
+        :
+        <Text style={{color:'#000',fontSize:16,textAlign:'center',marginTop:30}}>No Records Found</Text>
+      }
           </View>
           {/* <View style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 0 }}>
             <MyButtons title="Save" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => {

@@ -61,9 +61,9 @@ const ShopSearch = (props) => {
 
   const catSerch = async (ddd) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(vendor_lists_subcat + ddd, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(vendor_lists_subcat + ddd+'&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude, '', 'GET', '')
     setLoading(false)
-    console.log('the res==>>vendor_lists_subcat', responseJson)
+    console.log('the res==>>vendor_lists_subcat uiuiuiui', responseJson)
     if (responseJson.headers.success == 1) {
       setresData(responseJson.body)
       //  setRefreshing(!refreshing)
@@ -138,7 +138,7 @@ const ShopSearch = (props) => {
           press3={() => { }} img3width={25} img3height={25} />
 
         <View style={{ width: '96%', alignSelf: 'center' }}>
-          <SearchInput2 marginTop={10} placeholder={'Restaurant Name. Cuisine, Dishes'}
+          <SearchInput2 marginTop={10} placeholder={'Search By Vendor Name'}
             serchValue={searchValue}
             onChangeText={(e) => {
               if (props.route.params.from == 'CatClick') {
@@ -161,6 +161,7 @@ const ShopSearch = (props) => {
 
             }}
             paddingLeft={9} />
+{resData.length > 0 ? 
 
           <View style={{ width: '100%', alignSelf: 'center', marginTop: 20 }}>
             {
@@ -210,13 +211,14 @@ const ShopSearch = (props) => {
                       <View style={{ left: 9, width: '60%', }}>
                         <Text numberOfLines={2} style={{ fontSize: 18, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: 'bold', left: 7 }}>{item.name}</Text>
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 5, textAlign: 'left', fontWeight: '300', left: 7 }}>{item.address_line}</Text>
+                        {item.tentative_time ? 
                         <Text style={{ fontSize: 12, color: Mycolors.Black, marginTop: 2, textAlign: 'left', fontWeight: '200', left: 7, fontStyle: 'italic' }}>Food Preparation Time : {item.tentative_time}</Text>
-
+                        : null}
                       </View>
                       <View style={{ padding: 5, alignItems: 'flex-end',right:9 }}>
 
 
-                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders : ''}+ orders served.</Text>
+                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders+'+' : 'No '} orders served.</Text>
 
                       </View>
 
@@ -227,10 +229,11 @@ const ShopSearch = (props) => {
               })
 
             }
-
           </View>
 
-
+:
+<Text style={{color:'#000',fontSize:16,textAlign:'center',marginTop:50,fontWeight:'bold'}}>No Vendors Found</Text>
+}
 
         </View>
         <View style={{ height: 60 }} />

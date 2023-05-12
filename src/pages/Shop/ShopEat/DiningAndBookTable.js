@@ -181,8 +181,11 @@ const DiningAndBookTable = (props) => {
         console.log(m);
         console.log(d);
         console.log(y);
-
-        data['order_date'] = dateformates(m, d, y)
+        if(Platform.OS=='android'){
+          data['order_date'] = dateformates(m, d, y)
+        }else{
+          data['order_date'] = orderDate
+        }
       }
       if (keyword !== '') {
         data['keyword'] = keyword
@@ -370,7 +373,7 @@ const DiningAndBookTable = (props) => {
 
         <View style={{ width: '90%', alignSelf: 'center' }}>
 
-          {orderData != null ?
+          {orderData.length > 0 ?
             orderData.map((item, index) => {
               return (
 
@@ -387,7 +390,7 @@ const DiningAndBookTable = (props) => {
                       shadowOpacity: 0.9,
                       overflow: 'hidden',
                       elevation: 5,
-                      //  borderColor:'rgba(0,0,0,0.2)',borderWidth:0.5,
+                     borderColor:'rgba(0,0,0,0.2)',borderWidth:0.5,
                     }}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 14 }}>{item.business_name}</Text>
@@ -404,35 +407,45 @@ const DiningAndBookTable = (props) => {
 
                           {/* {flatliistDesign(item.banner_image,'Hat-Trick Combo','',item.no_of_person,()=>{dialCall(item.business_phone)},()=>{})} */}
 
+
                           <TouchableOpacity style={{
-                            width: '100%', height: 120, marginVertical: 5, backgroundColor: 'transparent',
-                            borderColor: '#dee4ec', borderRadius: 10, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', borderColor: 'gray', borderWidth: 1
+                            width: '100%',
+                            //  height: 120, 
+                            padding: 10,
+                            marginVertical: 5,
+                            backgroundColor: '#D4F9FA',
+                            //  borderColor: '#dee4ec',
+                            elevation: 3,
+                            borderRadius: 10,
+                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            alignItems: 'center'
                           }}
-                            onPress={() => { }}>
-                            <View style={{ width: 60, height: 75, alignSelf: 'center', borderRadius: 5, borderWidth: 3, borderColor: '#dee4ec', left: 2 }}>
+                            onPress={() => {
+                                  }}>
+                            <View style={{ width: 110, height: 110, alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#dee4ec', }}>
                               <Image source={{ uri: item.banner_image }} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
                             </View>
-                            <View style={{ marginLeft: 10 }}>
-                              {/* <Text style={{color:Mycolors.Black,fontWeight:'600',fontSize:12,}} >Hat-Trick Combo</Text>
-<Text style={{color:Mycolors.RED,fontWeight:'600',fontSize:12,}} >221</Text> */}
-                              {item.items.map((sitem, index) => {
-                                return (
-                                  <View style={{ flexDirection: 'row', top: -6, marginTop: 4 }}>
-                                    <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
-                                    <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} > X {sitem.product_name}</Text>
-                                  </View>
-                                )
-                              })}
+                            <View style={{ marginLeft: 15 }}>
+                              {
+                                item.items.map((sitem, index) => {
+                                  return (
+                                    <View style={{ flexDirection: 'row', top: -6, marginTop: 4, width: '85%', }}>
+                                      <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} >{sitem.quantity}</Text>
+                                      <Text numberOfLines={2} style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 13, }} > X {sitem.product_name} </Text>
+                                    </View>
+                                  )
+                                })}
+                              <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.paid_amount}</Text>
 
-                              <Text style={{ color: Mycolors.Black, fontWeight: '400', fontSize: 12, }} >Total Amount - ${item.amount}</Text>
-
-                              <View style={{ width: 120, }}>
+                              <View style={{ width: 120, marginTop: 4 }}>
                                 <MyButtons title="Call Restaurant" height={30} width={'100%'} borderRadius={5} alignSelf="center" press={() => { dialCall(item.business_phone) }} marginHorizontal={20} fontSize={11}
                                   titlecolor={Mycolors.RED} backgroundColor={'transparent'} marginVertical={0} borderColor={Mycolors.RED} borderWidth={0.4} />
                               </View>
 
                             </View>
                           </TouchableOpacity>
+
 
                         </>
                         :
@@ -449,7 +462,7 @@ const DiningAndBookTable = (props) => {
                           </View>
                           <View>
                             <Text style={{ color: Mycolors.Black, fontWeight: '600', fontSize: 12, marginTop: 15 }}>Table Number</Text>
-                            <Text style={{ color: Mycolors.GrayColor, fontSize: 11, marginTop: 4 }}>{item.table_no}</Text>
+                            <Text style={{ color: Mycolors.GrayColor, fontSize: 11, marginTop: 4 }}>{item.table_no ? item.table_no :'Table Not Assigned'}</Text>
                           </View>
                         </View>
                       }
@@ -536,8 +549,8 @@ const DiningAndBookTable = (props) => {
               </View>
               <View style={{ width: '100%', marginTop: 25, }}>
 
-                <Text style={{ color: '#ADC430', textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>No Order Found</Text>
-                <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}>Looks like you have not placed any order yet. </Text>
+                <Text style={{ color: '#ADC430', textAlign: 'center', fontWeight: 'bold', fontSize: 25 }}>No Orders Found</Text>
+                <Text style={{ color: '#000000', textAlign: 'center', fontSize: 14 }}></Text>
 
                 <View style={{ width: '40%', alignSelf: 'center', marginTop: 10 }}>
                   <MyButtons title="Back to home" height={50} width={'100%'} borderRadius={5} alignSelf="center" press={() => { props.navigation.goBack() }} marginHorizontal={20} fontSize={14}
@@ -674,7 +687,7 @@ const DiningAndBookTable = (props) => {
 
               {/* </View> */}
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Date</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 15 }}>Order Date</Text>
               <View style={{
                 width: '100%', alignSelf: 'center',
                 backgroundColor: '#FFFFFF',
@@ -693,17 +706,17 @@ const DiningAndBookTable = (props) => {
                           alignContent: 'flex-start',
                         },
                         placeholderText: {
-                          fontSize: 10,
+                          fontSize: 14,
                           color: Mycolors.GrayColor,
                           //marginLeft: '1%',
-                          left: -5
+                          left: Platform.OS=='ios' ? -10 : -5
                         },
                         zIndex: 99999
                       }}
                       showIcon={false}
                       androidMode={'spinner'}
                       readOnly={true}
-                      style={[styles.datePickerSelectInput, { fontSize: 11, color: Mycolors.GrayColor, left: 15 }]}
+                      style={[styles.datePickerSelectInput, { fontSize: 11, color: Mycolors.GrayColor, left: Platform.OS=='ios' ? -15 : 15}]}
                       date={orderDate}
                       mode="date"
                       placeholder={'Pick a Date'}
@@ -746,7 +759,7 @@ const DiningAndBookTable = (props) => {
               </View>
 
 
-              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 10, marginBottom: 5 }}>Order Type</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: Mycolors.Black, marginTop: 15, marginBottom: 15 }}>Order Type</Text>
               <FlatList
                 data={orderTypeData}
 
@@ -755,7 +768,7 @@ const DiningAndBookTable = (props) => {
                   return (
                     <TouchableWithoutFeedback onPress={() => { setOrderTypeValue(item.label) }}>
 
-                      <View style={[styles.radioButtonContainer, { width: '50%' }]}>
+                      <View style={[styles.radioButtonContainer, { width: '50%',marginTop:5 }]}>
                         <MaterialCommunityIcons name={item.label === orderTypeValue ? "checkbox-intermediate" : "checkbox-blank-outline"} color={'#ADC430'} size={24} />
                         <Text style={{ color: '#455A64', fontWeight: '600', fontSize: 14, marginLeft: 6 }} >{item.label}</Text>
                       </View>

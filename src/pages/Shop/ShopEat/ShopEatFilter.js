@@ -70,13 +70,15 @@ const ShopEatFilter = (props) => {
 
   useEffect(()=>{
    console.log('hello ji ==>>',User);
-   var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+  //  var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+   var murl='?lat='+'28.5355'+'&long='+'77.3910'
    getData(murl)
    myposition()
- },[])
-
- const checkcon=()=>{
-  var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+  },[])
+  
+  const checkcon=()=>{
+    // var murl='?lat='+mapdata.restorentlocation.latitude+'&long='+mapdata.restorentlocation.longitude
+    var murl='?lat='+'28.5355'+'&long='+'77.3910'
      getData(murl)
 }   
 const wait = (timeout) => {
@@ -185,7 +187,7 @@ if(val=='Rating'){
 
 <View style={{width:'92%',alignSelf:'center'}}>
     <View>
-<SearchInput2 marginTop={10} placeholder={'Search...'} 
+<SearchInput2 marginTop={10} placeholder={'Search By Vendor Name'} inputLeft={-30}
 serchValue={searchValue} 
 onChangeText={(e)=>{
   setsearchValue(e)
@@ -247,7 +249,7 @@ paddingLeft={50}/>
 </View>
   : null }
         
-
+        {resData.length > 0 ? 
 
     <View style={{width:'100%',alignSelf:'center',marginTop:20,zIndex:-999}}>
          {
@@ -311,6 +313,10 @@ paddingLeft={50}/>
               
          </View>
 
+
+:
+<Text style={{color:'#000',fontSize:16,textAlign:'center',marginTop:50,fontWeight:'bold'}}>No Vendors Found</Text>
+}
        
 </View>
 

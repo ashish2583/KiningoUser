@@ -13,7 +13,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../../WebApi/Loader';
 
 const ShopMyOrderDetails = (props) => {
-  //const {data} = props.route.params
   // console.log('ShopMyOrderDetails data', data);
   const [data, setdata] = useState('')
   const [modlevisual1, setmodlevisual1] = useState(false)
@@ -22,19 +21,20 @@ const ShopMyOrderDetails = (props) => {
   const [date, setDate] = useState('')
   const [itemTotal, setItemTotal] = useState(0)
   const User = useSelector(state => state.user.user_details)
- 
+  const mapdata = useSelector(state => state.maplocation) 
+
   const [loading, setLoading] = useState(false)
   const [orderData, setorderData] = useState([])
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
 //setdata(props.route.params.data)
-    let localItemTotal = 0
+   // let localItemTotal = 0
     var ddd=props.route.params.data
-    ddd.items.map(el=>{
-      localItemTotal += el.quantity * el.amount  
-    })
-    setItemTotal(localItemTotal)
+    // ddd.items.map(el=>{
+    //   localItemTotal += el.quantity * el.amount  
+    // })
+    // setItemTotal(localItemTotal)
     ordersDetatls(ddd.id)
   }, [])
 
@@ -68,7 +68,6 @@ const ordersDetatls=async (id)=>{
     // setMy_Alert(true)
   }
 }
-
 
 
   const dialCall = (number) => {
@@ -161,7 +160,7 @@ const ordersDetatls=async (id)=>{
               </View>
             </View>
           </View>
-{data.order_type!= "take-away" ?
+{data.order_type!= "take-away"  ?
           <View style={{
             top: -20,
             marginVertical: 10, backgroundColor: '#FAF9FB', padding: 15, borderRadius: 10,
@@ -190,25 +189,25 @@ const ordersDetatls=async (id)=>{
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#9B9B9B' }}>Destination Address</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address},{data.destination_city},{data.destination_state}</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>{data.destination_address} {data.destination_city} {data.destination_state}</Text>
               </View>
             </View>
            
-            {data.delivered_date!=null && data.status!= 11 && data.status!=13 && data.status!=15 ?
+            {data.delivered_date!=null && data.status!= 11 && data.status!=13 && data.status!=15 && data.order_type!= "take-away"?
   <View>
     <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ADC430', height: 40, alignItems: "center", borderRadius: 7, padding: 6, paddingLeft: 15, marginBottom: 10 }}>
               <Image source={require('../../../assets/Check-white.png')} style={{ width: 20, height: 20, overflow: 'hidden', alignSelf: 'center', marginRight: 8 }}></Image>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }} >Order Delivered on </Text>
               <Text style={{ color: 'white', fontSize: 12, fontWeight: '600', textAlign: 'center' }} >{data.delivered_date}</Text>
             </View>
-            <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
+            {/* <View style={{ backgroundColor: '#5867D8', width: 65, borderBottomRightRadius: 5, borderBottomLeftRadius: 5, position: 'absolute', right: 16, bottom: -7,height:17}}>
               <Text style={{ color: 'white', fontSize: 11, fontWeight: '600', textAlign: 'center' }} >On Time</Text>
-            </View>
+            </View> */}
   </View>
             : 
             data.status!= 0 && data.driver_name && data.status!= 11 ?
             <View>
-             <View style={{width:'100%',height:0.5,backgroundColor:'gray',marginVertical:5}}></View>
+             {/* <View style={{width:'100%',height:0.5,backgroundColor:'gray',marginVertical:5}}></View>
             <View style={{ flexDirection: 'row', width: '100%', marginTop: 10, borderRadius: 10, alignSelf: 'center', paddingHorizontal: 10,top:-8 }}>
               <View style={{ width: 40, height: 40, justifyContent: 'center', borderRadius: 10 }}>
                 <Image source={require('../../../assets/noRide.png')} style={{ width: 30, height: 30, overflow: 'hidden', alignSelf: 'center' }}></Image>
@@ -216,7 +215,7 @@ const ordersDetatls=async (id)=>{
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 12, color: '#000', top: 3, lineHeight: 18 }}>{data.driver_name ? data.driver_name +' has been assigned to your order' : ''} </Text>
               </View>
-            </View>
+            </View> */}
 
             </View>
             : 
@@ -229,7 +228,7 @@ const ordersDetatls=async (id)=>{
 
           </View>
   : null}        
- {data.status!=0 ? 
+ {data.status!=0 && data.status!=3 && data.order_type!= "take-away" && data.status!=12  && data.status!=2 ? 
           <View style={{
             top: -10,
             marginBottom: 10, backgroundColor: '#FAF9FB', padding: 15, borderRadius: 10,
@@ -243,18 +242,25 @@ const ordersDetatls=async (id)=>{
                 <Image source={require('../../../assets/noRide.png')} style={{ width: 40, height: 38, overflow: 'hidden', alignSelf: 'center' }}></Image>
               </View>
               <View style={{ marginLeft: 15, width: '75%' }}>
-                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{data.driver_name}</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>100+ Five-star</Text>
-                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>deliveries</Text>
+                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black',marginTop:5 }}>{data.driver_name}</Text>
+                <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}>has been assigned to your order</Text>
+                {/* <Text style={{ fontSize: 12, color: Mycolors.GrayColor, top: 3, lineHeight: 18 }}></Text> */}
               </View>
               </View>
               
              
               <View style={{ flexDirection: 'row', top:0,right:24 }}>
-                <TouchableOpacity style={{marginRight:5,width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff'}}>
+                <TouchableOpacity style={{marginRight:5,width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff'}}
+                onPress={()=>{ props.navigation.navigate('Chat',{data:data})}}>
                 <Image source={require('../../../assets/ChatCircle-news.png')} style={{ width: 25, height: 25, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', }} ></Image>
+            {mapdata.messagecount>0 ? 
+               <View style={{width:20,height:20,borderRadius:15,position:'absolute',backgroundColor:'red',justifyContent:'center',top:-7,right:-7}}>
+                <Text style={{textAlign:'center',color:'#fff',fontSize:10}}>{mapdata.messagecount}</Text>
+               </View>
+            : null}
                 </TouchableOpacity>
-                <TouchableOpacity style={{width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff'}}>
+                <TouchableOpacity style={{width:32,height:32,borderRadius:20,borderWidth:0.5,borderColor:'gray',justifyContent:'center',backgroundColor:'#fff',marginLeft:5}}
+                onPress={()=>{ props.navigation.navigate('Traking', { data: data })}}>
                 <Image source={require('../../../assets/layer_9.png')} style={{ width: 17, height: 22, alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch', top: 1 }} ></Image>
                 </TouchableOpacity>
               </View>
@@ -278,7 +284,7 @@ const ordersDetatls=async (id)=>{
               </View>
               <View style={{ marginLeft: 10, width: '80%' }}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{el.product_name} x {el.quantity}</Text>
-                <Text style={{ fontSize: 14, color:'#ADC430', top: 2, lineHeight: 22,fontWeight:'600' }}>${parseFloat(Number(el.amount).toFixed(2))}</Text>
+                <Text style={{ fontSize: 14, color:'#ADC430', top: 2, lineHeight: 22,fontWeight:'600' }}>${Number(el.amount).toFixed(2)}</Text>
               </View>
               {/* <Text style={{ color: '#ADC430', fontSize: 14, textAlign: 'center', lineHeight: 22, }}>${parseFloat(Number(el.amount).toFixed(2))}</Text> */}
             </View>
@@ -305,11 +311,11 @@ const ordersDetatls=async (id)=>{
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Item Total</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.amount).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${Number(data.amount).toFixed(2)}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${Number(data.vendor_charges).toFixed(2)}</Text>
               </View>
               {data.coupon_code !=null ?
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
@@ -319,11 +325,11 @@ const ordersDetatls=async (id)=>{
               : null }
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Taxes</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.taxes).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${Number(data.taxes).toFixed(2)}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: "white", fontSize: 13,  }} >Delivery Charges</Text>
-                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.delivery_charges).toFixed(2))}</Text>
+                <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${Number(data.delivery_charges).toFixed(2)}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ffff', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                <View style={{flexDirection:'row'}}>
@@ -332,7 +338,7 @@ const ordersDetatls=async (id)=>{
                </View>
                 <View style={{flexDirection:"column"}}>
                 <Text style={{ color: Mycolors.GrayColor, fontSize: 12, fontWeight: '600', textAlign: 'left' }} >Bill Total</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${parseFloat(Number(data.paid_amount).toFixed(3))}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 17, fontWeight: 'bold', textAlign: 'center' }} >${Number(data.paid_amount).toFixed(2)}</Text>
                 </View>
               </View>
             </View>

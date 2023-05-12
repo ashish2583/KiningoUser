@@ -187,6 +187,7 @@ const FoodDetails = (props) => {
       vendorDetail();
       menuList(null);
       diningCharges();
+      setmenutypeOpen(false)
     })
     return unsubscribe;
   }, [])
@@ -385,7 +386,7 @@ const FoodDetails = (props) => {
         // setmodlevisual4(true)
         // setmodlevisual1(false)
         // setmodlevisual2(false)
-        Toast.show({ text1: `Order placed successfully` });
+        Toast.show({text1:'Booking request has been sent successfully you will receive a notification once your table is finalized.'})
         props.navigation.navigate('DiningAndBookTable')
         // setalert_sms('Booking request has been sent successfully you will receive a notification once your table is finalized.')
         // setMy_Alert(true)
@@ -571,10 +572,11 @@ const FoodDetails = (props) => {
   }
 
   const goToMap = (l, n) => {
+   
     openMap(
       {
-        latitude: l,
-        longitude: n,
+        latitude: parseInt(l),
+        longitude: parseInt(n),
         provider: 'google',
         //  start:'Noida ,Uttar Pradesh,India',
         end: resData.address,
@@ -651,16 +653,13 @@ const FoodDetails = (props) => {
     const { responseJson, err } = await requestGetApi(shop_eat_menu_userid + props.route.params.data.userid, '', 'GET', User.token)
     setLoading(false)
     console.log('the res in_cart cart_Count ==>>', responseJson)
-    console.log('responseJson.body', responseJson?.body);
     if (responseJson.headers.success == 1) {
       var counts = 0
-      for (let i = 1; i <= responseJson?.body?.products?.length; i++) {
-        console.log('responseJson?.body?.products[i - 1]', responseJson?.body?.products[i - 1]);
-        if (responseJson?.body?.products[i - 1]?.in_cart == '1') {
+      for (let i = 1; i <= responseJson.body.length; i++) {
+        if (responseJson.body[i - 1].in_cart == '1') {
           counts = parseInt(counts) + parseInt('1')
         }
       }
-      console.log('counts', counts);
       setcartCount(counts)
       setreloades(!reloades)
     } else {
@@ -759,7 +758,6 @@ const FoodDetails = (props) => {
       // subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
 
     }
-    // setsubtotal(subtotals)
     return rdata;
   }
 
@@ -785,7 +783,7 @@ const FoodDetails = (props) => {
         console.log('state2');
         resdd[i - 1].cart_quantity = parseInt(resdd[i - 1].cart_quantity) + 1
       }
-      subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
+      subtotals = parseFloat(subtotals) + parseFloat(resdd[i - 1].price * resdd[i - 1].cart_quantity)
     }
 
     setsubtotal(subtotals)
@@ -811,7 +809,7 @@ const FoodDetails = (props) => {
     }
     var subtotals = 0
     for (let i = 1; i <= resdd.length; i++) {
-      subtotals = parseInt(subtotals) + parseInt(resdd[i - 1].price * resdd[i - 1].cart_quantity)
+      subtotals = parseFloat(subtotals) + parseFloat(resdd[i - 1].price * resdd[i - 1].cart_quantity)
     }
     if (subtotals == 0) {
       setmodlevisual3(false)
@@ -871,7 +869,7 @@ const FoodDetails = (props) => {
               // onFinishRating={(d)=>{setvenderRating(d)}}
               readonly={true}
             />
-            <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {parseFloat(Number(item.total_ratings).toFixed(2))} Ratings</Text>
+            <Text style={{ color: 'gray', fontSize: 11, top: -2 }}> {Number(item.total_ratings).toFixed(2)} Ratings</Text>
           </View>
           <Text style={{ color: Mycolors.RED, fontWeight: '600', fontSize: 12, marginTop: 3 }} >{rs}</Text>
           <View style={{ flexDirection: 'row' }}>
@@ -996,7 +994,8 @@ const FoodDetails = (props) => {
       phoneNumber = 'tel:' + num ;
     }
     else {
-      phoneNumber = 'telprompt:${' + num + '}';
+      phoneNumber = 'tel:' + num ;
+      // phoneNumber = 'telprompt:${' + num + '}';
     }
     Linking.openURL(phoneNumber);
   };
@@ -1014,7 +1013,7 @@ const FoodDetails = (props) => {
         return (
           <View>
             {item.menuType == menutypevalue && item.service_type_value == 'Take Away' ?
-              flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+              flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) },
                 () => {
                   setClickedItemData(item)
                   setmodlevisual1(false)
@@ -1023,7 +1022,7 @@ const FoodDetails = (props) => {
               )
               :
               item.menuType != menutypevalue && item.service_type_value == 'Take Away' ?
-                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) }, () => {
                   setClickedItemData(item)
                   setmodlevisual1(false)
 
@@ -1048,7 +1047,7 @@ const FoodDetails = (props) => {
           return (
             <View>
               {item.menuType == selectedValue && item.service_type_value == 'Delivery' ?
-                flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) },
+                flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) },
                   () => {
                     setClickedItemData(item)
                     setmodlevisual1(false)
@@ -1057,7 +1056,7 @@ const FoodDetails = (props) => {
                 )
                 :
                 item.menuType != selectedValue && item.service_type_value == 'Delivery' ?
-                  flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time, () => { postcart(item) }, () => {
+                  flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) }, () => {
                     setClickedItemData(item)
                     setmodlevisual1(false)
                   },
@@ -1081,7 +1080,7 @@ const FoodDetails = (props) => {
             <View>
   
               {item.menuType == menutypevalue && item.service_type_value == 'Dining' ?
-                DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                DiningflatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time,
                   () => {
                     // let arr=diningItens
                     let arr1 = diningItens1
@@ -1106,7 +1105,7 @@ const FoodDetails = (props) => {
                         "subcategory": item.subcategory,
                         "tentative_time": item.tentative_time
                       })
-                      setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                      setsubtotal(parseFloat(subtotal) + parseFloat(item.price))
   
                     }
   
@@ -1128,7 +1127,7 @@ const FoodDetails = (props) => {
                   <Text style={{ color: '#000', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>No Items Found</Text>
                   :
                   item.menuType != menutypevalue && item.service_type_value == 'Dining' ?
-                    DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                    DiningflatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time,
                       () => {
                         let arr1 = diningItens1
                         if (itemloop(item)) {
@@ -1151,7 +1150,7 @@ const FoodDetails = (props) => {
                             "subcategory": item.subcategory,
                             "tentative_time": item.tentative_time
                           })
-                          setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                          setsubtotal(parseFloat(subtotal) + parseFloat(item.price))
                         }
   
                         setdiningItens1(arr1)
@@ -1629,7 +1628,6 @@ const FoodDetails = (props) => {
               } else {
                 Toast.show({ text1: 'Please add items from the menu to place an order.', });
               }
-
             }} marginHorizontal={20} fontSize={12}
             titlecolor={Mycolors.BG_COLOR} marginVertical={0} hLinearColor={['#fd001f', '#b10027']} backgroundColor={'transparent'} />
         </View>
@@ -1657,7 +1655,7 @@ const FoodDetails = (props) => {
         <View style={{ height: '70%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 10 }}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
             <View style={{ paddingHorizontal: 4 }}>
-              <SearchInput2 marginTop={10} placeholder={'Search Cuisine,Dishes'}
+              <SearchInput2 marginTop={10} placeholder={'Search By Item Name'}
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   setsearchValue(e)
@@ -1678,7 +1676,7 @@ const FoodDetails = (props) => {
                       <View>
 
                         {selectedTab == 'Delivery' && item.service_type_value == 'Delivery' ?
-                          flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)),
+                          flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2),
                             item.tentative_time,
                             () => { selectedTab == 'Dining' ? '' : postcart(item) },
                             () => { setClickedItemData(item) },
@@ -1688,7 +1686,7 @@ const FoodDetails = (props) => {
                           )
                           :
                           selectedTab == 'Take Away' && item.service_type_value == 'Take Away' ?
-                            flatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)),
+                            flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2),
                               item.tentative_time,
                               () => { selectedTab == 'Dining' ? '' : postcart(item) },
                               () => { setClickedItemData(item) },
@@ -1710,7 +1708,7 @@ const FoodDetails = (props) => {
                       <View>
                         {
                           item.service_type_value == 'Dining' ?
-                            DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                            DiningflatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time,
                               () => {
                                 let arr1 = diningItens1
                                 if (itemloop(item)) {
@@ -1733,7 +1731,7 @@ const FoodDetails = (props) => {
                                     "subcategory": item.subcategory,
                                     "tentative_time": item.tentative_time
                                   })
-                                  setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                                  setsubtotal(parseFloat(subtotal) + parseFloat(item.price))
                                 }
 
                                 setdiningItens1(arr1)
@@ -1897,7 +1895,7 @@ const FoodDetails = (props) => {
                 // </TouchableOpacity>
                 <>
                   {
-                    DiningflatliistDesign(item.image, item.name, '$' + parseFloat(Number(item.price).toFixed(2)), item.tentative_time,
+                    DiningflatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time,
                       () => {
                         let arr1 = diningItens1
                         if (itemloop(item)) {
@@ -1920,7 +1918,7 @@ const FoodDetails = (props) => {
                             "subcategory": item.subcategory,
                             "tentative_time": item.tentative_time
                           })
-                          setsubtotal(parseInt(subtotal) + parseInt(item.price))
+                          setsubtotal(parseFloat(subtotal) + parseFloat(item.price))
                         }
 
                         setdiningItens1(arr1)
@@ -1973,7 +1971,7 @@ const FoodDetails = (props) => {
             >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5 }}>
                 <Text style={{ color: Mycolors.Black, fontSize: 13, fontWeight: '600' }} >Sub Total</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${subtotal}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${Number(subtotal).toFixed(2)}</Text>
               </View>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
@@ -1982,12 +1980,12 @@ const FoodDetails = (props) => {
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: Mycolors.Black, fontSize: 13, }} >Taxes</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${(subtotal * 0.5) / 100}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 13, marginTop: 5 }} >${Number(((subtotal * 0.5) / 100).toFixed(2))}</Text>
               </View>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, backgroundColor: '#ADC430', height: 46, alignItems: "center", borderRadius: 7, padding: 10 }}>
                 <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600' }} >Total Cost</Text>
-                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, fontWeight: '600', textAlign: 'center' }} >${(subtotal + ((subtotal * 0.5) / 100) + venderCharg)}</Text>
+                <Text style={{ color: Mycolors.TEXT_COLOR, fontSize: 14, fontWeight: '600', textAlign: 'center' }} >${ Number((subtotal + ((subtotal * 0.5) / 100) + venderCharg)).toFixed(2)}</Text>
               </View>
             </View>
 

@@ -271,10 +271,10 @@ const ShopMyOrderDetails = (props) => {
                 <Text style={{ color: "white", fontSize: 13, }} >Sub Total</Text>
                 <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }} >${formatNumber(data.amount)}</Text>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, marginTop: 5 }}>
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5, marginTop: 5 }}>
                 <Text style={{ color: "white", fontSize: 13, }} >Vendor Charges</Text>
                 <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }} >${formatNumber(data.vendor_charges)}</Text>
-              </View>
+              </View> */}
               {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, paddingHorizontal: 5 }}>
                 <Text style={{ color: 'white', fontSize: 13, }} >Restaurant Handling Charges</Text>
                 <Text style={{ color: 'white', fontSize: 14,  fontWeight: 'bold' }} >${parseFloat(Number(data.vendor_charges).toFixed(2))}</Text>

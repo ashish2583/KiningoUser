@@ -91,7 +91,7 @@ const ShopEatNotificationList = (props) => {
     <View style={{ width: '95%', alignSelf: 'center', marginTop: 25 }}>
                 <MyButtons title="Go To Home" height={35} width={'100%'} borderRadius={5} alignSelf="center" 
                 press={() => {
-                 
+                 props.navigation.navigate('ShopEat')
                 }}  fontSize={14} paddingHorizontal={10}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={Mycolors.RED} hLinearColor={['#b10027', '#fd001f']} />
               </View>
