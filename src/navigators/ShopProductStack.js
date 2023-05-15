@@ -18,6 +18,7 @@ import CategorySearch from '../pages/Shop/ShopProduct/CategorySearch';
 import ShopProductSearch from '../pages/Shop/ShopProduct/ShopProductSearch';
 import CatSearch from '../pages/Shop/ShopProduct/CatSearch';
 import ShopMyOrderDetails from '../pages/Shop/ShopProduct/ShopMyOrderDetails';
+import ShopProductFilter from '../pages/Shop/ShopProduct/ShopProductFilter';
 const ShopProductStack=(props)=>{
    
     const Stack = createNativeStackNavigator();
@@ -42,6 +43,7 @@ const ShopProductStack=(props)=>{
             <Stack.Screen component = {ShopProductSearch} name="ShopProductSearch" />
             <Stack.Screen component = {CatSearch} name="CatSearch" />
             <Stack.Screen component = {ShopMyOrderDetails} name="ShopMyOrderDetails" />
+            <Stack.Screen component = {ShopProductFilter} name="ShopProductFilter" />
             <Stack.Screen component = {Shop} name="Shop" />
             
 

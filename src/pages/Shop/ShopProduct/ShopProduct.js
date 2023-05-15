@@ -498,7 +498,7 @@ const ShopProduct = (props) => {
             width: 40,
             borderTopRightRadius: 10, borderBottomRightRadius: 10
           }}>
-            <TouchableOpacity onPress={() => { props.navigation.navigate('ShopEatFilter') }}>
+            <TouchableOpacity onPress={() => { props.navigation.navigate('ShopProductFilter', {categories: resData?.categories}) }}>
               <Image source={require('../../../assets/product_filter.png')} style={{ width: 25, height: 25 }}></Image>
             </TouchableOpacity>
           </View>
