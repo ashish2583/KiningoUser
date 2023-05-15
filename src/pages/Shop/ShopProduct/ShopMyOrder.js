@@ -106,6 +106,10 @@ const ShopMyOrder = (props) => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       myorderList()
+      // remove filter and search
+      setKeyword('')
+      setOrderDate('')
+      setShowOrderDate('')
     })
     return unsubscribe;
   }, [props.navigation])
