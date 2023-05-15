@@ -1085,7 +1085,7 @@ const FoodDetails = (props) => {
           press1={() => { props.navigation.goBack() }} img1={require('../../../assets/arrow.png')}
           img1width={30} img1height={30} img1backgroundColor={'#fff'} img1padding={5} img1borderRadius={4}
           press2={() => { }} title2={resData.name} fontWeight={'bold'} img2height={20} color={Mycolors.TEXT_COLOR}
-          press3={() => { props.navigation.navigate('ShopProdCart', { vendorId: props.route.params.vendorId }) }} img3width={45} img3height={45}
+          press3={() => { props.navigation.navigate('ShopProdCart', { vendorId: props.route.params.vendorId, businessid: props.route.params.businessid }) }} img3width={45} img3height={45}
           img3={selectedTab != 'Book A Table' && selectedTab != 'Dining' ? require('../../../assets/Cart.png') : ''}
           img3backgroundColor={'transparent'} img3padding={8} img3borderRadius={4} />
         {cartCount != '0' && selectedTab != 'Book A Table' && selectedTab != 'Dining' ?

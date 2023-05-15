@@ -330,7 +330,7 @@ const ShopProduct = (props) => {
   }, []);
   const getcart = async (callGetCopunFun = true) => {
     setLoading(true)
-    const { responseJson, err } = await requestGetApi(shop_product_cart, '', 'GET', userdetaile.token)
+    const { responseJson, err } = await requestGetApi(shop_product_cart + '?business_id=' + props.route.params.businessid, '', 'GET', userdetaile.token)
     setLoading(false)
     // console.log('', responseJson.body.items.length)
     console.log('the res get shop_product_cart ==>>', responseJson)
@@ -397,8 +397,9 @@ const ShopProduct = (props) => {
 
     // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + businessId, '', 'GET', userdetaile.token)
     const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + props.route.params.vendorId, '', 'GET', userdetaile.token)
+    // const { responseJson, err } = await requestGetApi(shop_product_coupons_userid + '?business_id=' + props.route.params.businessid, '', 'GET', userdetaile.token)
     setLoading(false)
-    console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
+  console.log('the res get shop_eat_coupons_userid ==>>', responseJson)
     if (responseJson !== null) {
       if (responseJson.headers.success == 1) {
         setrescopun(responseJson.body)
@@ -418,6 +419,7 @@ const ShopProduct = (props) => {
     setLoading(true)
     var data = {
       discount_id: discount_id,
+      business_id: props.route.params.businessid
     }
     console.log('removeCoupan data', data);
     const { responseJson, err } = await requestPostApi(shop_product_remove_coupon, data, 'POST', userdetaile.token)
@@ -454,9 +456,10 @@ const ShopProduct = (props) => {
       setLoading(true)
       var data = {
         discount_id: promocode,
-        business_id: props.route.params.vendorId,
+        // business_id: props.route.params.vendorId,
+        business_id: props.route.params.businessid,
       }
-      const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon, data, 'POST', userdetaile.token)
+      const { responseJson, err } = await requestPostApi(shop_product_cart_apply_coupon + '?business_id=' + props.route.params.businessid, data, 'POST', userdetaile.token)
       setLoading(false)
       console.log('the res shop_product_cart_apply_coupon==>>', responseJson)
       if (responseJson !== null) {
@@ -890,7 +893,7 @@ const ShopProduct = (props) => {
                       Toast.show({ text1: 'Please select Pickup Time' })
                       return
                     }
-                    props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, selectedSlot, takeAwayDate })
+                    props.navigation.navigate('ShopPayment', { address: selectedAddress, orderType: ordertype, selectedSlot, takeAwayDate, businessid: props.route.params.businessid })
                   }}
                   marginHorizontal={20} fontSize={11}
                   titlecolor={Mycolors.BG_COLOR} backgroundColor={'#835E23'} marginVertical={0} />

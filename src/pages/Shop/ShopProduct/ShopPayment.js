@@ -151,6 +151,7 @@ const ShopPayment = (props) => {
         "card_id": checkitem.card_id,
         "billing_address_id": null,
         "shipping_address_id": null,
+        "business_id":props.route.params.businessid,
         // "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
         "payment_type": 'stripe',  // stripe/cod/cheque
         "order_type": props.route.params.orderType, //delivery/take-away 

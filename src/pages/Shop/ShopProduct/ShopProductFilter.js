@@ -237,7 +237,7 @@ paddingLeft={50}/>
                               }
                                myselected(item)
                             }else{
-                             getData(makeUrl(item.title))
+                             getData(makeUrl(filterData?.find(el=>el.title === item.title)?.category_code))
                             myselected(item) 
                             }
                             
