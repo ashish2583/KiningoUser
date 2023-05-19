@@ -151,7 +151,7 @@ const ShopPayment = (props) => {
         "card_id": checkitem.card_id,
         "billing_address_id": null,
         "shipping_address_id": null,
-        "business_id":props.route.params.businessid,
+        "business_id": props.route.params.businessid,
         // "payment_type": checkitem.id=='' ? 'cod': 'stripe',  // stripe/cod/cheque
         "payment_type": 'stripe',  // stripe/cod/cheque
         "order_type": props.route.params.orderType, //delivery/take-away 
@@ -309,7 +309,7 @@ const ShopPayment = (props) => {
                       <TouchableOpacity style={{ width: '100%', borderColor: Mycolors.GrayColor, borderWidth: 0.02, flexDirection: 'row', alignItems: 'center', paddingVertical: 17, paddingHorizontal: 17, borderRadius: 7, backgroundColor: '#fff', marginTop: 15 }}
                         onPress={() => { setcheckitem(item) }}>
                         <View style={{ width: 51, height: 20 }}>
-                          <Image source={require('../../../assets/visa.png')}  style={{width:'100%',height:'100%',alignSelf:'center',borderRadius:5,resizeMode: 'stretch'}} ></Image>
+                          <Image source={require('../../../assets/visa.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }} ></Image>
                         </View>
                         <View style={{ marginLeft: 15 }}>
                           <Text style={{ color: Mycolors.TEXT_COLOR, fontWeight: '500', fontSize: 13 }}>**** **** **** {item.card_no}</Text>
@@ -328,8 +328,11 @@ const ShopPayment = (props) => {
 
             <Text style={{ color: Mycolors.GrayColor, fontWeight: '300', fontSize: 12, marginVertical: 20 }}>CURRENT METHOD</Text>
             <View style={{ width: '100%', borderColor: Mycolors.RED, borderWidth: 0.2, flexDirection: 'row', alignItems: 'center', paddingVertical: 17, paddingHorizontal: 17, borderRadius: 7, backgroundColor: '#fff' }}>
-              <View style={{ width: 51, height: 40 }}>
+              {/* <View style={{ width: 51, height: 40 }}>
                 <Image source={checkitem.img} style={{ width: '100%', height: '100%', alignSelf: 'center', borderRadius: 5, resizeMode: 'stretch' }} ></Image>
+              </View> */}
+              <View style={{ width: 51, height: 20 }}>
+                <Image source={require('../../../assets/visa.png')} style={{ width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'stretch' }} ></Image>
               </View>
               <View style={{ marginLeft: 15 }}>
                 <Text style={{ color: Mycolors.TEXT_COLOR, fontWeight: '500', fontSize: 13 }}>**** **** **** {checkitem.card_no}</Text>
