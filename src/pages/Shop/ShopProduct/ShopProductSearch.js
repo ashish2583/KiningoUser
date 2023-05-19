@@ -256,7 +256,7 @@ const ShopProductSearch = (props) => {
                       <View style={{ padding: 5, alignItems: 'flex-end', right: 9 }}>
 
 
-                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders : '0'}+ products delivered</Text>
+                        <Text style={{ fontSize: 12, color: Mycolors.ORANGE, marginTop: 5, textAlign: 'left', fontWeight: '500', }}>{item.total_orders != 0 ? item.total_orders + '+' : 'No'} products sold</Text>
 
                       </View>
 

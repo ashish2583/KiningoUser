@@ -56,14 +56,18 @@ const ProductSearchInput = (props) => {
                         editable={props.editable}
                         multiline={props.multiline}
                     />
-                    <View style={{ height: 38, backgroundColor: 'transparent', borderRadius: 8, left: -35, alignSelf:'center' }}>
-                    <TouchableOpacity style={{
-                                width: 38, height: 38, justifyContent: 'center', alignItems:'center', borderRadius: 8, backgroundColor: '#835E23'
-                            }}
-                                onPress={props.presssearch}>
-                                <AntDesign name="search1" color={'#FFF'} size={24} style={{alignSelf: 'center'}} />
-                                {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
-                            </TouchableOpacity>
+                    <View style={{ height: 38, backgroundColor: 'transparent', borderRadius: 8, left: -35, alignSelf: 'center' }}>
+                        <TouchableOpacity style={{
+                            width: 38, height: 38, justifyContent: 'center', alignItems: 'center', borderRadius: 8, backgroundColor: '#835E23'
+                        }}
+                            onPress={props.presssearch}>
+                            {props.isCustomSearchIcon ?
+                                props.customSearchIcon
+                                :
+                                <AntDesign name="search1" color={'#FFF'} size={24} style={{ alignSelf: 'center' }} />
+                            }
+                            {/* <Image source={require('../../../assets/Search-red.png')} style={{ width: 45, height: 48, overflow: 'hidden', alignSelf: 'center', right: 3 }}></Image> */}
+                        </TouchableOpacity>
 
                     </View>
                 </View>
