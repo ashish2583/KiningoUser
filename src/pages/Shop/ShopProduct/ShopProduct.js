@@ -216,18 +216,20 @@ const ShopProduct = (props) => {
       setMy_Alert3(true)
       // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
     }
-    
+
   });
   messaging().onNotificationOpenedApp(remoteMessage => {
     const data = remoteMessage.data
     console.log('Notification caused app to open from background state:', remoteMessage)
-    if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
-      props.navigation.navigate('ShopMyOrder')
-    } else if (remoteMessage.notification.body == orderPickedUp) {
-      setRemoteMessageData(remoteMessage.data)
-      setalert_sms3('Do you want to rate order?')
-      setMy_Alert3(true)
-      // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
+    if (remoteMessage.notification.title == 'Kinengo') {
+      if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+        props.navigation.navigate('ShopMyOrder')
+      } else if (remoteMessage.notification.body == orderPickedUp) {
+        setRemoteMessageData(remoteMessage.data)
+        setalert_sms3('Do you want to rate order?')
+        setMy_Alert3(true)
+        // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
+      }
     }
   });
 
@@ -241,7 +243,7 @@ const ShopProduct = (props) => {
       if (remoteMessage.notification.title == 'Kinengo') {
         if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
           props.navigation.navigate('ShopMyOrder', { data: remoteMessage.data })
-        }else if(remoteMessage.notification.body == orderPickedUp){
+        } else if (remoteMessage.notification.body == orderPickedUp) {
           setRemoteMessageData(remoteMessage.data)
           setalert_sms3('Do you want to rate order?')
           setMy_Alert3(true)
