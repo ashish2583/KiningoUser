@@ -209,6 +209,7 @@ const ShopProduct = (props) => {
     console.log('remoteMessage.data', remoteMessage.data);
     console.log('remoteMessage.notification.body', remoteMessage.notification.body);
     if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+      console.log('go to ShopMyOrder1');
       props.navigation.navigate('ShopMyOrder')
     } else if (remoteMessage.notification.body == orderPickedUp) {
       setRemoteMessageData(remoteMessage.data)
@@ -223,6 +224,7 @@ const ShopProduct = (props) => {
     console.log('Notification caused app to open from background state:', remoteMessage)
     if (remoteMessage.notification.title == 'Kinengo') {
       if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+        console.log('go to ShopMyOrder2');
         props.navigation.navigate('ShopMyOrder')
       } else if (remoteMessage.notification.body == orderPickedUp) {
         setRemoteMessageData(remoteMessage.data)
@@ -240,16 +242,17 @@ const ShopProduct = (props) => {
       console.log('====================================');
       console.log(remoteMessage);
       console.log('====================================');
-      if (remoteMessage.notification.title == 'Kinengo') {
+      // if (remoteMessage.notification.title == 'Kinengo') {
         if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
-          props.navigation.navigate('ShopMyOrder', { data: remoteMessage.data })
+          console.log('go to ShopMyOrder3');
+          props.navigation.navigate('ShopMyOrder')
         } else if (remoteMessage.notification.body == orderPickedUp) {
           setRemoteMessageData(remoteMessage.data)
           setalert_sms3('Please leave a rating for the vendor and the items you have received.')
           setMy_Alert3(true)
           // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
         }
-      }
+      // }
     });
 
   const LatlongTo_address = async (latlong) => {
