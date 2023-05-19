@@ -158,7 +158,7 @@ const ShopReview = (props) => {
         <View style={{ width: '90%', alignSelf: 'center' }}>
           <Text style={{ fontWeight: '600', fontSize: 16, marginTop: 5, color: Mycolors.Black, lineHeight: 20 }}>Rate your experience</Text>
           <View style={{ marginTop: 20 }}>
-            <Image source={{ uri: itemdata.banner_image }} style={{ width: '100%', height: 160, alignSelf: 'center', borderRadius: 10, overflow: 'hidden', resizeMode: 'stretch' }} ></Image>
+            <Image source={{ uri: itemdata?.banner_image || itemdata?.business_image }} style={{ width: '100%', height: 160, alignSelf: 'center', borderRadius: 10, overflow: 'hidden', resizeMode: 'stretch' }} ></Image>
           </View>
 
           <Text style={{ fontWeight: '500', fontSize: 13, marginTop: 20, color: Mycolors.Black, lineHeight: 20 }}>Please provide rating for the vendor here.</Text>
