@@ -200,7 +200,7 @@ const ShopProduct = (props) => {
   }, []);
 
   const rateOrder = () => {
-    props.navigation.navigate('ShopReview', { data: remoteMessageData })
+    props.navigation.navigate('ShopReview', { data: {...remoteMessageData, items: JSON.parse(remoteMessageData.items)} })
   }
 
   messaging().onMessage(remoteMessage => {
