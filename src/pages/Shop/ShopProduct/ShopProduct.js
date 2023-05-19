@@ -212,7 +212,7 @@ const ShopProduct = (props) => {
       props.navigation.navigate('ShopMyOrder')
     } else if (remoteMessage.notification.body == orderPickedUp) {
       setRemoteMessageData(remoteMessage.data)
-      setalert_sms3('Do you want to rate order?')
+      setalert_sms3('Please leave a rating for the vendor and the items you have received.')
       setMy_Alert3(true)
       // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
     }
@@ -226,7 +226,7 @@ const ShopProduct = (props) => {
         props.navigation.navigate('ShopMyOrder')
       } else if (remoteMessage.notification.body == orderPickedUp) {
         setRemoteMessageData(remoteMessage.data)
-        setalert_sms3('Do you want to rate order?')
+        setalert_sms3('Please leave a rating for the vendor and the items you have received.')
         setMy_Alert3(true)
         // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
       }
@@ -245,7 +245,7 @@ const ShopProduct = (props) => {
           props.navigation.navigate('ShopMyOrder', { data: remoteMessage.data })
         } else if (remoteMessage.notification.body == orderPickedUp) {
           setRemoteMessageData(remoteMessage.data)
-          setalert_sms3('Do you want to rate order?')
+          setalert_sms3('Please leave a rating for the vendor and the items you have received.')
           setMy_Alert3(true)
           // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
         }
