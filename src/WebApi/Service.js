@@ -58,7 +58,7 @@ export const  selectAddress_id=`user/selectAddress/id/`;
 export const shop_product_home= `shop/product/home`;
 export const shop_vendor_details= `shop/product/business/id/`;
 export const shop_product_categories= `shop/product/categories`;
-export const  shop_product_business_bycategory=`shop/product/business/byCategory?category=`;
+export const  shop_product_business_bycategory=`shop/product/business/byCategory?`;
 export const  shop_product_orders=`shop/product/orders`;
 
 export const  driver_corporate_vehicle=`driver/corporate_vehicle`;

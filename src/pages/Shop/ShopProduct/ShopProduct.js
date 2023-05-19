@@ -24,6 +24,7 @@ import { setRestorentLocation } from '../../../redux/actions/latLongAction';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from 'react-native-vector-icons/Feather';
+import messaging from '@react-native-firebase/messaging';
 
 Geocoder.init(GoogleApiKey);
 const GOOGLE_MAPS_APIKEY = GoogleApiKey;
@@ -33,6 +34,11 @@ let lan = null
 const dummyLocation = true
 const dummyCoupons = true
 console.log("ShopProductShopProductShopProduct......");
+const placedText = 'A new order has been placed.'
+const acceptedText = `Your order has been accepted and we will update you once its ready for takeaway.`
+const readyForTakeawayText = `Order is ready for takeaway please collect it from the store.`
+const orderPickedUp = `Your order has been picked up.`
+
 const ShopProduct = (props) => {
   const dispatch = useDispatch();
   const [searchValue, setsearchValue] = useState('')
@@ -101,17 +107,21 @@ const ShopProduct = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [My_Alert2, setMy_Alert2] = useState(false)
   const [alert_sms2, setalert_sms2] = useState('')
+  const [My_Alert3, setMy_Alert3] = useState(false)
+  const [alert_sms3, setalert_sms3] = useState('')
   const [refreshing, setRefreshing] = useState(false);
   const [addre, setaddre] = useState(' ');
   const [googleAddress, setGoogleAddress] = useState('');
   const [googleLatLng, setGoogleLatLng] = useState({});
+  const [remoteMessageData, setRemoteMessageData] = useState('');
 
   useEffect(() => {
 
-    if(dummyLocation){
+    if (dummyLocation) {
       homePage(28.5355, 77.3910)
+      // homePage(28.6033, 77.3540)
     }
-    
+
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
@@ -125,7 +135,8 @@ const ShopProduct = (props) => {
         let My_cord = ''
         My_cord = { latitude: location?.latitude, longitude: location?.longitude }
         dispatch(setRestorentLocation(My_cord))
-        homePage(location?.latitude, location?.longitude)
+        // homePage(location?.latitude, location?.longitude)
+        homePage(28.5355, 77.3910)
         LatlongTo_address(My_cord)
       })
       .catch(error => {
@@ -140,7 +151,7 @@ const ShopProduct = (props) => {
   }, [])
 
   const checkcon = () => {
-    console.log('locations latitude longitude2', lat, lan);
+    // console.log('locations latitude longitude2', lat, lan);
     if (lat !== null && lan !== null) {
       homePage(lat, lan)
     } else {
@@ -157,7 +168,8 @@ const ShopProduct = (props) => {
           let My_cord = ''
           My_cord = { latitude: location?.latitude, longitude: location?.longitude }
           dispatch(setRestorentLocation(My_cord))
-          homePage(location?.latitude, location?.longitude)
+          // homePage(location?.latitude, location?.longitude)
+          homePage(28.5355, 77.3910)
           LatlongTo_address(My_cord)
         })
         .catch(error => {
@@ -186,6 +198,57 @@ const ShopProduct = (props) => {
 
     });
   }, []);
+
+  const rateOrder = () => {
+    props.navigation.navigate('ShopReview', { data: remoteMessageData })
+  }
+
+  messaging().onMessage(remoteMessage => {
+    const data = remoteMessage.data
+    // console.log('onMessage remoteMessage',remoteMessage)
+    console.log('remoteMessage.data', remoteMessage.data);
+    console.log('remoteMessage.notification.body', remoteMessage.notification.body);
+    if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+      props.navigation.navigate('ShopMyOrder')
+    } else if (remoteMessage.notification.body == orderPickedUp) {
+      setRemoteMessageData(remoteMessage.data)
+      setalert_sms3('Do you want to rate order?')
+      setMy_Alert3(true)
+      // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
+    }
+    
+  });
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    const data = remoteMessage.data
+    console.log('Notification caused app to open from background state:', remoteMessage)
+    if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+      props.navigation.navigate('ShopMyOrder')
+    } else if (remoteMessage.notification.body == orderPickedUp) {
+      setRemoteMessageData(remoteMessage.data)
+      setalert_sms3('Do you want to rate order?')
+      setMy_Alert3(true)
+      // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
+    }
+  });
+
+
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      console.log('====================================');
+      console.log(remoteMessage);
+      console.log('====================================');
+      if (remoteMessage.notification.title == 'Kinengo') {
+        if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
+          props.navigation.navigate('ShopMyOrder', { data: remoteMessage.data })
+        }else if(remoteMessage.notification.body == orderPickedUp){
+          setRemoteMessageData(remoteMessage.data)
+          setalert_sms3('Do you want to rate order?')
+          setMy_Alert3(true)
+          // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
+        }
+      }
+    });
 
   const LatlongTo_address = async (latlong) => {
     console.log('LatlongTo_address called');
@@ -269,60 +332,60 @@ const ShopProduct = (props) => {
   }
 
   const getDummyCoupons = (data) => {
-     let coupons = []
-     const couponImages = [require('./ProductAssets/coupon-1.png'), require('./ProductAssets/coupon-2.png'), require('./ProductAssets/coupon-3.png')]
-     for(let i=0; i<3;i++){
+    let coupons = []
+    const couponImages = [require('./ProductAssets/coupon-1.png'), require('./ProductAssets/coupon-2.png'), require('./ProductAssets/coupon-3.png')]
+    for (let i = 0; i < 3; i++) {
       // coupons[i] = {...data, image: couponImages[i]}
-      coupons[i] = 
-        {
-            "discount_id": 17,
-            "coupon_name": "20% Off",
-            "coupon_code": "KINENGO20",
-            "coupon_type": "percentage",
-            "discount_value": 20,
-            "min_order_value": 20,
-            "start_date": "2023-04-05",
-            "end_date": "2023-12-31 19:11:39",
-            "coupon_desc": "Get a 20% discount on min. order of $20.",
-            "image": couponImages[i],
-            "status": 1,
-            "business_id": 14,
-            "business_name": "Kinengo eCom",
-            "address_line": "Sector 57, Noida, India",
-            "latitude": "28.60860062",
-            "longitude": "77.35099792"
-        }
-     }
-     console.log('dummy coupons', coupons);
-     return coupons    
-  } 
+      coupons[i] =
+      {
+        "discount_id": 17,
+        "coupon_name": "20% Off",
+        "coupon_code": "KINENGO20",
+        "coupon_type": "percentage",
+        "discount_value": 20,
+        "min_order_value": 20,
+        "start_date": "2023-04-05",
+        "end_date": "2023-12-31 19:11:39",
+        "coupon_desc": "Get a 20% discount on min. order of $20.",
+        "image": couponImages[i],
+        "status": 1,
+        "business_id": 14,
+        "business_name": "Kinengo eCom",
+        "address_line": "Sector 57, Noida, India",
+        "latitude": "28.60860062",
+        "longitude": "77.35099792"
+      }
+    }
+    console.log('dummy coupons', coupons);
+    return coupons
+  }
   const getDummyVendors = (data) => {
-     let vendors = []
-     const vendorImages = [require('./ProductAssets/vendor-1.jpg')]
-     for(let i=0; i<1;i++){
+    let vendors = []
+    const vendorImages = [require('./ProductAssets/vendor-1.jpg')]
+    for (let i = 0; i < 1; i++) {
       // vendors[i] = {...data, image: vendorImages[i]}
-      vendors[i] = 
-        {
-            "userid": 73,
-            "first_name": "eCom",
-            "last_name": "Product",
-            "emailid": "ecom@kinengo.com",
-            "phone": "1998877665",
-            "status": 1,
-            "business_id": 14,
-            "name": "Kinengo eCom",
-            "address_line": "Sector 57, Noida, India",
-            "latitude": "28.60860062",
-            "longitude": "77.35099792",
-            "distance": 5.603938871105555,
-            "banner_image": vendorImages[i],
-            "rating": "4.3",
-            "total_orders": 31
-        }
-     }
-     console.log('dummy vendors', vendors);
-     return vendors    
-  } 
+      vendors[i] =
+      {
+        "userid": 73,
+        "first_name": "eCom",
+        "last_name": "Product",
+        "emailid": "ecom@kinengo.com",
+        "phone": "1998877665",
+        "status": 1,
+        "business_id": 14,
+        "name": "Kinengo eCom",
+        "address_line": "Sector 57, Noida, India",
+        "latitude": "28.60860062",
+        "longitude": "77.35099792",
+        "distance": 5.603938871105555,
+        "banner_image": vendorImages[i],
+        "rating": "4.3",
+        "total_orders": 31
+      }
+    }
+    console.log('dummy vendors', vendors);
+    return vendors
+  }
 
   return (
     <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
@@ -498,7 +561,7 @@ const ShopProduct = (props) => {
             width: 40,
             borderTopRightRadius: 10, borderBottomRightRadius: 10
           }}>
-            <TouchableOpacity onPress={() => { props.navigation.navigate('ShopProductFilter', {categories: resData?.categories}) }}>
+            <TouchableOpacity onPress={() => { props.navigation.navigate('ShopProductFilter', { categories: resData?.categories }) }}>
               <Image source={require('../../../assets/product_filter.png')} style={{ width: 25, height: 25 }}></Image>
             </TouchableOpacity>
           </View>
@@ -559,7 +622,7 @@ paddingLeft={50}/> */}
                 // numColumns={2}
                 renderItem={({ item, index }) => {
                   return (
-                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow: 'hidden', overflow:'hidden' }}>
+                    <View style={{ width: dimensions.SCREEN_WIDTH * 75 / 100, marginHorizontal: 5, borderRadius: 10, overflow: 'hidden', overflow: 'hidden' }}>
                       <TouchableOpacity style={{ width: '95%', height: 110, backgroundColor: Mycolors.LogininputBox, alignSelf: 'center', alignSelf: 'center' }}
                         onPress={() => { props.navigation.navigate('ShopProductSearch', { datas: [], from: '' }) }}>
                         {/* <Image resizeMode='stretch' source={{ uri: item.image }} style={{ width: '100%', height: '100%', alignSelf: 'center', }}></Image> */}
@@ -926,6 +989,7 @@ paddingLeft={50}/> */}
       {loading ? <Loader /> : null}
       {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
       {My_Alert2 ? <MyAlert sms={alert_sms2} sms2={'Logout'} okPress={() => { logoutDriver() }} canclePress={() => { setMy_Alert2(false) }} /> : null}
+      {My_Alert3 ? <MyAlert sms={alert_sms3} okPress={rateOrder} canclePress={() => { setMy_Alert3(false) }} /> : null}
     </SafeAreaView>
   );
 }
@@ -933,7 +997,7 @@ const styles = StyleSheet.create({
   arrowContainer: {
     // position: 'absolute',
     // bottom: -40 / 2,
-    marginTop:-48/2,
+    marginTop: -48 / 2,
     backgroundColor: '#F8F8F8',
     // backgroundColor: 'red',
     alignSelf: 'center',

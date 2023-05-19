@@ -55,7 +55,7 @@ const ShopProductSearch = (props) => {
 
       if (props.route.params.from == 'CatClick') {
         // console.log('props.route.params.datas',props.route.params.datas);
-        catSerch(props.route.params.datas[0].category_name)
+        catSerch('')
 
       } else {
         // AllVenders()
@@ -65,16 +65,27 @@ const ShopProductSearch = (props) => {
 
   }, [])
 
-  const catSerch = async (ddd) => {
-    const endPoint = 
-      dummyLocation ?
-        shop_product_business_bycategory + ddd + '&lat=' + '28.5355' + '&long=' + '77.3910'
-        :
-        shop_product_business_bycategory + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
-    console.log('catSerch endPoint', endPoint);    
+  const catSerch = async (ddd = '') => {
+    let end = shop_product_business_bycategory
+    end += 'category_name=' + props.route.params.datas[0].category_name
+    if(ddd !== ''){
+      end += '&name=' + ddd
+    }
+    if(dummyLocation){
+      end += '&lat=' + '28.5355' + '&long=' + '77.3910'
+    }else{
+      end += '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    }
+
+    // const endPoint = 
+    //   dummyLocation ?
+    //     shop_product_business_bycategory + 'category_name=' + props.route.params.datas[0].category_name + '&name=' + ddd + '&lat=' + '28.5355' + '&long=' + '77.3910'
+    //     :
+    //     shop_product_business_bycategory + 'category_name=' + props.route.params.datas[0].category_name + '&name=' + ddd + '&lat=' + mapdata.restorentlocation.latitude + '&long=' + mapdata.restorentlocation.longitude
+    console.log('catSerch endPoint', end); 
     setLoading(true)
     // const { responseJson, err } = await requestGetApi(shop_product_business_bycategory + ddd, '', 'GET', '')
-    const { responseJson, err } = await requestGetApi(endPoint, '', 'GET', '')
+    const { responseJson, err } = await requestGetApi(end, '', 'GET', '')
     setLoading(false)
     console.log('the res==>>vendor_lists_subcat', responseJson)
     if (responseJson !== null) {
