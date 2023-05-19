@@ -37,7 +37,7 @@ function newAddMinutes(time, minsToAdd) {
 }
 const dummyImages = true
 // const dummyBannerImages = [{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`},{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-sites-1.png`}]
-const dummyBannerImages = [{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`},{image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg`}]
+const dummyBannerImages = [{ image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg` }, { image: `https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg` }]
 const takeAwayNonButton = true
 
 const FoodDetails = (props) => {
@@ -189,6 +189,8 @@ const FoodDetails = (props) => {
       stylers: [{ color: '#17263c' }],
     },
   ];
+  const [showProductInfoModal, setShowProductInfoModal] = useState(false)
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       vendorDetail();
@@ -627,11 +629,11 @@ const FoodDetails = (props) => {
         }
         setbannerimg(responseJson.body.bannerImages[0].image)
         var allimgs = [];
-        if(dummyImages){
+        if (dummyImages) {
           for (let i = 1; i <= dummyBannerImages.length; i++) {
             allimgs.push({ img: dummyBannerImages[i - 1].image })
           }
-        }else{
+        } else {
           for (let i = 1; i <= responseJson.body.bannerImages.length; i++) {
             allimgs.push({ img: responseJson.body.bannerImages[i - 1].image })
           }
@@ -1014,6 +1016,7 @@ const FoodDetails = (props) => {
             flatliistDesign(item.image, item.name, '$' + Number(item.price).toFixed(2), item.tentative_time, () => { postcart(item) },
               () => {
                 setClickedItemData(item)
+                setShowProductInfoModal(true)
                 setmodlevisual1(false)
                 {/* setmodlevisual2(true) */ }
               },
@@ -1386,8 +1389,8 @@ const FoodDetails = (props) => {
               </View> */}
 
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
-                <Text style={{ color: Mycolors.Black, fontWeight: '500', width:'50%' }} >Pick from a wide range of categories</Text>
-                <View style={{flexDirection:'row', alignItems:'center'}}>
+                <Text style={{ color: Mycolors.Black, fontWeight: '500', width: '50%' }} >Pick from a wide range of categories</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {Object.keys(selectedCategory)?.length > 0 ?
                     <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
                       <Image source={require('../../../assets/product_refresh.png')} ></Image>
@@ -1660,7 +1663,7 @@ const FoodDetails = (props) => {
         scrollTo={() => { }}
         scrollOffset={1}
         onBackdropPress={() => setmodlevisual1(false)}
-        onModalWillShow={() => { setmenuresData2({...menuresData}) }}
+        onModalWillShow={() => { setmenuresData2({ ...menuresData }) }}
         propagateSwipe={true}
         coverScreen={false}
         backdropColor='transparent'
@@ -1682,8 +1685,8 @@ const FoodDetails = (props) => {
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   if (e === '') {
-                    setmenuresData2({...menuresData})
-                  }else{
+                    setmenuresData2({ ...menuresData })
+                  } else {
                     setsearchValue(e)
                     searchmenuList(e.text)
                   }
@@ -1955,6 +1958,154 @@ const FoodDetails = (props) => {
         </View>
       </Modal>
       <Modal
+        isVisible={showProductInfoModal}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          setShowProductInfoModal(false)
+        }}
+        scrollTo={() => { }}
+        onBackdropPress={() => setShowProductInfoModal(false)}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '80%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+            <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 22, textAlign: 'center' }} >Product Details</Text>
+
+            <View style={{ height: 'auto', borderRadius: 20, overflow: 'hidden', marginTop: 20, width: '96%', alignSelf: 'center' }}>
+              <ImageSlider
+                //  localImg={true}
+                data={[
+                  // require('../../assets/Group75972.png'),
+                  {
+                    img: ClickedItemData?.default_image
+                  },
+                  {
+                    img: ClickedItemData?.image
+                  },
+                  // { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5a5uCP-n4teeW2SApcIqUrcQApev8ZVCJkA&usqp=CAU' },
+                  // { img: 'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg' },
+                  // { img: 'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510__340.jpg' }
+                ]}
+                // onClick={(item, index) => {alert('hello'+index)}}
+                autoPlay={true}
+                // onItemChanged={(item) => console.log("item", item)}
+                closeIconColor="#fff"
+              />
+            </View>
+
+            <View style={{ width: '96%', alignSelf: 'center', backgroundColor: '#F8F8F8' }}>
+
+              <View style={{ width: '96%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', backgroundColor: '#F8F8F8', borderRadius: 9, paddingVertical: 10 }}>
+                <View style={{ width: '70%' }}>
+                  <Text style={{ color: Mycolors.Black, fontWeight: '600' }}>{ClickedItemData?.name}</Text>
+                  <View style={{flexDirection:'row', alignItems:'center', marginVertical: 4}}>
+                    <Text style={{ color: 'black', fontSize: 13, }}>Category:</Text>
+                    <Text style={{ color: '#835E23', fontSize: 13, fontWeight: 'bold', marginLeft:5 }}>{ClickedItemData?.category}</Text>
+                  </View>
+                </View>
+
+                <View>
+                  <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                    <Image source={require('../../../assets/images/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                    <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>{Number(ClickedItemData?.rating).toFixed(1)}</Text>
+                  </View>
+                  <Text style={{ color: '#835E23', textAlign: 'right', fontSize: 16 }}>${Number(ClickedItemData?.price).toFixed(2)}</Text>
+                  {/* <Text style={{ color: Mycolors.GrayColor, fontSize: 11 }}>0% off, ${Number(ClickedItemData?.price).toFixed(2)}</Text> */}
+                </View>
+
+              </View>
+
+
+              <View>
+                <View style={{ width: '95%', alignSelf: 'center' }}>
+                  <Text style={{ color: Mycolors.DARK_GREY }}>
+                    {''+ClickedItemData?.product_desc}
+                  </Text>
+                  {/* <ViewMoreText
+                numberOfLines={3}
+                renderViewMore={(onPress) => {
+                  return (
+                    <Text onPress={onPress} style={{ color: '#FFC40C', textDecorationLine: "underline" }}>View more</Text>
+                  )
+                }}
+                renderViewLess={(onPress) => {
+                  return (
+                    <Text onPress={onPress} style={{ color: '#FFC40C', textDecorationLine: "underline" }}>View less</Text>
+                  )
+                }}
+                textStyle={{ textAlign: 'left', width: '95%' }}
+              >
+                <Text style={{ color: Mycolors.DARK_GREY }}>
+                  {ClickedItemData?.product_desc}
+                </Text>
+              </ViewMoreText> */}
+
+                  {/* <View>
+                <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+                  <View style={{ width: '95%', marginTop: 15, alignSelf: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Image source={require('../../../assets/images/store_image.png')} />
+                        <View style={{ marginLeft: 15, marginTop: 5 }}>
+                          <Text style={{ fontSize: 16, fontWeight: '500', color: '#263238' }}>{'productDetailsData.Business_name'}</Text>
+                          {productDetailsData['AVG(star)'] ?
+                            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                              <Image source={require('../../../assets/images/Star.png')} style={{ width: 18, height: 18 }}></Image>
+                              <Text style={{ color: Mycolors.Black, fontSize: 14, fontWeight: '600', left: 5 }}>4.5</Text>
+                            </View>
+                            : null}
+                          <TouchableOpacity onPress={() => setmodlevisual1(true)} >
+                            <AntDesign name="infocirlce" color={'#FFC40C'} size={24} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginTop: 5, height: 45, width: '35%', borderRadius: 20, backgroundColor: '#FFC40C', shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowRadius: 5, shadowOpacity: 1.0, elevation: 5 }}>
+                        <Text style={{ fontSize: 14, fontWeight: '500', color: '#fff' }}>Contact store</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', marginTop: 15, marginBottom: 20 }}>
+                      <Image source={require('../../../assets/images/product_location2.png')} style={{ height: 30, width: 30, flex: 1 }} resizeMode='contain' />
+                      <View style={{ marginLeft: 15, flex: 4 }}>
+                        <Text style={{ fontSize: 14, fontWeight: '500', color: '#455A64' }}>Location</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '500', color: '#B2B7B9' }}>500 S Buena Vista St, Burbank, CA 91521, United States</Text>
+                      </View>
+                      <Image source={require('../../../assets/images/product_google_maps_2.png')} style={{ height: 42, width: 42, flex: 2 }} resizeMode='contain' />
+                    </View>
+
+                  </View>
+                </View>
+
+              </View> */}
+
+
+                </View>
+
+
+              </View>
+
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
+
+
+              </View>
+
+
+
+            </View>
+
+
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
+
+        </View>
+      </Modal>
+      <Modal
         isVisible={modlevisual6}
         swipeDirection="down"
         onSwipeComplete={(e) => {
@@ -2177,27 +2328,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // width: '25%',
     // marginTop: 10,
-    marginRight:10,
+    marginRight: 10,
     backgroundColor: '#835E23',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 50
   },
-  taBox:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    borderColor:'#835E23',
-    borderWidth:1,
-    paddingHorizontal:25,
-    paddingVertical:5,
-    borderRadius:5
+  taBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderColor: '#835E23',
+    borderWidth: 1,
+    paddingHorizontal: 25,
+    paddingVertical: 5,
+    borderRadius: 5
   },
-  brownDot:{
-    backgroundColor:'#835E23',
-    height:15,
-    width:15,
-    borderRadius:15/2
+  brownDot: {
+    backgroundColor: '#835E23',
+    height: 15,
+    width: 15,
+    borderRadius: 15 / 2
   }
 });
 export default FoodDetails
