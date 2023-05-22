@@ -450,7 +450,12 @@ const FoodDetails = (props) => {
         //  Toast.show(responseJson.headers.message)
         // Alert.alert(responseJson.headers.message)
         Toast.show({ text1: responseJson.headers.message });
-        menuList(menutypevalue)
+        console.log('putcart searchValue',searchValue);
+        if(searchValue?.text != ''){
+          menuList(menutypevalue, searchValue?.text)
+        }else{
+          menuList(menutypevalue)
+        }
         setreloades(!reloades)
       } else {
         Toast.show({ text1: responseJson.headers.message })
@@ -507,7 +512,11 @@ const FoodDetails = (props) => {
       if (responseJson.headers.success == 1) {
         //  Toast.show(responseJson.headers.message)
         Toast.show({ text1: responseJson.headers.message });
-        menuList(menutypevalue)
+        if(searchValue?.text != ''){
+          menuList(menutypevalue, searchValue?.text)
+        }else{
+          menuList(menutypevalue)
+        }
         //  props.navigation.navigate('ShopCart')
       } else {
         Toast.show({ text1: responseJson.headers.message })
@@ -699,7 +708,7 @@ const FoodDetails = (props) => {
 
   }
 
-  const menuList = async (dd) => {
+  const menuList = async (dd, tt = '') => {
     cart_Count()
     console.log('menuList inside', dd, props.route.params.vendorId);
     setLoading(true)
@@ -712,6 +721,10 @@ const FoodDetails = (props) => {
       urls = shop_product_productlist + props.route.params.vendorId + '?menu_type=' + dd
       // urls=shop_eat_menu_userid+props.route.params.data.userid
     }
+    console.log('menuList tt', tt);
+    if (tt !== '') {
+      urls += '?name=' + tt
+    } 
     console.log('the res in_cart shop_eat_menu_userid urls==>>', urls)
     const { responseJson, err } = await requestGetApi(urls, '', 'GET', User.token)
     setLoading(false)
