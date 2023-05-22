@@ -222,7 +222,7 @@ const ShopProduct = (props) => {
   messaging().onNotificationOpenedApp(remoteMessage => {
     const data = remoteMessage.data
     console.log('Notification caused app to open from background state:', remoteMessage)
-    if (remoteMessage.notification.title == 'Kinengo') {
+    // if (remoteMessage.notification.title == 'Kinengo') {
       if (remoteMessage.notification.body == placedText || remoteMessage.notification.body == acceptedText || remoteMessage.notification.body == readyForTakeawayText) {
         console.log('go to ShopMyOrder2');
         props.navigation.navigate('ShopMyOrder')
@@ -232,7 +232,7 @@ const ShopProduct = (props) => {
         setMy_Alert3(true)
         // props.navigation.navigate('ShopReview',{ data: remoteMessage.data })
       }
-    }
+    // }
   });
 
 
