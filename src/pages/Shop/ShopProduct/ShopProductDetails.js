@@ -479,7 +479,11 @@ const FoodDetails = (props) => {
       if (responseJson.headers.success == 1) {
         // Toast.show(responseJson.headers.message)
         Toast.show({ text1: responseJson.headers.message });
-        menuList(menutypevalue)
+        if(searchValue?.text != ''){
+          menuList(menutypevalue, searchValue?.text)
+        }else{
+          menuList(menutypevalue)
+        }
         setreloades(!reloades)
       } else {
         menuList(menutypevalue)
@@ -1698,6 +1702,7 @@ const FoodDetails = (props) => {
                 serchValue={searchValue}
                 onChangeText={(e) => {
                   if (e === '') {
+                    setsearchValue(e)
                     setmenuresData2({ ...menuresData })
                   } else {
                     setsearchValue(e)
