@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Animated, Dimensions, StatusBar } from 'react-native';
 import MusicCumstomHeader from './MusicCustomHeader';
-import TrackPlayer, {
-    Capability,
-    Event,
-    RepeatMode,
-    State,
-    usePlaybackState,
-    useProgress,
-    useTrackPlayerEvents,
-} from 'react-native-track-player';
+// import TrackPlayer, {
+//     Capability,
+//     Event,
+//     RepeatMode,
+//     State,
+//     usePlaybackState,
+//     useProgress,
+//     useTrackPlayerEvents,
+// } from 'react-native-track-player';
 import Slider from '@react-native-community/slider';
 import { dimensions, Mycolors } from '../../../utility/Mycolors';
 import MyButtons from '../../../component/MyButtons';
@@ -124,16 +124,15 @@ const MusicPlayScreen = (props) => {
           }
     };
 
-    //   changing the track on complete
-    useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
-        if (event.type === Event.PlaybackTrackChanged && event.nextTrack !== null) {
-            const track = await TrackPlayer.getTrack(event.nextTrack);
-            const { title, artwork, artist } = track;
-            setTrackTitle(title);
-            setTrackArtist(artist);
-            setTrackArtwork(artwork);
-        }
-    });
+    // useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
+    //     if (event.type === Event.PlaybackTrackChanged && event.nextTrack !== null) {
+    //         const track = await TrackPlayer.getTrack(event.nextTrack);
+    //         const { title, artwork, artist } = track;
+    //         setTrackTitle(title);
+    //         setTrackArtist(artist);
+    //         setTrackArtwork(artwork);
+    //     }
+    // });
 
     const repeatIcon = () => {
         if (repeatMode == 'off') {
@@ -185,24 +184,24 @@ const MusicPlayScreen = (props) => {
 
         )
     }
-    useEffect(() => {
-        setupPlayer();
+    // useEffect(() => {
+    //     setupPlayer();
 
-        scrollX.addListener(({ value }) => {
-            //   console.log(`ScrollX : ${value} | Device Width : ${width} `);
+    //     scrollX.addListener(({ value }) => {
+          
 
-            const index = Math.round(value / width);
-            skipTo(index);
-            setsongIndex(index);
+    //         const index = Math.round(value / width);
+    //         skipTo(index);
+    //         setsongIndex(index);
 
-            //   console.log(`Index : ${index}`);
-        });
+          
+    //     });
 
-        return () => {
-            scrollX.removeAllListeners();
-            // TrackPlayer.destroy();
-        };
-    }, []);
+    //     return () => {
+    //         scrollX.removeAllListeners();
+          
+    //     };
+    // }, []);
 
     const skipToNext = () => {
         songSlider.current.scrollToOffset({
@@ -229,10 +228,6 @@ const MusicPlayScreen = (props) => {
             </Animated.View>
         );
     };
-
-
-
-
 
     const [upData, setupData] = useState([
         {
@@ -269,7 +264,7 @@ const MusicPlayScreen = (props) => {
 
     return (
         <SafeAreaView style={{ backgroundColor: '#2A2B2C', height: dimensions.SCREEN_HEIGHT * 100 / 100, width: '100%', flex: 1 }}>
-            <StatusBar hidden />
+            {/* <StatusBar hidden />
             <View style={StyleSheet.absoluteFillObject}>
                 {
                     data.map((image, index) => {
@@ -282,9 +277,7 @@ const MusicPlayScreen = (props) => {
                             inputRange,
                             outputRange: [0, 1, 0]
                         })
-                        // console.log('====================================');
-                        // console.log(image);
-                        // console.log('====================================');
+                     
                         return (
                             <Animated.Image
                                 resizeMode={'cover'}
@@ -323,7 +316,7 @@ const MusicPlayScreen = (props) => {
 
 
                 <View style={styles.mainContainer}>
-                    {/* Image */}
+                 
 
                     <Animated.FlatList
                         ref={songSlider}
@@ -347,17 +340,17 @@ const MusicPlayScreen = (props) => {
                         )}
                     />
 
-                    {/* Title & Artist Name */}
+                   
                     <View>
                         <Text style={[styles.songContent, styles.songTitle]}>
-                            {/* {songs[songIndex].title} */ trackTitle}
+                            {trackTitle}
                         </Text>
                         <Text style={[styles.songContent, styles.songArtist]}>
-                            {/* {songs[songIndex].artist} */ trackArtist}
+                            { trackArtist}
                         </Text>
                     </View>
 
-                    {/* songslider */}
+                  
                     <View>
                         <Slider
                             style={styles.progressBar}
@@ -372,22 +365,10 @@ const MusicPlayScreen = (props) => {
                             }}
                         />
 
-                        {/* Progress Durations */}
-                        {/* <View style={styles.progressLevelDuraiton}>
-                                <Text style={styles.progressLabelText}>
-                                    {new Date(progress.position * 1000)
-                                        .toLocaleTimeString()
-                                        .substring(3)}
-                                </Text>
-                                <Text style={styles.progressLabelText}>
-                                    {new Date((progress.duration - progress.position) * 1000)
-                                        .toLocaleTimeString()
-                                        .substring(3)}
-                                </Text>
-                            </View> */}
+                     
                     </View>
 
-                    {/* music control */}
+                 
                     <View style={styles.musicControlsContainer}>
                         <TouchableOpacity onPress={changeRepeatMode}>
                             <MaterialCommunityIcons
@@ -401,7 +382,7 @@ const MusicPlayScreen = (props) => {
                                 source={require('../../../assets/MusicSkipBack.png')}
                                 style={{ height: 25, width: 25, alignSelf: "center", marginTop: 1 }}
                             />
-                            {/* <Ionicons name="play-skip-back-outline" size={35} color="#FFFF" /> */}
+                         
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => togglePlayBack(playBackState)} style={{ paddingVertical: 4, height: 60, width: 55, }}>
                             {
@@ -417,26 +398,14 @@ const MusicPlayScreen = (props) => {
                                     />
                             }
 
-                            {/* <Ionicons
-                                    name={
-                                        playBackState === State.Playing
-                                            ? 'pause-circle-outline'
-                                            : 'play-circle-outline'
-                                    }
-                                    size={75}
-                                    color="#6D2F91"
-                                /> */}
+                          
                         </TouchableOpacity>
                         <TouchableOpacity onPress={skipToNext}>
                             <Image
                                 source={require('../../../assets/MusicSkipForward.png')}
                                 style={{ height: 25, width: 25, alignSelf: "center", marginTop: 1 }}
                             />
-                            {/* <Ionicons
-                                    name="play-skip-forward-outline"
-                                    size={35}
-                                    color="#FFFF"
-                                /> */}
+                           
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { }}>
                             <Ionicons name="heart-outline" size={30} color="#888888" />
@@ -444,32 +413,7 @@ const MusicPlayScreen = (props) => {
                     </View>
                 </View>
 
-                {/* bottom section */}
-                {/* <View style={styles.bottomSection}>
-                        <View style={styles.bottomIconContainer}>
-                            <TouchableOpacity onPress={() => { }}>
-                                <Ionicons name="heart-outline" size={30} color="#888888" />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={changeRepeatMode}>
-                                <MaterialCommunityIcons
-                                    name={`${repeatIcon()}`}
-                                    size={30}
-                                    color={repeatMode !== 'off' ? '#FFD369' : '#888888'}
-                                />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => { }}>
-                                <Ionicons name="share-outline" size={30} color="#888888" />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => { }}>
-                                <Ionicons name="ellipsis-horizontal" size={30} color="#888888" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    */}
-
+               
 
 
                 <View style={{ height: 60 }} />
@@ -482,7 +426,7 @@ const MusicPlayScreen = (props) => {
 
 
 
-            {/* Three Dots Click modul */}
+         
             <Modal
                 isVisible={modlevisual1}
                 swipeDirection="down"
@@ -508,8 +452,8 @@ const MusicPlayScreen = (props) => {
                     </View>
 
                 </View>
-            </Modal>
-        </SafeAreaView >
+            </Modal> */}
+        </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

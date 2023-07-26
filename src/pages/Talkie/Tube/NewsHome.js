@@ -5,7 +5,6 @@ import NewsSearch from './NewsSearch';
 import Modal from 'react-native-modal';
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
-// import { createThumbnail } from "react-native-create-thumbnail";
 import { VideoModel } from '../../../component/VideoModel';
 import LinearGradient from 'react-native-linear-gradient';
 

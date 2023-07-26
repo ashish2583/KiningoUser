@@ -11,7 +11,6 @@ import Modal from 'react-native-modal';
 // import Toast from 'react-native-simple-toast';
 import Loader from '../../../WebApi/Loader';
 import VideoPlayer from 'react-native-video-player'
-// import { createThumbnail } from "react-native-create-thumbnail";
 import { VideoModel } from '../../../component/VideoModel';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
  
