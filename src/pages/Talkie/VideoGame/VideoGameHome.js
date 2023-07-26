@@ -48,15 +48,15 @@ const VideoGameHome = (props) => {
   const [pick, setpick] = useState("");
   const [filepath, setfilepath] = useState(null);
   const [videoDetails, setVideoDetails] = useState([
-    {
-      url: `https://encrypted-vtbn0.gstatic.com/video?q=tbn:ANd9GcQt8LDJP9sEZiwlMAGvs8I-s0yXRX3nZtkjfQ`,
-    },
-    {
-      url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
-    },
-    {
-      url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
-    },
+    // {
+    //   url: `https://encrypted-vtbn0.gstatic.com/video?q=tbn:ANd9GcQt8LDJP9sEZiwlMAGvs8I-s0yXRX3nZtkjfQ`,
+    // },
+    // {
+    //   url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
+    // },
+    // {
+    //   url: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`,
+    // },
   ]);
   const [upData, setupData] = useState([
     {
@@ -110,41 +110,41 @@ const VideoGameHome = (props) => {
     },
   ]);
   const [courseData, setCourseData] = useState([
-    {
-      id: "1",
-      title: "Sandbox",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Sandboximage.png"),
-    },
-    {
-      id: "2",
-      title: "Battle Games",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/BattleGames.png"),
-    },
-    {
-      id: "3",
-      title: "Puzzlers",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Puzzlers.png"),
-    },
-    {
-      id: "4",
-      title: "Sandbox",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Sandboximage.png"),
-    },
-    {
-      id: "5",
-      title: "Battle Games",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/BattleGames.png"),
-    },
+    // {
+    //   id: "1",
+    //   title: "Sandbox",
+    //   desc: "",
+    //   time: "",
+    //   img: require("../../../assets/images/Sandboximage.png"),
+    // },
+    // {
+    //   id: "2",
+    //   title: "Battle Games",
+    //   desc: "",
+    //   time: "",
+    //   img: require("../../../assets/images/BattleGames.png"),
+    // },
+    // {
+    //   id: "3",
+    //   title: "Puzzlers",
+    //   desc: "",
+    //   time: "",
+    //   img: require("../../../assets/images/Puzzlers.png"),
+    // },
+    // {
+    //   id: "4",
+    //   title: "Sandbox",
+    //   desc: "",
+    //   time: "",
+    //   img: require("../../../assets/images/Sandboximage.png"),
+    // },
+    // {
+    //   id: "5",
+    //   title: "Battle Games",
+    //   desc: "",
+    //   time: "",
+    //   img: require("../../../assets/images/BattleGames.png"),
+    // },
   ]);
   useEffect(() => {
     // generateThumb()
@@ -384,7 +384,7 @@ const VideoGameHome = (props) => {
                       onPress={() => {}}
                     >
                       <Image
-                        source={{ uri: item.thumbnail }}
+                        source={{ uri: item.image }}
                         style={{ width: 75, height: 75 }}
                         resizeMode="contain"
                       ></Image>
@@ -545,7 +545,7 @@ const VideoGameHome = (props) => {
           width={"100%"}
           borderRadius={5}
           press={() => {
-            props.navigation.navigate("VideoUpload");
+            props.navigation.navigate("VideoUpload", { courseData });
           }}
           fontSize={13}
           titlecolor={Mycolors.BG_COLOR}

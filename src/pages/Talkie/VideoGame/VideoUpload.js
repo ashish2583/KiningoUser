@@ -43,43 +43,44 @@ const VideoUpload = (props) => {
   const [My_Alert, setMy_Alert] = useState(false);
   const [alert_sms, setalert_sms] = useState("");
 
-  const [courseData, setCourseData] = useState([
-    {
-      id: "1",
-      title: "Sandbox",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Sandboximage.png"),
-    },
-    {
-      id: "2",
-      title: "Battle Games",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/BattleGames.png"),
-    },
-    {
-      id: "3",
-      title: "Puzzlers",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Puzzlers.png"),
-    },
-    {
-      id: "4",
-      title: "Sandbox",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/Sandboximage.png"),
-    },
-    {
-      id: "5",
-      title: "Battle Games",
-      desc: "",
-      time: "",
-      img: require("../../../assets/images/BattleGames.png"),
-    },
-  ]);
+  const [courseData, setCourseData] = useState(props.route.params.courseData);
+  //   const [courseData, setCourseData] = useState([
+  //     {
+  //       id: "1",
+  //       title: "Sandbox",
+  //       desc: "",
+  //       time: "",
+  //       img: require("../../../assets/images/Sandboximage.png"),
+  //     },
+  //     {
+  //       id: "2",
+  //       title: "Battle Games",
+  //       desc: "",
+  //       time: "",
+  //       img: require("../../../assets/images/BattleGames.png"),
+  //     },
+  //     {
+  //       id: "3",
+  //       title: "Puzzlers",
+  //       desc: "",
+  //       time: "",
+  //       img: require("../../../assets/images/Puzzlers.png"),
+  //     },
+  //     {
+  //       id: "4",
+  //       title: "Sandbox",
+  //       desc: "",
+  //       time: "",
+  //       img: require("../../../assets/images/Sandboximage.png"),
+  //     },
+  //     {
+  //       id: "5",
+  //       title: "Battle Games",
+  //       desc: "",
+  //       time: "",
+  //       img: require("../../../assets/images/BattleGames.png"),
+  //     },
+  //   ]);
   useEffect(() => {}, []);
   const generateThumb = async (path) => {
     try {
@@ -336,7 +337,7 @@ const VideoUpload = (props) => {
                       </LinearGradient>
 
                       <Image
-                        source={item.img}
+                        source={{ uri: item.image }}
                         style={{ width: 75, height: 75 }}
                         resizeMode="contain"
                       ></Image>
@@ -350,7 +351,7 @@ const VideoUpload = (props) => {
                           textAlign: "center",
                         }}
                       >
-                        {item.title}
+                        {item.name}
                       </Text>
                     </TouchableOpacity>
                   </LinearGradient>
