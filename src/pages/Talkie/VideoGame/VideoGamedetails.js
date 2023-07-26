@@ -24,7 +24,13 @@ import Modal from "react-native-modal";
 import Loader from "../../../WebApi/Loader";
 import RepliesModal from "../../../component/ReplesModal";
 import { Rating, AirbnbRating } from "react-native-ratings";
-import { game_single_video, requestGetApi } from "../../../WebApi/Service";
+import {
+  game_review,
+  game_single_video,
+  requestGetApi,
+  requestPostApi,
+  requestPostApiMedia,
+} from "../../../WebApi/Service";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import MyAlert from "../../../component/MyAlert";
@@ -46,6 +52,7 @@ const VideoGamedetails = (props) => {
   const [loading, setLoading] = useState(false);
   const [postDecs, setPostDesc] = useState("");
   const [videoData, setVideoData] = useState({});
+  const [rating, setRating] = useState("0");
 
   const design = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
     return (
@@ -274,6 +281,29 @@ const VideoGamedetails = (props) => {
     const replies = upData?.find((el) => el.id === itemid)?.replies;
     if (replies?.length === 0) {
       return;
+    }
+  };
+  //   working on post review function
+  const postReview = async () => {
+    setLoading(true);
+    const { responseJson, err } = await requestPostApiMedia(
+      game_review,
+      "",
+      "POST",
+      User.token
+    );
+    setLoading(false);
+    console.log("postReview responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      setRating("0");
+      setPostDesc("");
+      setmodlevisual1(false);
+
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
     }
   };
   return (
@@ -897,6 +927,12 @@ const VideoGamedetails = (props) => {
                 // ratingBackgroundColor={'#455A64'}
                 tintColor={"#2A2B2C"}
                 style={{ paddingVertical: 10 }}
+                onSwipeRating={(d) => {
+                  setRating(d);
+                }}
+                onFinishRating={(d) => {
+                  setRating(d);
+                }}
                 // readonly={true}
                 // showRating
                 //onFinishRating={this.ratingCompleted}
@@ -945,7 +981,8 @@ const VideoGamedetails = (props) => {
                 width={"100%"}
                 borderRadius={5}
                 press={() => {
-                  props.navigation.navigate(" "), setmodlevisual1(false);
+                  //   props.navigation.navigate(" "), setmodlevisual1(false);
+                  postReview();
                 }}
                 fontSize={13}
                 titlecolor={Mycolors.BG_COLOR}
