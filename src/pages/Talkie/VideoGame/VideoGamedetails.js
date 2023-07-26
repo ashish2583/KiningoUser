@@ -283,12 +283,27 @@ const VideoGamedetails = (props) => {
       return;
     }
   };
+  const reviewValidation = () => {
+    if (postDecs?.trim()?.length === 0) {
+      Toast.show({ text1: "Please write review" });
+      return false;
+    }
+    return true;
+  };
   //   working on post review function
   const postReview = async () => {
+    if (!reviewValidation()) {
+      return;
+    }
     setLoading(true);
-    const { responseJson, err } = await requestPostApiMedia(
+    const data = {
+      game_id: props.route.params.videoId,
+      star: rating,
+      comments: postDecs,
+    };
+    const { responseJson, err } = await requestPostApi(
       game_review,
-      "",
+      data,
       "POST",
       User.token
     );
@@ -298,7 +313,7 @@ const VideoGamedetails = (props) => {
       setRating("0");
       setPostDesc("");
       setmodlevisual1(false);
-
+      getSingleVideo();
       //   Toast.show({ text1: responseJson.headers.message });
     } else {
       Toast.show({ text1: responseJson.headers.message });
