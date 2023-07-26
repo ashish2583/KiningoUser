@@ -86,6 +86,7 @@ export const post_movie_review = "talkie/movieReview";
 export const game_category = "common/talkie/game-category";
 export const game_video = "talkie/gameVideo";
 export const game = "talkie/game";
+export const game_single_video = "talkie/gameVideo/id/";
 
 export const requestPostApi = async (endPoint, body, method, token) => {
   console.log("the token is :-", token);

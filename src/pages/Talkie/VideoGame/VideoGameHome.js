@@ -490,7 +490,9 @@ const VideoGameHome = (props) => {
                       >
                         <TouchableOpacity
                           onPress={() => {
-                            props.navigation.navigate("VideoGamedetails");
+                            props.navigation.navigate("VideoGamedetails", {
+                              videoId: item.id,
+                            });
                           }}
                         >
                           <View style={{ width: "52%" }}>
