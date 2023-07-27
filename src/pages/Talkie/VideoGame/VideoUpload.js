@@ -83,13 +83,16 @@ const VideoUpload = (props) => {
   //   ]);
   useEffect(() => {}, []);
   const generateThumb = async (path) => {
+    console.log('generateThumb path', path);
     try {
       const thumb = await createThumbnail({
         url: path,
         timeStamp: 1000,
       });
-      console.log("thumb", thumb);
-      setThumbnail(thumb);
+      // console.log("thumb", thumb);
+      const updatedThumb  = {...thumb, path: thumb.path + '.' + thumb.mime?.split('/')[1]}
+      console.log("thumb", updatedThumb);
+      setThumbnail(updatedThumb);
     } catch (error) {
       console.log("error creating thumbnail", error);
     }
@@ -111,7 +114,6 @@ const VideoUpload = (props) => {
     if (!Validation()) {
       return;
     }
-    setLoading(true);
     const formdata = new FormData();
     formdata.append("category_id", "1");
     formdata.append("name", videoTitle);
@@ -132,6 +134,7 @@ const VideoUpload = (props) => {
     // formdata.append("duration", "2");
     formdata.append("status", "1");
     console.log("onUpload formdata", formdata);
+    setLoading(true);
     const headers = {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${User.token}`,
@@ -145,7 +148,7 @@ const VideoUpload = (props) => {
       });
       setLoading(false);
       const responseJson = await response.json();
-      console.log("onUpload...............", responseJson);
+      // console.log("onUpload...............", responseJson);
       if (responseJson.headers.success == 1) {
         props.navigation.goBack();
         Toast.show({ text1: responseJson.headers.message });
@@ -183,14 +186,15 @@ const VideoUpload = (props) => {
         console.log("image", image);
         console.log("the ddd==", image.assets[0].uri);
         var photo = {
-          uri: image.assets[0].uri,
+          // uri: image.assets[0].uri,
+          uri: image.assets[0].uri + '.' + image.assets[0].type?.split('/')[1],
           type: image.assets[0].type,
           name: image.assets[0].fileName,
         };
         console.log("photo", photo);
         setpick(photo);
         setfilepath(image);
-        generateThumb(photo?.uri);
+        generateThumb(image.assets[0].uri);
         // Toast.show({ text1: "Video added successfully" });
       }
     });
