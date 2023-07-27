@@ -183,7 +183,7 @@ const VideoGameHome = (props) => {
     setLoading2(false);
     console.log("getGameVideo responseJson", responseJson);
     if (responseJson.headers.success == 1) {
-      setVideoDetails(responseJson.body);
+      setVideoDetails(responseJson.body?.data);
       //   Toast.show({ text1: responseJson.headers.message });
     } else {
       Toast.show({ text1: responseJson.headers.message });
