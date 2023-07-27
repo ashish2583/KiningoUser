@@ -476,16 +476,7 @@ const VideoGameHome = (props) => {
                           />
                         </View>
                       </View>
-                      
-                    </View>
-                    
-                    <Image
-                      style={styles.BackGroundImage}
-                      // theme={theme}
-                      source={{ uri: item?.thumbnail }}
-                      resizeMode={"cover"}
-                    />
-                    <LinearGradient
+                      <LinearGradient
                         colors={["#000", "transparent"]}
                         style={{
                           height: 60,
@@ -493,8 +484,6 @@ const VideoGameHome = (props) => {
                           borderRadius: 15,
                           paddingHorizontal: 15,
                           justifyContent: "center",
-                          position:'absolute',
-                          bottom:0
                         }}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0.2, y: 0 }}
@@ -524,6 +513,13 @@ const VideoGameHome = (props) => {
                           </Text>
                         </TouchableOpacity>
                       </LinearGradient>
+                    </View>
+                    <Image
+                      style={styles.BackGroundImage}
+                      // theme={theme}
+                      source={{ uri: item?.thumbnail }}
+                      resizeMode={"cover"}
+                    />
                   </TouchableOpacity>
                 </View>
               )}
