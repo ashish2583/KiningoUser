@@ -25,6 +25,7 @@ import Loader from "../../../WebApi/Loader";
 import RepliesModal from "../../../component/ReplesModal";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import {
+  creation_common_add_views,
   game_review,
   game_single_video,
   requestGetApi,
@@ -50,6 +51,7 @@ const VideoGamedetails = (props) => {
   const [userMessage, setUserMessage] = useState("");
   const [replyingTo, setReplyingTo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [postDecs, setPostDesc] = useState("");
   const [videoData, setVideoData] = useState({});
   const [rating, setRating] = useState("0");
@@ -95,8 +97,32 @@ const VideoGamedetails = (props) => {
     );
   };
   useEffect(() => {
+    addView();
     getSingleVideo();
   }, []);
+  const addView = async () => {
+    const data = {
+      "object_type": "game",
+      "object_id" : '1'
+    }
+    setLoading2(true);
+    const { responseJson, err } = await requestGetApi(
+      creation_common_add_views + props.route.params.videoId,
+      data,
+      "POST",
+      User.token
+    );
+    setLoading2(false);
+    console.log("addView responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      setVideoData(responseJson.body);
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
+    }
+  };
   const getSingleVideo = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
@@ -590,7 +616,7 @@ const VideoGamedetails = (props) => {
 
           <View style={{ width: "100%", alignSelf: "center", marginTop: 15 }}>
             <FlatList
-              data={upData}
+              data={videoData?.review}
               showsHorizontalScrollIndicator={false}
               numColumns={1}
               renderItem={({ item, index }) => {
@@ -621,7 +647,7 @@ const VideoGamedetails = (props) => {
                             }}
                           >
                             <Image
-                              source={item.img}
+                              source={{uri: item.profile_image}}
                               style={{ height: 50, width: 50 }}
                             />
                             <View style={{ marginLeft: 10 }}>
@@ -632,7 +658,7 @@ const VideoGamedetails = (props) => {
                                   color: "#FFFFFF",
                                 }}
                               >
-                                {item.name}
+                                {item.user_name}
                               </Text>
                               <View
                                 style={{
@@ -652,7 +678,7 @@ const VideoGamedetails = (props) => {
                                     left: 7,
                                   }}
                                 >
-                                  4.5
+                                  {item.star}
                                 </Text>
                                 <Text
                                   style={{
@@ -662,7 +688,7 @@ const VideoGamedetails = (props) => {
                                     marginLeft: 25,
                                   }}
                                 >
-                                  {item.time}
+                                  14 min
                                 </Text>
                               </View>
                             </View>
@@ -702,7 +728,7 @@ const VideoGamedetails = (props) => {
                               color: "#FFFFFF",
                             }}
                           >
-                            {item.message}
+                            {item.comments}
                           </Text>
                         </View>
                       </View>
@@ -721,7 +747,7 @@ const VideoGamedetails = (props) => {
 
         <View style={{ height: 60 }} />
       </ScrollView>
-      {loading ? <Loader /> : null}
+      {loading || loading2 ? <Loader /> : null}
       <RepliesModal
         isVisible={showRepliesModal}
         setIsVisible={setShowRepliesModal}
@@ -734,7 +760,7 @@ const VideoGamedetails = (props) => {
         // startFromIndex={startFromIndex}
       />
 
-      <View style={styles.addCommentView}>
+      {/* <View style={styles.addCommentView}>
         <TextInput
           ref={myTextInput}
           value={userMessage}
@@ -751,7 +777,7 @@ const VideoGamedetails = (props) => {
             Send
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <Modal
         isVisible={showReportModal}
