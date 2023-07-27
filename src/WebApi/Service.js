@@ -80,8 +80,8 @@ export const driver_change_account_status = "driver/change_account_status";
 
 export const add_movie = "talkie/movie";
 export const get_movies = "talkie/movie";
-export const get_single_movie_video = "talkie/movieVideo/id/";
-export const post_movie_review = "talkie/movieReview";
+export const get_single_movie_video = "talkie/movie-video/id/";
+export const post_movie_review = "talkie/movie-review";
 
 export const game_category = "common/talkie/game-category";
 export const game_video = "talkie/game-video";

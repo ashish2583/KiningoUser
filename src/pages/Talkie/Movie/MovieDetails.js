@@ -25,7 +25,7 @@ import Loader from "../../../WebApi/Loader";
 import RepliesModal from "../../../component/ReplesModal";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import Share from "react-native-share";
-import { get_single_movie_video, requestGetApi } from "../../../WebApi/Service";
+import { get_single_movie_video, post_movie_review, requestGetApi, requestPostApi } from "../../../WebApi/Service";
 import { useSelector } from "react-redux";
 
 const MovieDetails = (props) => {
@@ -41,6 +41,7 @@ const MovieDetails = (props) => {
   const [loading, setLoading] = useState(false);
   const [postDecs, setPostDesc] = useState("");
   const [selectedcategory, setselectedcategory] = useState("1");
+  const [rating, setRating] = useState("0");
 
   const design = (img, ti, tit, w, imgh, imgw, redious, press) => {
     return (
@@ -263,6 +264,44 @@ const MovieDetails = (props) => {
     const replies = upData?.find((el) => el.id === itemid)?.replies;
     if (replies?.length === 0) {
       return;
+    }
+  };
+  const reviewValidation = () => {
+    if (postDecs?.trim()?.length === 0) {
+      Toast.show({ text1: "Please write review" });
+      return false;
+    }
+    return true;
+  };
+  //   working on post review function
+  const postReview = async () => {
+    if (!reviewValidation()) {
+      return;
+    }
+    setLoading(true);
+    const data = {
+      movie_id: upData?.id,
+      star: rating,
+      comments: postDecs,
+    };
+    const { responseJson, err } = await requestPostApi(
+      post_movie_review,
+      data,
+      "POST",
+      User.token
+    );
+    setLoading(false);
+    console.log("postReview responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      setRating("0");
+      setPostDesc("");
+      setmodlevisual1(false);
+      getSingleMovieVideo();
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
     }
   };
   return (
@@ -1000,6 +1039,12 @@ const MovieDetails = (props) => {
                 ratingBackgroundColor={"#D9D9D9"}
                 tintColor={"#FFFFFF"}
                 style={{ paddingVertical: 10 }}
+                onSwipeRating={(d) => {
+                  setRating(d);
+                }}
+                onFinishRating={(d) => {
+                  setRating(d);
+                }}
                 // readonly={true}
                 // showRating
                 //onFinishRating={this.ratingCompleted}
@@ -1048,7 +1093,8 @@ const MovieDetails = (props) => {
                 width={"100%"}
                 borderRadius={5}
                 press={() => {
-                  props.navigation.navigate(" "), setmodlevisual1(false);
+                  // props.navigation.navigate(" "), setmodlevisual1(false);
+                  postReview()
                 }}
                 fontSize={13}
                 titlecolor={Mycolors.BG_COLOR}
