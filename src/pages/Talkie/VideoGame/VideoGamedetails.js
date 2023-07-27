@@ -620,6 +620,21 @@ const VideoGamedetails = (props) => {
               showsHorizontalScrollIndicator={false}
               numColumns={1}
               renderItem={({ item, index }) => {
+                console.log('moment diff', moment().diff(item.created_date, 'days'));
+                const diffYears = moment().diff(item.created_date, 'years')
+                const diffMonths = moment().diff(item.created_date, 'months')
+                const diffdays = moment().diff(item.created_date, 'days')
+                const diffHours = moment().diff(item.created_date, 'hours')
+                let diff = null
+                if (diffYears > 0) {
+                  diff = diffYears + ' yrs ago'
+                } else if (diffMonths > 0) {
+                  diff = diffMonths + ' months ago'
+                } else if (diffdays > 0) {
+                  diff = diffdays + ' days ago'
+                } else if (diffHours > 0) {
+                  diff = diffHours + ' hours ago'
+                }
                 return (
                   <View
                     style={{
@@ -688,7 +703,7 @@ const VideoGamedetails = (props) => {
                                     marginLeft: 25,
                                   }}
                                 >
-                                  14 min
+                                  {diff}
                                 </Text>
                               </View>
                             </View>
