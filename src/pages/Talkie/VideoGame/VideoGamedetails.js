@@ -38,6 +38,45 @@ import MyAlert from "../../../component/MyAlert";
 import moment from "moment";
 import { VideoModel } from "../../../component/VideoModel";
 
+const getDiff = (created_date) => {
+  const diffYears = moment().diff(created_date, 'years')
+  if (diffYears > 0) {
+    if(diffYears > 1){
+      diff = diffYears + ' yrs ago'
+    }else{
+      diff = diffYears + ' yr ago'
+    }
+    return diff
+  }
+  const diffMonths = moment().diff(created_date, 'months')
+  if (diffMonths > 0) {
+    if(diffMonths > 1){
+      diff = diffMonths + ' months ago'
+    }else{
+      diff = diffMonths + ' month ago'
+    }
+    return diff
+  }
+  const diffdays = moment().diff(created_date, 'days')
+  if (diffdays > 0) {
+    if(diffdays > 1){
+      diff = diffdays + ' days ago'
+    }else{
+      diff = diffdays + ' day ago'
+    }
+    return diff
+  }
+  const diffHours = moment().diff(created_date, 'hours')
+  const diffMinutes = moment().diff(created_date, 'minutes')
+  const diffOnlyMinutes = diffMinutes % 60
+  if (diffHours > 0) {
+    let hr = diffHours > 1 ? ' hrs ' : ' hr '
+    let min = diffOnlyMinutes > 1 ? ' mins' : ' min'
+    diff = diffHours + hr + diffOnlyMinutes + min +' ago'
+    return diff
+  }
+}
+
 const VideoGamedetails = (props) => {
   const User = useSelector((state) => state.user.user_details);
   const [My_Alert, setMy_Alert] = useState(false);
@@ -621,20 +660,7 @@ const VideoGamedetails = (props) => {
               numColumns={1}
               renderItem={({ item, index }) => {
                 console.log('moment diff', moment().diff(item.created_date, 'days'));
-                const diffYears = moment().diff(item.created_date, 'years')
-                const diffMonths = moment().diff(item.created_date, 'months')
-                const diffdays = moment().diff(item.created_date, 'days')
-                const diffHours = moment().diff(item.created_date, 'hours')
-                let diff = null
-                if (diffYears > 0) {
-                  diff = diffYears + ' yrs ago'
-                } else if (diffMonths > 0) {
-                  diff = diffMonths + ' months ago'
-                } else if (diffdays > 0) {
-                  diff = diffdays + ' days ago'
-                } else if (diffHours > 0) {
-                  diff = diffHours + ' hours ago'
-                }
+                const diff = getDiff(item.created_date)
                 return (
                   <View
                     style={{
