@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
+  Platform,
+  PermissionsAndroid,
 } from "react-native";
 import HomeHeader from "../../../component/HomeHeader";
 import SearchInput2 from "../../../component/SearchInput2";
@@ -37,8 +39,10 @@ import Toast from "react-native-toast-message";
 import MyAlert from "../../../component/MyAlert";
 import moment from "moment";
 import { VideoModel } from "../../../component/VideoModel";
+import RNFetchBlob from 'rn-fetch-blob';
 
 const getDiff = (created_date) => {
+  let diff = null
   const diffYears = moment().diff(created_date, 'years')
   if (diffYears > 0) {
     if(diffYears > 1){
@@ -386,6 +390,91 @@ const VideoGamedetails = (props) => {
       setMy_Alert(true);
     }
   };
+  //function : imp function
+  const checkDownloadPermission = async () => {
+    if (Platform.OS === 'ios') {
+      downloadFile();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'Application needs access to your storage to download File',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          downloadFile();
+          console.log('Storage Permission Granted.');
+        } else {
+          Toast.show('Storage Permission Not Granted', Toast.LONG);
+          // Alert.alert('Error', 'Storage Permission Not Granted');
+        }
+      } catch (err) {
+        // To handle permission related exception
+        console.log('ERROR' + err);
+      }
+    }
+  };
+  //function : service function
+  const downloadFile = async () => {
+    let url = videoData?.file
+    let videoUrl = url;
+    let DownloadDir =
+      Platform.OS == 'ios'
+        ? RNFetchBlob.fs.dirs.DocumentDir
+        : RNFetchBlob.fs.dirs.DownloadDir;
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave =
+      Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+    const configfb = {
+      fileCache: true,
+      useDownloadManager: true,
+      notification: true,
+      mediaScannable: true,
+      title: 'Videogame',
+      path: `${dirToSave}.mp4`,
+    };
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: configfb.fileCache,
+        title: configfb.title,
+        path: configfb.path,
+        appendExt: 'mp4',
+      },
+      android: configfb,
+    });
+    Platform.OS == 'android'
+      ? RNFetchBlob.config({
+          fileCache: true,
+          addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            path: `${DownloadDir}/.mp4`,
+            description: 'kiningo Videogame',
+            title: `${videoData?.name}video.mp4`,
+            mime: 'video/mp4',
+            mediaScannable: true,
+          },
+        })
+          .fetch('GET', `${videoUrl}`)
+          .catch(error => {
+            console.warn(error.message);
+          })
+      : RNFetchBlob.config(configOptions)
+          .fetch('GET', `${videoUrl}`, {})
+          .then(res => {
+            if (Platform.OS === 'ios') {
+              RNFetchBlob.fs.writeFile(configfb.path, res.data, 'base64');
+              RNFetchBlob.ios.previewDocument(configfb.path);
+            }
+            console.log('The file saved to ', res);
+          })
+          .catch(e => {
+            console.log('The file saved to ERROR', e.message);
+          });
+  };
   return (
     <SafeAreaView
       style={{
@@ -483,7 +572,7 @@ const VideoGamedetails = (props) => {
                   style={{ width: 15, height: 15 }}
                 ></Image>
                 <Text style={{ color: "#FFD037", fontSize: 11, left: 7 }}>
-                  4.5
+                  {videoData?.rating}
                 </Text>
 
                 <View
@@ -501,7 +590,7 @@ const VideoGamedetails = (props) => {
                       fontWeight: "600",
                     }}
                   >
-                    1.4M Views
+                    {videoData?.total_views} Views
                   </Text>
                   <Text
                     style={{
@@ -560,7 +649,8 @@ const VideoGamedetails = (props) => {
               25,
               28,
               "",
-              20
+              20,
+              checkDownloadPermission 
             )}
             {design(
               require("../../../assets/ShareNetwork.png"),
@@ -613,18 +703,7 @@ const VideoGamedetails = (props) => {
                 textAlign: "left",
               }}
             >
-              PUBG: Battlegrounds (previously known as PlayerUnknown's
-              Battlegrounds, or simply PUBG) is an online multiplayer battle
-              royale game developed and published by PUBG Studios, a subsidiary
-              of Krafton. The game is based on previous mods that were created
-              by Brendan "PlayerUnknown" Greene for other games, inspired by the
-              2000 Japanese film Battle Royale, and expanded into a standalone
-              game under Greene's creative direction. In the game, up to one
-              hundred players parachute onto an island and scavenge for weapons
-              and equipment to kill others while avoiding getting killed
-              themselves. The available safe area of the game's map decreases in
-              size over time, directing surviving players into tighter areas to
-              force encounters.
+              {videoData?.description}
             </Text>
           </View>
 
@@ -659,7 +738,7 @@ const VideoGamedetails = (props) => {
               showsHorizontalScrollIndicator={false}
               numColumns={1}
               renderItem={({ item, index }) => {
-                console.log('moment diff', moment().diff(item.created_date, 'days'));
+                // console.log('moment diff', moment().diff(item.created_date, 'days'));
                 const diff = getDiff(item.created_date)
                 return (
                   <View
