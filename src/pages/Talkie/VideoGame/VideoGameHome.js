@@ -521,7 +521,7 @@ const VideoGameHome = (props) => {
                               color: Mycolors.BG_COLOR,
                             }}
                           >
-                            {`${item.first_name} ${item.last_name}`}
+                            {item.user_name}
                           </Text>
                         </TouchableOpacity>
                       </LinearGradient>
@@ -541,14 +541,12 @@ const VideoGameHome = (props) => {
         </View>
         <View style={{ height: 170 }} />
       </ScrollView>
-      <View
+      {/* <View
         style={{
           width: "95%",
           height: 60,
           flexDirection: "row",
           justifyContent: "space-between",
-          position: "absolute",
-          bottom: 100,
           alignSelf: "center",
           zIndex: 999,
         }}
@@ -566,7 +564,7 @@ const VideoGameHome = (props) => {
           marginVertical={0}
           backgroundColor={"#ED1C24"}
         />
-      </View>
+      </View> */}
       {loading || loading2 ? <Loader /> : null}
       <Modal
         isVisible={showVideoModal}
@@ -658,6 +656,9 @@ const VideoGameHome = (props) => {
           }}
         />
       ) : null}
+      <TouchableOpacity onPress={() => {props.navigation.navigate("VideoUpload", { courseData }) }} style={{ bottom: 60, right: 20, position: 'absolute', alignSelf: 'flex-end', width: 80, height: 80, borderRadius: 80 / 2, backgroundColor: "#ED1C24", justifyContent: 'center', alignItems: 'center', shadowColor: '#FFD037', shadowOffset: { width: 0, height: 3 }, shadowRadius: 1, shadowOpacity: 0.1, elevation: 5 }}>
+          <Image source={require('../../../assets/images/fashion-upload-icon.png')} style={{ width: 40, height: 40 }} />
+        </TouchableOpacity>
     </SafeAreaView>
   );
 };

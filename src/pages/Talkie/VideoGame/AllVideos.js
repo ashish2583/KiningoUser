@@ -116,7 +116,7 @@ const AllVideos = (props) => {
         <Search
           searchIcon={require("../../../assets/Search-icon-red.png")}
           marginTop={10}
-          placeholder={"Search video"}
+          placeholder={"Search video by title"}
           serchValue={searchValue}
           onChangeText={(e) => {
             console.log('onChangeText', e);
@@ -222,7 +222,7 @@ const AllVideos = (props) => {
                               color: Mycolors.BG_COLOR,
                             }}
                           >
-                            {`${item.first_name} ${item.last_name}`}
+                            {item.user_name}
                           </Text>
                         </TouchableOpacity>
                       </LinearGradient>

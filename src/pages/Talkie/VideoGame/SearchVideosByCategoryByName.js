@@ -304,7 +304,7 @@ const SearchVideosByCategoryByName = (props) => {
                               color: Mycolors.BG_COLOR,
                             }}
                           >
-                            {`${item.first_name} ${item.last_name}`}
+                            {item.user_name}
                           </Text>
                         </TouchableOpacity>
                       </LinearGradient>
