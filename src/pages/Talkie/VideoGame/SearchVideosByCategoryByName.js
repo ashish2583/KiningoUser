@@ -393,6 +393,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  VideoThumbWrapper: {
+    position: "relative",
+    // width: '48%',
+    // marginRight: 8,
+    marginBottom: 4,
+
+    width: dimensions.SCREEN_WIDTH / 2.3,
+    height: 190,
+    marginRight: 16,
+    borderRadius: 15,
+    // shadowColor:'#000',
+    // shadowOffset: {width: 0,height: 3},
+    // shadowRadius: 1,
+    // shadowOpacity: 0.03,
+    // elevation: 1,
+  },
+  PlayIconContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
+  PlayIconWrapper: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 export default SearchVideosByCategoryByName;
 
