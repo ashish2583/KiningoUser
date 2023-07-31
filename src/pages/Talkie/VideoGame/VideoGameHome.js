@@ -18,6 +18,7 @@ import SearchInput2 from "../../../component/SearchInput2";
 import { dimensions, Mycolors } from "../../../utility/Mycolors";
 import MyButtons from "../../../component/MyButtons";
 import B2BSearch from "../../Deal/B2b/B2BSearch";
+import Search from "./components/Search";
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 // import Toast from 'react-native-simple-toast';
@@ -191,6 +192,9 @@ const VideoGameHome = (props) => {
       setMy_Alert(true);
     }
   };
+  const gotoSearchVideosByCategoryByName = () => {
+    props.navigation.navigate("SearchVideosByCategoryByName", { courseData });
+  };
 
   const openLibrary = async () => {
     let options = {
@@ -322,7 +326,8 @@ const VideoGameHome = (props) => {
 
         <View style={{ width: "90%", alignSelf: "center" }}>
           <View style={{ top: -140, position: "absolute" }}>
-            <B2BSearch
+            <DummySearch onPress={gotoSearchVideosByCategoryByName} />
+            {/* <Search
               searchIcon={require("../../../assets/Search-icon-red.png")}
               marginTop={10}
               placeholder={"Search video"}
@@ -332,12 +337,13 @@ const VideoGameHome = (props) => {
               }}
               press={() => {
                 Alert.alert("Hi");
+                gotoSearchVideosByCategoryByName();
               }}
               presssearch={() => {
                 Alert.alert("Search Pressed");
               }}
               paddingLeft={20}
-            />
+            /> */}
           </View>
 
           <View
@@ -687,5 +693,48 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 15,
   },
+  dummySearchContainer:{
+    width: dimensions.SCREEN_WIDTH *0.9,
+    height: 55,
+    backgroundColor: "#fff",
+    alignSelf: "center",
+    flexDirection: "row",
+    paddingHorizontal:20,
+    justifyContent:'space-between',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 1,
+    shadowOpacity: 0.3,
+    // justifyContent: 'center',
+    alignItems: "center",
+    elevation: 5,
+    borderRadius: 5,
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  searchVideText:{
+    color:'#8F93A0', 
+    fontSize:13
+  },
 });
 export default VideoGameHome;
+
+const DummySearch = ({onPress}) => {
+  return (
+    <TouchableOpacity
+      style={styles.dummySearchContainer}
+      onPress={onPress}
+    >
+      <Text style={styles.searchVideText} >Search Video</Text>
+      <Image
+        source={
+          require("../../../assets/Search-icon-red.png")
+        }
+        style={{ width: 22, height: 22, alignSelf: "center" }}
+      ></Image>
+    </TouchableOpacity>
+  );
+};

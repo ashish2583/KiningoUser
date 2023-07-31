@@ -144,7 +144,6 @@ export const requestGetApi = async (endPoint, body, method, token) => {
   console.log("the token is :-", token);
   var header = {};
   var url = baseUrl + endPoint;
-
   if (token != "" && token != undefined) {
     header = {
       "Content-Type": "multipart/form-data",

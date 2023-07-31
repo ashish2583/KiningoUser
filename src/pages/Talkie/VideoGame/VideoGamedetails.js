@@ -146,11 +146,12 @@ const VideoGamedetails = (props) => {
   const addView = async () => {
     const data = {
       "object_type": "game",
-      "object_id" : '1'
+      "object_id" : props.route.params.videoId
     }
+    console.log('addView data', data);
     setLoading2(true);
-    const { responseJson, err } = await requestGetApi(
-      creation_common_add_views + props.route.params.videoId,
+    const { responseJson, err } = await requestPostApi(
+      creation_common_add_views +'43',
       data,
       "POST",
       User.token
