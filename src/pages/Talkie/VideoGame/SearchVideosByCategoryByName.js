@@ -33,7 +33,7 @@ const SearchVideosByCategoryByName = (props) => {
   const [searchValue, setsearchValue] = useState("");
   const [videoData, setVideoData] = useState("");
   const [showModal, setShowModal] = useState({ isVisible: false, data: null });
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(props?.route?.params?.category?.id || '');
   const [categoryModal, openCategoryModal] = useState(false)
 
   useEffect(() => {

@@ -192,8 +192,8 @@ const VideoGameHome = (props) => {
       setMy_Alert(true);
     }
   };
-  const gotoSearchVideosByCategoryByName = () => {
-    props.navigation.navigate("SearchVideosByCategoryByName", { courseData });
+  const gotoSearchVideosByCategoryByName = (category) => {
+    props.navigation.navigate("SearchVideosByCategoryByName", { courseData, category });
   };
   const gotoSearchVideosByCategory = (category) => {
     props.navigation.navigate("SearchVideosByCategory", { category });
@@ -393,7 +393,7 @@ const VideoGameHome = (props) => {
                         paddingHorizontal: 10,
                         justifyContent: "center",
                       }}
-                      onPress={() => {gotoSearchVideosByCategory(item)}}
+                      onPress={() => {gotoSearchVideosByCategoryByName(item)}}
                     >
                       <Image
                         source={{ uri: item.image }}
