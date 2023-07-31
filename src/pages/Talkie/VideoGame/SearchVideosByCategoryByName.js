@@ -159,7 +159,7 @@ const SearchVideosByCategoryByName = (props) => {
         </View>
         <View
           style={{
-            width: dimensions.SCREEN_WIDTH * 0.99,
+            width: '100%',
             alignSelf: "flex-start",
             marginTop: 20,
             marginBottom: 10,
@@ -232,8 +232,9 @@ const SearchVideosByCategoryByName = (props) => {
         ) : null}
         <View
           style={{
-            width: dimensions.SCREEN_WIDTH * 0.97,
-            alignSelf: "flex-start",
+            width: '100%',
+            // alignSelf: "flex-start",
+            alignItems:'center',
             marginTop: 20,
             marginBottom: 10,
           }}
@@ -241,8 +242,7 @@ const SearchVideosByCategoryByName = (props) => {
           {videoData?.length > 0 ? (
             <FlatList
               data={videoData}
-              showsHorizontalScrollIndicator={true}
-              horizontal
+              numColumns={1}
               renderItem={({ item }) => (
                 <View style={styles.VideoThumbWrapper}>
                   <TouchableOpacity
@@ -290,7 +290,7 @@ const SearchVideosByCategoryByName = (props) => {
                             });
                           }}
                         >
-                          <View style={{ width: "52%" }}>
+                          <View style={{ width: "100%" }}>
                             <Text
                               style={{ color: Mycolors.BG_COLOR, fontSize: 12 }}
                             >
@@ -388,21 +388,21 @@ const SearchVideosByCategoryByName = (props) => {
   );
 };
 const styles = StyleSheet.create({
+  // VideoThumbWrapper: {
+  //   position: "relative",
+  //   marginBottom: 4,
+
+  //   width: dimensions.SCREEN_WIDTH / 2.3,
+  //   height: 190,
+  //   marginRight: 16,
+  //   borderRadius: 15,
+  // },
   VideoThumbWrapper: {
     position: "relative",
-    // width: '48%',
-    // marginRight: 8,
-    marginBottom: 4,
-
-    width: dimensions.SCREEN_WIDTH / 2.3,
-    height: 190,
-    marginRight: 16,
+    marginBottom: 10,
+    width: dimensions.SCREEN_WIDTH*0.9,
+    height: 220,
     borderRadius: 15,
-    // shadowColor:'#000',
-    // shadowOffset: {width: 0,height: 3},
-    // shadowRadius: 1,
-    // shadowOpacity: 0.03,
-    // elevation: 1,
   },
   PlayIconContainer: {
     position: "absolute",
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
   BackGroundImage: {
     backgroundColor: "gray",
     width: "100%",
-    height: 190,
+    height: 220,
     justifyContent: "center",
     borderRadius: 15,
   },
@@ -442,22 +442,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     color: Mycolors.Black,
   },
-  VideoThumbWrapper: {
-    position: "relative",
-    // width: '48%',
-    // marginRight: 8,
-    marginBottom: 4,
-
-    width: dimensions.SCREEN_WIDTH / 2.3,
-    height: 190,
-    marginRight: 16,
-    borderRadius: 15,
-    // shadowColor:'#000',
-    // shadowOffset: {width: 0,height: 3},
-    // shadowRadius: 1,
-    // shadowOpacity: 0.03,
-    // elevation: 1,
-  },
+  
   PlayIconContainer: {
     position: "absolute",
     top: 0,
@@ -472,22 +457,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  VideoThumbWrapper: {
-    position: "relative",
-    // width: '48%',
-    // marginRight: 8,
-    marginBottom: 4,
 
-    width: dimensions.SCREEN_WIDTH / 2.3,
-    height: 190,
-    marginRight: 16,
-    borderRadius: 15,
-    // shadowColor:'#000',
-    // shadowOffset: {width: 0,height: 3},
-    // shadowRadius: 1,
-    // shadowOpacity: 0.03,
-    // elevation: 1,
-  },
   PlayIconContainer: {
     position: "absolute",
     top: 0,
