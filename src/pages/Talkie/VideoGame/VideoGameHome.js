@@ -734,7 +734,7 @@ const DummySearch = ({onPress}) => {
       style={styles.dummySearchContainer}
       onPress={onPress}
     >
-      <Text style={styles.searchVideText} >Search Video</Text>
+      <Text style={styles.searchVideText} >Search By Categories</Text>
       <Image
         source={
           require("../../../assets/Search-icon-red.png")

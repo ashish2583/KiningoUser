@@ -145,7 +145,7 @@ const SearchVideosByCategoryByName = (props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {selectedCategory ?
               <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
-                <Feather name="refresh-cw" color={'black'} size={16} />
+                <Feather name="refresh-cw" color={'#ED1C24'} size={16} />
                 {/* <Image source={require('../../../assets/product_refresh.png')} ></Image> */}
                 <Text style={{ color: 'black', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
               </TouchableOpacity>
@@ -370,7 +370,7 @@ const SearchVideosByCategoryByName = (props) => {
                     >
                       <Image source={{ uri: item.image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
                       <View style={{ justifyContent: 'center', alignItems: 'center', width: "60%" }}>
-                        <Text style={{ fontSize: 14, color: (selectedCategory === item?.id) ? '#835E23' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.name}</Text>
+                        <Text style={{ fontSize: 14, color: (selectedCategory === item?.id) ? '#ED1C24' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.name}</Text>
                       </View>
                     </TouchableOpacity>
                   )
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
   },
   categorySelectedStyle: {
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: '#ED1C24',
     // borderRadius: 10
   },
   refreshView: {
