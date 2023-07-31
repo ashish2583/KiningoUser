@@ -32,7 +32,8 @@ const SearchVideosByCategoryByName = (props) => {
   const [searchValue, setsearchValue] = useState("");
   const [videoData, setVideoData] = useState("");
   const [showModal, setShowModal] = useState({ isVisible: false, data: null });
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categoryModal, openCategoryModal] = useState(false)
 
   useEffect(() => {
     getGameVideo();
@@ -80,6 +81,10 @@ const SearchVideosByCategoryByName = (props) => {
       setMy_Alert(true);
     }
   };
+  const removeCategoryFilter = () => {
+    setSelectedCategory('')
+    // getDropdownData()
+  }
   const toggleModal = (state) => {
     setShowModal({
       isVisible: state.isVisible,
@@ -134,6 +139,22 @@ const SearchVideosByCategoryByName = (props) => {
           }}
           paddingLeft={20}
         /> */}
+         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
+          <Text style={{ color: Mycolors.Black, fontWeight: '500', width: '50%' }} >Pick from a wide range of categories</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {selectedCategory?.length > 0 ?
+              <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
+                <Image source={require('../../../assets/product_refresh.png')} ></Image>
+                <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
+              </TouchableOpacity>
+              :
+              null
+            }
+            <TouchableOpacity onPress={() => { openCategoryModal(true) }}>
+              <Text style={{ color: 'white', fontWeight: '500', textDecorationLine: "underline", textDecorationColor: 'white' }} >View All</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <View
           style={{
             width: dimensions.SCREEN_WIDTH * 0.99,
@@ -151,7 +172,7 @@ const SearchVideosByCategoryByName = (props) => {
               return (
                 <LinearGradient
                   colors={["rgba(255, 255, 255, 1)", "rgba(249, 249, 249, 1)"]}
-                  style={{
+                  style={[{
                     width: dimensions.SCREEN_WIDTH / 3.2,
                     marginRight: 10,
                     borderRadius: 15,
@@ -160,7 +181,7 @@ const SearchVideosByCategoryByName = (props) => {
                     shadowRadius: 1,
                     shadowOpacity: 0.03,
                     elevation: 1,
-                  }}
+                  }, selectedCategory === item?.id ? styles.categorySelectedStyle : null]}
                 >
                   <TouchableOpacity
                     style={{
@@ -305,6 +326,62 @@ const SearchVideosByCategoryByName = (props) => {
         </View>
       </ScrollView>
       {loading ? <Loader /> : null}
+      <Modal
+        isVisible={categoryModal}
+        swipeDirection="down"
+        onSwipeComplete={(e) => {
+          openCategoryModal(false)
+        }}
+        scrollTo={() => { }}
+        onBackdropPress={() => openCategoryModal(false)}
+        scrollOffset={1}
+        propagateSwipe={true}
+        coverScreen={false}
+        backdropColor='transparent'
+        style={{ justifyContent: 'flex-end', margin: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
+      >
+        <View style={{ height: '80%', backgroundColor: '#fff', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 20 }}>
+          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+
+            <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 22, textAlign: 'center' }} >Pick from a wide range of categories</Text>
+
+            <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
+              <FlatList
+                data={props.route.params.courseData}
+                renderItem={({ item, index }) => {
+                  return (
+                    <TouchableOpacity
+                      style={[{
+                        width: '96%', marginHorizontal: 10, flexDirection: 'row', alignItems: 'center', borderRadius: 10, marginBottom: 20,
+                        overflow: 'hidden',
+                        // borderWidth:1, borderColor:'black'
+                        shadowColor: '#E0E0E0',
+                        shadowOffset: {
+                          width: 0,
+                          height: 3
+                        },
+                        shadowRadius: 5,
+                        shadowOpacity: 0.6,
+                        elevation: 3,
+                      }, selectedCategory === item.id ? styles.categorySelectedStyle : null]}
+                      onPress={() => { setSelectedCategory(item.id); openCategoryModal(false) }}
+                    >
+                      <Image source={{ uri: item.image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
+                      <View style={{ justifyContent: 'center', alignItems: 'center', width: "60%" }}>
+                        <Text style={{ fontSize: 14, color: (selectedCategory === item?.id) ? '#835E23' : Mycolors.Black, marginTop: 5, textAlign: 'center', fontWeight: 'bold' }}>{item?.name}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )
+                }}
+              />
+            </View>
+
+
+            <View style={{ width: 100, height: 100 }} />
+          </ScrollView>
+
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -422,6 +499,22 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+  },
+  categorySelectedStyle: {
+    borderWidth: 2,
+    borderColor: 'white',
+    // borderRadius: 10
+  },
+  refreshView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // width: '25%',
+    // marginTop: 10,
+    marginRight: 10,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50
   },
 });
 export default SearchVideosByCategoryByName;
