@@ -195,6 +195,12 @@ const VideoGameHome = (props) => {
   const gotoSearchVideosByCategoryByName = () => {
     props.navigation.navigate("SearchVideosByCategoryByName", { courseData });
   };
+  const gotoSearchVideosByCategory = (category) => {
+    props.navigation.navigate("SearchVideosByCategory", { category });
+  };
+  const gotoAllVideos = () => {
+    props.navigation.navigate("AllVideos");
+  };
 
   const openLibrary = async () => {
     let options = {
@@ -387,7 +393,7 @@ const VideoGameHome = (props) => {
                         paddingHorizontal: 10,
                         justifyContent: "center",
                       }}
-                      onPress={() => {}}
+                      onPress={() => {gotoSearchVideosByCategory(item)}}
                     >
                       <Image
                         source={{ uri: item.image }}
@@ -424,7 +430,7 @@ const VideoGameHome = (props) => {
             <Text style={{ fontSize: 16, fontWeight: "500", color: "#FFFFFF" }}>
               Latest Videos
             </Text>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={gotoAllVideos}>
               <Text
                 style={{ fontSize: 13, fontWeight: "400", color: "#ED1C24" }}
               >

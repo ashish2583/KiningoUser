@@ -26,7 +26,7 @@ import { game_video, requestGetApi } from "../../../WebApi/Service";
 import LinearGradient from "react-native-linear-gradient";
 import { VideoModel } from "../../../component/VideoModel";
 
-const SearchVideosByCategoryByName = (props) => {
+const AllVideos = (props) => {
   const User = useSelector((state) => state.user.user_details);
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState("");
@@ -35,18 +35,15 @@ const SearchVideosByCategoryByName = (props) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    getGameVideo();
+    getGameVideo(searchValue);
   }, []);
 
-  const getGameVideo = async (cat) => {
+  const getGameVideo = async (name) => {
     let endPoint = game_video;
     let dataObj = {};
-    if (cat != null) {
-      dataObj.category_id = cat;
+    if (name != "") {
+      dataObj.name = name;
     }
-    // if (name != "") {
-    //   dataObj.name = name;
-    // }
     console.log('dataObj', dataObj);
     if (Object.keys(dataObj)?.length > 0) {
       let i = 0;
@@ -108,7 +105,7 @@ const SearchVideosByCategoryByName = (props) => {
           img1padding={5}
           img1borderRadius={4}
           press2={() => {}}
-          title2={"Search Videos By Category"}
+          title2={"All Videos"}
           fontWeight={"bold"}
           img2height={20}
           color={Mycolors.BG_COLOR}
@@ -116,7 +113,7 @@ const SearchVideosByCategoryByName = (props) => {
           img3width={25}
           img3height={25}
         />
-        {/* <Search
+        <Search
           searchIcon={require("../../../assets/Search-icon-red.png")}
           marginTop={10}
           placeholder={"Search video"}
@@ -124,7 +121,7 @@ const SearchVideosByCategoryByName = (props) => {
           onChangeText={(e) => {
             console.log('onChangeText', e);
             setsearchValue(e?.text);
-            getGameVideo(e?.text, selectedCategory);
+            getGameVideo(e?.text);
           }}
           press={() => {
             Alert.alert("Hi");
@@ -133,7 +130,7 @@ const SearchVideosByCategoryByName = (props) => {
             Alert.alert("Search Pressed");
           }}
           paddingLeft={20}
-        /> */}
+        />
         <View
           style={{
             width: dimensions.SCREEN_WIDTH * 0.99,
@@ -142,62 +139,6 @@ const SearchVideosByCategoryByName = (props) => {
             marginBottom: 10,
           }}
         >
-          <FlatList
-            data={props.route.params.courseData}
-            showsHorizontalScrollIndicator={true}
-            horizontal
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => {
-              return (
-                <LinearGradient
-                  colors={["rgba(255, 255, 255, 1)", "rgba(249, 249, 249, 1)"]}
-                  style={{
-                    width: dimensions.SCREEN_WIDTH / 3.2,
-                    marginRight: 10,
-                    borderRadius: 15,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 3 },
-                    shadowRadius: 1,
-                    shadowOpacity: 0.03,
-                    elevation: 1,
-                  }}
-                >
-                  <TouchableOpacity
-                    style={{
-                      width: dimensions.SCREEN_WIDTH / 3.2,
-                      height: 130,
-                      alignItems: "center",
-                      borderRadius: 15,
-                      paddingHorizontal: 10,
-                      justifyContent: "center",
-                    }}
-                    onPress={() => {
-                      setSelectedCategory(item.id);
-                      getGameVideo(item.id);
-                    }}
-                  >
-                    <Image
-                      source={{ uri: item.image }}
-                      style={{ width: 75, height: 75 }}
-                      resizeMode="contain"
-                    ></Image>
-
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        fontWeight: "500",
-                        color: "#263238",
-                        marginTop: 5,
-                        textAlign: "center",
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                </LinearGradient>
-              );
-            }}
-          />
         </View>
         {showModal.isVisible ? (
           <VideoModel
@@ -218,8 +159,7 @@ const SearchVideosByCategoryByName = (props) => {
           {videoData?.length > 0 ? (
             <FlatList
               data={videoData}
-              showsHorizontalScrollIndicator={true}
-              horizontal
+              numColumns={1}
               renderItem={({ item }) => (
                 <View style={styles.VideoThumbWrapper}>
                   <TouchableOpacity
@@ -424,7 +364,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-export default SearchVideosByCategoryByName;
+export default AllVideos;
 
 const objToQueryString = (obj) => {
   const keyValuePairs = [];
