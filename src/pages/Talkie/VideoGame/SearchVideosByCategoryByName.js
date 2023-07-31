@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { game_video, requestGetApi } from "../../../WebApi/Service";
 import LinearGradient from "react-native-linear-gradient";
 import { VideoModel } from "../../../component/VideoModel";
+import Feather from 'react-native-vector-icons/Feather';
 
 const SearchVideosByCategoryByName = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -140,12 +141,13 @@ const SearchVideosByCategoryByName = (props) => {
           paddingLeft={20}
         /> */}
          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: 20, }}>
-          <Text style={{ color: Mycolors.Black, fontWeight: '500', width: '50%' }} >Pick from a wide range of categories</Text>
+          <Text style={{ color: 'white', fontWeight: '500', width: '50%' }} >Pick from a wide range of categories</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {selectedCategory?.length > 0 ?
+            {selectedCategory ?
               <TouchableOpacity onPress={removeCategoryFilter} style={styles.refreshView}>
-                <Image source={require('../../../assets/product_refresh.png')} ></Image>
-                <Text style={{ color: '#fff', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
+                <Feather name="refresh-cw" color={'black'} size={16} />
+                {/* <Image source={require('../../../assets/product_refresh.png')} ></Image> */}
+                <Text style={{ color: 'black', fontSize: 12, fontWeight: '400', marginLeft: 10 }} >Clear</Text>
               </TouchableOpacity>
               :
               null
