@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  TextInput,
   FlatList,
   Alert,
   TouchableOpacity,
@@ -30,6 +29,7 @@ import MyAlert from "../../../component/MyAlert";
 import moment from "moment";
 import { createThumbnail } from "react-native-create-thumbnail";
 import { useSelector } from "react-redux";
+import { TextInput } from "react-native-paper";
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -374,13 +374,17 @@ const VideoUpload = (props) => {
           >
             <View style={styles.BoxView}>
               <TextInput
+                mode="flar"
+                label="Video Title"
+                underlineColor="red"
+                underlineColorAndroid="black"
+                textColor="black"
                 value={videoTitle}
+                topPosition={10}
                 onChangeText={(text) => {
                   setVideoTitle(text);
                 }}
-                placeholder="Video Title"
-                placeholderTextColor={"#B2B7B9"}
-                style={[styles.input, { width: "100%" }]}
+                style={[styles.input, { width: "100%", }]}
                 multiline
               />
             </View>
@@ -392,15 +396,18 @@ const VideoUpload = (props) => {
                 borderRadius: 5,
                 marginTop: 10,
                 alignSelf: "center",
-                backgroundColor: "#fff",
+                // backgroundColor: "#fff",
               }}
             >
               <TextInput
+                mode="flat"
+                label="Video Description"
+                underlineColor="yellow"
+                underlineColorAndroid="transparent"
                 value={videoDecs}
                 textAlignVertical="top"
+                textColor="black"
                 onChangeText={(e) => setVideoDesc(e)}
-                placeholder="Video Description"
-                placeholderTextColor="#bbbbbb"
                 multiline={true}
                 // maxLength={500}
                 // keyboardType="number-pad"
@@ -512,7 +519,9 @@ const styles = StyleSheet.create({
   BoxView: {
     marginTop: 15,
     width: "93%",
-    backgroundColor: "#fff",
+    height:60,
+    paddingVertical:10,
+    // backgroundColor: "#fff",
     // padding:15,
     // flexDirection: 'row',
     marginHorizontal: 15,
@@ -536,18 +545,10 @@ const styles = StyleSheet.create({
   },
   inputDesc: {
     paddingLeft: 20,
-    textAlign: "left",
     width: "100%",
     fontSize: 13,
-    borderColor: "rgba(0,0,0,0.2)",
-    borderWidth: 0.5,
-    // backgroundColor: '#34333a',
     color: "#fff",
-    height: 100,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    color: Mycolors.Black,
+    height:100
   },
   uploadButtonView: {
     marginTop: -100,
