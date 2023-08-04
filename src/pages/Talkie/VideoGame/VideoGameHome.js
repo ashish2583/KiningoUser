@@ -31,6 +31,7 @@ import {
   game_category,
   game_video,
   requestGetApi,
+  requestPostApi,
   get_banner_image
 } from "../../../WebApi/Service";
 import Toast from "react-native-toast-message";
@@ -170,7 +171,7 @@ const VideoGameHome = (props) => {
   const getBannerImages = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
-      get_banner_image,
+      get_banner_image + 'id/43',
       "",
       "GET",
       User.token

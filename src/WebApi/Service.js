@@ -88,7 +88,10 @@ export const game_video = "talkie/game-video";
 export const game = "talkie/game";
 export const game_single_video = "talkie/game-video/id/";
 export const game_review = "talkie/game-review";
+export const get_banner_image = `/admin/banner-image-upload/`
+export const game_add_comment = `/talkie/add-comment-game`
 export const creation_common_add_views = "creation/common/add-views/";
+
 
 export const creation_categories = `/creation/common/categories`
 export const creation_home = `/creation/common/home-page/51`
@@ -112,7 +115,6 @@ export const creation_addView = `/creation/common/add-views/`
 export const creation_getView = `/creation/common/suggested-articles-bycategory/`
 export const creation_searchHome = `/creation/common/home-page/51?page_no=1&limit=10`
 export const creation_deletenoti = `/creation/common/clear-notifications/`
-export const get_banner_image = `/admin/banner-image-upload`
 
 export const requestPostApi = async (endPoint, body, method, token) => {
   console.log("the token is :-", token);
