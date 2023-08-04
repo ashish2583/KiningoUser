@@ -35,6 +35,7 @@ import {
 import Toast from "react-native-toast-message";
 import MyAlert from "../../../component/MyAlert";
 import { useSelector } from "react-redux";
+import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 
 const VideoGameHome = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -47,6 +48,14 @@ const VideoGameHome = (props) => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState({});
   const [pick, setpick] = useState("");
+  const [allImg, setAllImg] = useState([
+    {
+        "img": "https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg"
+    },
+    {
+        "img": "https://kinengo-dev.s3.us-west-1.amazonaws.com/uploads/products/shopping-site-2.jpg"
+    }
+])
   const [filepath, setfilepath] = useState(null);
   const [videoDetails, setVideoDetails] = useState([
     // {
@@ -284,7 +293,43 @@ const VideoGameHome = (props) => {
             width: "100%",
           }}
         >
-          <ImageBackground
+          <View style={{ overflow: 'hidden', top: 0, width: '100%', alignSelf: 'center', position: 'absolute', zIndex: -999 }}>
+            <ImageSlider
+              //  localImg={true}'
+              data={allImg}
+              timer={5000}
+              // onClick={(item, index) => {alert('hello'+index)}}
+              autoPlay={true}
+              // indicatorContainerStyle={{  }}
+              indicatorContainerStyle={{}}
+              activeIndicatorStyle={{backgroundColor:'#ED1C24'}}
+              caroselImageStyle={{ resizeMode: 'stretch' }}
+              // onItemChanged={(item) => console.log("item", item)}
+              closeIconColor="#fff"
+            />
+          </View>
+          <HomeHeader
+              height={60}
+              paddingHorizontal={15}
+              press1={() => {
+                props.navigation.goBack();
+              }}
+              img1={require("../../../assets/service-header-back-button.png")}
+              img1width={30}
+              img1height={30}
+              img1backgroundColor={"transparent"}
+              img1padding={5}
+              img1borderRadius={4}
+              press2={() => {}}
+              title2={"Game Video"}
+              fontWeight={"bold"}
+              img2height={20}
+              color={Mycolors.BG_COLOR}
+              press3={() => {}}
+              img3width={25}
+              img3height={25}
+            />
+          {/* <ImageBackground
             source={require("../../../assets/images/Gamewallpaper.png")}
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
             resizeMode="stretch"
@@ -310,7 +355,7 @@ const VideoGameHome = (props) => {
               img3width={25}
               img3height={25}
             />
-          </ImageBackground>
+          </ImageBackground> */}
         </View>
         <View
           style={{

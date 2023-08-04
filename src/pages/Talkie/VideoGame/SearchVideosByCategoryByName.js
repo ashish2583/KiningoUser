@@ -64,6 +64,7 @@ const SearchVideosByCategoryByName = (props) => {
       }
       // endPoint += objToQueryString(dataObj);
     }
+    console.log('endPoint', endPoint);
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
       endPoint,

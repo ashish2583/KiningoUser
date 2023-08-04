@@ -90,6 +90,29 @@ export const game_single_video = "talkie/game-video/id/";
 export const game_review = "talkie/game-review";
 export const creation_common_add_views = "creation/common/add-views/";
 
+export const creation_categories = `/creation/common/categories`
+export const creation_home = `/creation/common/home-page/51`
+export const creation_Commonhome = `/creation/common/home-page/`
+export const creation_react = `/creation/common/react-article/`
+export const creation_get_report = `/creation/common/report-reasons`
+export const creation_post_report = `/creation/common/report-article/`
+export const creation_article = `creation/common/get-article/`
+export const creation_addPhoto = `/creation/common/add-profile-image`
+export const creation_profile = `/creation/common/user-profile/`
+export const creation_delete = `/creation/common/delete-article/`
+export const creation_addViews = `/creation/common/add-views/`
+export const creation_getNotifications = `/creation/common/get-notificationlist/`
+export const creation_addComments = `/creation/common/add-comment/`
+export const creation_reactComment = `/creation/common/react-comment/`
+export const creation_getComment = `/creation/common/all-comments/`
+export const creation_editComment = `/creation/common/edit-comment/`
+export const creation_deleteComment = `/creation/common/delete-comment/`
+export const creation_editArticle = `/creation/common/edit-article/`
+export const creation_addView = `/creation/common/add-views/`
+export const creation_getView = `/creation/common/suggested-articles-bycategory/`
+export const creation_searchHome = `/creation/common/home-page/51?page_no=1&limit=10`
+export const creation_deletenoti = `/creation/common/clear-notifications/`
+
 export const requestPostApi = async (endPoint, body, method, token) => {
   console.log("the token is :-", token);
   var header = {};

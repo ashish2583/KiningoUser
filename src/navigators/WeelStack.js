@@ -80,12 +80,14 @@ import ConnectDatingStack from "./ConnectDatingStack";
 import DealService from "./DealService";
 import DealLearning from "./DealLearning";
 import CreationFashion from "./CreationFashion";
+import CreationCooking from './CreationCooking';
 
 const WeelStack = (props) => {
   const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen component={CreationCooking} name="CreationCooking" />
       <Stack.Screen
         component={TalkieVideoGameStack}
         name="TalkieVideoGameStack"
