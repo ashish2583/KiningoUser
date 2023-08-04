@@ -26,9 +26,14 @@ import { game_video, requestGetApi } from "../../../WebApi/Service";
 import LinearGradient from "react-native-linear-gradient";
 import { VideoModel } from "../../../component/VideoModel";
 import Feather from 'react-native-vector-icons/Feather';
+import Animated from "react-native-reanimated";
 
 const SearchVideosByCategoryByName = (props) => {
   const User = useSelector((state) => state.user.user_details);
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const isAutoScrolling = React.useRef(true);
+  const activeIndex = React.useRef(0);
+  const flatListRef = React.useRef(null);
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState("");
   const [videoData, setVideoData] = useState("");
@@ -36,8 +41,29 @@ const SearchVideosByCategoryByName = (props) => {
   const [selectedCategory, setSelectedCategory] = useState(props?.route?.params?.category?.id || '');
   const [categoryModal, openCategoryModal] = useState(false)
 
+  const startAutoScroll = (toIndex) => {
+    if (props.route.params.courseData.length > 0) {
+      isAutoScrolling.current = true;
+      activeIndex.current = toIndex;
+      if (activeIndex.current > props.route.params.courseData.length - 1) {
+        activeIndex.current = 0;
+      }
+      flatListRef?.current?.scrollToIndex({
+        animated: true,
+        index: activeIndex.current,
+        viewPosition: 0.5,
+      });
+    }
+  };
+
   useEffect(() => {
     getGameVideo();
+  }, []);
+  React.useEffect(() => {
+    return () => {
+      isAutoScrolling.current = true;
+      activeIndex.current = 0;
+    };
   }, []);
 
   const getGameVideo = async (cat) => {
@@ -166,10 +192,15 @@ const SearchVideosByCategoryByName = (props) => {
             marginBottom: 10,
           }}
         >
-          <FlatList
+          <Animated.FlatList
+            ref={flatListRef}
             data={props.route.params.courseData}
             showsHorizontalScrollIndicator={true}
             horizontal
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {x: scrollX}}}],
+              {useNativeDriver: false},
+            )}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => {
               return (
@@ -367,7 +398,7 @@ const SearchVideosByCategoryByName = (props) => {
                         shadowOpacity: 0.6,
                         elevation: 3,
                       }, selectedCategory === item.id ? styles.categorySelectedStyle : null]}
-                      onPress={() => { setSelectedCategory(item.id); openCategoryModal(false) }}
+                      onPress={() => { setSelectedCategory(item.id); openCategoryModal(false); startAutoScroll(index) }}
                     >
                       <Image source={{ uri: item.image }} style={{ width: '40%', height: 100, borderRadius: 7 }} resizeMode='stretch' ></Image>
                       <View style={{ justifyContent: 'center', alignItems: 'center', width: "60%" }}>
