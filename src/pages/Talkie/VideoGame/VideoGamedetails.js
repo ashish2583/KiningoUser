@@ -187,8 +187,17 @@ const VideoGamedetails = (props) => {
       setMy_Alert(true);
     }
   };
+  const replyValidation = () => {
+    if (postDecs?.trim()?.length === 0) {
+      Toast.show({ text1: "Please write reply" });
+      return false;
+    }
+    return true;
+  };
   const addReply = async () => {
-    const formdata = new FormData();    
+    if(!replyValidation()){
+      return
+    }
     const data = {
       game_id: props.route.params.videoId,
       parent_id: replyingTo,
