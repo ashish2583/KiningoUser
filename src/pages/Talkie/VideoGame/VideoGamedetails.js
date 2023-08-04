@@ -24,7 +24,6 @@ import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 // import Toast from 'react-native-simple-toast';
 import Loader from "../../../WebApi/Loader";
-import RepliesModal from "../../../component/ReplesModal";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import {
   creation_common_add_views,
@@ -99,6 +98,7 @@ const VideoGamedetails = (props) => {
   const [postDecs, setPostDesc] = useState("");
   const [videoData, setVideoData] = useState({});
   const [rating, setRating] = useState("0");
+  const [showModalType, setShowModalType] = useState('');
 
   const design = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
     return (
@@ -160,7 +160,7 @@ const VideoGamedetails = (props) => {
     setLoading2(false);
     console.log("addView responseJson", responseJson);
     if (responseJson.headers.success == 1) {
-      setVideoData(responseJson.body);
+      // setVideoData(responseJson.body);
       //   Toast.show({ text1: responseJson.headers.message });
     } else {
       Toast.show({ text1: responseJson.headers.message });
@@ -187,41 +187,33 @@ const VideoGamedetails = (props) => {
       setMy_Alert(true);
     }
   };
-  const addReply = async (parent_id) => {
-    const formdata = new FormData();
-    formdata.append("game_id", videoData?.id);
-    formdata.append("parent_id", parent_id);
-    formdata.append("comments", 'reply');
-    formdata.append("star", '5');
-    console.log("onUpload formdata", formdata);
-    setLoading(true);
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${User.token}`,
+  const addReply = async () => {
+    const formdata = new FormData();    
+    const data = {
+      game_id: props.route.params.videoId,
+      parent_id: replyingTo,
+      comments: postDecs,
     };
-    const url = "http://54.153.75.225/backend/api/v1/" + game_add_comment;
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body: formdata,
-      });
-      setLoading(false);
-      const responseJson = await response.json();
-      console.log("addReply responseJson", responseJson);
-      if (responseJson.headers.success == 1) {
-
-        Toast.show({ text1: responseJson.headers.message });
-      } else {
-        Toast.show({ text1: responseJson.headers.message });
-        setalert_sms(err);
-        setMy_Alert(true);
-      }
-    } catch (error) {
-      Toast.show({ text1: "Network type error" });
-      console.log("Error uploading data:", error);
-    }
+    console.log('addReply data', data);  
+    const { responseJson, err } = await requestPostApi(
+      game_add_comment,
+      data,
+      "POST",
+      User.token
+    );
     setLoading(false);
+    console.log("addReply responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      Toast.show({ text1: responseJson.headers.message });
+      setPostDesc("");
+      setmodlevisual1(false);
+      getSingleVideo();
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
+    }
   };
   const MycustomonShare = async () => {
     const shareOptions = {
@@ -759,6 +751,7 @@ const VideoGamedetails = (props) => {
             </Text>
             <TouchableOpacity
               onPress={() => {
+                setShowModalType('review')
                 setmodlevisual1(true);
               }}
             >
@@ -853,6 +846,8 @@ const VideoGamedetails = (props) => {
                           </View>
                           <TouchableOpacity
                             onPress={() => {
+                              setShowModalType('reply')
+                              setmodlevisual1(true)
                               setShowAtUsername(true);
                               setReplyingTo(item.id);
                               setShowRepliesModal(true);
@@ -906,17 +901,6 @@ const VideoGamedetails = (props) => {
         <View style={{ height: 60 }} />
       </ScrollView>
       {loading || loading2 ? <Loader /> : null}
-      <RepliesModal
-        isVisible={showRepliesModal}
-        setIsVisible={setShowRepliesModal}
-        data={upData}
-        setData={setupData}
-        replyingTo={replyingTo}
-        setReplyingTo={setReplyingTo}
-        showAtUsername={showAtUsername}
-        likeChildComment={likeChildComment}
-        // startFromIndex={startFromIndex}
-      />
 
       {/* <View style={styles.addCommentView}>
         <TextInput
@@ -1117,25 +1101,27 @@ const VideoGamedetails = (props) => {
                 Your opinion matters to us!
               </Text>
 
-              <Rating
-                // type='custom'
-                // type='heart'
-                ratingCount={5}
-                imageSize={50}
-                startingValue={1}
-                // ratingBackgroundColor={'#455A64'}
-                tintColor={"#2A2B2C"}
-                style={{ paddingVertical: 10 }}
-                onSwipeRating={(d) => {
-                  setRating(d);
-                }}
-                onFinishRating={(d) => {
-                  setRating(d);
-                }}
-                // readonly={true}
-                // showRating
-                //onFinishRating={this.ratingCompleted}
-              />
+              {showModalType === 'review' ?     
+                <Rating
+                  // type='custom'
+                  // type='heart'
+                  ratingCount={5}
+                  imageSize={50}
+                  startingValue={1}
+                  // ratingBackgroundColor={'#455A64'}
+                  tintColor={"#2A2B2C"}
+                  style={{ paddingVertical: 10 }}
+                  onSwipeRating={(d) => {
+                    setRating(d);
+                  }}
+                  onFinishRating={(d) => {
+                    setRating(d);
+                  }}
+                  // readonly={true}
+                  // showRating
+                  //onFinishRating={this.ratingCompleted}
+                />
+              :null}
               <View
                 style={{
                   width: "93%",
@@ -1152,7 +1138,7 @@ const VideoGamedetails = (props) => {
                   value={postDecs}
                   textAlignVertical="top"
                   onChangeText={(e) => setPostDesc(e)}
-                  placeholder="Write Your review here…"
+                  placeholder={`Write Your ${showModalType === 'review' ?'review':'reply'} here…`}
                   placeholderTextColor="#bbbbbb"
                   multiline={true}
                   // maxLength={500}
@@ -1175,13 +1161,13 @@ const VideoGamedetails = (props) => {
               }}
             >
               <MyButtons
-                title="Post Your Riview"
+                title={`Post Your ${showModalType === 'review' ?'Review':'Reply'}`}
                 height={50}
                 width={"100%"}
                 borderRadius={5}
                 press={() => {
                   //   props.navigation.navigate(" "), setmodlevisual1(false);
-                  postReview();
+                  showModalType === 'review' ? postReview() : addReply()
                 }}
                 fontSize={13}
                 titlecolor={Mycolors.BG_COLOR}
