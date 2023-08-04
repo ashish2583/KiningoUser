@@ -112,6 +112,7 @@ export const creation_addView = `/creation/common/add-views/`
 export const creation_getView = `/creation/common/suggested-articles-bycategory/`
 export const creation_searchHome = `/creation/common/home-page/51?page_no=1&limit=10`
 export const creation_deletenoti = `/creation/common/clear-notifications/`
+export const get_banner_image = `/admin/banner-image-upload`
 
 export const requestPostApi = async (endPoint, body, method, token) => {
   console.log("the token is :-", token);

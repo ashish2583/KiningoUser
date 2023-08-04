@@ -31,6 +31,7 @@ import {
   game_category,
   game_video,
   requestGetApi,
+  get_banner_image
 } from "../../../WebApi/Service";
 import Toast from "react-native-toast-message";
 import MyAlert from "../../../component/MyAlert";
@@ -42,6 +43,7 @@ const VideoGameHome = (props) => {
   const [searchValue, setsearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const [My_Alert, setMy_Alert] = useState(false);
   const [alert_sms, setalert_sms] = useState("");
   const [showModal, setShowModal] = useState({ isVisible: false, data: null });
@@ -156,13 +158,37 @@ const VideoGameHome = (props) => {
     //   img: require("../../../assets/images/BattleGames.png"),
     // },
   ]);
+  const [bannerImagesData, setBannerImagesData] = useState([])
   useEffect(() => {
     // generateThumb()
   }, []);
   useEffect(() => {
     getCategories();
     getGameVideo();
+    getBannerImages();
   }, []);
+  const getBannerImages = async () => {
+    setLoading(true);
+    const { responseJson, err } = await requestGetApi(
+      get_banner_image,
+      "",
+      "GET",
+      User.token
+    );
+    setLoading(false);
+    console.log("getBannerImages responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      const data = [...responseJson.body]
+      const updatedData = data.map(el=>({...el, img: el.image}))
+
+      setBannerImagesData([...updatedData]);
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
+    }
+  };
   const getCategories = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
@@ -296,7 +322,7 @@ const VideoGameHome = (props) => {
           <View style={{ overflow: 'hidden', top: 0, width: '100%', alignSelf: 'center', position: 'absolute', zIndex: -999 }}>
             <ImageSlider
               //  localImg={true}'
-              data={allImg}
+              data={bannerImagesData}
               timer={5000}
               // onClick={(item, index) => {alert('hello'+index)}}
               autoPlay={true}
@@ -610,7 +636,7 @@ const VideoGameHome = (props) => {
           backgroundColor={"#ED1C24"}
         />
       </View> */}
-      {loading || loading2 ? <Loader /> : null}
+      {loading || loading2 || loading3 ? <Loader /> : null}
       <Modal
         isVisible={showVideoModal}
         swipeDirection="down"
