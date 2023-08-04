@@ -376,6 +376,7 @@ const VideoUpload = (props) => {
               <TextInput
                 mode="flar"
                 label="Video Title"
+                theme={{colors: {primary: "#ED1C24"}}}
                 underlineColor="red"
                 underlineColorAndroid="black"
                 textColor="black"
@@ -403,6 +404,7 @@ const VideoUpload = (props) => {
                 mode="flat"
                 label="Video Description"
                 underlineColor="yellow"
+                theme={{colors: {primary: "#ED1C24"}}}
                 underlineColorAndroid="transparent"
                 value={videoDecs}
                 textAlignVertical="top"
@@ -538,13 +540,13 @@ const styles = StyleSheet.create({
     // elevation: 5,
   },
   input: {
-    paddingLeft: 20,
+    // paddingLeft: 20,
     fontSize: 13,
     fontWeight: "400",
     color: "#000",
   },
   inputDesc: {
-    paddingLeft: 20,
+    // paddingLeft: 20,
     width: "100%",
     fontSize: 13,
     color: "#fff",
