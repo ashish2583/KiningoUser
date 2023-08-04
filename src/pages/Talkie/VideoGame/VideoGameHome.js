@@ -171,7 +171,7 @@ const VideoGameHome = (props) => {
   const getBannerImages = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
-      get_banner_image + 'id/43',
+      get_banner_image + '43',
       "",
       "GET",
       User.token
