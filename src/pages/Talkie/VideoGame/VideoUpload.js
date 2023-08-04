@@ -30,6 +30,10 @@ import moment from "moment";
 import { createThumbnail } from "react-native-create-thumbnail";
 import { useSelector } from "react-redux";
 import { TextInput } from "react-native-paper";
+import {
+  requestPostApi,
+  game,
+} from "../../../WebApi/Service";
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -135,19 +139,13 @@ const VideoUpload = (props) => {
     formdata.append("status", "1");
     console.log("onUpload formdata", formdata);
     setLoading(true);
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${User.token}`,
-    };
-    const url = "http://54.153.75.225/backend/api/v1/talkie/game";
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body: formdata,
-      });
-      setLoading(false);
-      const responseJson = await response.json();
+      const { responseJson, err } = await requestPostApi(
+        game + '/id/1',
+        formdata,
+        "POST",
+        User.token
+      );
       // console.log("onUpload...............", responseJson);
       if (responseJson.headers.success == 1) {
         props.navigation.goBack();
