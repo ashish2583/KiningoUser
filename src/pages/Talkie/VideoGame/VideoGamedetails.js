@@ -28,6 +28,7 @@ import RepliesModal from "../../../component/ReplesModal";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import {
   creation_common_add_views,
+  game_add_comment,
   game_review,
   game_single_video,
   requestGetApi,
@@ -185,6 +186,42 @@ const VideoGamedetails = (props) => {
       setalert_sms(err);
       setMy_Alert(true);
     }
+  };
+  const addReply = async (parent_id) => {
+    const formdata = new FormData();
+    formdata.append("game_id", videoData?.id);
+    formdata.append("parent_id", parent_id);
+    formdata.append("comments", 'reply');
+    formdata.append("star", '5');
+    console.log("onUpload formdata", formdata);
+    setLoading(true);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${User.token}`,
+    };
+    const url = "http://54.153.75.225/backend/api/v1/" + game_add_comment;
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers,
+        body: formdata,
+      });
+      setLoading(false);
+      const responseJson = await response.json();
+      console.log("addReply responseJson", responseJson);
+      if (responseJson.headers.success == 1) {
+
+        Toast.show({ text1: responseJson.headers.message });
+      } else {
+        Toast.show({ text1: responseJson.headers.message });
+        setalert_sms(err);
+        setMy_Alert(true);
+      }
+    } catch (error) {
+      Toast.show({ text1: "Network type error" });
+      console.log("Error uploading data:", error);
+    }
+    setLoading(false);
   };
   const MycustomonShare = async () => {
     const shareOptions = {
