@@ -34,6 +34,7 @@ import {
   requestPostApi,
   game,
 } from "../../../WebApi/Service";
+import axios from "axios";
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -119,14 +120,14 @@ const VideoUpload = (props) => {
       return;
     }
     const formdata = new FormData();
-    formdata.append("category_id", "1");
-    formdata.append("name", videoTitle);
-    formdata.append("published_date", moment().format("YYYY-MM-DD hh:mm:ss"));
-    formdata.append("created_date", moment().format("YYYY-MM-DD hh:mm:ss"));
-    formdata.append("published_channel", "kids");
-    formdata.append("description", videoDecs);
-    formdata.append("files", { ...pick });
-    formdata.append("image", {
+    formdata.append(`category_id`, selectedCategory);
+    formdata.append(`name`, videoTitle);
+    formdata.append(`published_date`, moment().format("YYYY-MM-DD hh:mm:ss"));
+    formdata.append(`created_date`, moment().format("YYYY-MM-DD hh:mm:ss"));
+    formdata.append(`published_channel`, "kids");
+    formdata.append(`description`, videoDecs);
+    formdata.append(`files`, { ...pick });
+    formdata.append(`image`, {
       name: thumbnail.path.slice(
         thumbnail.path.lastIndexOf("/"),
         thumbnail.path.length
@@ -136,24 +137,27 @@ const VideoUpload = (props) => {
     });
     // formdata.append("uploaded_by", "user");
     // formdata.append("duration", "2");
-    formdata.append("status", "1");
+    formdata.append(`status`, "1");
     console.log("onUpload formdata", formdata);
     setLoading(true);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${User.token}`,
+    };
+    const url = "http://54.153.75.225/backend/api/v1/" + game;
     try {
-      const { responseJson, err } = await requestPostApi(
-        game + '/id/1',
-        formdata,
-        "POST",
-        User.token
-      );
-      // console.log("onUpload...............", responseJson);
-      if (responseJson.headers.success == 1) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers,
+        body: formdata,
+      });
+      const responseJson = await response.json();
+      console.log("onUpload responseJson", responseJson);
+      if (responseJson?.headers?.success == 1) {
         props.navigation.goBack();
-        Toast.show({ text1: responseJson.headers.message });
+        Toast.show({ text1: responseJson?.headers?.message });
       } else {
-        Toast.show({ text1: responseJson.headers.message });
-        setalert_sms(err);
-        setMy_Alert(true);
+        Toast.show({ text1: responseJson?.headers?.message });
       }
     } catch (error) {
       Toast.show({ text1: "Network type error" });

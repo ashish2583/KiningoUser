@@ -8,6 +8,7 @@ import VideoGamedetails from '../pages/Talkie/VideoGame/VideoGamedetails';
 import SearchVideosByCategoryByName from '../pages/Talkie/VideoGame/SearchVideosByCategoryByName';
 import SearchVideosByCategory from '../pages/Talkie/VideoGame/SearchVideosByCategory';
 import AllVideos from '../pages/Talkie/VideoGame/AllVideos';
+import VideoProfile from '../pages/Talkie/VideoGame/VideoProfile';
 
  
 
@@ -28,6 +29,7 @@ const VideoGameStack = (props) => {
             <Stack.Screen component={SearchVideosByCategoryByName} name="SearchVideosByCategoryByName" />
             <Stack.Screen component={SearchVideosByCategory} name="SearchVideosByCategory" />
             <Stack.Screen component={AllVideos} name="AllVideos" />
+            <Stack.Screen component={VideoProfile} name="VideoProfile" />
             
 
         </Stack.Navigator>
