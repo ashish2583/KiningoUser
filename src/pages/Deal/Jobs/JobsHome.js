@@ -85,6 +85,18 @@ const JobsHome = (props) => {
         <JobsHeader text="Home" />
         <View style={styles.mainView2}>
           <JobsSearch value={searchText} setValue={setSearchText} />
+          <View style={styles.findOutContainer}>
+            <View style={{ width: "50%" }}>
+              <Text style={styles.findOutText}>
+                How to find a perfect job for you?
+              </Text>
+              <MyButton
+                text="Find Out"
+                style={{ width: "50%", marginTop: 20 }}
+              />
+            </View>
+            <Image source={require("./assets/images/job-search.png")} />
+          </View>
           <ViewMore text="Featured Jobs" />
           <FlatList
             data={featuredJobsData}
@@ -112,6 +124,14 @@ const ViewMore = ({ text, onPress }) => {
   );
 };
 
+const MyButton = ({ text, onPress, style = {} }) => {
+  return (
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+      <Text style={styles.buttonT}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   safeView: {
     backgroundColor: "#F8F8F8",
@@ -126,10 +146,27 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     marginTop: -30,
   },
+  findOutContainer: {
+    backgroundColor: "#6D2F92",
+    borderRadius: 10,
+    width: "100%",
+    height: 143,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 19,
+    marginBottom: 19,
+    marginTop: 37,
+  },
+  findOutText: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "500",
+  },
   viewMoreContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   viewMoreHeading: {
     color: "#222B45",
@@ -166,9 +203,13 @@ const styles = StyleSheet.create({
   },
   jobT: {
     color: "white",
+    fontSize: 14,
+    fontWeight: "500",
   },
   compN: {
     color: "white",
+    fontSize: 13,
+    fontWeight: "500",
   },
   featuredMiddleRow: {
     flexDirection: "row",
@@ -196,6 +237,19 @@ const styles = StyleSheet.create({
     marginTop: 11,
   },
   bottomT: {
+    color: "white",
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  button: {
+    backgroundColor: "#FFC40C",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonT: {
     color: "white",
     fontSize: 13,
     fontWeight: "500",
