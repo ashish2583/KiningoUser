@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     width:'100%',
     // width: dimensions.SCREEN_WIDTH * 0.6,
     height: 203,
-    marginRight: 15,
+    marginBottom: 15,
     borderRadius: 10,
     backgroundColor: "white",
     shadowColor: "rgb(26, 42, 97)",
