@@ -81,7 +81,6 @@ const JobsHome = (props) => {
         </View>
 
         <View style={styles.featuredMiddleRow}>
-          <Text style={styles.recentJobT}>{item.jobTitle}</Text>
           {item.tags?.map((el) => (
             <View style={styles.tagView}>
               <Text style={styles.tagT}>{el}</Text>
