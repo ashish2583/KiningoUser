@@ -34,6 +34,26 @@ const featuredJobsData = [
     location: "California, USA",
   },
 ];
+const recentJobList = [
+  {
+    id: "1",
+    icon: require("./assets/images/google-icon.png"),
+    companyName: "Google",
+    jobTitle: "UI Designer",
+    tags: ["Senior", "Full-Time", "Remote"],
+    salary: "$8K/Month",
+    location: "California, USA",
+  },
+  {
+    id: "2",
+    icon: require("./assets/images/google-icon.png"),
+    companyName: "Google",
+    jobTitle: "UI Designer",
+    tags: ["Senior", "Full-Time", "Remote"],
+    salary: "$8K/Month",
+    location: "California, USA",
+  },
+];
 
 const JobsHome = (props) => {
   const [searchText, setSearchText] = useState("");
@@ -61,6 +81,7 @@ const JobsHome = (props) => {
         </View>
 
         <View style={styles.featuredMiddleRow}>
+          <Text style={styles.recentJobT}>{item.jobTitle}</Text>
           {item.tags?.map((el) => (
             <View style={styles.tagView}>
               <Text style={styles.tagT}>{el}</Text>
@@ -75,6 +96,46 @@ const JobsHome = (props) => {
       </ImageBackground>
     );
   };
+  const renderRecentJob = ({ item }) => {
+    return (
+      <View style={styles.recentJobsContainer}>
+        <View style={styles.featuredTopRow}>
+          <View style={styles.featuredTopLeftRow}>
+            <View style={styles.iconBg}>
+              <Image source={item.icon} />
+            </View>
+            <View style={{ marginLeft: 10 }}>
+              <Text style={styles.recentCompN}>{item.companyName}</Text>
+              <Text style={styles.recentBottomT}>{item.location}</Text>
+            </View>
+          </View>
+          <TouchableOpacity>
+            <Image source={require("./assets/images/bookmark-2.png")} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.recentMiddle}>
+          <Text style={styles.recentBottomT}>{item.jobTitle}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            {item.tags?.map((el, index) => (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.recentTagT}>{el}</Text>
+                {!(item.tags.length - 1 === index) ? (
+                  <View style={styles.tagDot}></View>
+                ) : null}
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.featuredBottomRow}>
+          <MyButton text="Apply Now" style={{ width: "50%", backgroundColor:'#0089CF', paddingVertical: 11 }} />
+          <Text style={styles.recentBottomT}>{item.salary}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView
@@ -105,6 +166,15 @@ const JobsHome = (props) => {
             style={{ marginTop: 10 }}
             keyExtractor={(item) => item.id}
             renderItem={renderFeaturedJob}
+          />
+          <ViewMore text="Recent Job List" />
+          <FlatList
+            data={recentJobList}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: 10 }}
+            keyExtractor={(item) => item.id}
+            renderItem={renderRecentJob}
           />
         </View>
       </ScrollView>
@@ -253,5 +323,58 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 13,
     fontWeight: "500",
+  },
+  recentJobsContainer: {
+    padding: 14,
+    width: dimensions.SCREEN_WIDTH * 0.6,
+    height: 203,
+    marginRight: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "rgb(26, 42, 97)",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 5,
+  },
+  recentJobT: {
+    color: "#171716",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  recentCompN: {
+    color: "#171716",
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  recentTagT: {
+    color: "rgba(23, 23, 22, 0.75)",
+    fontSize: 14,
+    fontWeight: "400",
+  },
+  tagDot: {
+    backgroundColor: "#BFD4E4",
+    height: 4,
+    width: 4,
+    borderRadius: 4 / 2,
+    marginHorizontal: 10,
+  },
+  recentBottomT: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  recentBottomT2: {
+    color: "rgba(23, 23, 22, 0.75)",
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  recentMiddle: {
+    // flexDirection: "row",
+    // alignItems: "center",
+    marginTop: 11,
   },
 });
