@@ -50,7 +50,8 @@ const recentJobList = [
     companyName: "Google",
     jobTitle: "UI Designer",
     tags: ["Senior", "Full-Time", "Remote"],
-    salary: "$8K/Month",
+    salary: "$8K",
+    salaryMonth: "/Month",
     location: "California, USA",
   },
 ];
@@ -129,7 +130,7 @@ const JobsHome = (props) => {
 
         <View style={styles.featuredBottomRow}>
           <MyButton text="Apply Now" style={{ width: "50%", backgroundColor:'#0089CF', paddingVertical: 11 }} />
-          <Text style={styles.recentBottomT}>{item.salary}</Text>
+          <Text style={styles.recentBottomT}>{item.salary}<Text style={styles.recentBottomT2}>{item.salaryMonth}</Text></Text>
         </View>
       </View>
     );
