@@ -81,12 +81,14 @@ import DealService from "./DealService";
 import DealLearning from "./DealLearning";
 import CreationFashion from "./CreationFashion";
 import CreationCooking from './CreationCooking';
+import DealJobs from './DealJobs';
 
 const WeelStack = (props) => {
   const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen component={DealJobs} name="DealJobs" />
       <Stack.Screen
         component={TalkieVideoGameStack}
         name="TalkieVideoGameStack"
