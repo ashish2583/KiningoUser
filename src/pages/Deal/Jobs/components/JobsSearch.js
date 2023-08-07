@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "400",
     color: "#95969D",
-    width: "100%",
+    // width: "100%",
     marginLeft:13,
   },
   filterView:{
