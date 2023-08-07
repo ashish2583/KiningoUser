@@ -106,7 +106,7 @@ const JobsHome = (props) => {
             </View>
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.recentCompN}>{item.companyName}</Text>
-              <Text style={styles.recentBottomT}>{item.location}</Text>
+              <Text style={styles.recentLocation}>{item.location}</Text>
             </View>
           </View>
           <TouchableOpacity>
@@ -128,7 +128,7 @@ const JobsHome = (props) => {
           </View>
         </View>
 
-        <View style={styles.featuredBottomRow}>
+        <View style={styles.recentBottomRow}>
           <MyButton text="Apply Now" style={{ width: "50%", backgroundColor:'#0089CF', paddingVertical: 11 }} />
           <Text style={styles.recentBottomT}>{item.salary}<Text style={styles.recentBottomT2}>{item.salaryMonth}</Text></Text>
         </View>
@@ -347,8 +347,13 @@ const styles = StyleSheet.create({
   },
   recentCompN: {
     color: "#171716",
-    fontSize: 13,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  recentLocation: {
+    color: "rgba(23, 23, 22, 0.75)",
+    fontSize: 12,
+    fontWeight: "400",
   },
   recentTagT: {
     color: "rgba(23, 23, 22, 0.75)",
@@ -375,6 +380,12 @@ const styles = StyleSheet.create({
   recentMiddle: {
     // flexDirection: "row",
     // alignItems: "center",
-    marginTop: 11,
+    marginTop: 22,
+  },
+  recentBottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 21,
   },
 });
