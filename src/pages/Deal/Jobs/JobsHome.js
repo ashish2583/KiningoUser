@@ -101,7 +101,7 @@ const JobsHome = (props) => {
       <View style={styles.recentJobsContainer}>
         <View style={styles.featuredTopRow}>
           <View style={styles.featuredTopLeftRow}>
-            <View style={styles.iconBg}>
+            <View style={styles.recentIconBg}>
               <Image source={item.icon} />
             </View>
             <View style={{ marginLeft: 10 }}>
@@ -268,6 +268,14 @@ const styles = StyleSheet.create({
     width: 46,
     borderRadius: 10,
     backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  recentIconBg: {
+    height: 40,
+    width: 40,
+    borderRadius: 40 / 2,
+    backgroundColor: "rgba(153, 151, 239, 0.1)",
     justifyContent: "center",
     alignItems: "center",
   },
