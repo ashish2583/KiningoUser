@@ -36,6 +36,7 @@ import {
 } from "../../../WebApi/Service";
 import axios from "axios";
 import Animated from "react-native-reanimated";
+import { CommonActions } from "@react-navigation/native";
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -124,6 +125,10 @@ const VideoUpload = (props) => {
       });
     }
   };
+  const resetIndexGoToHome = CommonActions.reset({
+    index: 1,
+    routes: [{name: 'VideoGameHome'}],
+  });
   const Validation = () => {
     if (videoTitle?.trim()?.length === 0) {
       Toast.show({ text1: "Please enter Video Title" });
@@ -180,7 +185,11 @@ const VideoUpload = (props) => {
       const responseJson = await response.json();
       console.log("onUpload responseJson", responseJson);
       if (responseJson?.headers?.success == 1) {
-        props.navigation.goBack();
+        if(props.route.params?.type == 'edit'){
+          props.navigation.dispatch(resetIndexGoToHome)
+        }else{
+          props.navigation.goBack();
+        }
         Toast.show({ text1: responseJson?.headers?.message });
       } else {
         Toast.show({ text1: responseJson?.headers?.message });
