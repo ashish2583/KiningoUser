@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, } from 'react-native';
-import { requestPostApi, requestGetApi, creation_delete, profile as app_profile } from '../../../WebApi/Service'
+import { requestPostApi, requestGetApi, creation_delete, game_profile, game } from '../../../WebApi/Service'
 import { useSelector, useDispatch } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,10 +17,10 @@ import VideoPlayer from 'react-native-video-player'
 import { createThumbnail } from "react-native-create-thumbnail";
 import HomeHeaderRoundBottom from '../../../component/HomeHeaderRoundBottom';
 
-const CookingProfile = (props) => {
+const VideoProfile = (props) => {
     const dispatch = useDispatch();
     const User = useSelector(state => state.user.user_details)
-    console.log('User', User);
+    // console.log('User', User);
     const [articleData, setArticleData] = useState('')
     const [scrollEnabled, setScrollEnabled] = useState(false)
     const myTextInput = useRef()
@@ -56,7 +56,7 @@ const CookingProfile = (props) => {
     const getProfileData = async () => {
         setLoading(true);
         const { responseJson, err } = await requestGetApi(
-            app_profile,
+            game_profile,
           "",
           "GET",
           User.token
@@ -72,36 +72,21 @@ const CookingProfile = (props) => {
         }
       };
 
-    const Delete = async (id) => {
+    const deleteVideo = async (id) => {
         setLoading(true)
-        console.log('the deleteee post id', id)
-        console.log('myy url ', creation_delete + id)
-
-        const { responseJson, err } = await requestPostApi(creation_delete + id, '', 'DELETE', User.token)
-        // props.navigation.navigate('MyProfile')
-        console.log('the deleteee post of cooking', responseJson)
-
-        if (responseJson.headers
-            .success == 1) {
-            // setUserid(nameAgeList[0].rest.userid)
-            // props.navigation.navigate('MyProfile')
-            // setdescrbe(responseJson.post.post_description)
+        const { responseJson, err } = await requestPostApi(game +'/id/'+ id, '', 'DELETE', User.token)
+        console.log('deleteVideo responseJson', responseJson)
+        if (responseJson.headers.success == 1) {
             Toast.show({ text1: responseJson.headers.message });
             setLoading(false)
-            ArtCategory()
-            // setLoading(false)
-            // Toast.show({ text1: responseJson.headers.message });
-
+            getProfileData()
         } else {
-
             setalert_sms(err)
             setMy_Alert(true)
-
         }
         setLoading(false)
     }
     const openImageModal = (index) => {
-
         console.log('my image')
         setmodlevisual(true)
     }
@@ -339,14 +324,14 @@ const CookingProfile = (props) => {
                                             <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64', left: -2 }}>
                                                 {/* {`${firstname} ${lastname}`} */}
 
-                                                {profileDetails?.username}
+                                                {User.first_name + ' ' + User.last_name}
                                             </Text>
 
                                         </View>
 
 
                                         <TouchableOpacity style={styles.threeDotsView} onPress={() => { props.navigation.navigate('CookingUpload') }}>
-                                            <Text style={{ height: 23, alignSelf: 'center', bottom: 4, color: 'white' }}>Add Post</Text>
+                                            <Text style={{ height: 23, alignSelf: 'center', bottom: 4, color: 'white' }}>Add Game Video</Text>
                                         </TouchableOpacity>
                                     </View>
 
@@ -365,9 +350,9 @@ const CookingProfile = (props) => {
                                     }}>
 
                                         {/* {postCount} */}
-                                        {likes}
+                                        {profileDetails?.total_reviews}
                                     </Text>
-                                    <Text style={styles.numText}>Likes</Text>
+                                    <Text style={styles.numText}>Reviews</Text>
                                 </LinearGradient>
                                 <LinearGradient
                                     colors={['rgba(255, 255, 255, 1)', 'rgba(249, 249, 249, 1)']}
@@ -384,9 +369,9 @@ const CookingProfile = (props) => {
                                         }}>
 
                                             {/* {foolCount} */}
-                                            {dislike}
+                                            {profileDetails?.total_views}
                                         </Text>
-                                        <Text style={styles.numText}>Dislikes</Text>
+                                        <Text style={styles.numText}>Views</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
                                 <LinearGradient
@@ -401,7 +386,7 @@ const CookingProfile = (props) => {
                                                 fontWeight: '500',
                                                 color: '#455A64', marginHorizontal: 12
                                             }}>
-                                                {comment}
+                                                {profileDetails?.total_posts}
 
                                             </Text>
                                         </View>
@@ -412,7 +397,7 @@ const CookingProfile = (props) => {
                                                 fontWeight: '400',
                                                 color: '#455A64',
                                                 marginLeft: -3
-                                            }}>Comments</Text>
+                                            }}>Posts</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </LinearGradient>
@@ -430,19 +415,17 @@ const CookingProfile = (props) => {
 
 
                     <View style={{ width: dimensions.SCREEN_WIDTH * 0.9, alignSelf: 'center', marginTop: 10 }}>
-                        {desData.length === 0 ? (
+                        {profileDetails?.posts?.length === 0 ? (
                             <Text style={{ fontSize: 16, color: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>No posts Found</Text>
                         ) : (<FlatList
-                            data={desData}
+                            data={profileDetails?.posts}
                             showsHorizontalScrollIndicator={false}
                             numColumns={1}
                             style={{}}
                             renderItem={({ item, index }) => {
-                                console.log(item, 'harticle_id of profile');
                                 return (
-
                                     <View style={{ width: '95.5%', marginVertical: 10, borderRadius: 30, }}>
-                                        <TouchableOpacity style={styles.flatlistMainView} onPress={() => { props.navigation.navigate('CookingPost', { id: item[0].article_id }) }}>
+                                        <TouchableOpacity style={styles.flatlistMainView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
 
                                             <View style={styles.followingImageView}>
                                                 <View style={{}} onPress={() => {
@@ -469,21 +452,21 @@ const CookingProfile = (props) => {
 
 
                                                     }}>
-                                                        <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>  {userame
+                                                        <Text style={{ fontSize: 14, fontWeight: '600', color: '#455A64' }}>  {User.first_name + ' ' + User.last_name
                                                         }</Text>
                                                     </View>
 
                                                 </View>
                                             </View>
                                             <View>
-                                                <Text style={{ marginRight: 0, color: '#263238', }}>{item[0].cretedTime}</Text>
+                                                <Text style={{ marginRight: 0, color: '#263238', }}>{item.created_date}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                                                 {/* <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 12, marginLeft: -10 }]}> */}
                                                 <TouchableOpacity
                                                     onPress={() => {
                                                         // handleToggleView(item) 
-                                                        setSelectedItemId(item[0].article_id)
+                                                        setSelectedItemId(item.id)
 
                                                     }}
 
@@ -495,12 +478,12 @@ const CookingProfile = (props) => {
                                                     // });
                                                     // setProfileModal({
                                                     //     active: true,
-                                                    //     id_article: item[0].article_id,
+                                                    //     id_article: item.id,
                                                     //     category: item.category_id,
                                                     //     description: item.description
                                                     // })
 
-                                                    // setSelectedId(item[0].article_id);
+                                                    // setSelectedId(item.id);
                                                     // setSelectedCategoryy(item.category_id);
                                                     // setdesc(item[0].description)
 
@@ -511,8 +494,7 @@ const CookingProfile = (props) => {
                                                     <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
                                                 </TouchableOpacity>
                                                 <View style={{ position: 'relative', }}>
-                                                    {console.log(selectedItemId === item[0].article_id, 'hhhhhhhhbid check')}
-                                                    {selectedItemId === item[0].article_id && (
+                                                    {selectedItemId === item.id && (
                                                         <View
                                                             style={{
                                                                 position: 'absolute',
@@ -531,7 +513,7 @@ const CookingProfile = (props) => {
                                                         >
                                                             {/* View content */}
                                                             <TouchableOpacity style={{}}>
-                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), props.navigation.navigate('CookingEditArticle', { id: item[0].article_id, cat: item.category_id, desc: item[0].description, title: item[0].title, category: item[0].category_data }) }}>
+                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), props.navigation.navigate('CookingEditArticle', { id: item.id, cat: item.category_id, desc: item[0].description, title: item[0].title, category: item[0].category_data }) }}>
                                                                     <Text
 
                                                                         style={{
@@ -541,7 +523,7 @@ const CookingProfile = (props) => {
                                                                     >Edit</Text>
                                                                 </TouchableOpacity>
                                                                 <View style={{ width: '100%', height: 1, backgroundColor: '#E0E0E0', marginTop: 4 }} />
-                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), Delete(item[0].article_id) }} style={{ marginTop: 2 }}>
+                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), deleteVideo(item.id) }} style={{ marginTop: 2 }}>
                                                                     <Text
 
                                                                         style={{ fontWeight: '500', color: 'black', fontSize: 12, marginLeft: 15, marginTop: 4 }}
@@ -570,13 +552,10 @@ const CookingProfile = (props) => {
                                         <View style={{ width: dimensions.SCREEN_WIDTH, alignSelf: 'center', }}>
                                             <View style={{ justifyContent: 'flex-start', backgroundColor: 'white' }}>
                                                 <View style={styles.scrollViewContent}>
-                                                    {console.log(item, 'my filter function for rrr')
-                                                    }
                                                     <View style={styles.imageContainer} >
-                                                        <View style={styles.imageView} onPress={() => { props.navigation.navigate('CookingPost', { id: item[0].article_id }) }}>
-                                                            {console.log(image, 'image under flatList')}
+                                                        <View style={styles.imageView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
                                                             <AppIntroSlider
-                                                                data={item.filter(item => item.file_url !== null)}
+                                                                data={{image: item.thumbnail}}
 
                                                                 renderItem={_renderItem}
                                                                 // renderPagination={() => null}
@@ -598,7 +577,7 @@ const CookingProfile = (props) => {
                                             </View>
                                         </View>
 
-                                        <TouchableOpacity style={styles.flatlistMainBottomView} onPress={() => { props.navigation.navigate('CookingPost', { id: item[0].article_id }) }}>
+                                        <TouchableOpacity style={styles.flatlistMainBottomView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
 
                                             <View style={styles.flatlistBottomView}>
 
@@ -618,13 +597,13 @@ const CookingProfile = (props) => {
                                                                 fontWeight: 'bold',
                                                                 color: '#263238',
                                                                 width: '60%', marginBottom: 10, marginTop: -12
-                                                            }}>{item[0].title}</Text>
+                                                            }}>{item.name}</Text>
                                                             <Text style={{
                                                                 fontSize: 14,
                                                                 fontWeight: '500',
                                                                 color: '#ED1C24',
                                                                 textAlign: 'right', marginBottom: 10, marginTop: -12
-                                                            }}>{item[0].category_name}</Text>
+                                                            }}>{item.category_id}</Text>
                                                         </View>
                                                     </TouchableOpacity>
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -634,21 +613,21 @@ const CookingProfile = (props) => {
                                                                     source={require('../../../assets/images/fashion-dark-like-button.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item[0].likes} Likes</Text>
+                                                                <Text style={styles.buttonText}>{item?.likes} Likes</Text>
                                                             </TouchableOpacity>
                                                             <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
                                                                     source={require('../../../assets/images/fashion-dark-dislike-button.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item[0].dislike} Dislikes</Text>
+                                                                <Text style={styles.buttonText}>{item?.dislike} Dislikes</Text>
                                                             </TouchableOpacity>
                                                             <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
                                                                     source={require('../../../assets/People/commentPostPeople.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item[0].comment} Comments</Text>
+                                                                <Text style={styles.buttonText}>{item?.comment} Comments</Text>
                                                             </TouchableOpacity>
                                                         </View>
                                                     </View>
@@ -897,7 +876,7 @@ const CookingProfile = (props) => {
                             </View>
                             <View style={{ marginTop: 10 }}>
                                 <TouchableOpacity style={{ marginHorizontal: 10, flexDirection: 'row', alignItems: 'center' }} onPress={() => {
-                                    Delete(selectedId)
+                                    deleteVideo(selectedId)
                                         , setProfileModal(false)
                                 }} >
                                     <Image source={require('../../../assets/People/PeopleLogoutIconModal.png')} style={{ width: 34, height: 34 }} resizeMode='contain' />
@@ -1197,8 +1176,10 @@ const styles = StyleSheet.create({
     threeDotsView: {
         backgroundColor: '#ED1C24',
         padding: 10,
-        borderRadius: 20, right: 12,
-        width: 103, height: 31
+        borderRadius: 20, 
+        right: 12,
+        width: 'auto', 
+        height: 31
     },
     imageView: {
         width: dimensions.SCREEN_WIDTH,
@@ -1342,4 +1323,4 @@ const styles = StyleSheet.create({
     },
 
 });
-export default CookingProfile
+export default VideoProfile
