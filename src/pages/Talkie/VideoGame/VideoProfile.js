@@ -261,7 +261,7 @@ const VideoProfile = (props) => {
     }
 
     const _renderItem = ({ item }) => {
-        console.log(item, 'item ggggg');
+        // console.log(item, 'item ggggg');
         return (
             
                 <ImageBackground source={{ uri: item.thumbnail }} resizeMode='stretch' style={{ width: '100%', height: 350, alignSelf: 'center', justifyContent:'center', alignItems:'center' }} >
