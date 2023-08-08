@@ -488,33 +488,10 @@ const VideoProfile = (props) => {
                                                 <Text style={{ marginRight: 0, color: '#263238', }}>{item.created_date}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                                {/* <TouchableOpacity onPress={() => { setThreedotclickdata(item.userid), setShowModal(true) }} style={[styles.rightButtonsView, { marginRight: 12, marginLeft: -10 }]}> */}
                                                 <TouchableOpacity
                                                     onPress={() => {
-                                                        // handleToggleView(item) 
                                                         setSelectedItemId(item.id)
-
                                                     }}
-
-                                                    // setEditItemId(item.id);
-                                                    // setEditModal({
-                                                    //     active: true,
-                                                    //     id: item.id,
-
-                                                    // });
-                                                    // setProfileModal({
-                                                    //     active: true,
-                                                    //     id_article: item.id,
-                                                    //     category: item.category_id,
-                                                    //     description: item.description
-                                                    // })
-
-                                                    // setSelectedId(item.id);
-                                                    // setSelectedCategoryy(item.category_id);
-                                                    // setdesc(item[0].description)
-
-                                                    // setTile(item[0].title)
-
                                                     style={[styles.rightButtonsView, { marginRight: 0, marginLeft: -10, }]}
                                                 >
                                                     <Image source={require('../../../assets/images/people-three-dots.png')} style={{ width: 20, height: 20 }} resizeMode='contain' />
@@ -629,7 +606,7 @@ const VideoProfile = (props) => {
                                                                 fontWeight: '500',
                                                                 color: '#ED1C24',
                                                                 textAlign: 'right', marginBottom: 10, marginTop: -12
-                                                            }}>{item.category_id}</Text>
+                                                            }}>{item.category_name}</Text>
                                                         </View>
                                                     </TouchableOpacity>
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -641,19 +618,19 @@ const VideoProfile = (props) => {
                                                                 />
                                                                 <Text style={styles.buttonText}>{item?.likes} Likes</Text>
                                                             </TouchableOpacity>
-                                                            <TouchableOpacity style={styles.buttonView}>
+                                                            {/* <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
                                                                     source={require('../../../assets/images/fashion-dark-dislike-button.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
                                                                 <Text style={styles.buttonText}>{item?.dislike} Dislikes</Text>
-                                                            </TouchableOpacity>
+                                                            </TouchableOpacity> */}
                                                             <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
                                                                     source={require('../../../assets/People/commentPostPeople.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item?.comment} Comments</Text>
+                                                                <Text style={styles.buttonText}>{item?.total_comments} Comments</Text>
                                                             </TouchableOpacity>
                                                         </View>
                                                     </View>
