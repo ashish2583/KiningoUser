@@ -552,11 +552,15 @@ const VideoGameHome = (props) => {
                         {/* <PlayIcon width={28} height={28} /> */}
                         <View
                           style={{
-                            width: 55,
-                            height: 55,
+                            position:'absolute',
+                            top:'50%',
+                            left:'40%',
+                            // width: 55,
+                            // height: 55,
+                            // marginTop: 35,
                             borderRadius: 55 / 2,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            // alignItems: "center",
+                            // justifyContent: "center",
                           }}
                         >
                           <Image

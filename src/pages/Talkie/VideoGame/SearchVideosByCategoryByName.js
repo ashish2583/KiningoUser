@@ -31,9 +31,12 @@ import Animated from "react-native-reanimated";
 const SearchVideosByCategoryByName = (props) => {
   const User = useSelector((state) => state.user.user_details);
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const scrollY = React.useRef(new Animated.Value(0)).current;
   const isAutoScrolling = React.useRef(true);
   const activeIndex = React.useRef(0);
+  const activeIndex2 = React.useRef(0);
   const flatListRef = React.useRef(null);
+  const flatListRef2 = React.useRef(null);
   const [loading, setLoading] = useState(false);
   const [searchValue, setsearchValue] = useState("");
   const [videoData, setVideoData] = useState("");
@@ -51,6 +54,20 @@ const SearchVideosByCategoryByName = (props) => {
       flatListRef?.current?.scrollToIndex({
         animated: true,
         index: activeIndex.current,
+        viewPosition: 0.5,
+      });
+    }
+  };
+  const startAutoScroll2 = (toIndex) => {
+    if (props.route.params.courseData.length > 0) {
+      isAutoScrolling.current = true;
+      activeIndex2.current = toIndex;
+      if (activeIndex2.current > props.route.params.courseData.length - 1) {
+        activeIndex2.current = 0;
+      }
+      flatListRef2?.current?.scrollToIndex({
+        animated: true,
+        index: activeIndex2.current,
         viewPosition: 0.5,
       });
     }
@@ -279,6 +296,8 @@ const SearchVideosByCategoryByName = (props) => {
                 <View style={styles.VideoThumbWrapper}>
                   <TouchableOpacity
                     onPress={() => {
+                      const abc = {...item}
+                      abc.url = item.file
                       setShowModal({
                         isVisible: true,
                         data: item,
@@ -290,11 +309,14 @@ const SearchVideosByCategoryByName = (props) => {
                         {/* <PlayIcon width={28} height={28} /> */}
                         <View
                           style={{
-                            width: 55,
-                            height: 55,
+                            position:'absolute',
+                            top:'50%',
+                            left:'45%',
+                            // width: 55,
+                            // height: 55,
                             borderRadius: 55 / 2,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            // alignItems: "center",
+                            // justifyContent: "center",
                           }}
                         >
                           <Image
@@ -367,6 +389,16 @@ const SearchVideosByCategoryByName = (props) => {
           openCategoryModal(false)
         }}
         scrollTo={() => { }}
+        onModalWillShow={()=>{
+          if(!selectedCategory){
+            return
+          }
+          // console.log('props.route.params.courseData', props.route.params.courseData);
+          // console.log('selectedCategory', selectedCategory);
+          const catIndex = props.route.params.courseData?.findIndex(el=>el.id === selectedCategory)
+          console.log('catIndex', catIndex);
+          startAutoScroll2(catIndex)
+        }}
         onBackdropPress={() => openCategoryModal(false)}
         scrollOffset={1}
         propagateSwipe={true}
@@ -380,8 +412,19 @@ const SearchVideosByCategoryByName = (props) => {
             <Text style={{ color: Mycolors.Black, fontWeight: '500', fontSize: 22, textAlign: 'center' }} >Pick from a wide range of categories</Text>
 
             <View style={{ width: '100%', alignSelf: 'center', marginTop: 10 }}>
-              <FlatList
+              <Animated.FlatList
+                ref={flatListRef2}
                 data={props.route.params.courseData}
+                onScroll={Animated.event(
+                  [{nativeEvent: {contentOffset: {y: scrollY}}}],
+                  {useNativeDriver: false},
+                )}
+                onScrollToIndexFailed={info => {
+                  const wait = new Promise(resolve => setTimeout(resolve, 500));
+                  wait.then(() => {
+                    flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
+                  });
+                }}
                 renderItem={({ item, index }) => {
                   return (
                     <TouchableOpacity
