@@ -35,21 +35,25 @@ import {
   game,
 } from "../../../WebApi/Service";
 import axios from "axios";
+import Animated from "react-native-reanimated";
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
-  const [videoTitle, setVideoTitle] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [videoDecs, setVideoDesc] = useState("");
+  const [videoTitle, setVideoTitle] = useState(props.route.params?.type == 'add' ? '' : props.route.params?.data?.name);
+  const [selectedCategory, setSelectedCategory] = useState(props.route.params?.type == 'add' ? null : props.route.params?.data?.category_id);
+  const [videoDecs, setVideoDesc] = useState(props.route.params?.type == 'add' ? '' : props.route.params?.data?.description);
   const [loading, setLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState("");
   const [pick, setpick] = useState({});
   const [filepath, setfilepath] = useState(null);
   const [My_Alert, setMy_Alert] = useState(false);
   const [alert_sms, setalert_sms] = useState("");
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const isAutoScrolling = React.useRef(true);
+  const activeIndex = React.useRef(0);
+  const flatListRef = React.useRef(null);
 
   const [courseData, setCourseData] = useState(props.route.params.courseData);
-  //   const [courseData, setCourseData] = useState([
   //     {
   //       id: "1",
   //       title: "Sandbox",
@@ -86,7 +90,11 @@ const VideoUpload = (props) => {
   //       img: require("../../../assets/images/BattleGames.png"),
   //     },
   //   ]);
-  useEffect(() => {}, []);
+  props.route.params?.type == 'edit' && useEffect(() => {
+    const index = props.route.params.courseData?.findIndex(el=>el.id === props.route.params?.data?.category_id)
+    console.log('index', index);
+    startAutoScroll(index)
+  }, []);
   const generateThumb = async (path) => {
     console.log('generateThumb path', path);
     try {
@@ -100,6 +108,20 @@ const VideoUpload = (props) => {
       setThumbnail(updatedThumb);
     } catch (error) {
       console.log("error creating thumbnail", error);
+    }
+  };
+  const startAutoScroll = (toIndex) => {
+    if (props.route.params.courseData.length > 0) {
+      isAutoScrolling.current = true;
+      activeIndex.current = toIndex;
+      if (activeIndex.current > props.route.params.courseData.length - 1) {
+        activeIndex.current = 0;
+      }
+      flatListRef?.current?.scrollToIndex({
+        animated: true,
+        index: activeIndex.current,
+        viewPosition: 0.5,
+      });
     }
   };
   const Validation = () => {
@@ -236,7 +258,7 @@ const VideoUpload = (props) => {
               img1padding={5}
               img1borderRadius={4}
               press2={() => {}}
-              title2={"Game Video"}
+              title2={`${props.route.params.type == 'add' ? 'Add': 'Update'} Game Video`}
               fontWeight={"bold"}
               img2height={20}
               color={Mycolors.BG_COLOR}
@@ -271,10 +293,22 @@ const VideoUpload = (props) => {
               top: -130,
             }}
           >
-            <FlatList
+            <Animated.FlatList
+              ref={flatListRef}
               data={courseData}
               showsHorizontalScrollIndicator={true}
               horizontal
+              onScroll={Animated.event(
+                [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                {useNativeDriver: false},
+              )}
+              initialScrollIndex={activeIndex.current}  
+              onScrollToIndexFailed={info => {
+                const wait = new Promise(resolve => setTimeout(resolve, 500));
+                wait.then(() => {
+                  flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
+                });
+              }}
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => {
                 return (

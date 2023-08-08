@@ -353,7 +353,7 @@ const VideoGameHome = (props) => {
               img2height={20}
               color={Mycolors.BG_COLOR}
               press3={() => {
-                props.navigation.navigate("VideoProfile");
+                props.navigation.navigate("VideoProfile", {courseData});
               }}
               img3={{
                 uri: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60`,
@@ -733,7 +733,7 @@ const VideoGameHome = (props) => {
           }}
         />
       ) : null}
-      <TouchableOpacity onPress={() => {props.navigation.navigate("VideoUpload", { courseData }) }} style={{ bottom: 60, right: 20, position: 'absolute', alignSelf: 'flex-end', width: 80, height: 80, borderRadius: 80 / 2, backgroundColor: "#ED1C24", justifyContent: 'center', alignItems: 'center', shadowColor: '#FFD037', shadowOffset: { width: 0, height: 3 }, shadowRadius: 1, shadowOpacity: 0.1, elevation: 5 }}>
+      <TouchableOpacity onPress={() => {props.navigation.navigate("VideoUpload", { courseData, type: 'add' }) }} style={{ bottom: 60, right: 20, position: 'absolute', alignSelf: 'flex-end', width: 80, height: 80, borderRadius: 80 / 2, backgroundColor: "#ED1C24", justifyContent: 'center', alignItems: 'center', shadowColor: '#FFD037', shadowOffset: { width: 0, height: 3 }, shadowRadius: 1, shadowOpacity: 0.1, elevation: 5 }}>
           <Image source={require('../../../assets/images/fashion-upload-icon.png')} style={{ width: 40, height: 40 }} />
         </TouchableOpacity>
     </SafeAreaView>

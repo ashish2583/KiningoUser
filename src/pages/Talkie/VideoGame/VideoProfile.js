@@ -355,7 +355,7 @@ const VideoProfile = (props) => {
                                         </View>
 
 
-                                        <TouchableOpacity style={styles.threeDotsView} onPress={() => { props.navigation.navigate('CookingUpload') }}>
+                                        <TouchableOpacity style={styles.threeDotsView} onPress={() => { props.navigation.navigate('VideoUpload', { type :'add', courseData: props.route.params.courseData }) }}>
                                             <Text style={{ height: 23, alignSelf: 'center', bottom: 4, color: 'white' }}>Add Game Video</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -539,7 +539,7 @@ const VideoProfile = (props) => {
                                                         >
                                                             {/* View content */}
                                                             <TouchableOpacity style={{}}>
-                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), props.navigation.navigate('CookingEditArticle', { id: item.id, cat: item.category_id, desc: item[0].description, title: item[0].title, category: item[0].category_data }) }}>
+                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null); props.navigation.navigate('VideoUpload', { data: item, type :'edit', courseData: props.route.params.courseData }) }}>
                                                                     <Text
 
                                                                         style={{
