@@ -166,7 +166,10 @@ const VideoUpload = (props) => {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${User.token}`,
     };
-    const url = "http://54.153.75.225/backend/api/v1/" + game;
+    let url = "http://54.153.75.225/backend/api/v1/" + game;
+    if(props.route.params?.type == 'edit'){
+      url += '/id/' + props.route.params?.id
+    }
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -340,6 +343,10 @@ const VideoUpload = (props) => {
                         position: "relative",
                       }}
                       onPress={() => {
+                        if(props.route.params?.type == 'edit'){
+                          Toast.show({text1: `While editing video, category cannot be changed`})
+                          return
+                        }
                         setSelectedCategory(item.id);
                       }}
                     >
