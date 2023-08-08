@@ -262,7 +262,7 @@ const VideoProfile = (props) => {
                     item.type === 'video' ? (
                         <VideoPlayer
                             resizeMode="contain"
-                            video={{ uri: item.file_url }}
+                            video={{ uri: item.image }}
                             style={{ borderWidth: 2 }}
                             videoWidth={dimensions.SCREEN_WIDTH}
                             videoHeight={200}
@@ -277,7 +277,7 @@ const VideoProfile = (props) => {
                             }}
                         />
                     ) : (
-                        <Image source={{ uri: item.file_url }} style={{ width: '100%', height: 350, alignSelf: 'center' }} />
+                        <Image source={{ uri: item.image }} style={{ width: '100%', height: 350, alignSelf: 'center' }} />
                     )
                 }
             </>
@@ -558,7 +558,7 @@ const VideoProfile = (props) => {
                                                     <View style={styles.imageContainer} >
                                                         <View style={styles.imageView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
                                                             <AppIntroSlider
-                                                                data={{image: item.thumbnail}}
+                                                                data={item}
 
                                                                 renderItem={_renderItem}
                                                                 // renderPagination={() => null}
@@ -618,13 +618,13 @@ const VideoProfile = (props) => {
                                                                 />
                                                                 <Text style={styles.buttonText}>{item?.likes} Likes</Text>
                                                             </TouchableOpacity>
-                                                            {/* <TouchableOpacity style={styles.buttonView}>
+                                                            <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
-                                                                    source={require('../../../assets/images/fashion-dark-dislike-button.png')}
+                                                                    source={require('./images/game-view-icon.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item?.dislike} Dislikes</Text>
-                                                            </TouchableOpacity> */}
+                                                                <Text style={styles.buttonText}>{item?.total_views} Views</Text>
+                                                            </TouchableOpacity>
                                                             <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
                                                                     source={require('../../../assets/People/commentPostPeople.png')}
