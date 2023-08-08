@@ -16,6 +16,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import VideoPlayer from 'react-native-video-player'
 import { createThumbnail } from "react-native-create-thumbnail";
 import HomeHeaderRoundBottom from '../../../component/HomeHeaderRoundBottom';
+import { VideoModel } from "../../../component/VideoModel";
 
 const VideoProfile = (props) => {
     const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const VideoProfile = (props) => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [isEditingOptionsVisible, setEditingOptionsVisible] = useState(false);
     const [profileDetails, setProfileDetails] = useState({});
+    const [showModal, setShowModal] = useState({ isVisible: false, data: null });
 
     useEffect(() => {
         getProfileData()
@@ -90,6 +92,12 @@ const VideoProfile = (props) => {
         console.log('my image')
         setmodlevisual(true)
     }
+    const toggleModal = (state) => {
+        setShowModal({
+          isVisible: state.isVisible,
+          data: state.data,
+        });
+      };
     const checkCameraPermission = async () => {
         if (Platform.OS === 'ios') {
           onCamera();
@@ -254,41 +262,30 @@ const VideoProfile = (props) => {
 
     const _renderItem = ({ item }) => {
         console.log(item, 'item ggggg');
-
-
         return (
-            <>
-                {
-                    item.type === 'video' ? (
-                        <VideoPlayer
-                            resizeMode="contain"
-                            video={{ uri: item.image }}
-                            style={{ borderWidth: 2 }}
-                            videoWidth={dimensions.SCREEN_WIDTH}
-                            videoHeight={200}
-                            autoplay={false}
-                            thumbnail={{ uri: item.thumb.path }}
-                            endWithThumbnail
-                            disableControlsAutoHide
-                            customStyles={{
-                                thumbnail: { width: '100%', height: 230, },
-                                videoWrapper: { width: '100%', height: 200, resizeMode: 'stretch' },
-                                // wrapper: { width: '100%', height: 227 },
-                            }}
-                        />
-                    ) : (
-                        <Image source={{ uri: item.image }} style={{ width: '100%', height: 350, alignSelf: 'center' }} />
-                    )
-                }
-            </>
-        );
+            
+                <ImageBackground source={{ uri: item.thumbnail }} resizeMode='stretch' style={{ width: '100%', height: 350, alignSelf: 'center', justifyContent:'center', alignItems:'center' }} >
+                    <TouchableOpacity  onPress={() => {
+                      setShowModal({
+                        isVisible: true,
+                        data: item,
+                      });
+                    }}>
+                        <Image
+                            source={require("../../../assets/VideoGame-play-button.png")}
+                            style={{ width: 30, height: 30 }}
+                            />
+                    </TouchableOpacity>
+                </ImageBackground>
+            
+        )
     }
     return (
         <SafeAreaView scrollEnabled={scrollEnabled} style={{ height: '100%', backgroundColor: '#F8F8F8' }}>
             <ScrollView>
                 <HomeHeaderRoundBottom height={100} extraStyle={{ paddingtop: 10, paddingBottom: 25 }} paddingHorizontal={15} borderBottomLeftRadius={20} borderBottomRightRadius={20} backgroundColor='#ED1C24'
                     press1={() => { props.navigation.goBack() }} img1={require('../../../assets/images/service-header-back-button.png')} img1width={25} img1height={18}
-                    press2={() => { }} title2={'Cooking'} fontWeight={'500'} img2height={20} color={'#fff'}
+                    press2={() => { }} title2={'Profile'} fontWeight={'500'} img2height={20} color={'#fff'}
                     press3={() => { props.navigation.navigate('CookingNotifications') }} img3={require('../../../assets/images/fashion-bell-icon.png')} img3width={25} img3height={22}
                     press4={() => {
                         AsyncStorage.clear();
@@ -438,7 +435,14 @@ const VideoProfile = (props) => {
                         </TouchableOpacity>
                     </View>
 
-
+                    {showModal.isVisible ? (
+                        <VideoModel
+                        isVisible={showModal.isVisible}
+                        toggleModal={toggleModal}
+                        videoDetail={{ ...showModal?.data, url: showModal?.data?.file }}
+                        {...props}
+                        />
+                    ) : null}                            
                     <View style={{ width: dimensions.SCREEN_WIDTH * 0.9, alignSelf: 'center', marginTop: 10 }}>
                         {profileDetails?.posts?.length === 0 ? (
                             <Text style={{ fontSize: 16, color: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>No posts Found</Text>
@@ -451,7 +455,11 @@ const VideoProfile = (props) => {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={{ width: '95.5%', marginVertical: 10, borderRadius: 30, }}>
-                                        <TouchableOpacity style={styles.flatlistMainView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
+                                        <TouchableOpacity style={styles.flatlistMainView} onPress={() => {
+                                            props.navigation.navigate("VideoGamedetails", {
+                                            videoId: item.id,
+                                            });
+                                        }}>
 
                                             <View style={styles.followingImageView}>
                                                 <View style={{}} onPress={() => {
@@ -558,7 +566,7 @@ const VideoProfile = (props) => {
                                                     <View style={styles.imageContainer} >
                                                         <View style={styles.imageView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
                                                             <AppIntroSlider
-                                                                data={item}
+                                                                data={[item]}
 
                                                                 renderItem={_renderItem}
                                                                 // renderPagination={() => null}
