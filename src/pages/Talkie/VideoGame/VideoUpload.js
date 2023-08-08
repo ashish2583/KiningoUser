@@ -168,8 +168,9 @@ const VideoUpload = (props) => {
     };
     let url = "http://54.153.75.225/backend/api/v1/" + game;
     if(props.route.params?.type == 'edit'){
-      url += '/id/' + props.route.params?.id
+      url += '/id/' + props.route.params?.data?.id
     }
+    console.log('onUpload url', url);
     try {
       const response = await fetch(url, {
         method: "POST",
