@@ -264,7 +264,7 @@ const VideoProfile = (props) => {
         // console.log(item, 'item ggggg');
         return (
             
-                <ImageBackground source={{ uri: item.thumbnail }} resizeMode='stretch' style={{ width: '100%', height: 350, alignSelf: 'center', justifyContent:'center', alignItems:'center' }} >
+                <ImageBackground source={{ uri: item.thumbnail }} resizeMode='stretch' style={{ width: '100%', height: 350, alignSelf: 'center', justifyContent:'center', alignItems:'center' }}  >
                     <TouchableOpacity  onPress={() => {
                       setShowModal({
                         isVisible: true,
@@ -565,17 +565,19 @@ const VideoProfile = (props) => {
                                                 <View style={styles.scrollViewContent}>
                                                     <View style={styles.imageContainer} >
                                                         <View style={styles.imageView} onPress={() => { props.navigation.navigate('CookingPost', { id: item.id }) }}>
-                                                            <AppIntroSlider
-                                                                data={[item]}
-
-                                                                renderItem={_renderItem}
-                                                                // renderPagination={() => null}
-                                                                renderDoneButton={() => <View />}
-                                                                renderNextButton={() => <View />}
-                                                                activeDotStyle={{ backgroundColor: '#ED1C24', height: 4, width: 18, borderRadius: 0, top: 20 }}
-                                                                dotStyle={{ backgroundColor: '#fff', height: 4, width: 18, borderRadius: 0, top: 20 }}
-                                                                keyExtractor={(item) => item.id}
-                                                            />
+                                                        <ImageBackground source={{ uri: item.thumbnail }} resizeMode='stretch' style={{ width: '100%', height: 200, alignSelf: 'center', justifyContent:'center', alignItems:'center' }}  >
+                                                            <TouchableOpacity  onPress={() => {
+                                                            setShowModal({
+                                                                isVisible: true,
+                                                                data: item,
+                                                            });
+                                                            }}>
+                                                                <Image
+                                                                    source={require("../../../assets/VideoGame-play-button.png")}
+                                                                    style={{ width: 30, height: 30 }}
+                                                                    />
+                                                            </TouchableOpacity>
+                                                        </ImageBackground>
                                                             {/* // <Image
                                                                 //     source={{ uri: image?.file_url }}
                                                                 //     style={styles.image}
