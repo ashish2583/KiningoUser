@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, } from 'react-native';
+import { View, Image, Text, StyleSheet, SafeAreaView, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, ImageBackground, Platform, PermissionsAndroid, } from 'react-native';
 import { requestPostApi, requestGetApi, creation_delete, game_profile, game } from '../../../WebApi/Service'
 import { useSelector, useDispatch } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -90,6 +90,31 @@ const VideoProfile = (props) => {
         console.log('my image')
         setmodlevisual(true)
     }
+    const checkCameraPermission = async () => {
+        if (Platform.OS === 'ios') {
+          onCamera();
+        } else {
+          try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.CAMERA,
+              {
+                title: 'Camera Permission Required',
+                message:
+                  'Application needs access to your camera to click your profile image',
+              },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              onCamera();
+              console.log('Camera Permission Granted.');
+            } else {
+              Toast.show({text1: 'Camera Permission Not Granted'});
+            }
+          } catch (err) {
+            // To handle permission related exception
+            console.log('ERROR' + err);
+          }
+        }
+      };
     const onCamera = () => {
         ImagePicker.openCamera({
             width: 300,
@@ -421,6 +446,7 @@ const VideoProfile = (props) => {
                             data={profileDetails?.posts}
                             showsHorizontalScrollIndicator={false}
                             numColumns={1}
+                            contentContainerStyle={{paddingBottom:50}}
                             style={{}}
                             renderItem={({ item, index }) => {
                                 return (
@@ -805,7 +831,7 @@ const VideoProfile = (props) => {
                                 <Image source={require('../../../assets/Art/GalleryCreation.png')} style={{ width: 40, height: 40, alignSelf: 'center' }} />
                                 <Text style={{ textAlign: 'center', color: Mycolors.TEXT_COLOR }}>Open Library</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ width: 150, height: 150 }} onPress={onCamera}>
+                            <TouchableOpacity style={{ width: 150, height: 150 }} onPress={checkCameraPermission}>
                                 <Image source={require('../../../assets/Art/cameraCreation.png')} style={{ width: 40, height: 35, alignSelf: 'center' }} />
                                 <Text style={{ textAlign: 'center', color: Mycolors.TEXT_COLOR }}>Open Camera</Text>
                             </TouchableOpacity>
