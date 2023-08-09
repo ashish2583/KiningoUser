@@ -30,23 +30,31 @@ import moment from "moment";
 import { createThumbnail } from "react-native-create-thumbnail";
 import { useSelector } from "react-redux";
 import { TextInput } from "react-native-paper";
-import {
-  requestPostApi,
-  game,
-} from "../../../WebApi/Service";
+import { requestPostApi, game } from "../../../WebApi/Service";
 import axios from "axios";
 import Animated from "react-native-reanimated";
 import { CommonActions } from "@react-navigation/native";
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker from "react-native-document-picker";
+import Video from 'react-native-video';
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
-  const [videoTitle, setVideoTitle] = useState(props.route.params?.type == 'add' ? '' : props.route.params?.data?.name);
-  const [selectedCategory, setSelectedCategory] = useState(props.route.params?.type == 'add' ? null : props.route.params?.data?.category_id);
-  const [videoDecs, setVideoDesc] = useState(props.route.params?.type == 'add' ? '' : props.route.params?.data?.description);
+  const [videoTitle, setVideoTitle] = useState(
+    props.route.params?.type == "add" ? "" : props.route.params?.data?.name
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    props.route.params?.type == "add"
+      ? null
+      : props.route.params?.data?.category_id
+  );
+  const [videoDecs, setVideoDesc] = useState(
+    props.route.params?.type == "add"
+      ? ""
+      : props.route.params?.data?.description
+  );
   const [loading, setLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState({});
-  const [pick, setpick] = useState({});
+  const [pick, setpick] = useState([]);
   const [filepath, setfilepath] = useState(null);
   const [My_Alert, setMy_Alert] = useState(false);
   const [alert_sms, setalert_sms] = useState("");
@@ -92,13 +100,16 @@ const VideoUpload = (props) => {
   //       img: require("../../../assets/images/BattleGames.png"),
   //     },
   //   ]);
-  props.route.params?.type == 'edit' && useEffect(() => {
-    const index = props.route.params.courseData?.findIndex(el=>el.id === props.route.params?.data?.category_id)
-    console.log('index', index);
-    startAutoScroll(index)
-  }, []);
+  props.route.params?.type == "edit" &&
+    useEffect(() => {
+      const index = props.route.params.courseData?.findIndex(
+        (el) => el.id === props.route.params?.data?.category_id
+      );
+      console.log("index", index);
+      startAutoScroll(index);
+    }, []);
   const generateThumb = async (path) => {
-    console.log('generateThumb path', path);
+    console.log("generateThumb path", path);
     try {
       const thumb = await createThumbnail({
         url: path,
@@ -128,7 +139,7 @@ const VideoUpload = (props) => {
   };
   const resetIndexGoToHome = CommonActions.reset({
     index: 1,
-    routes: [{name: 'VideoGameHome'}],
+    routes: [{ name: "VideoGameHome" }],
   });
   const Validation = () => {
     if (videoTitle?.trim()?.length === 0) {
@@ -175,10 +186,10 @@ const VideoUpload = (props) => {
       Authorization: `Bearer ${User.token}`,
     };
     let url = "http://54.153.75.225/backend/api/v1/" + game;
-    if(props.route.params?.type == 'edit'){
-      url += '/id/' + props.route.params?.data?.id
+    if (props.route.params?.type == "edit") {
+      url += "/id/" + props.route.params?.data?.id;
     }
-    console.log('onUpload url', url);
+    console.log("onUpload url", url);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -188,9 +199,9 @@ const VideoUpload = (props) => {
       const responseJson = await response.json();
       console.log("onUpload responseJson", responseJson);
       if (responseJson?.headers?.success == 1) {
-        if(props.route.params?.type == 'edit'){
-          props.navigation.dispatch(resetIndexGoToHome)
-        }else{
+        if (props.route.params?.type == "edit") {
+          props.navigation.dispatch(resetIndexGoToHome);
+        } else {
           props.navigation.goBack();
         }
         Toast.show({ text1: responseJson?.headers?.message });
@@ -209,16 +220,16 @@ const VideoUpload = (props) => {
         type: [DocumentPicker.types.video],
       });
       // The selected video can be accessed using 'res.uri'
-      console.log('Selected Video URI:', res[0].uri);
+      console.log("Selected Video URI:", res[0].uri);
       setpick(res);
       generateThumb(res[0].uri);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User canceled the picker
-        console.log('User canceled video picker');
+        console.log("User canceled video picker");
       } else {
         // Error occurred while picking the video
-        console.log('Error picking video:', err);
+        console.log("Error picking video:", err);
       }
     }
   };
@@ -246,7 +257,7 @@ const VideoUpload = (props) => {
         console.log("the ddd==", image.assets[0].uri);
         var photo = {
           // uri: image.assets[0].uri,
-          uri: image.assets[0].uri + '.' + image.assets[0].type?.split('/')[1],
+          uri: image.assets[0].uri + "." + image.assets[0].type?.split("/")[1],
           type: image.assets[0].type,
           name: image.assets[0].fileName,
         };
@@ -293,7 +304,9 @@ const VideoUpload = (props) => {
               img1padding={5}
               img1borderRadius={4}
               press2={() => {}}
-              title2={`${props.route.params.type == 'add' ? 'Add': 'Update'} Game Video`}
+              title2={`${
+                props.route.params.type == "add" ? "Add" : "Update"
+              } Game Video`}
               fontWeight={"bold"}
               img2height={20}
               color={Mycolors.BG_COLOR}
@@ -334,14 +347,17 @@ const VideoUpload = (props) => {
               showsHorizontalScrollIndicator={true}
               horizontal
               onScroll={Animated.event(
-                [{nativeEvent: {contentOffset: {x: scrollX}}}],
-                {useNativeDriver: false},
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                { useNativeDriver: false }
               )}
-              initialScrollIndex={activeIndex.current}  
-              onScrollToIndexFailed={info => {
-                const wait = new Promise(resolve => setTimeout(resolve, 500));
+              initialScrollIndex={activeIndex.current}
+              onScrollToIndexFailed={(info) => {
+                const wait = new Promise((resolve) => setTimeout(resolve, 500));
                 wait.then(() => {
-                  flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
+                  flatListRef.current?.scrollToIndex({
+                    index: info.index,
+                    animated: true,
+                  });
                 });
               }}
               keyExtractor={(item) => item.id}
@@ -375,9 +391,11 @@ const VideoUpload = (props) => {
                         position: "relative",
                       }}
                       onPress={() => {
-                        if(props.route.params?.type == 'edit'){
-                          Toast.show({text1: `While editing video, category cannot be changed`})
-                          return
+                        if (props.route.params?.type == "edit") {
+                          Toast.show({
+                            text1: `While editing video, category cannot be changed`,
+                          });
+                          return;
                         }
                         setSelectedCategory(item.id);
                       }}
@@ -451,7 +469,7 @@ const VideoUpload = (props) => {
               <TextInput
                 mode="flar"
                 label="Video Title"
-                theme={{colors: {primary: "#ED1C24"}}}
+                theme={{ colors: { primary: "#ED1C24" } }}
                 underlineColor="red"
                 underlineColorAndroid="black"
                 textColor="black"
@@ -460,7 +478,7 @@ const VideoUpload = (props) => {
                 onChangeText={(text) => {
                   setVideoTitle(text);
                 }}
-                style={[styles.input, { width: "100%", }]}
+                style={[styles.input, { width: "100%" }]}
                 multiline
               />
             </View>
@@ -479,7 +497,7 @@ const VideoUpload = (props) => {
                 mode="flat"
                 label="Video Description"
                 underlineColor="yellow"
-                theme={{colors: {primary: "#ED1C24"}}}
+                theme={{ colors: { primary: "#ED1C24" } }}
                 underlineColorAndroid="transparent"
                 value={videoDecs}
                 textAlignVertical="top"
@@ -517,37 +535,69 @@ const VideoUpload = (props) => {
               Video
             </Text>
           </TouchableOpacity>
-          {Object.keys(thumbnail)?.length > 0 ? 
-          <View style={{marginTop: 10}} >
-            <Image source={{uri: thumbnail?.path}} style={{alignSelf:'center', height:50, width:50, marginTop:10}} />
-          </View>
-          :null}
+          {pick?.length > 0 ? (
+            <View
+              style={{
+                height: 70,
+                width: 80,
+                position: "relative",
+                marginRight: 29,
+                marginTop: 22,
+              }}
+            >
+              <Video
+                source={{ uri: pick[0].uri }}
+                style={{ width: 90, height: 90 }}
+                resizeMode="cover"
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setpick({})
+                  Toast.show({ text1: "Video has been deleted" });
+                }}
+                style={styles.deleteButtonn}
+              >
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    left: 78,
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    top: -98,
+                  }}
+                  source={require("../../../assets/cutRed.png")}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
-        <View style={{ height: 20}} />
+        <View style={{ height: 20 }} />
         <View
-        style={{
-          width: "85%",
-          height: 60,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          // position: "absolute",
-          // bottom: 100,
-          alignSelf: "center",
-          // zIndex: 999,
-        }}
-      >
-        <MyButtons
-          title="Save"
-          height={50}
-          width={"100%"}
-          borderRadius={5}
-          press={onUpload}
-          fontSize={13}
-          titlecolor={Mycolors.BG_COLOR}
-          marginVertical={0}
-          backgroundColor={"#ED1C24"}
-        />
-      </View>
+          style={{
+            width: "85%",
+            height: 60,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            // position: "absolute",
+            // bottom: 100,
+            alignSelf: "center",
+            // zIndex: 999,
+          }}
+        >
+          <MyButtons
+            title="Save"
+            height={50}
+            width={"100%"}
+            borderRadius={5}
+            press={onUpload}
+            fontSize={13}
+            titlecolor={Mycolors.BG_COLOR}
+            marginVertical={0}
+            backgroundColor={"#ED1C24"}
+          />
+        </View>
       </ScrollView>
       {My_Alert ? (
         <MyAlert
@@ -602,8 +652,8 @@ const styles = StyleSheet.create({
   BoxView: {
     marginTop: 15,
     width: "93%",
-    height:60,
-    paddingVertical:10,
+    height: 60,
+    paddingVertical: 10,
     // backgroundColor: "#fff",
     // padding:15,
     // flexDirection: 'row',
@@ -631,7 +681,7 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: 13,
     color: "#fff",
-    height:100
+    height: 100,
   },
   uploadButtonView: {
     marginTop: -100,
@@ -655,6 +705,16 @@ const styles = StyleSheet.create({
     // shadowRadius: 5,
     // shadowOpacity: 0.10,
     // elevation: 5,
+  },
+  deleteButtonn: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    right: -12,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    top: 1,
+
   },
 });
 export default VideoUpload;
