@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
+  ActivityIndicator
 } from "react-native";
 import HomeHeader from "../../../component/HomeHeader";
 import SearchInput2 from "../../../component/SearchInput2";
@@ -54,7 +55,7 @@ const VideoUpload = (props) => {
   );
   const [loading, setLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState({});
-  const [pick, setpick] = useState([]);
+  const [pick, setpick] = useState(props.route.params?.type == "add" ? [] : [{uri: props.route.params?.data.file}]);
   const [filepath, setfilepath] = useState(null);
   const [My_Alert, setMy_Alert] = useState(false);
   const [alert_sms, setalert_sms] = useState("");
@@ -100,6 +101,8 @@ const VideoUpload = (props) => {
   //       img: require("../../../assets/images/BattleGames.png"),
   //     },
   //   ]);
+  const [videoOpacity, setVideoOpacity] = useState(1)
+  
   props.route.params?.type == "edit" &&
     useEffect(() => {
       const index = props.route.params.courseData?.findIndex(
@@ -269,6 +272,17 @@ const VideoUpload = (props) => {
       }
     });
   };
+  const onLoadStart = () => {
+    setVideoOpacity(1)
+  }
+  
+  const onLoad = () => {
+    setVideoOpacity(0)
+  }
+  
+  const onBuffer = ({isBuffering}) => {
+    setVideoOpacity(isBuffering ? 1 : 0)
+  }
 
   return (
     <SafeAreaView
@@ -535,6 +549,7 @@ const VideoUpload = (props) => {
               Video
             </Text>
           </TouchableOpacity>
+          {console.log('pick[0]?.uri', pick[0]?.uri)}
           {pick?.length > 0 ? (
             <View
               style={{
@@ -543,12 +558,22 @@ const VideoUpload = (props) => {
                 position: "relative",
                 marginRight: 29,
                 marginTop: 22,
+                alignSelf:'center'
               }}
             >
               <Video
                 source={{ uri: pick[0].uri }}
                 style={{ width: 90, height: 90 }}
                 resizeMode="cover"
+                onBuffer={onBuffer}
+                onLoadStart={onLoadStart}
+                onLoad={onLoad}
+              />
+              <ActivityIndicator
+                animating
+                size="large"
+                color={'white'}
+                style={[styles.activityIndicator, {opacity: videoOpacity}]}
               />
               <TouchableOpacity
                 onPress={() => {
@@ -711,7 +736,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     top: 1,
-
   },
+  activityIndicator: {
+    position: 'absolute',
+    top: 70,
+    left: 70,
+    right: 70,
+    height: 50,
+},
 });
 export default VideoUpload;

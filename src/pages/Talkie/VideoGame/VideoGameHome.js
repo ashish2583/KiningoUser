@@ -164,10 +164,13 @@ const VideoGameHome = (props) => {
     // generateThumb()
   }, []);
   useEffect(() => {
-    getCategories();
-    getGameVideo();
-    getBannerImages();
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getCategories();
+      getGameVideo();
+      getBannerImages();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
   const getBannerImages = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(
@@ -737,9 +740,11 @@ const VideoGameHome = (props) => {
           }}
         />
       ) : null}
-      <TouchableOpacity onPress={() => {props.navigation.navigate("VideoUpload", { courseData, type: 'add' }) }} style={{ bottom: 60, right: 20, position: 'absolute', alignSelf: 'flex-end', width: 80, height: 80, borderRadius: 80 / 2, backgroundColor: "#ED1C24", justifyContent: 'center', alignItems: 'center', shadowColor: '#FFD037', shadowOffset: { width: 0, height: 3 }, shadowRadius: 1, shadowOpacity: 0.1, elevation: 5 }}>
-          <Image source={require('../../../assets/images/fashion-upload-icon.png')} style={{ width: 40, height: 40 }} />
-        </TouchableOpacity>
+      {!(loading || loading2 || loading3) ?
+        <TouchableOpacity onPress={() => {props.navigation.navigate("VideoUpload", { courseData, type: 'add' }) }} style={{ bottom: 60, right: 20, position: 'absolute', alignSelf: 'flex-end', width: 80, height: 80, borderRadius: 80 / 2, backgroundColor: "#ED1C24", justifyContent: 'center', alignItems: 'center', shadowColor: '#FFD037', shadowOffset: { width: 0, height: 3 }, shadowRadius: 1, shadowOpacity: 0.1, elevation: 5 }}>
+            <Image source={require('../../../assets/images/fashion-upload-icon.png')} style={{ width: 40, height: 40 }} />
+          </TouchableOpacity>
+       :null}
     </SafeAreaView>
   );
 };
