@@ -37,6 +37,7 @@ import {
 import axios from "axios";
 import Animated from "react-native-reanimated";
 import { CommonActions } from "@react-navigation/native";
+import DocumentPicker from 'react-native-document-picker';
 
 const VideoUpload = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -44,7 +45,7 @@ const VideoUpload = (props) => {
   const [selectedCategory, setSelectedCategory] = useState(props.route.params?.type == 'add' ? null : props.route.params?.data?.category_id);
   const [videoDecs, setVideoDesc] = useState(props.route.params?.type == 'add' ? '' : props.route.params?.data?.description);
   const [loading, setLoading] = useState(false);
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState({});
   const [pick, setpick] = useState({});
   const [filepath, setfilepath] = useState(null);
   const [My_Alert, setMy_Alert] = useState(false);
@@ -103,10 +104,10 @@ const VideoUpload = (props) => {
         url: path,
         timeStamp: 1000,
       });
-      // console.log("thumb", thumb);
-      const updatedThumb  = {...thumb, path: thumb.path + '.' + thumb.mime?.split('/')[1]}
-      console.log("thumb", updatedThumb);
-      setThumbnail(updatedThumb);
+      console.log("thumb", thumb);
+      // const updatedThumb  = {...thumb, path: thumb.path + '.' + thumb.mime?.split('/')[1]}
+      // console.log("thumb", updatedThumb);
+      setThumbnail(thumb);
     } catch (error) {
       console.log("error creating thumbnail", error);
     }
@@ -153,7 +154,11 @@ const VideoUpload = (props) => {
     formdata.append(`created_date`, moment().format("YYYY-MM-DD hh:mm:ss"));
     formdata.append(`published_channel`, "kids");
     formdata.append(`description`, videoDecs);
-    formdata.append(`files`, { ...pick });
+    formdata.append(`files`, {
+      name: pick[0].name,
+      type: pick[0].type,
+      uri: pick[0].uri,
+    });
     formdata.append(`image`, {
       name: thumbnail.path.slice(
         thumbnail.path.lastIndexOf("/"),
@@ -162,8 +167,6 @@ const VideoUpload = (props) => {
       uri: thumbnail.path,
       type: thumbnail.mime,
     });
-    // formdata.append("uploaded_by", "user");
-    // formdata.append("duration", "2");
     formdata.append(`status`, "1");
     console.log("onUpload formdata", formdata);
     setLoading(true);
@@ -199,6 +202,25 @@ const VideoUpload = (props) => {
       console.log("Error uploading data:", error);
     }
     setLoading(false);
+  };
+  const handleVideoUpload = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.video],
+      });
+      // The selected video can be accessed using 'res.uri'
+      console.log('Selected Video URI:', res[0].uri);
+      setpick(res);
+      generateThumb(res[0].uri);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User canceled the picker
+        console.log('User canceled video picker');
+      } else {
+        // Error occurred while picking the video
+        console.log('Error picking video:', err);
+      }
+    }
   };
   const openLibrary = async () => {
     let options = {
@@ -474,7 +496,8 @@ const VideoUpload = (props) => {
           <TouchableOpacity
             style={styles.uploadButtonView}
             onPress={() => {
-              openLibrary();
+              handleVideoUpload();
+              // openLibrary();
             }}
           >
             <Image
@@ -494,19 +517,23 @@ const VideoUpload = (props) => {
               Video
             </Text>
           </TouchableOpacity>
+          {Object.keys(thumbnail)?.length > 0 ? 
+          <View style={{marginTop: 10}} >
+            <Image source={{uri: thumbnail?.path}} style={{alignSelf:'center', height:50, width:50, marginTop:10}} />
+          </View>
+          :null}
         </View>
-        <View style={{ height: 100 }} />
-      </ScrollView>
-      <View
+        <View style={{ height: 20}} />
+        <View
         style={{
           width: "85%",
           height: 60,
           flexDirection: "row",
           justifyContent: "space-between",
-          position: "absolute",
-          bottom: 100,
+          // position: "absolute",
+          // bottom: 100,
           alignSelf: "center",
-          zIndex: 999,
+          // zIndex: 999,
         }}
       >
         <MyButtons
@@ -521,6 +548,7 @@ const VideoUpload = (props) => {
           backgroundColor={"#ED1C24"}
         />
       </View>
+      </ScrollView>
       {My_Alert ? (
         <MyAlert
           sms={alert_sms}
