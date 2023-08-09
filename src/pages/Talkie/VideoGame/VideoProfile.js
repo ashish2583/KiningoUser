@@ -73,7 +73,17 @@ const VideoProfile = (props) => {
           setMy_Alert(true);
         }
       };
-
+    
+    const confirmDeleteVideo = (id) => {
+        Alert.alert('Delete Video', 'Are you sure you want to delete this video?', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {text: 'OK', onPress: () => deleteVideo(id)},
+            ]);
+    }
     const deleteVideo = async (id) => {
         setLoading(true)
         const { responseJson, err } = await requestPostApi(game +'/id/'+ id, '', 'DELETE', User.token)
@@ -534,7 +544,7 @@ const VideoProfile = (props) => {
                                                                     >Edit</Text>
                                                                 </TouchableOpacity>
                                                                 <View style={{ width: '100%', height: 1, backgroundColor: '#E0E0E0', marginTop: 4 }} />
-                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), deleteVideo(item.id) }} style={{ marginTop: 2 }}>
+                                                                <TouchableOpacity onPress={() => { setSelectedItemId(null), confirmDeleteVideo(item.id) }} style={{ marginTop: 2 }}>
                                                                     <Text
 
                                                                         style={{ fontWeight: '500', color: 'black', fontSize: 12, marginLeft: 15, marginTop: 4 }}
