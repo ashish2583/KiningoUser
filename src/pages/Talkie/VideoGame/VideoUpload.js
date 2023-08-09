@@ -145,10 +145,15 @@ const VideoUpload = (props) => {
     routes: [{ name: "VideoGameHome" }],
   });
   const Validation = () => {
-    if (videoTitle?.trim()?.length === 0) {
+    if (selectedCategory === null) {
+      Toast.show({ text1: "Please choose Category" });
+      return false;
+    } 
+    else if (videoTitle?.trim()?.length === 0) {
       Toast.show({ text1: "Please enter Video Title" });
       return false;
-    } else if (videoDecs?.trim()?.length === 0) {
+    } 
+    else if (videoDecs?.trim()?.length === 0) {
       Toast.show({ text1: "Please enter Video Description" });
       return false;
     } else if (typeof pick !== "object" || Object.keys(pick)?.length === 0) {
@@ -562,7 +567,8 @@ const VideoUpload = (props) => {
                 position: "relative",
                 marginRight: 29,
                 marginTop: 22,
-                alignSelf:'center'
+                alignSelf:'center',
+                marginTop: props.route.params?.type == "add" ? 22 : -100
               }}
             >
               <Video
@@ -579,7 +585,7 @@ const VideoUpload = (props) => {
                 color={'white'}
                 style={[styles.activityIndicator, {opacity: videoOpacity}]}
               />
-              {!(props.route.params?.type == "edit") ? 
+              {props.route.params?.type == "add" ? 
               <TouchableOpacity
                 onPress={() => {
                   setpick([])
