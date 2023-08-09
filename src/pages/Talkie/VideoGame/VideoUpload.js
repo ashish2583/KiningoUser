@@ -166,21 +166,23 @@ const VideoUpload = (props) => {
     formdata.append(`name`, videoTitle);
     formdata.append(`published_date`, moment().format("YYYY-MM-DD hh:mm:ss"));
     formdata.append(`created_date`, moment().format("YYYY-MM-DD hh:mm:ss"));
-    formdata.append(`published_channel`, "kids");
+    formdata.append(`published_channel`, props.route.params?.type == "edit" ? props.route.params?.data?.published_channel : "kids");
     formdata.append(`description`, videoDecs);
-    formdata.append(`files`, {
-      name: pick[0].name,
-      type: pick[0].type,
-      uri: pick[0].uri,
-    });
-    formdata.append(`image`, {
-      name: thumbnail.path.slice(
-        thumbnail.path.lastIndexOf("/"),
-        thumbnail.path.length
-      ),
-      uri: thumbnail.path,
-      type: thumbnail.mime,
-    });
+    if(props.route.params?.type == "add"){
+      formdata.append(`files`, {
+        name: pick[0].name,
+        type: pick[0].type,
+        uri: pick[0].uri,
+      });
+      formdata.append(`image`, {
+        name: thumbnail.path.slice(
+          thumbnail.path.lastIndexOf("/"),
+          thumbnail.path.length
+        ),
+        uri: thumbnail.path,
+        type: thumbnail.mime,
+      });
+    }
     formdata.append(`status`, "1");
     console.log("onUpload formdata", formdata);
     setLoading(true);
@@ -190,12 +192,12 @@ const VideoUpload = (props) => {
     };
     let url = "http://54.153.75.225/backend/api/v1/" + game;
     if (props.route.params?.type == "edit") {
-      url += "/id/" + props.route.params?.data?.id;
+      url += "/" + props.route.params?.data?.id;
     }
     console.log("onUpload url", url);
     try {
       const response = await fetch(url, {
-        method: "POST",
+        method: props.route.params?.type == "edit" ? 'PUT' : "POST",
         headers,
         body: formdata,
       });
@@ -525,6 +527,7 @@ const VideoUpload = (props) => {
               />
             </View>
           </View>
+          {props.route.params?.type == "add" ? 
           <TouchableOpacity
             style={styles.uploadButtonView}
             onPress={() => {
@@ -549,7 +552,8 @@ const VideoUpload = (props) => {
               Video
             </Text>
           </TouchableOpacity>
-          {console.log('pick[0]?.uri', pick[0]?.uri)}
+          :null}
+          {/* {console.log('pick[0]?.uri', pick[0]?.uri)} */}
           {pick?.length > 0 ? (
             <View
               style={{
@@ -575,12 +579,13 @@ const VideoUpload = (props) => {
                 color={'white'}
                 style={[styles.activityIndicator, {opacity: videoOpacity}]}
               />
+              {!(props.route.params?.type == "edit") ? 
               <TouchableOpacity
                 onPress={() => {
                   setpick([])
                   Toast.show({ text1: "Video has been deleted" });
                 }}
-                // style={styles.deleteButtonn}
+                style={styles.deleteButtonn}
               >
                 <Image
                   style={{
@@ -595,6 +600,7 @@ const VideoUpload = (props) => {
                   source={require("../../../assets/cutRed.png")}
                 />
               </TouchableOpacity>
+              :null}
             </View>
           ) : null}
         </View>
@@ -609,7 +615,7 @@ const VideoUpload = (props) => {
           }}
         >
           <MyButtons
-            title="Save"
+            title={props.route.params?.type == "edit" ? 'Update' : "Save"}
             height={50}
             width={"100%"}
             borderRadius={5}
