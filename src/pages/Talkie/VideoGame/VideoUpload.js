@@ -529,9 +529,9 @@ const VideoUpload = (props) => {
                 marginLeft: 10,
               }}
             >
-              {typeof pick === "object" && Object.keys(pick)?.length === 0
-                ? "Upload "
-                : "Change "}
+              {pick?.length > 0
+                ? "Change "
+                : "Upload "}
               Video
             </Text>
           </TouchableOpacity>
@@ -552,10 +552,10 @@ const VideoUpload = (props) => {
               />
               <TouchableOpacity
                 onPress={() => {
-                  setpick({})
+                  setpick([])
                   Toast.show({ text1: "Video has been deleted" });
                 }}
-                style={styles.deleteButtonn}
+                // style={styles.deleteButtonn}
               >
                 <Image
                   style={{
@@ -573,17 +573,14 @@ const VideoUpload = (props) => {
             </View>
           ) : null}
         </View>
-        <View style={{ height: 20 }} />
+        <View style={{ height: 40 }} />
         <View
           style={{
             width: "85%",
             height: 60,
             flexDirection: "row",
             justifyContent: "space-between",
-            // position: "absolute",
-            // bottom: 100,
             alignSelf: "center",
-            // zIndex: 999,
           }}
         >
           <MyButtons
