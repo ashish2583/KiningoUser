@@ -28,6 +28,7 @@ import { Rating, AirbnbRating } from "react-native-ratings";
 import {
   creation_common_add_views,
   game_add_comment,
+  game_like,
   game_review,
   game_single_video,
   requestGetApi,
@@ -522,7 +523,7 @@ const VideoGamedetails = (props) => {
       reaction_type: videoData?.liked ? 'dislike' : 'like',
     };
     const { responseJson, err } = await requestPostApi(
-      game_review,
+      game_like,
       data,
       "POST",
       User.token
@@ -683,7 +684,7 @@ const VideoGamedetails = (props) => {
           >
             {design(
               require("../../../assets/Heart-like-buttom.png"),
-              "Like",
+              videoData?.liked ? 'Liked' : "Like",
               "",
               "45%",
               25,
