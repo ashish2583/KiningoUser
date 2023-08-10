@@ -202,6 +202,7 @@ const VideoGamedetails = (props) => {
       game_id: props.route.params.videoId,
       parent_id: replyingTo,
       comments: postDecs,
+      // comment_type: "secondary",
     };
     console.log('addReply data', data);  
     const { responseJson, err } = await requestPostApi(
@@ -514,6 +515,29 @@ const VideoGamedetails = (props) => {
             console.log('The file saved to ERROR', e.message);
           });
   };
+  const likeVideo = async () => {
+    setLoading(true);
+    const data = {
+      game_id: props.route.params.videoId,
+      reaction_type: videoData?.liked ? 'dislike' : 'like',
+    };
+    const { responseJson, err } = await requestPostApi(
+      game_review,
+      data,
+      "POST",
+      User.token
+    );
+    setLoading(false);
+    console.log("likeVideo responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      getSingleVideo();
+      //   Toast.show({ text1: responseJson.headers.message });
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
+    }
+  }
   return (
     <SafeAreaView
       style={{
@@ -629,7 +653,7 @@ const VideoGamedetails = (props) => {
                       fontWeight: "600",
                     }}
                   >
-                    {videoData?.total_views} Views
+                    {videoData?.total_views} {videoData?.total_views > 1 ? 'Views': 'View'}
                   </Text>
                   <Text
                     style={{
@@ -665,7 +689,10 @@ const VideoGamedetails = (props) => {
               25,
               28,
               "",
-              20
+              20,
+              () => {
+                likeVideo()
+              }
             )}
             {design(
               require("../../../assets/Newspaper.png"),

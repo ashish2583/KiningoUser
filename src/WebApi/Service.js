@@ -89,9 +89,10 @@ export const game = "talkie/game";
 export const game_single_video = "talkie/game-video/id/";
 export const game_review = "talkie/game-review";
 export const get_banner_image = `/admin/banner-image-upload/id/`
-export const game_add_comment = `/talkie/add-comment-game`
+export const game_add_comment = `talkie/add-comment-game`
 export const creation_common_add_views = "creation/common/add-views/";
 export const game_profile = "talkie/game/dashboard";
+export const game_like = "talkie/react-game";
 
 
 export const creation_categories = `/creation/common/categories`

@@ -636,7 +636,7 @@ const VideoProfile = (props) => {
                                                                     source={require('../../../assets/images/fashion-dark-like-button.png')}
                                                                     style={styles.buttonIcon}
                                                                 />
-                                                                <Text style={styles.buttonText}>{item?.likes} Likes</Text>
+                                                                <Text style={styles.buttonText}>{item?.total_likes} Likes</Text>
                                                             </TouchableOpacity>
                                                             <TouchableOpacity style={styles.buttonView}>
                                                                 <Image
