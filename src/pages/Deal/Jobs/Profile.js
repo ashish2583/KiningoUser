@@ -68,6 +68,22 @@ const Profile = (props) => {
               <Text style={[styles.workExpSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
             </View>
           </View>
+
+          <View style={styles.eduContainer}>
+            <View style={styles.eduTopRow}>
+              <Image source={require('./assets/images/jobs-icon-education.png')} />
+              <Text style={styles.eduText}>Education</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            <Text style={styles.managerText}>Information Technology</Text>
+            <Text style={[styles.eduSmallText, {marginTop: 13}]}>University of Oxford</Text>
+            <View style={styles.eduBottomRow}>
+              <Text style={styles.eduSmallText}>Jan 2015 - Feb 2022</Text>
+              <View style={styles.dot}></View>
+              <Text style={[styles.eduSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
+            </View>
+          </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -243,5 +259,49 @@ const styles = StyleSheet.create({
     width:2, 
     height:2, 
     borderRadius:1, 
-    marginLeft:8}
+    marginLeft:8
+  },
+
+  eduContainer:{
+    paddingTop: 23,
+    paddingBottom: 22,
+    paddingHorizontal: 20,
+    width: dimensions.SCREEN_WIDTH - 40,
+    marginRight: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    marginTop:22,
+    shadowColor: "rgb(26, 42, 97)",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 5,
+  },
+  eduTopRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  eduText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+    marginLeft:10
+  },
+  managerText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  eduSmallText:{
+    color: '#524B6B',
+    fontSize: 12,
+    fontWeight: "400",
+  },
+  eduBottomRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
 });
