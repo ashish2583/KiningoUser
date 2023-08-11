@@ -124,13 +124,15 @@ const Profile = (props) => {
               <Text style={styles.skillText}>Skill</Text>
             </View>
             <Divider style={{marginVertical:20}} />
-            {skills?.map(el=>{
-              return (
-                <View style={styles.skillTextView} >
-                  <Text style={styles.skillText}>{el.name}</Text>
-                </View>
-              )
-            })}
+            <View style={styles.skillTextContainer} >
+              {skills?.map(el=>{
+                return (
+                  <View style={styles.skillTextView} >
+                    <Text style={styles.skillText}>{el.name}</Text>
+                  </View>
+                )
+              })}
+            </View>
 
           </View>
 
@@ -442,6 +444,11 @@ const styles = StyleSheet.create({
     color: '#524B6B',
     fontSize: 14,
     fontWeight: "400",
+  },
+  skillTextContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    width:'80%'
   },
   skillTextView:{
     backgroundColor:'rgba(203, 201, 212, 0.2)',
