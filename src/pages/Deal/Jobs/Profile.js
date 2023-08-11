@@ -14,6 +14,40 @@ import JobsHeader from "./components/JobsHeader";
 import JobsSearch from "./components/JobsSearch";
 import { dimensions } from "../../../utility/Mycolors";
 
+const skills = [
+  {
+    id:'1',
+    name: 'Leadership',
+  },
+  {
+    id:'2',
+    name: 'Teamwork',
+  },
+  {
+    id:'3',
+    name: 'Visioner',
+  },
+  {
+    id:'4',
+    name: 'Target oriented',
+  },
+  {
+    id:'5',
+    name: 'Consistent',
+  },
+  {
+    id:'6',
+    name: 'Leadership',
+  },
+  {
+    id:'7',
+    name: 'Teamwork',
+  },
+  {
+    id:'8',
+    name: 'Visioner',
+  },
+]
 const Profile = (props) => {
 
   return (
@@ -82,6 +116,22 @@ const Profile = (props) => {
               <View style={styles.dot}></View>
               <Text style={[styles.eduSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
             </View>
+          </View>
+
+          <View style={styles.skillContainer}>
+            <View style={styles.skillTopRow}>
+              <Image source={require('./assets/images/jobs-icon-skill.png')} />
+              <Text style={styles.skillText}>Skill</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            {skills?.map(el=>{
+              return (
+                <View style={styles.skillTextView} >
+                  <Text style={styles.skillText}>{el.name}</Text>
+                </View>
+              )
+            })}
+
           </View>
 
           <View style={styles.aprctinContainer}>
@@ -359,4 +409,46 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
   },
+
+  skillContainer:{
+    paddingTop: 23,
+    paddingBottom: 22,
+    paddingHorizontal: 20,
+    width: dimensions.SCREEN_WIDTH - 40,
+    marginRight: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    marginTop:22,
+    shadowColor: "rgb(26, 42, 97)",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 5,
+  },
+  skillTopRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  skillText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+    marginLeft:10
+  },
+  skillText:{
+    color: '#524B6B',
+    fontSize: 14,
+    fontWeight: "400",
+  },
+  skillTextView:{
+    backgroundColor:'rgba(203, 201, 212, 0.2)',
+    paddingHorizontal:10,
+    paddingVertical:5,
+    borderRadius:5,
+    alignItems:'center',
+    justifyContent:'center',
+  }
 });
