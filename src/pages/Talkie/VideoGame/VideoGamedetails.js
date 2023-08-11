@@ -100,6 +100,7 @@ const VideoGamedetails = (props) => {
   const [videoData, setVideoData] = useState({});
   const [rating, setRating] = useState("0");
   const [showModalType, setShowModalType] = useState('');
+  const [whichParentIdReplies, setWhichParentIdReplies ] = useState(null);
 
   const design = (img, ti, tit, w, imgh, imgw, bg, redious, press) => {
     return (
@@ -387,11 +388,86 @@ const VideoGamedetails = (props) => {
     setupData([...upDataCopy]);
   };
 
-  const returnOneReply = (itemid) => {
-    const replies = upData?.find((el) => el.id === itemid)?.replies;
-    if (replies?.length === 0) {
-      return;
-    }
+  const returnOneReply = (reply, fullwidth = false) => {
+     console.log('reply', reply);
+     const diff = getDiff(reply.created_date)
+     return (
+      <View style={{marginTop:10, width:fullwidth?'80%': '100%', alignSelf:'flex-end'}} >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={{uri: reply.profile_image}}
+              style={{ height: 50, width: 50 }}
+            />
+            <View style={{ marginLeft: 10 }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "700",
+                  color: "#FFFFFF",
+                }}
+              >
+                {reply.user_name}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 5,
+                }}
+              >
+                <Image
+                  source={require("../../../assets/Star.png")}
+                  style={{ width: 15, height: 15 }}
+                ></Image>
+                <Text
+                  style={{
+                    color: "#FFD037",
+                    fontSize: 11,
+                    left: 7,
+                  }}
+                >
+                  {reply.star}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "400",
+                    color: "#6F6D6D",
+                    marginLeft: 25,
+                  }}
+                >
+                  {diff}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              lineHeight: 20,
+              fontWeight: "400",
+              color: "#FFFFFF",
+            }}
+          >
+            {reply.comments}
+          </Text>
+        </View>
+      </View>
+     ) 
   };
   const reviewValidation = () => {
     if (postDecs?.trim()?.length === 0) {
@@ -538,6 +614,10 @@ const VideoGamedetails = (props) => {
       setalert_sms(err);
       setMy_Alert(true);
     }
+  }
+  const openRepliesModal = (id) => {
+    setWhichParentIdReplies(id);
+    setShowRepliesModal(true);
   }
   return (
     <SafeAreaView
@@ -922,9 +1002,22 @@ const VideoGamedetails = (props) => {
                           </Text>
                         </View>
                       </View>
-
-                      {item?.replies?.length > 0 ? (
-                        <>{returnOneReply(item.id)}</>
+                      {item?.reply?.length > 1 ? 
+                      <TouchableOpacity onPress={()=>{openRepliesModal(item.id)}} >
+                        <Text
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 20,
+                          fontWeight: "400",
+                          color: "#FFFFFF",
+                        }}
+                        >
+                          View previous {item?.reply?.length - 1} replies
+                        </Text>      
+                      </TouchableOpacity>
+                      :null}
+                      {item?.reply?.length > 0 ? (
+                        <>{returnOneReply(item?.reply[item?.reply?.length - 1])}</>
                       ) : null}
                     </>
                   </View>
@@ -959,11 +1052,11 @@ const VideoGamedetails = (props) => {
       </View> */}
 
       <Modal
-        isVisible={showReportModal}
+        isVisible={showRepliesModal}
         swipeDirection="down"
-        onBackdropPress={() => setShowReportModal(false)}
+        onBackdropPress={() => setShowRepliesModal(false)}
         onSwipeComplete={(e) => {
-          setShowReportModal(false);
+          setShowRepliesModal(false);
         }}
         scrollTo={() => {}}
         scrollOffset={1}
@@ -979,7 +1072,7 @@ const VideoGamedetails = (props) => {
         <View
           style={{
             height: "90%",
-            backgroundColor: "#fff",
+            backgroundColor: "#000",
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
           }}
@@ -994,71 +1087,27 @@ const VideoGamedetails = (props) => {
               marginTop: 30,
             }}
           >
-            Report
+            Replies
           </Text>
           <ScrollView
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
           >
+            {console.log('videoData?.review', videoData?.review)}
+            {console.log('whichParentIdReplies', whichParentIdReplies)}
             <FlatList
-              data={reportReasonData}
+              data={videoData?.review?.find(el=>el.id === whichParentIdReplies)?.reply}
               showsHorizontalScrollIndicator={false}
               numColumns={1}
               keyExtractor={(item) => item.id}
               style={{ marginBottom: 10 }}
               renderItem={({ item, index }) => {
+                console.log('replies modal', item);
                 return (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => setSelectedReasonId(item.id)}
-                    style={
-                      selectedReasonId === item.id
-                        ? styles.selectedReasonView
-                        : styles.reasonView
-                    }
-                  >
-                    <Image
-                      source={
-                        selectedReasonId === item.id
-                          ? require("../../../assets/dating-home-header-left-image.png")
-                          : require("../../../assets/dating-home-header-left-image.png")
-                      }
-                    />
-                    <View style={{ marginLeft: 10 }}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 14,
-                          fontWeight: "400",
-                          color: "#455A64",
-                        }}
-                      >
-                        {item.name}
-                      </Text>
-                      {item.description ? (
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            lineHeight: 12,
-                            fontWeight: "400",
-                            color: "#C5C6C9",
-                            marginTop: 2,
-                          }}
-                        >
-                          {item.description}
-                        </Text>
-                      ) : null}
-                    </View>
-                  </TouchableOpacity>
+                  returnOneReply(item, true)
                 );
               }}
             />
-
-            <TouchableOpacity style={styles.reportButtonView}>
-              <Text style={{ fontSize: 15, fontWeight: "500", color: "#fff" }}>
-                Report
-              </Text>
-            </TouchableOpacity>
           </ScrollView>
         </View>
       </Modal>
