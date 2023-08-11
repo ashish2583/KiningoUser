@@ -392,7 +392,7 @@ const VideoGamedetails = (props) => {
      console.log('reply', reply);
      const diff = getDiff(reply.created_date)
      return (
-      <View style={{marginTop:10, width:fullwidth?'80%': '100%', alignSelf:'flex-end'}} >
+      <View style={{marginTop:10, marginBottom: !fullwidth ? 20 : 10, marginRight: !fullwidth ? 15 : 0, width: fullwidth ? '100%': '80%', alignSelf: fullwidth ? 'flex-start' : 'flex-end', backgroundColor: "#131313", padding: 10, borderRadius: 15,}} >
         <View
           style={{
             flexDirection: "row",
@@ -418,7 +418,7 @@ const VideoGamedetails = (props) => {
                   color: "#FFFFFF",
                 }}
               >
-                {reply.user_name}
+                {reply?.user_name || reply?.first_name + ' ' + reply?.last_name}
               </Text>
               <View
                 style={{
@@ -889,6 +889,7 @@ const VideoGamedetails = (props) => {
                 // console.log('moment diff', moment().diff(item.created_date, 'days'));
                 const diff = getDiff(item.created_date)
                 return (
+                  <>
                   <View
                     style={{
                       width: dimensions.SCREEN_WIDTH * 0.89,
@@ -1002,25 +1003,26 @@ const VideoGamedetails = (props) => {
                           </Text>
                         </View>
                       </View>
-                      {item?.reply?.length > 1 ? 
-                      <TouchableOpacity onPress={()=>{openRepliesModal(item.id)}} >
-                        <Text
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 20,
-                          fontWeight: "400",
-                          color: "#FFFFFF",
-                        }}
-                        >
-                          View previous {item?.reply?.length - 1} replies
-                        </Text>      
-                      </TouchableOpacity>
-                      :null}
-                      {item?.reply?.length > 0 ? (
-                        <>{returnOneReply(item?.reply[item?.reply?.length - 1])}</>
-                      ) : null}
                     </>
                   </View>
+                  {item?.reply?.length > 1 ? 
+                  <TouchableOpacity onPress={()=>{openRepliesModal(item.id)}} style={{marginLeft:60}} >
+                    <Text
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 20,
+                      fontWeight: "400",
+                      color: "#FFFFFF",
+                    }}
+                    >
+                      View previous {item?.reply?.length - 1} replies
+                    </Text>      
+                  </TouchableOpacity>
+                  :null}
+                  {item?.reply?.length > 0 ? (
+                    <>{returnOneReply(item?.reply[item?.reply?.length - 1])}</>
+                  ) : null}
+                  </>
                 );
               }}
               keyExtractor={(item) => item.id}
@@ -1073,6 +1075,7 @@ const VideoGamedetails = (props) => {
           style={{
             height: "90%",
             backgroundColor: "#000",
+            padding: 20,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
           }}
@@ -1093,8 +1096,6 @@ const VideoGamedetails = (props) => {
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
           >
-            {console.log('videoData?.review', videoData?.review)}
-            {console.log('whichParentIdReplies', whichParentIdReplies)}
             <FlatList
               data={videoData?.review?.find(el=>el.id === whichParentIdReplies)?.reply}
               showsHorizontalScrollIndicator={false}
