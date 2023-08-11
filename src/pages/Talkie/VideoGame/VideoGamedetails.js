@@ -427,25 +427,12 @@ const VideoGamedetails = (props) => {
                   marginTop: 5,
                 }}
               >
-                <Image
-                  source={require("../../../assets/Star.png")}
-                  style={{ width: 15, height: 15 }}
-                ></Image>
-                <Text
-                  style={{
-                    color: "#FFD037",
-                    fontSize: 11,
-                    left: 7,
-                  }}
-                >
-                  {reply.star}
-                </Text>
                 <Text
                   style={{
                     fontSize: 12,
                     fontWeight: "400",
                     color: "#6F6D6D",
-                    marginLeft: 25,
+                    // marginLeft: 25,
                   }}
                 >
                   {diff}
