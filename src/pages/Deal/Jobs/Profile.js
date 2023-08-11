@@ -53,6 +53,21 @@ const Profile = (props) => {
             <Divider style={{marginVertical:20}} />
             <Text style={styles.aboutMeLongText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus id commodo egestas metus interdum dolor.</Text>
           </View>
+
+          <View style={styles.workExpContainer}>
+            <View style={styles.workExpTopRow}>
+              <Image source={require('./assets/images/jobs-icon-work-experience.png')} />
+              <Text style={styles.workExpText}>Work experience</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            <Text style={styles.managerText}>Manager</Text>
+            <Text style={[styles.workExpSmallText, {marginTop: 13}]}>Amazon Inc</Text>
+            <View style={styles.workExpBottomRow}>
+              <Text style={styles.workExpSmallText}>Jan 2015 - Feb 2022</Text>
+              <View style={styles.dot}></View>
+              <Text style={[styles.workExpSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -181,4 +196,52 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "400",
   },
+  workExpContainer:{
+    paddingTop: 23,
+    paddingBottom: 22,
+    paddingHorizontal: 20,
+    width: dimensions.SCREEN_WIDTH - 40,
+    marginRight: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    marginTop:22,
+    shadowColor: "rgb(26, 42, 97)",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 5,
+  },
+  workExpTopRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  workExpText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+    marginLeft:10
+  },
+  managerText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  workExpSmallText:{
+    color: '#524B6B',
+    fontSize: 12,
+    fontWeight: "400",
+  },
+  workExpBottomRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  dot:{
+    backgroundColor:'#524B6B', 
+    width:2, 
+    height:2, 
+    borderRadius:1, 
+    marginLeft:8}
 });
