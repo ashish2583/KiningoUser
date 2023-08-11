@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 
-const JobsSearch = ({ value, setValue }) => {
+const JobsSearch = ({ value, setValue, style = {} }) => {
   return (
-    <View style={styles.searchContainer}>
+    <View style={[styles.searchContainer, style]}>
       <View style={styles.searchLeftContainer}>
         <Image source={require("../assets/images/jobs-search.png")} />
         <TextInput

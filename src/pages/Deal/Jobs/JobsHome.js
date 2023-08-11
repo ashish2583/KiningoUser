@@ -41,7 +41,8 @@ const recentJobList = [
     companyName: "Google",
     jobTitle: "UI Designer",
     tags: ["Senior", "Full-Time", "Remote"],
-    salary: "$8K/Month",
+    salary: "$8K",
+    salaryMonth: "/Month",
     location: "California, USA",
   },
   {
@@ -134,7 +135,10 @@ const JobsHome = (props) => {
 
         <View style={styles.recentBottomRow}>
           <MyButton text="Apply Now" style={{ width: "50%", backgroundColor:'#0089CF', paddingVertical: 11 }} />
-          <Text style={styles.recentBottomT}>{item.salary}<Text style={styles.recentBottomT2}>{item.salaryMonth}</Text></Text>
+          <View style={styles.salaryRow}>
+            <Text style={styles.recentBottomT}>{item.salary}</Text>
+            <Text style={styles.recentBottomT2}>{item.salaryMonth}</Text>
+          </View>
         </View>
       </View>
     );
@@ -148,8 +152,13 @@ const JobsHome = (props) => {
         contentContainerStyle={styles.mainView}
       >
         <JobsHeader text="Home" />
+        <JobsSearch value={searchText} setValue={setSearchText} style={{
+          width: dimensions.SCREEN_WIDTH - 40,
+          alignSelf: 'center',
+          marginTop: -25,
+          zIndex:2,
+        }} />
         <View style={styles.mainView2}>
-          <JobsSearch value={searchText} setValue={setSearchText} />
           <View style={styles.findOutContainer}>
             <View style={{ width: "50%" }}>
               <Text style={styles.findOutText}>
@@ -400,4 +409,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 21,
   },
+  salaryRow:{
+    flexDirection: "row",
+    alignItems: "center",
+  }
 });

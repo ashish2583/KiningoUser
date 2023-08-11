@@ -88,11 +88,11 @@ const WeelStack = (props) => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen component={DealJobs} name="DealJobs" />
       <Stack.Screen
         component={TalkieVideoGameStack}
         name="TalkieVideoGameStack"
       />
-      <Stack.Screen component={DealJobs} name="DealJobs" />
       <Stack.Screen component={TalkieMovieStack} name="TalkieMovieStack" />
       <Stack.Screen component={CreationCooking} name="CreationCooking" />
       <Stack.Screen component={ShopProductStack} name="ShopProduct" />
