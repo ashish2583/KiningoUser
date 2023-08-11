@@ -84,6 +84,19 @@ const Profile = (props) => {
             </View>
           </View>
 
+          <View style={styles.aprctinContainer}>
+            <View style={styles.aprctinTopRow}>
+              <Image source={require('./assets/images/jobs-icon-appreciation.png')} />
+              <Text style={styles.aprctinText}>Appreciation</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            <Text style={styles.managerText}>Wireless Symposium (RWS)</Text>
+            <Text style={[styles.aprctinSmallText, {marginTop: 13}]}>Young Scientist</Text>
+            <View style={styles.aprctinBottomRow}>
+              <Text style={styles.aprctinSmallText}>2014</Text>
+            </View>
+          </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -301,6 +314,48 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   eduBottomRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  aprctinContainer:{
+    paddingTop: 23,
+    paddingBottom: 22,
+    paddingHorizontal: 20,
+    width: dimensions.SCREEN_WIDTH - 40,
+    marginRight: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    marginTop:22,
+    shadowColor: "rgb(26, 42, 97)",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 5,
+  },
+  aprctinTopRow:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  aprctinText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+    marginLeft:10
+  },
+  managerText:{
+    color: '#150B3D',
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  aprctinSmallText:{
+    color: '#524B6B',
+    fontSize: 12,
+    fontWeight: "400",
+  },
+  aprctinBottomRow:{
     flexDirection:'row',
     alignItems:'center',
   },
