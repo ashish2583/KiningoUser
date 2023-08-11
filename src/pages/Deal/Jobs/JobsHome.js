@@ -115,7 +115,7 @@ const JobsHome = (props) => {
             </View>
           </View>
           <TouchableOpacity>
-            <Image source={require("./assets/images/bookmark-2.png")} />
+            <Image source={true ? require("./assets/images/bookmark-2.png") : require("./assets/images/bookmark-2-selected.png")} />
           </TouchableOpacity>
         </View>
 
