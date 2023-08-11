@@ -63,6 +63,9 @@ const JobsHome = (props) => {
   const gotoSearchJobsScreen = () => {
     props.navigation.navigate('SearchJobs')
   }
+  const gotoProfile = () => {
+    props.navigation.navigate('Profile')
+  }
 
   const renderFeaturedJob = ({ item }) => {
     return (
@@ -171,7 +174,7 @@ const JobsHome = (props) => {
             </View>
             <Image source={require("./assets/images/job-search.png")} />
           </View>
-          <ViewMore text="Featured Jobs" />
+          <ViewMore text="Featured Jobs" onPress={gotoProfile} />
           <FlatList
             data={featuredJobsData}
             horizontal={true}
