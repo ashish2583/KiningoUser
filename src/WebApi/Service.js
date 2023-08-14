@@ -94,6 +94,8 @@ export const creation_common_add_views = "creation/common/add-views/";
 export const game_profile = "talkie/game/dashboard";
 export const game_like = "talkie/react-game";
 
+export const deal_job_profile = "deal/job/demand/profile/";
+
 
 export const creation_categories = `/creation/common/categories`
 export const creation_home = `/creation/common/home-page/51`

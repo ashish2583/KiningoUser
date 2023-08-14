@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// Saurabh Saneja August 14, 2023 view profile
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +14,10 @@ import {
 import JobsHeader from "./components/JobsHeader";
 import JobsSearch from "./components/JobsSearch";
 import { dimensions } from "../../../utility/Mycolors";
+import MyAlert from '../../../component/MyAlert';
+import { requestGetApi, deal_job_profile } from "../../../WebApi/Service";
+import { useSelector } from "react-redux";
+import Loader from '../../../WebApi/Loader';
 
 const skills = [
   {
@@ -71,10 +76,35 @@ const languages = [
   },
 ];
 const Profile = (props) => {
+  const userdetaile  = useSelector(state => state.user.user_details)
   const [showMoreSkills, setShowMoreSkills] = useState(false);
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [My_Alert, setMy_Alert] = useState(false)
+  const [alert_sms, setalert_sms] = useState('')
+  const [profileData, setProfileData] = useState({});
+
+  useEffect(()=> {
+    console.log('userdetaile.token', userdetaile);
+    getProfileData()
+  }, [])
+  // Saurabh Saneja August 14, 2023 get profile data
+  const getProfileData = async () => {
+    setLoading(true)
+    const { responseJson, err } = await requestGetApi(deal_job_profile + userdetaile.userid, '', 'GET', userdetaile.token)
+    setLoading(false)
+    console.log('getProfileData responseJson', responseJson)
+    if (responseJson.headers.success == 1) {
+      setProfileData(responseJson.body)
+    } else {
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  }
+
 
   const getSkillsMoreThanFive = () => {
+    // Saurabh Saneja August 14, 2023
     // get first 5 skills using slice method, then add remaining number (for example 3) at the end
     return [
       ...skills?.slice(0, 5),
@@ -82,6 +112,7 @@ const Profile = (props) => {
     ];
   };
   const getLanguagesMoreThanFive = () => {
+    // Saurabh Saneja August 14, 2023
     // get first 5 languages using slice method, then add remaining number (for example 3) at the end
     return [
       ...languages?.slice(0, 5),
@@ -196,12 +227,13 @@ const Profile = (props) => {
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{}}>
+              {/* Saurabh Saneja August 14, 2023 */}
               {/* only show truncated skills if see more button not pressed */}
               {skills?.length > 5 && !showMoreSkills ? (
                 <View>
                   <View style={styles.skillTextContainer}>
                     {getSkillsMoreThanFive()?.map((el, index) => {
-                      console.log("skill el index", el, index);
+                      // console.log("skill el index", el, index);
                       return (
                         <View
                           style={[
@@ -256,12 +288,13 @@ const Profile = (props) => {
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{}}>
+              {/* Saurabh Saneja August 14, 2023 */}
               {/* only show truncated languages if see more button not pressed */}
               {languages?.length > 5 && !showMoreLanguages ? (
                 <View>
                   <View style={styles.skillTextContainer}>
                     {getLanguagesMoreThanFive()?.map((el, index) => {
-                      console.log("languages el index", el, index);
+                      // console.log("languages el index", el, index);
                       return (
                         <View
                           style={[
@@ -353,6 +386,8 @@ const Profile = (props) => {
           </View>
         </View>
       </ScrollView>
+      {loading ? <Loader /> : null}
+      {My_Alert ? <MyAlert sms={alert_sms} okPress={() => { setMy_Alert(false) }} /> : null}
     </SafeAreaView>
   );
 };
