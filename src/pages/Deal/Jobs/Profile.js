@@ -48,8 +48,38 @@ const skills = [
     name: 'Visioner',
   },
 ]
+const languages = [
+  {
+    id:'1',
+    name: 'English',
+  },
+  {
+    id:'2',
+    name: 'German',
+  },
+  {
+    id:'3',
+    name: 'Spanish',
+  },
+  {
+    id:'4',
+    name: 'Mandarin',
+  },
+  {
+    id:'5',
+    name: 'Italian',
+  },
+]
 const Profile = (props) => {
+  const [showMoreSkills, setShowMoreSkills] = useState(false)
+  const [showMoreLanguages, setShowMoreLanguages] = useState(false)
 
+  const getSkillsMoreThanFive = () => {
+    return [...skills?.slice(0, 5), {id: skills?.length, name: skills.length - 5}]
+  }
+  const getLanguagesMoreThanFive = () => {
+    return [...languages?.slice(0, 5), {id: languages?.length, name: languages.length - 5}]
+  }
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView
@@ -121,35 +151,91 @@ const Profile = (props) => {
           <View style={styles.skillContainer}>
             <View style={styles.skillTopRow}>
               <Image source={require('./assets/images/jobs-icon-skill.png')} />
-              <Text style={styles.skillText}>Skill</Text>
+              <Text style={[styles.skillText, {marginLeft: 10}]}>Skill</Text>
             </View>
             <Divider style={{marginVertical:20}} />
-            <View style={styles.skillTextContainer} >
-              {skills?.length > 5 ? 
-              [...skills?.slice(0, 5), {id: skills?.length, name: skills.length - 5}]?.map((el, index)=>{
-                console.log('skill el index', el ,index);
-                return (
-                    <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
-                      {index === 5 ? 
-                      <Text style={styles.skillText}>+ {el.name} more</Text>
-                      :
-                      <Text style={styles.skillText}>{el.name}</Text>
-                    }
-                    </View>
-                )
-              })
+            <View style={{}} >
+              {/* only show truncated skills if see more button not pressed */}
+              {skills?.length > 5 && !showMoreSkills ? 
+              <View>
+                 <View style={styles.skillTextContainer} >
+                {getSkillsMoreThanFive()?.map((el, index)=>{
+                  console.log('skill el index', el ,index);
+                  return (
+                      <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
+                        {index === 5 ? 
+                        <Text style={styles.skillText2}>+ {el.name} more</Text>
+                        :
+                        <Text style={styles.skillText2}>{el.name}</Text>
+                      }
+                      </View>
+                  )
+                })}
+                </View>
+                <TouchableOpacity onPress={()=> {setShowMoreSkills(true)}} >
+                  <Text style={styles.seeMoreText}>See More</Text>
+                </TouchableOpacity>
+              </View>
               :
-              skills?.map(el=>{
+              <View style={styles.skillTextContainer} >
+              {skills?.map(el=>{
                 return (
                   <View style={styles.skillTextView} >
-                    <Text style={styles.skillText}>{el.name}</Text>
+                    <Text style={styles.skillText2}>{el.name}</Text>
                   </View>
                 )
-              })
+              })}
+              </View>
+
             }
             </View>
 
           </View>
+
+
+          <View style={styles.skillContainer}>
+            <View style={styles.skillTopRow}>
+            <Image source={require('./assets/images/jobs-icon-language.png')} style={{height: 24, width: 24}} />
+              <Text style={[styles.skillText, {marginLeft: 10}]}>Language</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            <View style={{}} >
+              {/* only show truncated languages if see more button not pressed */}
+              {languages?.length > 5 && !showMoreLanguages ? 
+              <View>
+                 <View style={styles.skillTextContainer} >
+                {getLanguagesMoreThanFive()?.map((el, index)=>{
+                  console.log('languages el index', el ,index);
+                  return (
+                      <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
+                        {index === 5 ? 
+                        <Text style={styles.skillText2}>+ {el.name} more</Text>
+                        :
+                        <Text style={styles.skillText2}>{el.name}</Text>
+                      }
+                      </View>
+                  )
+                })}
+                </View>
+                <TouchableOpacity onPress={()=> {setShowMoreSkills(true)}} >
+                  <Text style={styles.seeMoreText}>See More</Text>
+                </TouchableOpacity>
+              </View>
+              :
+              <View style={styles.skillTextContainer} >
+              {languages?.map(el=>{
+                return (
+                  <View style={styles.skillTextView} >
+                    <Text style={styles.skillText2}>{el.name}</Text>
+                  </View>
+                )
+              })}
+              </View>
+
+            }
+            </View>
+
+          </View>  
 
           <View style={styles.aprctinContainer}>
             <View style={styles.aprctinTopRow}>
@@ -455,7 +541,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginLeft:10
   },
-  skillText:{
+  skillText2:{
     color: '#524B6B',
     fontSize: 14,
     fontWeight: "400",
@@ -480,5 +566,7 @@ const styles = StyleSheet.create({
     color: '#0089CF',
     fontSize: 12,
     fontWeight: "400",
+    textAlign:'center',
+    marginTop: 30
   }
 });
