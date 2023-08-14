@@ -125,13 +125,28 @@ const Profile = (props) => {
             </View>
             <Divider style={{marginVertical:20}} />
             <View style={styles.skillTextContainer} >
-              {skills?.map(el=>{
+              {skills?.length > 5 ? 
+              [...skills?.slice(0, 5), {id: skills?.length, name: skills.length - 5}]?.map((el, index)=>{
+                console.log('skill el index', el ,index);
+                return (
+                    <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
+                      {index === 5 ? 
+                      <Text style={styles.skillText}>+ {el.name} more</Text>
+                      :
+                      <Text style={styles.skillText}>{el.name}</Text>
+                    }
+                    </View>
+                )
+              })
+              :
+              skills?.map(el=>{
                 return (
                   <View style={styles.skillTextView} >
                     <Text style={styles.skillText}>{el.name}</Text>
                   </View>
                 )
-              })}
+              })
+            }
             </View>
 
           </View>
@@ -448,14 +463,22 @@ const styles = StyleSheet.create({
   skillTextContainer:{
     flexDirection:'row',
     alignItems:'center',
-    width:'80%'
+    flexWrap:'wrap'
+    // width:'80%'
   },
   skillTextView:{
     backgroundColor:'rgba(203, 201, 212, 0.2)',
     paddingHorizontal:10,
-    paddingVertical:5,
-    borderRadius:5,
+    paddingVertical:10,
+    borderRadius:10,
     alignItems:'center',
     justifyContent:'center',
+    marginBottom:10,
+    marginRight:10
+  },
+  seeMoreText:{
+    color: '#0089CF',
+    fontSize: 12,
+    fontWeight: "400",
   }
 });
