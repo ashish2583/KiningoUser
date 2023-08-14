@@ -103,6 +103,10 @@ const EditProfile = (props) => {
       { id: languages?.length, name: languages.length - 5 },
     ];
   };
+  const gotoAddWorkExp = () => {
+    props.navigation.navigate('AddWorkExp')
+  }
+
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView
@@ -168,9 +172,11 @@ const EditProfile = (props) => {
                 />
                 <Text style={styles.workExpText}>Work experience</Text>
               </View>
-              <Image
-                source={require("./assets/images/jobs-add-icon.png")}
-              />
+              <TouchableOpacity onPress={gotoAddWorkExp} >
+                <Image
+                  source={require("./assets/images/jobs-add-icon.png")}
+                />
+              </TouchableOpacity>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >
