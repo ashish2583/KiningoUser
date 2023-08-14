@@ -16,72 +16,78 @@ import { dimensions } from "../../../utility/Mycolors";
 
 const skills = [
   {
-    id:'1',
-    name: 'Leadership',
+    id: "1",
+    name: "Leadership",
   },
   {
-    id:'2',
-    name: 'Teamwork',
+    id: "2",
+    name: "Teamwork",
   },
   {
-    id:'3',
-    name: 'Visioner',
+    id: "3",
+    name: "Visioner",
   },
   {
-    id:'4',
-    name: 'Target oriented',
+    id: "4",
+    name: "Target oriented",
   },
   {
-    id:'5',
-    name: 'Consistent',
+    id: "5",
+    name: "Consistent",
   },
   {
-    id:'6',
-    name: 'Leadership',
+    id: "6",
+    name: "Leadership",
   },
   {
-    id:'7',
-    name: 'Teamwork',
+    id: "7",
+    name: "Teamwork",
   },
   {
-    id:'8',
-    name: 'Visioner',
+    id: "8",
+    name: "Visioner",
   },
-]
+];
 const languages = [
   {
-    id:'1',
-    name: 'English',
+    id: "1",
+    name: "English",
   },
   {
-    id:'2',
-    name: 'German',
+    id: "2",
+    name: "German",
   },
   {
-    id:'3',
-    name: 'Spanish',
+    id: "3",
+    name: "Spanish",
   },
   {
-    id:'4',
-    name: 'Mandarin',
+    id: "4",
+    name: "Mandarin",
   },
   {
-    id:'5',
-    name: 'Italian',
+    id: "5",
+    name: "Italian",
   },
-]
+];
 const Profile = (props) => {
-  const [showMoreSkills, setShowMoreSkills] = useState(false)
-  const [showMoreLanguages, setShowMoreLanguages] = useState(false)
+  const [showMoreSkills, setShowMoreSkills] = useState(false);
+  const [showMoreLanguages, setShowMoreLanguages] = useState(false);
 
   const getSkillsMoreThanFive = () => {
     // get first 5 skills using slice method, then add remaining number (for example 3) at the end
-    return [...skills?.slice(0, 5), {id: skills?.length, name: skills.length - 5}]
-  }
+    return [
+      ...skills?.slice(0, 5),
+      { id: skills?.length, name: skills.length - 5 },
+    ];
+  };
   const getLanguagesMoreThanFive = () => {
     // get first 5 languages using slice method, then add remaining number (for example 3) at the end
-    return [...languages?.slice(0, 5), {id: languages?.length, name: languages.length - 5}]
-  }
+    return [
+      ...languages?.slice(0, 5),
+      { id: languages?.length, name: languages.length - 5 },
+    ];
+  };
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView
@@ -93,183 +99,258 @@ const Profile = (props) => {
         <View style={styles.mainView2}>
           <View style={styles.profileContainer}>
             <View style={styles.profileTopRow}>
-              <Image source={{uri: person_Image}} style={styles.profileImageStyle} />
+              <Image
+                source={{ uri: person_Image }}
+                style={styles.profileImageStyle}
+              />
               <View style={styles.profileTopRightRow}>
                 <TouchableOpacity>
-                  <Image source={require('./assets/images/jobs-icon-shared.png')} />
+                  <Image
+                    source={require("./assets/images/jobs-icon-shared.png")}
+                  />
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft:16}} >
-                  <Image source={require('./assets/images/jobs-icon-setting.png')} />
+                <TouchableOpacity style={{ marginLeft: 16 }}>
+                  <Image
+                    source={require("./assets/images/jobs-icon-setting.png")}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
             <Text style={styles.name}>Orlando Diggs</Text>
             <Text style={styles.location}>California, USA</Text>
-            <TouchableOpacity style={styles.editProfileButton} >
+            <TouchableOpacity style={styles.editProfileButton}>
               <Text style={styles.editProfileText}>Edit profile</Text>
-              <Image source={require('./assets/images/jobs-icon-edit-profile.png')} />
+              <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
             </TouchableOpacity>
           </View>
 
           <View style={styles.aboutMeContainer}>
             <View style={styles.aboutMeTopRow}>
-              <Image source={require('./assets/images/jobs-icon-about-me.png')} />
+              <Image
+                source={require("./assets/images/jobs-icon-about-me.png")}
+              />
               <Text style={styles.aboutMeText}>About me</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
-            <Text style={styles.aboutMeLongText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus id commodo egestas metus interdum dolor.</Text>
+            <Divider style={{ marginVertical: 20 }} />
+            <Text style={styles.aboutMeLongText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus id
+              commodo egestas metus interdum dolor.
+            </Text>
           </View>
 
           <View style={styles.workExpContainer}>
             <View style={styles.workExpTopRow}>
-              <Image source={require('./assets/images/jobs-icon-work-experience.png')} />
+              <Image
+                source={require("./assets/images/jobs-icon-work-experience.png")}
+              />
               <Text style={styles.workExpText}>Work experience</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
+            <Divider style={{ marginVertical: 20 }} />
             <Text style={styles.managerText}>Manager</Text>
-            <Text style={[styles.workExpSmallText, {marginTop: 13}]}>Amazon Inc</Text>
+            <Text style={[styles.workExpSmallText, { marginTop: 13 }]}>
+              Amazon Inc
+            </Text>
             <View style={styles.workExpBottomRow}>
               <Text style={styles.workExpSmallText}>Jan 2015 - Feb 2022</Text>
               <View style={styles.dot}></View>
-              <Text style={[styles.workExpSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
+              <Text
+                style={[
+                  styles.workExpSmallText,
+                  { marginLeft: 5, marginTop: 7 },
+                ]}
+              >
+                5 Years
+              </Text>
             </View>
           </View>
 
           <View style={styles.eduContainer}>
             <View style={styles.eduTopRow}>
-              <Image source={require('./assets/images/jobs-icon-education.png')} />
+              <Image
+                source={require("./assets/images/jobs-icon-education.png")}
+              />
               <Text style={styles.eduText}>Education</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
+            <Divider style={{ marginVertical: 20 }} />
             <Text style={styles.managerText}>Information Technology</Text>
-            <Text style={[styles.eduSmallText, {marginTop: 13}]}>University of Oxford</Text>
+            <Text style={[styles.eduSmallText, { marginTop: 13 }]}>
+              University of Oxford
+            </Text>
             <View style={styles.eduBottomRow}>
               <Text style={styles.eduSmallText}>Jan 2015 - Feb 2022</Text>
               <View style={styles.dot}></View>
-              <Text style={[styles.eduSmallText, {marginLeft:5, marginTop: 7}]}>5 Years</Text>
+              <Text
+                style={[styles.eduSmallText, { marginLeft: 5, marginTop: 7 }]}
+              >
+                5 Years
+              </Text>
             </View>
           </View>
 
           <View style={styles.skillContainer}>
             <View style={styles.skillTopRow}>
-              <Image source={require('./assets/images/jobs-icon-skill.png')} />
-              <Text style={[styles.skillText, {marginLeft: 10}]}>Skill</Text>
+              <Image source={require("./assets/images/jobs-icon-skill.png")} />
+              <Text style={[styles.skillText, { marginLeft: 10 }]}>Skill</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
-            <View style={{}} >
+            <Divider style={{ marginVertical: 20 }} />
+            <View style={{}}>
               {/* only show truncated skills if see more button not pressed */}
-              {skills?.length > 5 && !showMoreSkills ? 
-              <View>
-                 <View style={styles.skillTextContainer} >
-                {getSkillsMoreThanFive()?.map((el, index)=>{
-                  console.log('skill el index', el ,index);
-                  return (
-                      <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
-                        {index === 5 ? 
-                        <Text style={styles.skillText2}>+ {el.name} more</Text>
-                        :
-                        <Text style={styles.skillText2}>{el.name}</Text>
-                      }
-                      </View>
-                  )
-                })}
-                </View>
-                <TouchableOpacity onPress={()=> {setShowMoreSkills(true)}} >
-                  <Text style={styles.seeMoreText}>See More</Text>
-                </TouchableOpacity>
-              </View>
-              :
-              <View style={styles.skillTextContainer} >
-              {skills?.map(el=>{
-                return (
-                  <View style={styles.skillTextView} >
-                    <Text style={styles.skillText2}>{el.name}</Text>
+              {skills?.length > 5 && !showMoreSkills ? (
+                <View>
+                  <View style={styles.skillTextContainer}>
+                    {getSkillsMoreThanFive()?.map((el, index) => {
+                      console.log("skill el index", el, index);
+                      return (
+                        <View
+                          style={[
+                            styles.skillTextView,
+                            index === 5
+                              ? { backgroundColor: "transparent" }
+                              : null,
+                          ]}
+                        >
+                          {index === 5 ? (
+                            <Text style={styles.skillText2}>
+                              + {el.name} more
+                            </Text>
+                          ) : (
+                            <Text style={styles.skillText2}>{el.name}</Text>
+                          )}
+                        </View>
+                      );
+                    })}
                   </View>
-                )
-              })}
-              </View>
-
-            }
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowMoreSkills(true);
+                    }}
+                  >
+                    <Text style={styles.seeMoreText}>See More</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.skillTextContainer}>
+                  {skills?.map((el) => {
+                    return (
+                      <View style={styles.skillTextView}>
+                        <Text style={styles.skillText2}>{el.name}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
             </View>
-
           </View>
-
 
           <View style={styles.skillContainer}>
             <View style={styles.skillTopRow}>
-            <Image source={require('./assets/images/jobs-icon-language.png')} style={{height: 24, width: 24}} />
-              <Text style={[styles.skillText, {marginLeft: 10}]}>Language</Text>
+              <Image
+                source={require("./assets/images/jobs-icon-language.png")}
+                style={{ height: 24, width: 24 }}
+              />
+              <Text style={[styles.skillText, { marginLeft: 10 }]}>
+                Language
+              </Text>
             </View>
-            <Divider style={{marginVertical:20}} />
-            <View style={{}} >
+            <Divider style={{ marginVertical: 20 }} />
+            <View style={{}}>
               {/* only show truncated languages if see more button not pressed */}
-              {languages?.length > 5 && !showMoreLanguages ? 
-              <View>
-                 <View style={styles.skillTextContainer} >
-                {getLanguagesMoreThanFive()?.map((el, index)=>{
-                  console.log('languages el index', el ,index);
-                  return (
-                      <View style={[styles.skillTextView, index === 5 ? {backgroundColor:'transparent'} : null]} >
-                        {index === 5 ? 
-                        <Text style={styles.skillText2}>+ {el.name} more</Text>
-                        :
-                        <Text style={styles.skillText2}>{el.name}</Text>
-                      }
-                      </View>
-                  )
-                })}
-                </View>
-                <TouchableOpacity onPress={()=> {setShowMoreLanguages(true)}} >
-                  <Text style={styles.seeMoreText}>See More</Text>
-                </TouchableOpacity>
-              </View>
-              :
-              <View style={styles.skillTextContainer} >
-              {languages?.map(el=>{
-                return (
-                  <View style={styles.skillTextView} >
-                    <Text style={styles.skillText2}>{el.name}</Text>
+              {languages?.length > 5 && !showMoreLanguages ? (
+                <View>
+                  <View style={styles.skillTextContainer}>
+                    {getLanguagesMoreThanFive()?.map((el, index) => {
+                      console.log("languages el index", el, index);
+                      return (
+                        <View
+                          style={[
+                            styles.skillTextView,
+                            index === 5
+                              ? { backgroundColor: "transparent" }
+                              : null,
+                          ]}
+                        >
+                          {index === 5 ? (
+                            <Text style={styles.skillText2}>
+                              + {el.name} more
+                            </Text>
+                          ) : (
+                            <Text style={styles.skillText2}>{el.name}</Text>
+                          )}
+                        </View>
+                      );
+                    })}
                   </View>
-                )
-              })}
-              </View>
-
-            }
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowMoreLanguages(true);
+                    }}
+                  >
+                    <Text style={styles.seeMoreText}>See More</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.skillTextContainer}>
+                  {languages?.map((el) => {
+                    return (
+                      <View style={styles.skillTextView}>
+                        <Text style={styles.skillText2}>{el.name}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
             </View>
-
-          </View>  
+          </View>
 
           <View style={styles.aprctinContainer}>
             <View style={styles.aprctinTopRow}>
-              <Image source={require('./assets/images/jobs-icon-appreciation.png')} />
+              <Image
+                source={require("./assets/images/jobs-icon-appreciation.png")}
+              />
               <Text style={styles.aprctinText}>Appreciation</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
+            <Divider style={{ marginVertical: 20 }} />
             <Text style={styles.managerText}>Wireless Symposium (RWS)</Text>
-            <Text style={[styles.aprctinSmallText, {marginTop: 13}]}>Young Scientist</Text>
+            <Text style={[styles.aprctinSmallText, { marginTop: 13 }]}>
+              Young Scientist
+            </Text>
             <View style={styles.aprctinBottomRow}>
               <Text style={styles.aprctinSmallText}>2014</Text>
             </View>
           </View>
-          
+
           <View style={styles.aprctinContainer}>
             <View style={styles.aprctinTopRow}>
-              <Image source={require('./assets/images/jobs-icon-resume.png')} style={{width: 24, height: 24}} />
+              <Image
+                source={require("./assets/images/jobs-icon-resume.png")}
+                style={{ width: 24, height: 24 }}
+              />
               <Text style={styles.aprctinText}>Resume</Text>
             </View>
-            <Divider style={{marginVertical:20}} />
+            <Divider style={{ marginVertical: 20 }} />
             <View style={styles.resumeBottomRow}>
-              <View style={styles.resumeBottomLeftRow}>              
-                <Image source={require('./assets/images/jobs-pdf-icon.png')} style={{width: 33, height: 44}} />
-                <View style={{marginLeft:20, width:'70%'}} >
-                  <Text style={styles.resumeTitle}>Jamet kudasi - CV - UI/UX Designer</Text>
-                  <Text style={[styles.aprctinSmallText, {marginTop: 5}]}>867 Kb . 14 Feb 2022 at 11:30 am</Text>
+              <View style={styles.resumeBottomLeftRow}>
+                <Image
+                  source={require("./assets/images/jobs-pdf-icon.png")}
+                  style={{ width: 33, height: 44 }}
+                />
+                <View style={{ marginLeft: 20, width: "70%" }}>
+                  <Text style={styles.resumeTitle}>
+                    Jamet kudasi - CV - UI/UX Designer
+                  </Text>
+                  <Text style={[styles.aprctinSmallText, { marginTop: 5 }]}>
+                    867 Kb . 14 Feb 2022 at 11:30 am
+                  </Text>
                 </View>
               </View>
-              <Image source={require('./assets/images/jobs-resume-delete.png')} style={{width: 24, height: 24}} />
+              <Image
+                source={require("./assets/images/jobs-resume-delete.png")}
+                style={{ width: 24, height: 24 }}
+              />
             </View>
           </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -277,21 +358,22 @@ const Profile = (props) => {
 };
 export default Profile;
 
-const Divider = ({borderColor = '#DEE1E7', style = {}}) => {
+const Divider = ({ borderColor = "#DEE1E7", style = {} }) => {
   return (
     <View
       style={{
-        width: '100%',
+        width: "100%",
         borderWidth: 0.5,
         borderColor: borderColor,
-        alignSelf:'center',
-        ...style
+        alignSelf: "center",
+        ...style,
       }}
     />
   );
 };
 
-const person_Image = "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cGVyc29ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+const person_Image =
+  "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cGVyc29ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
 
 const styles = StyleSheet.create({
   safeView: {
@@ -307,7 +389,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     marginTop: -30,
   },
-  profileContainer:{
+  profileContainer: {
     paddingVertical: 14,
     paddingHorizontal: 16,
     width: dimensions.SCREEN_WIDTH - 40,
@@ -323,49 +405,49 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  profileTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between'
+  profileTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  profileTopRightRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  profileTopRightRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  profileImageStyle:{
+  profileImageStyle: {
     height: 52,
     width: 52,
     borderRadius: 52 / 2,
   },
   name: {
-    color: '#455A64',
+    color: "#455A64",
     fontSize: 14,
     fontWeight: "500",
-    marginTop: 12
+    marginTop: 12,
   },
   location: {
-    color: '#455A64',
+    color: "#455A64",
     fontSize: 12,
     fontWeight: "400",
   },
-  editProfileButton:{
+  editProfileButton: {
     width: 120,
     height: 30,
-    backgroundColor: 'rgba(0, 137, 207, 0.1)',
+    backgroundColor: "rgba(0, 137, 207, 0.1)",
     borderRadius: 5,
-    flexDirection:'row',
-    alignItems:'center',
-    paddingHorizontal:15,
-    paddingVertical:6.5,
-    marginTop:20,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 6.5,
+    marginTop: 20,
   },
-  editProfileText:{
-    color: '#0089CF',
+  editProfileText: {
+    color: "#0089CF",
     fontSize: 12,
     fontWeight: "400",
-    marginRight:10
+    marginRight: 10,
   },
-  aboutMeContainer:{
+  aboutMeContainer: {
     paddingTop: 23,
     paddingBottom: 45,
     paddingHorizontal: 20,
@@ -373,7 +455,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 10,
     backgroundColor: "white",
-    marginTop:22,
+    marginTop: 22,
     shadowColor: "rgb(26, 42, 97)",
     shadowOffset: {
       width: 0,
@@ -383,22 +465,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  aboutMeTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  aboutMeTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  aboutMeText:{
-    color: '#150B3D',
+  aboutMeText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
-    marginLeft:10
+    marginLeft: 10,
   },
-  aboutMeLongText:{
-    color: '#524B6B',
+  aboutMeLongText: {
+    color: "#524B6B",
     fontSize: 14,
     fontWeight: "400",
   },
-  workExpContainer:{
+  workExpContainer: {
     paddingTop: 23,
     paddingBottom: 22,
     paddingHorizontal: 20,
@@ -406,7 +488,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 10,
     backgroundColor: "white",
-    marginTop:22,
+    marginTop: 22,
     shadowColor: "rgb(26, 42, 97)",
     shadowOffset: {
       width: 0,
@@ -416,39 +498,39 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  workExpTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  workExpTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  workExpText:{
-    color: '#150B3D',
+  workExpText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
-    marginLeft:10
+    marginLeft: 10,
   },
-  managerText:{
-    color: '#150B3D',
+  managerText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
   },
-  workExpSmallText:{
-    color: '#524B6B',
+  workExpSmallText: {
+    color: "#524B6B",
     fontSize: 12,
     fontWeight: "400",
   },
-  workExpBottomRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  workExpBottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  dot:{
-    backgroundColor:'#524B6B', 
-    width:2, 
-    height:2, 
-    borderRadius:1, 
-    marginLeft:8
+  dot: {
+    backgroundColor: "#524B6B",
+    width: 2,
+    height: 2,
+    borderRadius: 1,
+    marginLeft: 8,
   },
 
-  eduContainer:{
+  eduContainer: {
     paddingTop: 23,
     paddingBottom: 22,
     paddingHorizontal: 20,
@@ -456,7 +538,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 10,
     backgroundColor: "white",
-    marginTop:22,
+    marginTop: 22,
     shadowColor: "rgb(26, 42, 97)",
     shadowOffset: {
       width: 0,
@@ -466,31 +548,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  eduTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  eduTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  eduText:{
-    color: '#150B3D',
+  eduText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
-    marginLeft:10
+    marginLeft: 10,
   },
-  managerText:{
-    color: '#150B3D',
+  managerText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
   },
-  eduSmallText:{
-    color: '#524B6B',
+  eduSmallText: {
+    color: "#524B6B",
     fontSize: 12,
     fontWeight: "400",
   },
-  eduBottomRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  eduBottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  aprctinContainer:{
+  aprctinContainer: {
     paddingTop: 23,
     paddingBottom: 22,
     paddingHorizontal: 20,
@@ -498,7 +580,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 10,
     backgroundColor: "white",
-    marginTop:22,
+    marginTop: 22,
     shadowColor: "rgb(26, 42, 97)",
     shadowOffset: {
       width: 0,
@@ -508,32 +590,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  aprctinTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  aprctinTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  aprctinText:{
-    color: '#150B3D',
+  aprctinText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
-    marginLeft:10
+    marginLeft: 10,
   },
-  managerText:{
-    color: '#150B3D',
+  managerText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
   },
-  aprctinSmallText:{
-    color: '#524B6B',
+  aprctinSmallText: {
+    color: "#524B6B",
     fontSize: 12,
     fontWeight: "400",
   },
-  aprctinBottomRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  aprctinBottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 
-  skillContainer:{
+  skillContainer: {
     paddingTop: 23,
     paddingBottom: 22,
     paddingHorizontal: 20,
@@ -541,7 +623,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 10,
     backgroundColor: "white",
-    marginTop:22,
+    marginTop: 22,
     shadowColor: "rgb(26, 42, 97)",
     shadowOffset: {
       width: 0,
@@ -551,56 +633,56 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
   },
-  skillTopRow:{
-    flexDirection:'row',
-    alignItems:'center',
+  skillTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  skillText:{
-    color: '#150B3D',
+  skillText: {
+    color: "#150B3D",
     fontSize: 14,
     fontWeight: "700",
-    marginLeft:10
+    marginLeft: 10,
   },
-  skillText2:{
-    color: '#524B6B',
+  skillText2: {
+    color: "#524B6B",
     fontSize: 14,
     fontWeight: "400",
   },
-  skillTextContainer:{
-    flexDirection:'row',
-    alignItems:'center',
-    flexWrap:'wrap'
+  skillTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
     // width:'80%'
   },
-  skillTextView:{
-    backgroundColor:'rgba(203, 201, 212, 0.2)',
-    paddingHorizontal:10,
-    paddingVertical:10,
-    borderRadius:10,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:10,
-    marginRight:10
+  skillTextView: {
+    backgroundColor: "rgba(203, 201, 212, 0.2)",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+    marginRight: 10,
   },
-  seeMoreText:{
-    color: '#0089CF',
+  seeMoreText: {
+    color: "#0089CF",
     fontSize: 12,
     fontWeight: "400",
-    textAlign:'center',
-    marginTop: 30
+    textAlign: "center",
+    marginTop: 30,
   },
-  resumeBottomRow:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between'
+  resumeBottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  resumeBottomLeftRow:{
-    flexDirection:'row',
-    alignItems:'center'
+  resumeBottomLeftRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  resumeTitle:{
-    color:'#150B3D',
-    fontSize:12,
-    fontWeight:'400'
-  }
+  resumeTitle: {
+    color: "#150B3D",
+    fontSize: 12,
+    fontWeight: "400",
+  },
 });
