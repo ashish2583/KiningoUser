@@ -75,9 +75,11 @@ const Profile = (props) => {
   const [showMoreLanguages, setShowMoreLanguages] = useState(false)
 
   const getSkillsMoreThanFive = () => {
+    // get first 5 skills using slice method, then add remaining number (for example 3) at the end
     return [...skills?.slice(0, 5), {id: skills?.length, name: skills.length - 5}]
   }
   const getLanguagesMoreThanFive = () => {
+    // get first 5 languages using slice method, then add remaining number (for example 3) at the end
     return [...languages?.slice(0, 5), {id: languages?.length, name: languages.length - 5}]
   }
   return (
@@ -217,7 +219,7 @@ const Profile = (props) => {
                   )
                 })}
                 </View>
-                <TouchableOpacity onPress={()=> {setShowMoreSkills(true)}} >
+                <TouchableOpacity onPress={()=> {setShowMoreLanguages(true)}} >
                   <Text style={styles.seeMoreText}>See More</Text>
                 </TouchableOpacity>
               </View>
@@ -247,6 +249,24 @@ const Profile = (props) => {
             <Text style={[styles.aprctinSmallText, {marginTop: 13}]}>Young Scientist</Text>
             <View style={styles.aprctinBottomRow}>
               <Text style={styles.aprctinSmallText}>2014</Text>
+            </View>
+          </View>
+          
+          <View style={styles.aprctinContainer}>
+            <View style={styles.aprctinTopRow}>
+              <Image source={require('./assets/images/jobs-icon-resume.png')} style={{width: 24, height: 24}} />
+              <Text style={styles.aprctinText}>Resume</Text>
+            </View>
+            <Divider style={{marginVertical:20}} />
+            <View style={styles.resumeBottomRow}>
+              <View style={styles.resumeBottomLeftRow}>              
+                <Image source={require('./assets/images/jobs-pdf-icon.png')} style={{width: 33, height: 44}} />
+                <View style={{marginLeft:20, width:'70%'}} >
+                  <Text style={styles.resumeTitle}>Jamet kudasi - CV - UI/UX Designer</Text>
+                  <Text style={[styles.aprctinSmallText, {marginTop: 5}]}>867 Kb . 14 Feb 2022 at 11:30 am</Text>
+                </View>
+              </View>
+              <Image source={require('./assets/images/jobs-resume-delete.png')} style={{width: 24, height: 24}} />
             </View>
           </View>
 
@@ -568,5 +588,19 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     textAlign:'center',
     marginTop: 30
+  },
+  resumeBottomRow:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
+  },
+  resumeBottomLeftRow:{
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  resumeTitle:{
+    color:'#150B3D',
+    fontSize:12,
+    fontWeight:'400'
   }
 });
