@@ -1,4 +1,4 @@
-// Saurabh Saneja August 14, 2023 view profile
+// Saurabh Saneja August 14, 2023 edit profile
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -75,7 +75,7 @@ const languages = [
     name: "Italian",
   },
 ];
-const Profile = (props) => {
+const EditProfile = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
   const [showMoreSkills, setShowMoreSkills] = useState(false);
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
@@ -85,26 +85,7 @@ const Profile = (props) => {
   const [profileData, setProfileData] = useState({});
 
   useEffect(()=> {
-    console.log('userdetaile.token', userdetaile);
-    getProfileData()
   }, [])
-  // Saurabh Saneja August 14, 2023 get profile data
-  const getProfileData = async () => {
-    setLoading(true)
-    const { responseJson, err } = await requestGetApi(deal_job_profile + userdetaile.userid, '', 'GET', userdetaile.token)
-    setLoading(false)
-    console.log('getProfileData responseJson', responseJson)
-    if (responseJson.headers.success == 1) {
-      setProfileData(responseJson.body)
-    } else {
-      setalert_sms(err)
-      setMy_Alert(true)
-    }
-  }
-
-  const gotoEditProile = () => {
-    props.navigation.navigate('EditProfile')
-  }
 
   const getSkillsMoreThanFive = () => {
     // Saurabh Saneja August 14, 2023
@@ -152,7 +133,7 @@ const Profile = (props) => {
             </View>
             <Text style={styles.name}>Orlando Diggs</Text>
             <Text style={styles.location}>California, USA</Text>
-            <TouchableOpacity onPress={gotoEditProile} style={styles.editProfileButton}>
+            <TouchableOpacity style={styles.editProfileButton}>
               <Text style={styles.editProfileText}>Edit profile</Text>
               <Image
                 source={require("./assets/images/jobs-icon-edit-profile.png")}
@@ -162,10 +143,15 @@ const Profile = (props) => {
 
           <View style={styles.aboutMeContainer}>
             <View style={styles.aboutMeTopRow}>
+            <View style={styles.aboutMeTopLeftRow}>
               <Image
                 source={require("./assets/images/jobs-icon-about-me.png")}
               />
               <Text style={styles.aboutMeText}>About me</Text>
+            </View>
+            <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <Text style={styles.aboutMeLongText}>
@@ -175,14 +161,24 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.workExpContainer}>
-            <View style={styles.workExpTopRow}>
+            <View style={[styles.workExpTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.workExpTopRow}>
+                <Image
+                  source={require("./assets/images/jobs-icon-work-experience.png")}
+                />
+                <Text style={styles.workExpText}>Work experience</Text>
+              </View>
               <Image
-                source={require("./assets/images/jobs-icon-work-experience.png")}
+                source={require("./assets/images/jobs-add-icon.png")}
               />
-              <Text style={styles.workExpText}>Work experience</Text>
             </View>
             <Divider style={{ marginVertical: 20 }} />
-            <Text style={styles.managerText}>Manager</Text>
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >
+              <Text style={styles.managerText}>Manager</Text>
+              <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
+            </View>
             <Text style={[styles.workExpSmallText, { marginTop: 13 }]}>
               Amazon Inc
             </Text>
@@ -201,14 +197,24 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.eduContainer}>
-            <View style={styles.eduTopRow}>
+            <View style={[styles.eduTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.eduTopLeftRow}>
+                <Image
+                  source={require("./assets/images/jobs-icon-education.png")}
+                />
+                <Text style={styles.eduText}>Education</Text>
+              </View>
               <Image
-                source={require("./assets/images/jobs-icon-education.png")}
+                source={require("./assets/images/jobs-add-icon.png")}
               />
-              <Text style={styles.eduText}>Education</Text>
             </View>
             <Divider style={{ marginVertical: 20 }} />
-            <Text style={styles.managerText}>Information Technology</Text>
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >
+              <Text style={styles.managerText}>Information Technology</Text>
+              <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
+            </View>
             <Text style={[styles.eduSmallText, { marginTop: 13 }]}>
               University of Oxford
             </Text>
@@ -224,9 +230,14 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.skillContainer}>
-            <View style={styles.skillTopRow}>
-              <Image source={require("./assets/images/jobs-icon-skill.png")} />
-              <Text style={[styles.skillText, { marginLeft: 10 }]}>Skill</Text>
+            <View style={[styles.skillTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.skillTopLeftRow}>
+                <Image source={require("./assets/images/jobs-icon-skill.png")} />
+                <Text style={[styles.skillText, { marginLeft: 10 }]}>Skill</Text>
+              </View>
+              <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{}}>
@@ -280,14 +291,19 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.skillContainer}>
-            <View style={styles.skillTopRow}>
+            <View style={[styles.skillTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.skillTopLeftRow}>
+                <Image
+                  source={require("./assets/images/jobs-icon-language.png")}
+                  style={{ height: 24, width: 24 }}
+                />
+                <Text style={[styles.skillText, { marginLeft: 10 }]}>
+                  Language
+                </Text>
+              </View>
               <Image
-                source={require("./assets/images/jobs-icon-language.png")}
-                style={{ height: 24, width: 24 }}
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
               />
-              <Text style={[styles.skillText, { marginLeft: 10 }]}>
-                Language
-              </Text>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{}}>
@@ -341,14 +357,24 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.aprctinContainer}>
-            <View style={styles.aprctinTopRow}>
+            <View style={[styles.aprctinTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.aprctinTopLeftRow}>
+                <Image
+                  source={require("./assets/images/jobs-icon-appreciation.png")}
+                />
+                <Text style={styles.aprctinText}>Appreciation</Text>
+              </View>
               <Image
-                source={require("./assets/images/jobs-icon-appreciation.png")}
+                source={require("./assets/images/jobs-add-icon.png")}
               />
-              <Text style={styles.aprctinText}>Appreciation</Text>
             </View>
             <Divider style={{ marginVertical: 20 }} />
-            <Text style={styles.managerText}>Wireless Symposium (RWS)</Text>
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >
+              <Text style={styles.managerText}>Wireless Symposium (RWS)</Text>
+              <Image
+                source={require("./assets/images/jobs-icon-edit-profile.png")}
+              />
+            </View>
             <Text style={[styles.aprctinSmallText, { marginTop: 13 }]}>
               Young Scientist
             </Text>
@@ -358,12 +384,17 @@ const Profile = (props) => {
           </View>
 
           <View style={styles.aprctinContainer}>
-            <View style={styles.aprctinTopRow}>
+            <View style={[styles.aprctinTopRow, {justifyContent:'space-between'}]}>
+              <View style={styles.aprctinTopLeftRow}>
+                <Image
+                  source={require("./assets/images/jobs-icon-resume.png")}
+                  style={{ width: 24, height: 24 }}
+                />
+                <Text style={styles.aprctinText}>Resume</Text>
+              </View>
               <Image
-                source={require("./assets/images/jobs-icon-resume.png")}
-                style={{ width: 24, height: 24 }}
+                source={require("./assets/images/jobs-add-icon.png")}
               />
-              <Text style={styles.aprctinText}>Resume</Text>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={styles.resumeBottomRow}>
@@ -394,7 +425,7 @@ const Profile = (props) => {
     </SafeAreaView>
   );
 };
-export default Profile;
+export default EditProfile;
 
 const Divider = ({ borderColor = "#DEE1E7", style = {} }) => {
   return (
@@ -506,6 +537,12 @@ const styles = StyleSheet.create({
   aboutMeTopRow: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent:'space-between'
+  },
+  aboutMeTopLeftRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:'space-between'
   },
   aboutMeText: {
     color: "#150B3D",
@@ -537,6 +574,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   workExpTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  workExpTopLeftRow: {
     flexDirection: "row",
     alignItems: "center",
   },
@@ -590,6 +631,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  eduTopLeftRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   eduText: {
     color: "#150B3D",
     fontSize: 14,
@@ -629,6 +674,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   aprctinTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  aprctinTopLeftRow: {
     flexDirection: "row",
     alignItems: "center",
   },
@@ -672,6 +721,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   skillTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  skillTopLeftRow: {
     flexDirection: "row",
     alignItems: "center",
   },
