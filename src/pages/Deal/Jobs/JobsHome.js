@@ -159,7 +159,8 @@ const JobsHome = (props) => {
           width: dimensions.SCREEN_WIDTH - 40,
           alignSelf: 'center',
           marginTop: -25,
-          zIndex:2,
+          zIndex: 999,
+          elevation: 10
         }} />
         <View style={styles.mainView2}>
           <View style={styles.findOutContainer}>
