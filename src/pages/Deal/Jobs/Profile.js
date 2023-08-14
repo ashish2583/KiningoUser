@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     paddingBottom: "30%",
-    alignItems: "center",
+    // alignItems: "center",
   },
   mainView2: {
     padding: 20,
