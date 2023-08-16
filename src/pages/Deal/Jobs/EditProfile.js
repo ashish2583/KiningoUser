@@ -106,6 +106,9 @@ const EditProfile = (props) => {
   const gotoAddWorkExp = () => {
     props.navigation.navigate('AddWorkExp')
   }
+  const gotoAddWorkEducation = () => {
+    props.navigation.navigate('AddEducation')
+  }
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -210,9 +213,11 @@ const EditProfile = (props) => {
                 />
                 <Text style={styles.eduText}>Education</Text>
               </View>
-              <Image
-                source={require("./assets/images/jobs-add-icon.png")}
-              />
+              <TouchableOpacity onPress={gotoAddWorkEducation}>
+                <Image
+                  source={require("./assets/images/jobs-add-icon.png")}
+                />
+              </TouchableOpacity>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >

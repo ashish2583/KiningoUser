@@ -18,20 +18,21 @@ import JobsHeader from "./components/JobsHeader";
 import JobsSearch from "./components/JobsSearch";
 import { dimensions } from "../../../utility/Mycolors";
 import MyAlert from '../../../component/MyAlert';
-import { requestGetApi, deal_job_profile, requestPostApi, deal_job_work_experience } from "../../../WebApi/Service";
+import { requestGetApi, deal_job_profile, requestPostApi, deal_job_work_experience, deal_job_education } from "../../../WebApi/Service";
 import { useSelector } from "react-redux";
 import Loader from '../../../WebApi/Loader';
 import DateSelector from "./components/DateSelector";
 import DatePicker from 'react-native-date-picker';
 import moment from "moment";
 
-const AddWorkExp = (props) => {
+const AddEducation = (props) => {
   const userdetaile  = useSelector(state => state.user.user_details)
   const [loading, setLoading] = useState(false)
   const [My_Alert, setMy_Alert] = useState(false)
   const [alert_sms, setalert_sms] = useState('')
-  const [jobTitle, setJobTitle] = useState('')
-  const [company, setCompany] = useState('')
+  const [educationLevel, setEducationLevel] = useState('')
+  const [institutionName, setInstitutionName] = useState('')
+  const [fieldOfStudy, setFieldOfStudy] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [isStartDateOpen, setIsStartDateOpen] = useState('')
@@ -39,17 +40,21 @@ const AddWorkExp = (props) => {
   const [description, setDescription] = useState('')
   const [isChecked, setIsChecked] = useState(true)
 
-  const companyRef = useRef()
+  const institutionNameRef = useRef()
+  const fieldOfStudyRef = useRef()
 
   useEffect(()=> {
   }, [])
   // Saurabh Saneja August 16, 2023 validate fields before calling api
   const validation = () => {
-    if (jobTitle?.trim()?.length === 0) {
+    if (educationLevel?.trim()?.length === 0) {
       Toast.show({ text1: "Please enter Job Title" });
       return false;
-    } else if (company?.trim()?.length === 0) {
+    } else if (institutionName?.trim()?.length === 0) {
       Toast.show({ text1: "Please enter Company" });
+      return false; 
+    } else if (fieldOfStudy?.trim()?.length === 0) {
+      Toast.show({ text1: "Please enter Field of study" });
       return false;
     } else if (startDate === '') {
       Toast.show({ text1: "Please select Start Date" });
@@ -71,19 +76,22 @@ const AddWorkExp = (props) => {
     setLoading(true);
     const data = {
       "candidate_id": userdetaile.userid,
-      "company": company,
+      "degree": fieldOfStudy,
+      "college": institutionName,
+      "year": 2021,
+      "marks_type": "Percentage",
+      "marks": 85,
       "from_date": moment(startDate).format('YYYY-MM-DD'),
       "end_date": moment(endDate).format('YYYY-MM-DD'),
-      "title": jobTitle,
       "status": isChecked ? 1 : 0
     };
+    console.log("handleAdd data", data);
     const { responseJson, err } = await requestPostApi(
-      deal_job_work_experience,
+      deal_job_education,
       data,
       "POST",
       userdetaile.token
     );
-    console.log("handleAdd data", data);
     setLoading(false);
     console.log("handleAdd responseJson", responseJson);
     if (responseJson.headers.success == 1) {
@@ -102,23 +110,31 @@ const AddWorkExp = (props) => {
         style={{ width: "100%" }}
         contentContainerStyle={styles.mainView}
       >
-        <JobsHeader text="Work Experience" />
+        <JobsHeader text="Education" />
         <View style={styles.mainView2}>
-          <Text style={styles.title}>Add work experience</Text>
+          <Text style={styles.title}>Add Education</Text>
 
-          <Text style={styles.inputTitle}>Job Title</Text>
+          <Text style={styles.inputTitle}>Level of education</Text>
           <MyTextInput
-            placeholder='Job title'
-            value={jobTitle}
-            setValue={setJobTitle}
-            onSubmitEditing={()=>{companyRef.current.focus()}}
+            placeholder='Level of education'
+            value={educationLevel}
+            setValue={setEducationLevel}
+            onSubmitEditing={()=>{institutionNameRef.current.focus()}}
             />
-          <Text style={styles.inputTitle}>Company</Text>
+          <Text style={styles.inputTitle}>Institution name</Text>
           <MyTextInput
-            inputRef={companyRef}
-            placeholder='Company'
-            value={company}
-            setValue={setCompany}
+            inputRef={institutionNameRef}
+            placeholder='Institution name'
+            value={institutionName}
+            setValue={setInstitutionName}
+            onSubmitEditing={()=>{fieldOfStudyRef.current.focus()}}
+          />
+          <Text style={styles.inputTitle}>Field of study</Text>
+          <MyTextInput
+            inputRef={fieldOfStudyRef}
+            placeholder='Field of study'
+            value={fieldOfStudy}
+            setValue={setFieldOfStudy}
             onSubmitEditing={()=>{Keyboard.dismiss()}}
           />
           <View style={styles.dateRow}>
@@ -199,7 +215,7 @@ const AddWorkExp = (props) => {
     </SafeAreaView>
   );
 };
-export default AddWorkExp;
+export default AddEducation;
 
 const MyTextInput = ({placeholder, value, setValue, inputRef, onSubmitEditing}) => {
   return (

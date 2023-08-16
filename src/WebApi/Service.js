@@ -95,7 +95,8 @@ export const game_profile = "talkie/game/dashboard";
 export const game_like = "talkie/react-game";
 
 export const deal_job_profile = "deal/job/demand/profile/";
-export const deal_work_experience = `deal/job/demand/add-experience`
+export const deal_job_work_experience = `deal/job/demand/add-experience`
+export const deal_job_education = `deal/job/demand/add-education`
 
 
 export const creation_categories = `/creation/common/categories`
