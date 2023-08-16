@@ -109,6 +109,9 @@ const EditProfile = (props) => {
   const gotoAddWorkEducation = () => {
     props.navigation.navigate('AddEducation')
   }
+  const gotoAddAppreciaton = () => {
+    props.navigation.navigate('AddAppreciaton')
+  }
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -375,9 +378,11 @@ const EditProfile = (props) => {
                 />
                 <Text style={styles.aprctinText}>Appreciation</Text>
               </View>
-              <Image
-                source={require("./assets/images/jobs-add-icon.png")}
-              />
+              <TouchableOpacity onPress={gotoAddAppreciaton} >
+                <Image
+                  source={require("./assets/images/jobs-add-icon.png")}
+                />
+              </TouchableOpacity>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}} >
