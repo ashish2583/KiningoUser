@@ -12,12 +12,13 @@ import {
   Image,
   FlatList,
   Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import JobsHeader from "./components/JobsHeader";
 import JobsSearch from "./components/JobsSearch";
 import { dimensions } from "../../../utility/Mycolors";
 import MyAlert from '../../../component/MyAlert';
-import { requestGetApi, deal_job_profile } from "../../../WebApi/Service";
+import { requestGetApi, deal_job_profile, requestPostApi, deal_work_experience } from "../../../WebApi/Service";
 import { useSelector } from "react-redux";
 import Loader from '../../../WebApi/Loader';
 import DateSelector from "./components/DateSelector";
@@ -31,17 +32,68 @@ const AddWorkExp = (props) => {
   const [alert_sms, setalert_sms] = useState('')
   const [jobTitle, setJobTitle] = useState('')
   const [company, setCompany] = useState('')
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [isStartDateOpen, setIsStartDateOpen] = useState('')
   const [isEndDateOpen, setIsEndDateOpen] = useState('')
   const [description, setDescription] = useState('')
+  const [isChecked, setIsChecked] = useState(true)
 
   const companyRef = useRef()
 
   useEffect(()=> {
   }, [])
-
+  // Saurabh Saneja August 16, 2023 validate fields before calling api
+  const validation = () => {
+    if (jobTitle?.trim()?.length === 0) {
+      Toast.show({ text1: "Please enter Job Title" });
+      return false;
+    } else if (company?.trim()?.length === 0) {
+      Toast.show({ text1: "Please enter Company" });
+      return false;
+    } else if (startDate === '') {
+      Toast.show({ text1: "Please select Start Date" });
+      return false;
+    } else if (endDate === '') {
+      Toast.show({ text1: "Please select End Date" });
+      return false;
+    } else if (description?.trim()?.length === 0) {
+      Toast.show({ text1: "Please enter description" });
+      return false;
+    }
+    return true;
+  };
+  // Saurabh Saneja August 16, 2023 send work experience data to backend
+  const handleAdd = async () => {
+    if (!validation()) {
+      return;
+    }
+    setLoading(true);
+    const data = {
+      "candidate_id": userdetaile.userid,
+      "company": company,
+      "from_date": moment(startDate).format('YYYY-MM-DD'),
+      "end_date": moment(endDate).format('YYYY-MM-DD'),
+      "title": jobTitle,
+      "status": isChecked
+    };
+    const { responseJson, err } = await requestPostApi(
+      deal_work_experience,
+      data,
+      "POST",
+      userdetaile.token
+    );
+    setLoading(false);
+    console.log("handleAdd responseJson", responseJson);
+    if (responseJson.headers.success == 1) {
+      Toast.show({ text1: responseJson.headers.message });
+      props.navigation.goBack()
+    } else {
+      Toast.show({ text1: responseJson.headers.message });
+      setalert_sms(err);
+      setMy_Alert(true);
+    }
+  };
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView
@@ -73,9 +125,8 @@ const AddWorkExp = (props) => {
             <Text style={styles.inputTitle}>Start Date</Text>
               <DateSelector
                 Title={
-                  moment(startDate).format('YYYY-MM-DD') ==
-                  moment(new Date()).format('YYYY-MM-DD')
-                  ? 'Select Date'
+                  startDate == ''
+                  ? 'Select Start Date'
                   : // : moment(startDate).format('MMMM Do YYYY')
                   moment(startDate).format('DD-MM-YYYY')
                 }
@@ -86,9 +137,8 @@ const AddWorkExp = (props) => {
             <Text style={styles.inputTitle}>End Date</Text>
               <DateSelector
                 Title={
-                  moment(endDate).format('YYYY-MM-DD') ==
-                  moment(new Date()).format('YYYY-MM-DD')
-                  ? 'Select Date'
+                 endDate == ''
+                  ? 'Select End Date'
                   : // : moment(endDate).format('MMMM Do YYYY')
                   moment(endDate).format('DD-MM-YYYY')
                 }
@@ -97,10 +147,12 @@ const AddWorkExp = (props) => {
             </View>
           </View>
 
-          <View style={styles.checkMyPosition}>
-            <Image source={require('./assets/images/jobs-blue-checked.png')} />
-            <Text style={styles.myPostionText}>This is my position now</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={()=>{setIsChecked(!isChecked)}} >
+            <View style={styles.checkMyPosition}>
+              <Image source={isChecked ? require('./assets/images/jobs-blue-checked.png') : require('./assets/images/jobs-blue-unchecked.png')} />
+              <Text style={styles.myPostionText}>This is my position now</Text>
+            </View>
+          </TouchableWithoutFeedback>
 
           <Text style={styles.inputTitle}>Description</Text>      
           <TextInput
@@ -112,7 +164,7 @@ const AddWorkExp = (props) => {
             style={styles.descInput}
           />
 
-          <MyButton text="SAVE" style={{ backgroundColor:'#0089CF', paddingVertical: 20, marginTop: 40 }} />
+          <MyButton text="SAVE" onPress={handleAdd} style={{ backgroundColor:'#0089CF', paddingVertical: 20, marginTop: 40 }} />
         </View>
       </ScrollView>
       {loading ? <Loader /> : null}
@@ -121,7 +173,7 @@ const AddWorkExp = (props) => {
         modal
         mode="date"
         open={isStartDateOpen}
-        date={startDate}
+        date={startDate === '' ? new Date() : startDate}
         onConfirm={date => {
           setIsStartDateOpen(false);
           setStartDate(date);
@@ -134,7 +186,7 @@ const AddWorkExp = (props) => {
         modal
         mode="date"
         open={isEndDateOpen}
-        date={startDate}
+        date={endDate === '' ? new Date() : endDate}
         onConfirm={date => {
           setIsEndDateOpen(false);
           setEndDate(date);
