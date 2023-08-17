@@ -41,6 +41,7 @@ import { useSelector } from "react-redux";
 import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
 import messaging from '@react-native-firebase/messaging';
 import { setGameNotificationCount } from '../../../redux/actions/user_action';
+import HomeHeaderRoundBottom from "./components/HomeHeaderRoundBottom";
 
 const VideoGameHome = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -396,32 +397,12 @@ const VideoGameHome = (props) => {
               closeIconColor="#fff"
             />
           </View>
-          <HomeHeader
-              height={60}
-              paddingHorizontal={15}
-              press1={() => {
-                props.navigation.goBack();
-              }}
-              img1={require("../../../assets/service-header-back-button.png")}
-              img1width={30}
-              img1height={30}
-              img1backgroundColor={"transparent"}
-              img1padding={5}
-              img1borderRadius={4}
-              press2={() => {}}
-              title2={"Game Video"}
-              fontWeight={"bold"}
-              img2height={20}
-              color={Mycolors.BG_COLOR}
-              press3={() => {
-                props.navigation.navigate("VideoProfile", {courseData});
-              }}
-              img3={{
-                uri: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60`,
-              }}
-              img3width={25}
-              img3height={25}
-            />
+          <HomeHeaderRoundBottom height={100} extraStyle={{ paddingtop: 10, paddingBottom: 25 }} paddingHorizontal={15} borderBottomLeftRadius={20} borderBottomRightRadius={20} backgroundColor='#FFC40C'
+          press1={() => { props.navigation.goBack() }} img1={require('../../../assets/images/service-header-back-button.png')} img1width={25} img1height={18}
+          press2={() => { }} title2={'Startup'} fontWeight={'500'} img2height={20} color={'#fff'}
+          press3={() => { props.navigation.navigate('StartupNotifications') }} img3={require('../../../assets/images/fashion-bell-icon.png')} img3width={25} img3height={22}
+          press4={() => { props.navigation.navigate('StartupProfile') }} img4={require('../../../assets/People/PeopleProfileIConModal.png')} img4width={25} img4height={22}
+        />
           {/* <ImageBackground
             source={require("../../../assets/images/Gamewallpaper.png")}
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
