@@ -97,6 +97,8 @@ export const game_like = "talkie/react-game";
 export const deal_job_profile = "deal/job/demand/profile/";
 export const deal_job_work_experience = `deal/job/demand/add-experience`
 export const deal_job_education = `deal/job/demand/add-education`
+export const deal_job_add_skills = `deal/job/demand/add-skills`
+export const deal_job_skills = `deal/job/demand/skills`
 
 
 export const creation_categories = `/creation/common/categories`
@@ -196,7 +198,7 @@ export const requestGetApi = async (endPoint, body, method, token) => {
     });
     let code = await response.status;
     console.log(code);
-    if (code == 200) {
+    if (code == 200 || code == 201) {
       let responseJson = await response.json();
       console.log("Code 200==>>", responseJson);
       return { responseJson: responseJson, err: null, code: code };

@@ -112,6 +112,9 @@ const EditProfile = (props) => {
   const gotoAddAppreciaton = () => {
     props.navigation.navigate('AddAppreciaton')
   }
+  const gotoAddSkills = () => {
+    props.navigation.navigate('AddSkills')
+  }
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -249,9 +252,11 @@ const EditProfile = (props) => {
                 <Image source={require("./assets/images/jobs-icon-skill.png")} />
                 <Text style={[styles.skillText, { marginLeft: 10 }]}>Skill</Text>
               </View>
-              <Image
-                source={require("./assets/images/jobs-icon-edit-profile.png")}
-              />
+              <TouchableOpacity onPress={gotoAddSkills}>
+                <Image
+                  source={require("./assets/images/jobs-icon-edit-profile.png")}
+                />
+              </TouchableOpacity>
             </View>
             <Divider style={{ marginVertical: 20 }} />
             <View style={{}}>

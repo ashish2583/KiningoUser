@@ -9,6 +9,7 @@ import EditProfile from '../pages/Deal/Jobs/EditProfile';
 import AddWorkExp from '../pages/Deal/Jobs/AddWorkExp';
 import AddEducation from '../pages/Deal/Jobs/AddEducation';
 import AddAppreciaton from '../pages/Deal/Jobs/AddAppreciaton';
+import AddSkills from '../pages/Deal/Jobs/AddSkills';
 
 const DealLearning=(props)=>{
    
@@ -26,6 +27,7 @@ const DealLearning=(props)=>{
             <Stack.Screen component = {AddWorkExp} name="AddWorkExp" />
             <Stack.Screen component = {AddEducation} name="AddEducation" />
             <Stack.Screen component = {AddAppreciaton} name="AddAppreciaton" />
+            <Stack.Screen component = {AddSkills} name="AddSkills" />
             
 
         </Stack.Navigator>
