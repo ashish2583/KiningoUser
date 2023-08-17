@@ -296,7 +296,7 @@ const VideoProfile = (props) => {
                 <HomeHeaderRoundBottom height={100} extraStyle={{ paddingtop: 10, paddingBottom: 25 }} paddingHorizontal={15} borderBottomLeftRadius={20} borderBottomRightRadius={20} backgroundColor='#ED1C24'
                     press1={() => { props.navigation.goBack() }} img1={require('../../../assets/images/service-header-back-button.png')} img1width={25} img1height={18}
                     press2={() => { }} title2={'Profile'} fontWeight={'500'} img2height={20} color={'#fff'}
-                    press3={() => { props.navigation.navigate('CookingNotifications') }} img3={require('../../../assets/images/fashion-bell-icon.png')} img3width={25} img3height={22}
+                    press3={() => { props.navigation.navigate('VideoNotification') }} img3={require('../../../assets/images/fashion-bell-icon.png')} img3width={25} img3height={22}
                     press4={() => {
                         AsyncStorage.clear();
                         dispatch(onLogoutUser())

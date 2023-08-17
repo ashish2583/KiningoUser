@@ -145,5 +145,11 @@ export const setDashBoardData = (data) => {
         dash_data:data
     }
 }
+export const setGameNotificationCount = (data) => {
+    return {
+        type: types.GAMECOUNT,
+        game_data: data
+    }
+}
 
 

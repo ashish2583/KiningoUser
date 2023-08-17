@@ -389,7 +389,7 @@ const VideoGamedetails = (props) => {
   };
 
   const returnOneReply = (reply, fullwidth = false) => {
-     console.log('reply', reply);
+    //  console.log('reply', reply);
      const diff = getDiff(reply.created_date)
      return (
       <View style={{marginTop:10, marginBottom: !fullwidth ? 20 : 10, marginRight: !fullwidth ? 15 : 0, width: fullwidth ? '100%': '80%', alignSelf: fullwidth ? 'flex-start' : 'flex-end', backgroundColor: "#131313", padding: 10, borderRadius: 15,}} >
@@ -1090,7 +1090,7 @@ const VideoGamedetails = (props) => {
               keyExtractor={(item) => item.id}
               style={{ marginBottom: 10 }}
               renderItem={({ item, index }) => {
-                console.log('replies modal', item);
+                // console.log('replies modal', item);
                 return (
                   returnOneReply(item, true)
                 );

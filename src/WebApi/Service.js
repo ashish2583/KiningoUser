@@ -93,6 +93,7 @@ export const game_add_comment = `talkie/add-comment-game`
 export const creation_common_add_views = "creation/common/add-views/";
 export const game_profile = "talkie/game/dashboard";
 export const game_like = "talkie/react-game";
+export const game_notification = "talkie/game-notificationlist/id/43";
 
 export const deal_job_profile = "deal/job/demand/profile/";
 export const deal_job_work_experience = `deal/job/demand/add-experience`

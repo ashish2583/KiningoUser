@@ -32,12 +32,15 @@ import {
   game_video,
   requestGetApi,
   requestPostApi,
-  get_banner_image
+  get_banner_image,
+  game_notification
 } from "../../../WebApi/Service";
 import Toast from "react-native-toast-message";
 import MyAlert from "../../../component/MyAlert";
 import { useSelector } from "react-redux";
 import { ImageSlider, ImageCarousel } from "react-native-image-slider-banner";
+import messaging from '@react-native-firebase/messaging';
+import { setGameNotificationCount } from '../../../redux/actions/user_action';
 
 const VideoGameHome = (props) => {
   const User = useSelector((state) => state.user.user_details);
@@ -168,9 +171,64 @@ const VideoGameHome = (props) => {
       getCategories();
       getGameVideo();
       getBannerImages();
+      getAllNotificationsList();
     });
     return unsubscribe;
   }, [props.navigation]);
+  messaging().onMessage(remoteMessage => {
+    const data = remoteMessage;
+    if (data && Object.keys(data).length !== 0) {
+      dispatch(setGameNotificationCount(1));
+    } else {
+      null
+    }
+  });
+
+  messaging().onNotificationOpenedApp(remoteMessage => {
+
+    const data = remoteMessage;
+    console.log('when app is closed',);
+    if (data && Object.keys(data).length !== 0) {
+      dispatch(setGameNotificationCount(1));
+    } else {
+      null
+    }
+  });
+
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      const data = remoteMessage;
+      console.log('when app is clodee',);
+      if (data && Object.keys(data).length !== 0) {
+        dispatch(setGameNotificationCount(1));
+      } else {
+        null
+      }
+    });
+
+  const getAllNotificationsList = async () => {
+    console.log('notification function called');
+    setLoading(true)
+
+    const { responseJson, err } = await requestGetApi(game_notification, '', 'GET', User.token)
+    setLoading(false)
+    console.log('the res in_cart notification_list ==>>', responseJson)
+    if (responseJson.headers.success == 1) {
+      console.log('my data lenght', responseJson.body.data.length);
+
+      console.log('my notifications art home', responseJson.body.data.length != 0);
+      responseJson.body.data.length != 0 ? console.log('o is called') : console.log('1 is called');
+      const hasStatusZero = responseJson.body.data.some((item) => item.status === 0);
+      console.log('item for notification status', (hasStatusZero))
+      dispatch(setGameNotificationCount(hasStatusZero ? 0 : 1));
+      // responseJson.body.data.length != 0 ? dispatch(setcookingnotificationcount(1)) : dispatch(setcookingnotificationcount(0))
+
+    } else {
+      setalert_sms(err)
+      setMy_Alert(true)
+    }
+  };
   const getBannerImages = async () => {
     setLoading(true);
     const { responseJson, err } = await requestGetApi(

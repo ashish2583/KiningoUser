@@ -9,6 +9,7 @@ import SearchVideosByCategoryByName from '../pages/Talkie/VideoGame/SearchVideos
 import SearchVideosByCategory from '../pages/Talkie/VideoGame/SearchVideosByCategory';
 import AllVideos from '../pages/Talkie/VideoGame/AllVideos';
 import VideoProfile from '../pages/Talkie/VideoGame/VideoProfile';
+import VideoNotification from '../pages/Talkie/VideoGame/VideoNotification';
 
  
 
@@ -30,6 +31,7 @@ const VideoGameStack = (props) => {
             <Stack.Screen component={SearchVideosByCategory} name="SearchVideosByCategory" />
             <Stack.Screen component={AllVideos} name="AllVideos" />
             <Stack.Screen component={VideoProfile} name="VideoProfile" />
+            <Stack.Screen component={VideoNotification} name="VideoNotification" />
             
 
         </Stack.Navigator>

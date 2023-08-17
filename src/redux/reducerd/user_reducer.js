@@ -12,7 +12,8 @@ const initialState = {
     drv_id:'',
     venderDeatil:'',
     corp_user:null,
-    dashdata:''
+    dashdata:'',
+    game_data: null
 }
 
 
@@ -71,6 +72,11 @@ export default (state = initialState ,action) => {
                 return {
                     ...state,
                     dashdata :action.dash_data
+                }
+        case types.GAMECOUNT :
+                return {
+                    ...state,
+                    game_data :action.game_data
                 }
         case types.SELECTEDCARTAB :
             return {
